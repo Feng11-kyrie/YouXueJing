@@ -57,6 +57,17 @@ def main():
     }, open(os.path.join(PUB_GRF, "question_tags.json"), "w", encoding="utf-8"),
         ensure_ascii=False, indent=2)
 
+    # ---- 3.5 诊断题库(公开版剥掉答案 —— 题单设计是展示点, 答案不必公开)
+    dg = json.load(open(os.path.join(SRC, "diagnostic.json"), encoding="utf-8"))
+    pub_dg = json.loads(json.dumps(dg, ensure_ascii=False))
+    for x in pub_dg["题目"]:
+        x.pop("答案", None)
+        for k in list(x):
+            if k in ("_答案待校验",):
+                x.pop(k, None)
+    json.dump(pub_dg, open(os.path.join(PUB_GRF, "diagnostic.json"), "w", encoding="utf-8"),
+              ensure_ascii=False, indent=2)
+
     # ---- 4. 统计摘要
     from collections import Counter
     subj = Counter(r["学科"] for r in clean)

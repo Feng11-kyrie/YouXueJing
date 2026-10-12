@@ -70,6 +70,7 @@ def main():
             "次考点": list(t.get("次考点") or []),
             "次考点名": [leafname.get(i, "") for i in (t.get("次考点") or [])],
             "难度": t.get("难度"), "置信度": t.get("置信度"),
+            "图片": qq.get("图片"), "图片依据": qq.get("_图片依据"), "缺图": qq.get("_缺图", False),
             "题干": qq["题干"], "选项": qq.get("选项") or {}, "答案": qq.get("答案"),
         })
 
