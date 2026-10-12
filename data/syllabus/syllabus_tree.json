@@ -1,0 +1,3832 @@
+{
+  "名称": "408 考纲知识点树",
+  "来源": "2026 年计算机学科专业基础综合考试大纲(官方考察内容结构)",
+  "层级": "L1 学科 / L2 章 / L3 节 / L4 考点",
+  "规模": {
+    "学科": 4,
+    "章": 24,
+    "节": 116,
+    "考点": 214
+  },
+  "编码规则": "<学科>-<章>-<节>-<考点>, 学科码 DS/CO/OS/CN",
+  "待补字段": [
+    "exam_freq",
+    "depends_on",
+    "掌握要求等级",
+    "aliases"
+  ],
+  "学科": [
+    {
+      "id": "DS",
+      "level": 1,
+      "parent": null,
+      "name_official": "数据结构",
+      "name_plain": "数据结构",
+      "aliases": [],
+      "满分": 45,
+      "children": [
+        {
+          "id": "DS-01",
+          "level": 2,
+          "parent": "DS",
+          "name_official": "基本概念",
+          "name_plain": "基本概念",
+          "aliases": [],
+          "exam_freq": null,
+          "depends_on": [],
+          "children": [
+            {
+              "id": "DS-01-01",
+              "level": 3,
+              "parent": "DS-01",
+              "name_official": "数据结构的基本概念",
+              "name_plain": "数据结构的基本概念",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "DS-01-02",
+              "level": 3,
+              "parent": "DS-01",
+              "name_official": "算法的基本概念",
+              "name_plain": "算法的基本概念",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "DS-02",
+          "level": 2,
+          "parent": "DS",
+          "name_official": "线性表",
+          "name_plain": "线性表",
+          "aliases": [],
+          "exam_freq": null,
+          "depends_on": [],
+          "children": [
+            {
+              "id": "DS-02-01",
+              "level": 3,
+              "parent": "DS-02",
+              "name_official": "线性表的基本概念",
+              "name_plain": "线性表的基本概念",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "DS-02-02",
+              "level": 3,
+              "parent": "DS-02",
+              "name_official": "线性表的实现",
+              "name_plain": "线性表的实现",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "DS-02-02-01",
+                  "level": 4,
+                  "parent": "DS-02-02",
+                  "name_official": "顺序存储",
+                  "name_plain": "顺序存储",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "DS-02-02-02",
+                  "level": 4,
+                  "parent": "DS-02-02",
+                  "name_official": "链式存储",
+                  "name_plain": "链式存储",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "DS-02-03",
+              "level": 3,
+              "parent": "DS-02",
+              "name_official": "线性表的应用",
+              "name_plain": "线性表的应用",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "DS-03",
+          "level": 2,
+          "parent": "DS",
+          "name_official": "栈、队列和数组",
+          "name_plain": "栈、队列和数组",
+          "aliases": [],
+          "exam_freq": null,
+          "depends_on": [],
+          "children": [
+            {
+              "id": "DS-03-01",
+              "level": 3,
+              "parent": "DS-03",
+              "name_official": "栈和队列的基本概念",
+              "name_plain": "栈和队列的基本概念",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "DS-03-02",
+              "level": 3,
+              "parent": "DS-03",
+              "name_official": "栈和队列的顺序存储结构",
+              "name_plain": "栈和队列的顺序存储结构",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "DS-03-03",
+              "level": 3,
+              "parent": "DS-03",
+              "name_official": "栈和队列的链式存储结构",
+              "name_plain": "栈和队列的链式存储结构",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "DS-03-04",
+              "level": 3,
+              "parent": "DS-03",
+              "name_official": "多维数组的存储",
+              "name_plain": "多维数组的存储",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "DS-03-05",
+              "level": 3,
+              "parent": "DS-03",
+              "name_official": "特殊矩阵的压缩存储",
+              "name_plain": "特殊矩阵的压缩存储",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "DS-03-06",
+              "level": 3,
+              "parent": "DS-03",
+              "name_official": "栈、队列和数组的应用",
+              "name_plain": "栈、队列和数组的应用",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "DS-04",
+          "level": 2,
+          "parent": "DS",
+          "name_official": "树和二叉树",
+          "name_plain": "树和二叉树",
+          "aliases": [],
+          "exam_freq": null,
+          "depends_on": [],
+          "children": [
+            {
+              "id": "DS-04-01",
+              "level": 3,
+              "parent": "DS-04",
+              "name_official": "树的基本概念",
+              "name_plain": "树的基本概念",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "DS-04-02",
+              "level": 3,
+              "parent": "DS-04",
+              "name_official": "二叉树",
+              "name_plain": "二叉树",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "DS-04-02-01",
+                  "level": 4,
+                  "parent": "DS-04-02",
+                  "name_official": "二叉树的定义及其主要特性",
+                  "name_plain": "二叉树的定义及其主要特性",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "DS-04-02-02",
+                  "level": 4,
+                  "parent": "DS-04-02",
+                  "name_official": "二叉树的顺序存储结构和链式存储结构",
+                  "name_plain": "二叉树的顺序存储结构和链式存储结构",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "DS-04-02-03",
+                  "level": 4,
+                  "parent": "DS-04-02",
+                  "name_official": "二叉树的遍历",
+                  "name_plain": "二叉树的遍历",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "DS-04-02-04",
+                  "level": 4,
+                  "parent": "DS-04-02",
+                  "name_official": "线索二叉树的基本概念和构造",
+                  "name_plain": "线索二叉树的基本概念和构造",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "DS-04-03",
+              "level": 3,
+              "parent": "DS-04",
+              "name_official": "树、森林",
+              "name_plain": "树、森林",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "DS-04-03-01",
+                  "level": 4,
+                  "parent": "DS-04-03",
+                  "name_official": "树的存储结构",
+                  "name_plain": "树的存储结构",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "DS-04-03-02",
+                  "level": 4,
+                  "parent": "DS-04-03",
+                  "name_official": "森林与二叉树的转换",
+                  "name_plain": "森林与二叉树的转换",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "DS-04-03-03",
+                  "level": 4,
+                  "parent": "DS-04-03",
+                  "name_official": "树和森林的遍历",
+                  "name_plain": "树和森林的遍历",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "DS-04-04",
+              "level": 3,
+              "parent": "DS-04",
+              "name_official": "树和二叉树的应用",
+              "name_plain": "哈夫曼树/并查集/堆",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "DS-04-04-01",
+                  "level": 4,
+                  "parent": "DS-04-04",
+                  "name_official": "哈夫曼（Huffman）树和哈夫曼编码",
+                  "name_plain": "哈夫曼（Huffman）树和哈夫曼编码",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "DS-04-04-02",
+                  "level": 4,
+                  "parent": "DS-04-04",
+                  "name_official": "并查集及其应用",
+                  "name_plain": "并查集及其应用",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "DS-04-04-03",
+                  "level": 4,
+                  "parent": "DS-04-04",
+                  "name_official": "堆及其应用",
+                  "name_plain": "堆及其应用",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "DS-05",
+          "level": 2,
+          "parent": "DS",
+          "name_official": "图",
+          "name_plain": "图",
+          "aliases": [],
+          "exam_freq": null,
+          "depends_on": [],
+          "children": [
+            {
+              "id": "DS-05-01",
+              "level": 3,
+              "parent": "DS-05",
+              "name_official": "图的基本概念",
+              "name_plain": "图的基本概念",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "DS-05-02",
+              "level": 3,
+              "parent": "DS-05",
+              "name_official": "图的存储及基本操作",
+              "name_plain": "图的存储及基本操作",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "DS-05-02-01",
+                  "level": 4,
+                  "parent": "DS-05-02",
+                  "name_official": "邻接矩阵",
+                  "name_plain": "邻接矩阵",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "DS-05-02-02",
+                  "level": 4,
+                  "parent": "DS-05-02",
+                  "name_official": "邻接表",
+                  "name_plain": "邻接表",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "DS-05-02-03",
+                  "level": 4,
+                  "parent": "DS-05-02",
+                  "name_official": "邻接多重表、十字链表",
+                  "name_plain": "邻接多重表、十字链表",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "DS-05-03",
+              "level": 3,
+              "parent": "DS-05",
+              "name_official": "图的遍历",
+              "name_plain": "图的遍历",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "DS-05-03-01",
+                  "level": 4,
+                  "parent": "DS-05-03",
+                  "name_official": "深度优先搜索",
+                  "name_plain": "深度优先搜索",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "DS-05-03-02",
+                  "level": 4,
+                  "parent": "DS-05-03",
+                  "name_official": "广度优先搜索",
+                  "name_plain": "广度优先搜索",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "DS-05-04",
+              "level": 3,
+              "parent": "DS-05",
+              "name_official": "图的基本应用",
+              "name_plain": "图的基本应用",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "DS-05-04-01",
+                  "level": 4,
+                  "parent": "DS-05-04",
+                  "name_official": "最小（代价）生成树",
+                  "name_plain": "最小（代价）生成树",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "DS-05-04-02",
+                  "level": 4,
+                  "parent": "DS-05-04",
+                  "name_official": "最短路径",
+                  "name_plain": "最短路径",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "DS-05-04-03",
+                  "level": 4,
+                  "parent": "DS-05-04",
+                  "name_official": "拓扑排序",
+                  "name_plain": "拓扑排序",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "DS-05-04-04",
+                  "level": 4,
+                  "parent": "DS-05-04",
+                  "name_official": "关键路径",
+                  "name_plain": "关键路径",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "DS-06",
+          "level": 2,
+          "parent": "DS",
+          "name_official": "查找",
+          "name_plain": "查找",
+          "aliases": [],
+          "exam_freq": null,
+          "depends_on": [],
+          "children": [
+            {
+              "id": "DS-06-01",
+              "level": 3,
+              "parent": "DS-06",
+              "name_official": "查找的基本概念",
+              "name_plain": "查找的基本概念",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "DS-06-02",
+              "level": 3,
+              "parent": "DS-06",
+              "name_official": "顺序查找法",
+              "name_plain": "顺序查找法",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "DS-06-03",
+              "level": 3,
+              "parent": "DS-06",
+              "name_official": "分块查找法",
+              "name_plain": "分块查找法",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "DS-06-04",
+              "level": 3,
+              "parent": "DS-06",
+              "name_official": "折半查找法",
+              "name_plain": "折半查找法",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "DS-06-05",
+              "level": 3,
+              "parent": "DS-06",
+              "name_official": "树型查找",
+              "name_plain": "二叉搜索树与平衡树",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "DS-06-05-01",
+                  "level": 4,
+                  "parent": "DS-06-05",
+                  "name_official": "二叉搜索树",
+                  "name_plain": "二叉搜索树",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "DS-06-05-02",
+                  "level": 4,
+                  "parent": "DS-06-05",
+                  "name_official": "平衡二叉树",
+                  "name_plain": "平衡二叉树",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "DS-06-05-03",
+                  "level": 4,
+                  "parent": "DS-06-05",
+                  "name_official": "红黑树",
+                  "name_plain": "红黑树",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "DS-06-06",
+              "level": 3,
+              "parent": "DS-06",
+              "name_official": "B 树及其基本操作、B+树的基本概念",
+              "name_plain": "B树与B+树",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "DS-06-07",
+              "level": 3,
+              "parent": "DS-06",
+              "name_official": "散列（Hash）表",
+              "name_plain": "哈希表",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "DS-06-08",
+              "level": 3,
+              "parent": "DS-06",
+              "name_official": "字符串模式匹配",
+              "name_plain": "字符串模式匹配（KMP）",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "DS-06-09",
+              "level": 3,
+              "parent": "DS-06",
+              "name_official": "查找算法的分析及应用",
+              "name_plain": "查找算法的分析及应用",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "DS-07",
+          "level": 2,
+          "parent": "DS",
+          "name_official": "排序",
+          "name_plain": "排序",
+          "aliases": [],
+          "exam_freq": null,
+          "depends_on": [],
+          "children": [
+            {
+              "id": "DS-07-01",
+              "level": 3,
+              "parent": "DS-07",
+              "name_official": "排序的基本概念",
+              "name_plain": "排序的基本概念",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "DS-07-02",
+              "level": 3,
+              "parent": "DS-07",
+              "name_official": "直接插入排序",
+              "name_plain": "直接插入排序",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "DS-07-03",
+              "level": 3,
+              "parent": "DS-07",
+              "name_official": "折半插入排序",
+              "name_plain": "折半插入排序",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "DS-07-04",
+              "level": 3,
+              "parent": "DS-07",
+              "name_official": "起泡排序（Bubble Sort）",
+              "name_plain": "起泡排序（Bubble Sort）",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "DS-07-05",
+              "level": 3,
+              "parent": "DS-07",
+              "name_official": "简单选择排序",
+              "name_plain": "简单选择排序",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "DS-07-06",
+              "level": 3,
+              "parent": "DS-07",
+              "name_official": "希尔排序（Shell Sort）",
+              "name_plain": "希尔排序（Shell Sort）",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "DS-07-07",
+              "level": 3,
+              "parent": "DS-07",
+              "name_official": "快速排序",
+              "name_plain": "快速排序",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "DS-07-08",
+              "level": 3,
+              "parent": "DS-07",
+              "name_official": "堆排序",
+              "name_plain": "堆排序",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "DS-07-09",
+              "level": 3,
+              "parent": "DS-07",
+              "name_official": "二路归并排序（Merge Sort）",
+              "name_plain": "二路归并排序（Merge Sort）",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "DS-07-10",
+              "level": 3,
+              "parent": "DS-07",
+              "name_official": "基数排序",
+              "name_plain": "基数排序",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "DS-07-11",
+              "level": 3,
+              "parent": "DS-07",
+              "name_official": "外部排序",
+              "name_plain": "外部排序",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "DS-07-12",
+              "level": 3,
+              "parent": "DS-07",
+              "name_official": "排序算法的分析与应用",
+              "name_plain": "排序算法的分析与应用",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CO",
+      "level": 1,
+      "parent": null,
+      "name_official": "计算机组成原理",
+      "name_plain": "计算机组成原理",
+      "aliases": [],
+      "满分": 45,
+      "children": [
+        {
+          "id": "CO-01",
+          "level": 2,
+          "parent": "CO",
+          "name_official": "计算机系统概述",
+          "name_plain": "计算机系统概述",
+          "aliases": [],
+          "exam_freq": null,
+          "depends_on": [],
+          "children": [
+            {
+              "id": "CO-01-01",
+              "level": 3,
+              "parent": "CO-01",
+              "name_official": "计算机系统层次结构",
+              "name_plain": "计算机系统层次结构",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CO-01-01-01",
+                  "level": 4,
+                  "parent": "CO-01-01",
+                  "name_official": "计算机系统的基本组成",
+                  "name_plain": "计算机系统的基本组成",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-01-01-02",
+                  "level": 4,
+                  "parent": "CO-01-01",
+                  "name_official": "计算机硬件的基本组成",
+                  "name_plain": "计算机硬件的基本组成",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-01-01-03",
+                  "level": 4,
+                  "parent": "CO-01-01",
+                  "name_official": "计算机软件和硬件的关系",
+                  "name_plain": "计算机软件和硬件的关系",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-01-01-04",
+                  "level": 4,
+                  "parent": "CO-01-01",
+                  "name_official": "计算机系统的工作原理",
+                  "name_plain": "计算机系统的工作原理",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CO-01-02",
+              "level": 3,
+              "parent": "CO-01",
+              "name_official": "计算机性能指标",
+              "name_plain": "计算机性能指标",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "CO-02",
+          "level": 2,
+          "parent": "CO",
+          "name_official": "数据的表示和运算",
+          "name_plain": "数据的表示和运算",
+          "aliases": [],
+          "exam_freq": null,
+          "depends_on": [],
+          "children": [
+            {
+              "id": "CO-02-01",
+              "level": 3,
+              "parent": "CO-02",
+              "name_official": "数制与编码",
+              "name_plain": "数制与编码",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CO-02-01-01",
+                  "level": 4,
+                  "parent": "CO-02-01",
+                  "name_official": "进位计数制及其数据之间的相互转换",
+                  "name_plain": "进位计数制及其数据之间的相互转换",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-02-01-02",
+                  "level": 4,
+                  "parent": "CO-02-01",
+                  "name_official": "定点数的编码表示",
+                  "name_plain": "定点数的编码表示",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CO-02-02",
+              "level": 3,
+              "parent": "CO-02",
+              "name_official": "运算方法和运算电路",
+              "name_plain": "运算方法和运算电路",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CO-02-02-01",
+                  "level": 4,
+                  "parent": "CO-02-02",
+                  "name_official": "基本运算部件",
+                  "name_plain": "基本运算部件",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-02-02-02",
+                  "level": 4,
+                  "parent": "CO-02-02",
+                  "name_official": "加/减运算",
+                  "name_plain": "加/减运算",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-02-02-03",
+                  "level": 4,
+                  "parent": "CO-02-02",
+                  "name_official": "乘/除运算",
+                  "name_plain": "乘/除运算",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CO-02-03",
+              "level": 3,
+              "parent": "CO-02",
+              "name_official": "整数的表示和运算",
+              "name_plain": "整数的表示和运算",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CO-02-03-01",
+                  "level": 4,
+                  "parent": "CO-02-03",
+                  "name_official": "无符号整数的表示和运算",
+                  "name_plain": "无符号整数的表示和运算",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-02-03-02",
+                  "level": 4,
+                  "parent": "CO-02-03",
+                  "name_official": "带符号整数的表示和运算",
+                  "name_plain": "带符号整数的表示和运算",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CO-02-04",
+              "level": 3,
+              "parent": "CO-02",
+              "name_official": "浮点数的表示和运算",
+              "name_plain": "浮点数的表示和运算",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CO-02-04-01",
+                  "level": 4,
+                  "parent": "CO-02-04",
+                  "name_official": "浮点数的表示",
+                  "name_plain": "浮点数的表示",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-02-04-02",
+                  "level": 4,
+                  "parent": "CO-02-04",
+                  "name_official": "浮点数的加/减运算",
+                  "name_plain": "浮点数的加/减运算",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "CO-03",
+          "level": 2,
+          "parent": "CO",
+          "name_official": "存储器层次结构",
+          "name_plain": "存储器层次结构",
+          "aliases": [],
+          "exam_freq": null,
+          "depends_on": [],
+          "children": [
+            {
+              "id": "CO-03-01",
+              "level": 3,
+              "parent": "CO-03",
+              "name_official": "存储器的分类",
+              "name_plain": "存储器的分类",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "CO-03-02",
+              "level": 3,
+              "parent": "CO-03",
+              "name_official": "层次化存储器的基本结构",
+              "name_plain": "层次化存储器的基本结构",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "CO-03-03",
+              "level": 3,
+              "parent": "CO-03",
+              "name_official": "半导体随机存取存储器",
+              "name_plain": "半导体随机存取存储器",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CO-03-03-01",
+                  "level": 4,
+                  "parent": "CO-03-03",
+                  "name_official": "SRAM 存储器",
+                  "name_plain": "SRAM 存储器",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-03-03-02",
+                  "level": 4,
+                  "parent": "CO-03-03",
+                  "name_official": "DRAM 存储器",
+                  "name_plain": "DRAM 存储器",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-03-03-03",
+                  "level": 4,
+                  "parent": "CO-03-03",
+                  "name_official": "Flash 存储器",
+                  "name_plain": "Flash 存储器",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CO-03-04",
+              "level": 3,
+              "parent": "CO-03",
+              "name_official": "主存储器",
+              "name_plain": "主存储器",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CO-03-04-01",
+                  "level": 4,
+                  "parent": "CO-03-04",
+                  "name_official": "DRAM 芯片和内存条",
+                  "name_plain": "DRAM 芯片和内存条",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-03-04-02",
+                  "level": 4,
+                  "parent": "CO-03-04",
+                  "name_official": "多模块存储器",
+                  "name_plain": "多模块存储器",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-03-04-03",
+                  "level": 4,
+                  "parent": "CO-03-04",
+                  "name_official": "主存和 CPU 之间的连接",
+                  "name_plain": "主存和 CPU 之间的连接",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CO-03-05",
+              "level": 3,
+              "parent": "CO-03",
+              "name_official": "外部存储器",
+              "name_plain": "外部存储器",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CO-03-05-01",
+                  "level": 4,
+                  "parent": "CO-03-05",
+                  "name_official": "磁盘存储器",
+                  "name_plain": "磁盘存储器",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-03-05-02",
+                  "level": 4,
+                  "parent": "CO-03-05",
+                  "name_official": "固态硬盘（SSD）",
+                  "name_plain": "固态硬盘（SSD）",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CO-03-06",
+              "level": 3,
+              "parent": "CO-03",
+              "name_official": "高速缓冲存储器（Cache）",
+              "name_plain": "Cache（高速缓存）",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CO-03-06-01",
+                  "level": 4,
+                  "parent": "CO-03-06",
+                  "name_official": "Cache 的基本原理",
+                  "name_plain": "Cache 的基本原理",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-03-06-02",
+                  "level": 4,
+                  "parent": "CO-03-06",
+                  "name_official": "Cache 和主存之间的映射方式",
+                  "name_plain": "Cache 和主存之间的映射方式",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-03-06-03",
+                  "level": 4,
+                  "parent": "CO-03-06",
+                  "name_official": "Cache 中主存块的替换算法",
+                  "name_plain": "Cache 中主存块的替换算法",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-03-06-04",
+                  "level": 4,
+                  "parent": "CO-03-06",
+                  "name_official": "Cache 写策略",
+                  "name_plain": "Cache 写策略",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CO-03-07",
+              "level": 3,
+              "parent": "CO-03",
+              "name_official": "虚拟存储器",
+              "name_plain": "虚拟存储器（页式/段式）",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CO-03-07-01",
+                  "level": 4,
+                  "parent": "CO-03-07",
+                  "name_official": "虚拟存储器的基本概念",
+                  "name_plain": "虚拟存储器的基本概念",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-03-07-02",
+                  "level": 4,
+                  "parent": "CO-03-07",
+                  "name_official": "页式虚拟存储器",
+                  "name_plain": "页式虚拟存储器",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-03-07-03",
+                  "level": 4,
+                  "parent": "CO-03-07",
+                  "name_official": "段式虚拟存储器的基本原理",
+                  "name_plain": "段式虚拟存储器的基本原理",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-03-07-04",
+                  "level": 4,
+                  "parent": "CO-03-07",
+                  "name_official": "段页式虚拟存储器的基本原理",
+                  "name_plain": "段页式虚拟存储器的基本原理",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "CO-04",
+          "level": 2,
+          "parent": "CO",
+          "name_official": "指令系统",
+          "name_plain": "指令系统",
+          "aliases": [],
+          "exam_freq": null,
+          "depends_on": [],
+          "children": [
+            {
+              "id": "CO-04-01",
+              "level": 3,
+              "parent": "CO-04",
+              "name_official": "指令系统的基本概念",
+              "name_plain": "指令系统的基本概念",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "CO-04-02",
+              "level": 3,
+              "parent": "CO-04",
+              "name_official": "指令格式",
+              "name_plain": "指令格式",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "CO-04-03",
+              "level": 3,
+              "parent": "CO-04",
+              "name_official": "寻址方式",
+              "name_plain": "寻址方式",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "CO-04-04",
+              "level": 3,
+              "parent": "CO-04",
+              "name_official": "数据的对齐和大/小端存放方式",
+              "name_plain": "数据的对齐和大/小端存放方式",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "CO-04-05",
+              "level": 3,
+              "parent": "CO-04",
+              "name_official": "CISC 和 RISC 的基本概念",
+              "name_plain": "CISC 和 RISC 的基本概念",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "CO-04-06",
+              "level": 3,
+              "parent": "CO-04",
+              "name_official": "高级语言程序与机器代码之间的对应",
+              "name_plain": "高级语言程序与机器代码之间的对应",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CO-04-06-01",
+                  "level": 4,
+                  "parent": "CO-04-06",
+                  "name_official": "编译器、汇编器和链接器的基本概念",
+                  "name_plain": "编译器、汇编器和链接器的基本概念",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-04-06-02",
+                  "level": 4,
+                  "parent": "CO-04-06",
+                  "name_official": "选择结构语句的机器级表示",
+                  "name_plain": "选择结构语句的机器级表示",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-04-06-03",
+                  "level": 4,
+                  "parent": "CO-04-06",
+                  "name_official": "循环结构语句的机器级表示",
+                  "name_plain": "循环结构语句的机器级表示",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-04-06-04",
+                  "level": 4,
+                  "parent": "CO-04-06",
+                  "name_official": "过程（函数）调用对应的机器级表示",
+                  "name_plain": "过程（函数）调用对应的机器级表示",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "CO-05",
+          "level": 2,
+          "parent": "CO",
+          "name_official": "中央处理器（CPU）",
+          "name_plain": "中央处理器（CPU）",
+          "aliases": [],
+          "exam_freq": null,
+          "depends_on": [],
+          "children": [
+            {
+              "id": "CO-05-01",
+              "level": 3,
+              "parent": "CO-05",
+              "name_official": "CPU 的功能和基本结构",
+              "name_plain": "CPU 的功能和基本结构",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "CO-05-02",
+              "level": 3,
+              "parent": "CO-05",
+              "name_official": "指令执行过程",
+              "name_plain": "指令执行过程",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "CO-05-03",
+              "level": 3,
+              "parent": "CO-05",
+              "name_official": "数据通路的功能和基本结构",
+              "name_plain": "数据通路的功能和基本结构",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "CO-05-04",
+              "level": 3,
+              "parent": "CO-05",
+              "name_official": "控制器的功能和工作原理",
+              "name_plain": "控制器的功能和工作原理",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "CO-05-05",
+              "level": 3,
+              "parent": "CO-05",
+              "name_official": "异常和中断机制",
+              "name_plain": "异常和中断机制",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CO-05-05-01",
+                  "level": 4,
+                  "parent": "CO-05-05",
+                  "name_official": "异常和中断的基本概念",
+                  "name_plain": "异常和中断的基本概念",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-05-05-02",
+                  "level": 4,
+                  "parent": "CO-05-05",
+                  "name_official": "异常和中断的分类",
+                  "name_plain": "异常和中断的分类",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-05-05-03",
+                  "level": 4,
+                  "parent": "CO-05-05",
+                  "name_official": "异常和中断的检测与响应",
+                  "name_plain": "异常和中断的检测与响应",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CO-05-06",
+              "level": 3,
+              "parent": "CO-05",
+              "name_official": "指令流水线",
+              "name_plain": "指令流水线（含三类冒险）",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CO-05-06-01",
+                  "level": 4,
+                  "parent": "CO-05-06",
+                  "name_official": "指令流水线的基本概念",
+                  "name_plain": "指令流水线的基本概念",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-05-06-02",
+                  "level": 4,
+                  "parent": "CO-05-06",
+                  "name_official": "指令流水线的基本实现",
+                  "name_plain": "指令流水线的基本实现",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-05-06-03",
+                  "level": 4,
+                  "parent": "CO-05-06",
+                  "name_official": "结构冒险、数据冒险和控制冒险的处理",
+                  "name_plain": "结构冒险、数据冒险和控制冒险的处理",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-05-06-04",
+                  "level": 4,
+                  "parent": "CO-05-06",
+                  "name_official": "超标量和动态流水线的基本概念",
+                  "name_plain": "超标量和动态流水线的基本概念",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CO-05-07",
+              "level": 3,
+              "parent": "CO-05",
+              "name_official": "多处理器的基本概念",
+              "name_plain": "多处理器基础",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CO-05-07-01",
+                  "level": 4,
+                  "parent": "CO-05-07",
+                  "name_official": "SISD、SIMD、MIMD、向量处理器的基本概念",
+                  "name_plain": "SISD、SIMD、MIMD、向量处理器的基本概念",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-05-07-02",
+                  "level": 4,
+                  "parent": "CO-05-07",
+                  "name_official": "硬件多线程的基本概念",
+                  "name_plain": "硬件多线程的基本概念",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-05-07-03",
+                  "level": 4,
+                  "parent": "CO-05-07",
+                  "name_official": "多核（multi-core）处理器的基本概念",
+                  "name_plain": "多核（multi-core）处理器的基本概念",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-05-07-04",
+                  "level": 4,
+                  "parent": "CO-05-07",
+                  "name_official": "共享内存多处理器（SMP）的基本概念",
+                  "name_plain": "共享内存多处理器（SMP）的基本概念",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "CO-06",
+          "level": 2,
+          "parent": "CO",
+          "name_official": "总线和输入输出系统",
+          "name_plain": "总线和输入输出系统",
+          "aliases": [],
+          "exam_freq": null,
+          "depends_on": [],
+          "children": [
+            {
+              "id": "CO-06-01",
+              "level": 3,
+              "parent": "CO-06",
+              "name_official": "总线",
+              "name_plain": "总线",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CO-06-01-01",
+                  "level": 4,
+                  "parent": "CO-06-01",
+                  "name_official": "总线的基本概念",
+                  "name_plain": "总线的基本概念",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-06-01-02",
+                  "level": 4,
+                  "parent": "CO-06-01",
+                  "name_official": "总线的组成及性能指标",
+                  "name_plain": "总线的组成及性能指标",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-06-01-03",
+                  "level": 4,
+                  "parent": "CO-06-01",
+                  "name_official": "总线事务和定时",
+                  "name_plain": "总线事务和定时",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CO-06-02",
+              "level": 3,
+              "parent": "CO-06",
+              "name_official": "I/O 接口（I/O 控制器）",
+              "name_plain": "I/O 接口（I/O 控制器）",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CO-06-02-01",
+                  "level": 4,
+                  "parent": "CO-06-02",
+                  "name_official": "I/O 接口的功能和基本结构",
+                  "name_plain": "I/O 接口的功能和基本结构",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-06-02-02",
+                  "level": 4,
+                  "parent": "CO-06-02",
+                  "name_official": "I/O 端口及其编址",
+                  "name_plain": "I/O 端口及其编址",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CO-06-03",
+              "level": 3,
+              "parent": "CO-06",
+              "name_official": "I/O 方式",
+              "name_plain": "I/O 控制方式（查询/中断/DMA）",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CO-06-03-01",
+                  "level": 4,
+                  "parent": "CO-06-03",
+                  "name_official": "程序查询方式",
+                  "name_plain": "程序查询方式",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-06-03-02",
+                  "level": 4,
+                  "parent": "CO-06-03",
+                  "name_official": "程序中断方式",
+                  "name_plain": "程序中断方式",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CO-06-03-03",
+                  "level": 4,
+                  "parent": "CO-06-03",
+                  "name_official": "DMA 方式",
+                  "name_plain": "DMA 方式",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "OS",
+      "level": 1,
+      "parent": null,
+      "name_official": "操作系统",
+      "name_plain": "操作系统",
+      "aliases": [],
+      "满分": 35,
+      "children": [
+        {
+          "id": "OS-01",
+          "level": 2,
+          "parent": "OS",
+          "name_official": "操作系统基础",
+          "name_plain": "操作系统基础",
+          "aliases": [],
+          "exam_freq": null,
+          "depends_on": [],
+          "children": [
+            {
+              "id": "OS-01-01",
+              "level": 3,
+              "parent": "OS-01",
+              "name_official": "操作系统的基本概念",
+              "name_plain": "操作系统的基本概念",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "OS-01-02",
+              "level": 3,
+              "parent": "OS-01",
+              "name_official": "操作系统发展历程",
+              "name_plain": "操作系统发展历程",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "OS-01-03",
+              "level": 3,
+              "parent": "OS-01",
+              "name_official": "程序运行环境",
+              "name_plain": "程序运行环境（内核态/系统调用）",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "OS-01-03-01",
+                  "level": 4,
+                  "parent": "OS-01-03",
+                  "name_official": "CPU 运行模式",
+                  "name_plain": "CPU 运行模式",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-01-03-02",
+                  "level": 4,
+                  "parent": "OS-01-03",
+                  "name_official": "中断和异常的处理",
+                  "name_plain": "中断和异常的处理",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-01-03-03",
+                  "level": 4,
+                  "parent": "OS-01-03",
+                  "name_official": "系统调用",
+                  "name_plain": "系统调用",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-01-03-04",
+                  "level": 4,
+                  "parent": "OS-01-03",
+                  "name_official": "程序的链接与装入",
+                  "name_plain": "程序的链接与装入",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-01-03-05",
+                  "level": 4,
+                  "parent": "OS-01-03",
+                  "name_official": "程序运行时内存映像与地址空间",
+                  "name_plain": "程序运行时内存映像与地址空间",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "OS-01-04",
+              "level": 3,
+              "parent": "OS-01",
+              "name_official": "操作系统结构",
+              "name_plain": "操作系统结构",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "OS-01-05",
+              "level": 3,
+              "parent": "OS-01",
+              "name_official": "操作系统引导",
+              "name_plain": "操作系统引导",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "OS-01-06",
+              "level": 3,
+              "parent": "OS-01",
+              "name_official": "虚拟机",
+              "name_plain": "虚拟机",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "OS-02",
+          "level": 2,
+          "parent": "OS",
+          "name_official": "进程管理",
+          "name_plain": "进程管理",
+          "aliases": [],
+          "exam_freq": null,
+          "depends_on": [],
+          "children": [
+            {
+              "id": "OS-02-01",
+              "level": 3,
+              "parent": "OS-02",
+              "name_official": "进程与线程",
+              "name_plain": "进程与线程",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "OS-02-01-01",
+                  "level": 4,
+                  "parent": "OS-02-01",
+                  "name_official": "进程与线程的基本概念",
+                  "name_plain": "进程与线程的基本概念",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-02-01-02",
+                  "level": 4,
+                  "parent": "OS-02-01",
+                  "name_official": "进程/线程的状态与转换",
+                  "name_plain": "进程/线程的状态与转换",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-02-01-03",
+                  "level": 4,
+                  "parent": "OS-02-01",
+                  "name_official": "线程的实现",
+                  "name_plain": "线程的实现",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-02-01-04",
+                  "level": 4,
+                  "parent": "OS-02-01",
+                  "name_official": "进程与线程的组织与控制",
+                  "name_plain": "进程与线程的组织与控制",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-02-01-05",
+                  "level": 4,
+                  "parent": "OS-02-01",
+                  "name_official": "进程间通信",
+                  "name_plain": "进程间通信",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "OS-02-02",
+              "level": 3,
+              "parent": "OS-02",
+              "name_official": "CPU 调度与上下文切换",
+              "name_plain": "CPU 调度与上下文切换",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "OS-02-02-01",
+                  "level": 4,
+                  "parent": "OS-02-02",
+                  "name_official": "调度的基本概念",
+                  "name_plain": "调度的基本概念",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-02-02-02",
+                  "level": 4,
+                  "parent": "OS-02-02",
+                  "name_official": "调度的目标",
+                  "name_plain": "调度的目标",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-02-02-03",
+                  "level": 4,
+                  "parent": "OS-02-02",
+                  "name_official": "调度的实现",
+                  "name_plain": "调度的实现",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-02-02-04",
+                  "level": 4,
+                  "parent": "OS-02-02",
+                  "name_official": "CPU 调度算法",
+                  "name_plain": "CPU 调度算法",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-02-02-05",
+                  "level": 4,
+                  "parent": "OS-02-02",
+                  "name_official": "多处理机调度",
+                  "name_plain": "多处理机调度",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-02-02-06",
+                  "level": 4,
+                  "parent": "OS-02-02",
+                  "name_official": "上下文及其切换机制",
+                  "name_plain": "上下文及其切换机制",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "OS-02-03",
+              "level": 3,
+              "parent": "OS-02",
+              "name_official": "同步与互斥",
+              "name_plain": "同步与互斥（信号量）",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "OS-02-03-01",
+                  "level": 4,
+                  "parent": "OS-02-03",
+                  "name_official": "同步与互斥的基本概念",
+                  "name_plain": "同步与互斥的基本概念",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-02-03-02",
+                  "level": 4,
+                  "parent": "OS-02-03",
+                  "name_official": "基本的实现方法",
+                  "name_plain": "基本的实现方法",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-02-03-03",
+                  "level": 4,
+                  "parent": "OS-02-03",
+                  "name_official": "锁",
+                  "name_plain": "锁",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-02-03-04",
+                  "level": 4,
+                  "parent": "OS-02-03",
+                  "name_official": "信号量",
+                  "name_plain": "信号量",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-02-03-05",
+                  "level": 4,
+                  "parent": "OS-02-03",
+                  "name_official": "条件变量",
+                  "name_plain": "条件变量",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-02-03-06",
+                  "level": 4,
+                  "parent": "OS-02-03",
+                  "name_official": "经典同步问题",
+                  "name_plain": "经典同步问题",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "OS-02-04",
+              "level": 3,
+              "parent": "OS-02",
+              "name_official": "死锁",
+              "name_plain": "死锁",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "OS-02-04-01",
+                  "level": 4,
+                  "parent": "OS-02-04",
+                  "name_official": "死锁的基本概念",
+                  "name_plain": "死锁的基本概念",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-02-04-02",
+                  "level": 4,
+                  "parent": "OS-02-04",
+                  "name_official": "死锁预防",
+                  "name_plain": "死锁预防",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-02-04-03",
+                  "level": 4,
+                  "parent": "OS-02-04",
+                  "name_official": "死锁避免",
+                  "name_plain": "死锁避免",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-02-04-04",
+                  "level": 4,
+                  "parent": "OS-02-04",
+                  "name_official": "死锁检测和解除",
+                  "name_plain": "死锁检测和解除",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "OS-03",
+          "level": 2,
+          "parent": "OS",
+          "name_official": "内存管理",
+          "name_plain": "内存管理",
+          "aliases": [],
+          "exam_freq": null,
+          "depends_on": [],
+          "children": [
+            {
+              "id": "OS-03-01",
+              "level": 3,
+              "parent": "OS-03",
+              "name_official": "内存管理基础",
+              "name_plain": "内存管理基础",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "OS-03-01-01",
+                  "level": 4,
+                  "parent": "OS-03-01",
+                  "name_official": "内存管理的基本概念",
+                  "name_plain": "内存管理的基本概念",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-03-01-02",
+                  "level": 4,
+                  "parent": "OS-03-01",
+                  "name_official": "连续分配管理方式",
+                  "name_plain": "连续分配管理方式",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-03-01-03",
+                  "level": 4,
+                  "parent": "OS-03-01",
+                  "name_official": "页式管理",
+                  "name_plain": "页式管理",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-03-01-04",
+                  "level": 4,
+                  "parent": "OS-03-01",
+                  "name_official": "段式管理",
+                  "name_plain": "段式管理",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-03-01-05",
+                  "level": 4,
+                  "parent": "OS-03-01",
+                  "name_official": "段页式管理",
+                  "name_plain": "段页式管理",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "OS-03-02",
+              "level": 3,
+              "parent": "OS-03",
+              "name_official": "虚拟内存管理",
+              "name_plain": "虚拟内存与页面置换",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "OS-03-02-01",
+                  "level": 4,
+                  "parent": "OS-03-02",
+                  "name_official": "虚拟内存的基本概念",
+                  "name_plain": "虚拟内存的基本概念",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-03-02-02",
+                  "level": 4,
+                  "parent": "OS-03-02",
+                  "name_official": "请求页式管理",
+                  "name_plain": "请求页式管理",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-03-02-03",
+                  "level": 4,
+                  "parent": "OS-03-02",
+                  "name_official": "页框分配与回收",
+                  "name_plain": "页框分配与回收",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-03-02-04",
+                  "level": 4,
+                  "parent": "OS-03-02",
+                  "name_official": "页置换算法",
+                  "name_plain": "页置换算法",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-03-02-05",
+                  "level": 4,
+                  "parent": "OS-03-02",
+                  "name_official": "内存映射文件",
+                  "name_plain": "内存映射文件",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-03-02-06",
+                  "level": 4,
+                  "parent": "OS-03-02",
+                  "name_official": "虚拟存储器性能的影响因素及改进方法",
+                  "name_plain": "虚拟存储器性能的影响因素及改进方法",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "OS-04",
+          "level": 2,
+          "parent": "OS",
+          "name_official": "文件管理",
+          "name_plain": "文件管理",
+          "aliases": [],
+          "exam_freq": null,
+          "depends_on": [],
+          "children": [
+            {
+              "id": "OS-04-01",
+              "level": 3,
+              "parent": "OS-04",
+              "name_official": "文件",
+              "name_plain": "文件",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "OS-04-01-01",
+                  "level": 4,
+                  "parent": "OS-04-01",
+                  "name_official": "文件的基本概念",
+                  "name_plain": "文件的基本概念",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-04-01-02",
+                  "level": 4,
+                  "parent": "OS-04-01",
+                  "name_official": "文件元数据和索引节点",
+                  "name_plain": "文件元数据和索引节点",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-04-01-03",
+                  "level": 4,
+                  "parent": "OS-04-01",
+                  "name_official": "文件的操作",
+                  "name_plain": "文件的操作",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-04-01-04",
+                  "level": 4,
+                  "parent": "OS-04-01",
+                  "name_official": "文件的保护",
+                  "name_plain": "文件的保护",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-04-01-05",
+                  "level": 4,
+                  "parent": "OS-04-01",
+                  "name_official": "文件的逻辑结构",
+                  "name_plain": "文件的逻辑结构",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-04-01-06",
+                  "level": 4,
+                  "parent": "OS-04-01",
+                  "name_official": "文件的物理结构",
+                  "name_plain": "文件的物理结构",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "OS-04-02",
+              "level": 3,
+              "parent": "OS-04",
+              "name_official": "目录",
+              "name_plain": "目录",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "OS-04-02-01",
+                  "level": 4,
+                  "parent": "OS-04-02",
+                  "name_official": "目录的基本概念",
+                  "name_plain": "目录的基本概念",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-04-02-02",
+                  "level": 4,
+                  "parent": "OS-04-02",
+                  "name_official": "树形目录",
+                  "name_plain": "树形目录",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-04-02-03",
+                  "level": 4,
+                  "parent": "OS-04-02",
+                  "name_official": "目录的操作",
+                  "name_plain": "目录的操作",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-04-02-04",
+                  "level": 4,
+                  "parent": "OS-04-02",
+                  "name_official": "硬链接和软链接",
+                  "name_plain": "硬链接和软链接",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "OS-04-03",
+              "level": 3,
+              "parent": "OS-04",
+              "name_official": "文件系统",
+              "name_plain": "文件系统实现",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "OS-04-03-01",
+                  "level": 4,
+                  "parent": "OS-04-03",
+                  "name_official": "文件系统的全局结构",
+                  "name_plain": "文件系统的全局结构",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-04-03-02",
+                  "level": 4,
+                  "parent": "OS-04-03",
+                  "name_official": "外存空闲空间管理方法",
+                  "name_plain": "外存空闲空间管理方法",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-04-03-03",
+                  "level": 4,
+                  "parent": "OS-04-03",
+                  "name_official": "虚拟文件系统",
+                  "name_plain": "虚拟文件系统",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-04-03-04",
+                  "level": 4,
+                  "parent": "OS-04-03",
+                  "name_official": "文件系统挂载",
+                  "name_plain": "文件系统挂载",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "OS-05",
+          "level": 2,
+          "parent": "OS",
+          "name_official": "输入/输出（I/O）管理",
+          "name_plain": "输入/输出（I/O）管理",
+          "aliases": [],
+          "exam_freq": null,
+          "depends_on": [],
+          "children": [
+            {
+              "id": "OS-05-01",
+              "level": 3,
+              "parent": "OS-05",
+              "name_official": "I/O 管理基础",
+              "name_plain": "I/O 管理基础",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "OS-05-01-01",
+                  "level": 4,
+                  "parent": "OS-05-01",
+                  "name_official": "设备",
+                  "name_plain": "设备",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-05-01-02",
+                  "level": 4,
+                  "parent": "OS-05-01",
+                  "name_official": "I/O 控制方式",
+                  "name_plain": "I/O 控制方式",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-05-01-03",
+                  "level": 4,
+                  "parent": "OS-05-01",
+                  "name_official": "I/O 软件层次结构",
+                  "name_plain": "I/O 软件层次结构",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-05-01-04",
+                  "level": 4,
+                  "parent": "OS-05-01",
+                  "name_official": "输入/输出应用程序接口",
+                  "name_plain": "输入/输出应用程序接口",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "OS-05-02",
+              "level": 3,
+              "parent": "OS-05",
+              "name_official": "设备独立软件",
+              "name_plain": "设备独立软件",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "OS-05-02-01",
+                  "level": 4,
+                  "parent": "OS-05-02",
+                  "name_official": "缓冲区管理",
+                  "name_plain": "缓冲区管理",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-05-02-02",
+                  "level": 4,
+                  "parent": "OS-05-02",
+                  "name_official": "设备分配与回收",
+                  "name_plain": "设备分配与回收",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-05-02-03",
+                  "level": 4,
+                  "parent": "OS-05-02",
+                  "name_official": "假脱机技术（SPOOLing）",
+                  "name_plain": "假脱机技术（SPOOLing）",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-05-02-04",
+                  "level": 4,
+                  "parent": "OS-05-02",
+                  "name_official": "设备驱动程序接口",
+                  "name_plain": "设备驱动程序接口",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "OS-05-03",
+              "level": 3,
+              "parent": "OS-05",
+              "name_official": "外存管理",
+              "name_plain": "外存与磁盘调度",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "OS-05-03-01",
+                  "level": 4,
+                  "parent": "OS-05-03",
+                  "name_official": "磁盘",
+                  "name_plain": "磁盘",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "OS-05-03-02",
+                  "level": 4,
+                  "parent": "OS-05-03",
+                  "name_official": "固态硬盘",
+                  "name_plain": "固态硬盘",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CN",
+      "level": 1,
+      "parent": null,
+      "name_official": "计算机网络",
+      "name_plain": "计算机网络",
+      "aliases": [],
+      "满分": 25,
+      "children": [
+        {
+          "id": "CN-01",
+          "level": 2,
+          "parent": "CN",
+          "name_official": "计算机网络概述",
+          "name_plain": "计算机网络概述",
+          "aliases": [],
+          "exam_freq": null,
+          "depends_on": [],
+          "children": [
+            {
+              "id": "CN-01-01",
+              "level": 3,
+              "parent": "CN-01",
+              "name_official": "计算机网络基本概念",
+              "name_plain": "计算机网络基本概念",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CN-01-01-01",
+                  "level": 4,
+                  "parent": "CN-01-01",
+                  "name_official": "计算机网络的定义、组成与功能",
+                  "name_plain": "计算机网络的定义、组成与功能",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-01-01-02",
+                  "level": 4,
+                  "parent": "CN-01-01",
+                  "name_official": "计算机网络的分类",
+                  "name_plain": "计算机网络的分类",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-01-01-03",
+                  "level": 4,
+                  "parent": "CN-01-01",
+                  "name_official": "计算机网络主要性能指标",
+                  "name_plain": "计算机网络主要性能指标",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CN-01-02",
+              "level": 3,
+              "parent": "CN-01",
+              "name_official": "计算机网络体系结构",
+              "name_plain": "计算机网络体系结构",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CN-01-02-01",
+                  "level": 4,
+                  "parent": "CN-01-02",
+                  "name_official": "计算机网络分层结构",
+                  "name_plain": "计算机网络分层结构",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-01-02-02",
+                  "level": 4,
+                  "parent": "CN-01-02",
+                  "name_official": "计算机网络协议、接口、服务等概念",
+                  "name_plain": "计算机网络协议、接口、服务等概念",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-01-02-03",
+                  "level": 4,
+                  "parent": "CN-01-02",
+                  "name_official": "ISO/OSI 参考模型和 TCP/IP 参考模型",
+                  "name_plain": "ISO/OSI 参考模型和 TCP/IP 参考模型",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "CN-02",
+          "level": 2,
+          "parent": "CN",
+          "name_official": "物理层",
+          "name_plain": "物理层",
+          "aliases": [],
+          "exam_freq": null,
+          "depends_on": [],
+          "children": [
+            {
+              "id": "CN-02-01",
+              "level": 3,
+              "parent": "CN-02",
+              "name_official": "通信基础",
+              "name_plain": "通信基础",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CN-02-01-01",
+                  "level": 4,
+                  "parent": "CN-02-01",
+                  "name_official": "信道、信号、带宽、码元、波特、速率、信源与信宿等基本概念",
+                  "name_plain": "信道、信号、带宽、码元、波特、速率、信源与信宿等基本概念",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-02-01-02",
+                  "level": 4,
+                  "parent": "CN-02-01",
+                  "name_official": "奈奎斯特定理与香农定理",
+                  "name_plain": "奈奎斯特定理与香农定理",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-02-01-03",
+                  "level": 4,
+                  "parent": "CN-02-01",
+                  "name_official": "编码与调制",
+                  "name_plain": "编码与调制",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-02-01-04",
+                  "level": 4,
+                  "parent": "CN-02-01",
+                  "name_official": "电路交换、报文交换与分组交换",
+                  "name_plain": "电路交换、报文交换与分组交换",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-02-01-05",
+                  "level": 4,
+                  "parent": "CN-02-01",
+                  "name_official": "数据报与虚电路",
+                  "name_plain": "数据报与虚电路",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CN-02-02",
+              "level": 3,
+              "parent": "CN-02",
+              "name_official": "传输介质",
+              "name_plain": "传输介质",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CN-02-02-01",
+                  "level": 4,
+                  "parent": "CN-02-02",
+                  "name_official": "双绞线、同轴电缆、光纤与无线传输介质",
+                  "name_plain": "双绞线、同轴电缆、光纤与无线传输介质",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-02-02-02",
+                  "level": 4,
+                  "parent": "CN-02-02",
+                  "name_official": "物理层接口的特性",
+                  "name_plain": "物理层接口的特性",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CN-02-03",
+              "level": 3,
+              "parent": "CN-02",
+              "name_official": "物理层设备",
+              "name_plain": "物理层设备",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CN-02-03-01",
+                  "level": 4,
+                  "parent": "CN-02-03",
+                  "name_official": "中继器",
+                  "name_plain": "中继器",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-02-03-02",
+                  "level": 4,
+                  "parent": "CN-02-03",
+                  "name_official": "集线器",
+                  "name_plain": "集线器",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "CN-03",
+          "level": 2,
+          "parent": "CN",
+          "name_official": "数据链路层",
+          "name_plain": "数据链路层",
+          "aliases": [],
+          "exam_freq": null,
+          "depends_on": [],
+          "children": [
+            {
+              "id": "CN-03-01",
+              "level": 3,
+              "parent": "CN-03",
+              "name_official": "数据链路层的功能",
+              "name_plain": "数据链路层的功能",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "CN-03-02",
+              "level": 3,
+              "parent": "CN-03",
+              "name_official": "组帧",
+              "name_plain": "组帧",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            },
+            {
+              "id": "CN-03-03",
+              "level": 3,
+              "parent": "CN-03",
+              "name_official": "差错控制",
+              "name_plain": "差错控制",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CN-03-03-01",
+                  "level": 4,
+                  "parent": "CN-03-03",
+                  "name_official": "检错编码",
+                  "name_plain": "检错编码",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-03-03-02",
+                  "level": 4,
+                  "parent": "CN-03-03",
+                  "name_official": "纠错编码",
+                  "name_plain": "纠错编码",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CN-03-04",
+              "level": 3,
+              "parent": "CN-03",
+              "name_official": "流量控制与可靠传输机制",
+              "name_plain": "流量控制与可靠传输机制",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CN-03-04-01",
+                  "level": 4,
+                  "parent": "CN-03-04",
+                  "name_official": "流量控制、可靠传输与滑动窗口机制",
+                  "name_plain": "流量控制、可靠传输与滑动窗口机制",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-03-04-02",
+                  "level": 4,
+                  "parent": "CN-03-04",
+                  "name_official": "停止-等待协议",
+                  "name_plain": "停止-等待协议",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-03-04-03",
+                  "level": 4,
+                  "parent": "CN-03-04",
+                  "name_official": "后退 N 帧协议（GBN）",
+                  "name_plain": "后退 N 帧协议（GBN）",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-03-04-04",
+                  "level": 4,
+                  "parent": "CN-03-04",
+                  "name_official": "选择重传协议（SR）",
+                  "name_plain": "选择重传协议（SR）",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CN-03-05",
+              "level": 3,
+              "parent": "CN-03",
+              "name_official": "介质访问控制",
+              "name_plain": "介质访问控制（CSMA/CD 等）",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CN-03-05-01",
+                  "level": 4,
+                  "parent": "CN-03-05",
+                  "name_official": "信道划分",
+                  "name_plain": "信道划分",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-03-05-02",
+                  "level": 4,
+                  "parent": "CN-03-05",
+                  "name_official": "随机访问",
+                  "name_plain": "随机访问",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-03-05-03",
+                  "level": 4,
+                  "parent": "CN-03-05",
+                  "name_official": "轮询访问",
+                  "name_plain": "轮询访问",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CN-03-06",
+              "level": 3,
+              "parent": "CN-03",
+              "name_official": "局域网",
+              "name_plain": "局域网",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CN-03-06-01",
+                  "level": 4,
+                  "parent": "CN-03-06",
+                  "name_official": "局域网的基本概念与体系结构",
+                  "name_plain": "局域网的基本概念与体系结构",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-03-06-02",
+                  "level": 4,
+                  "parent": "CN-03-06",
+                  "name_official": "以太网与 IEEE802.3",
+                  "name_plain": "以太网与 IEEE802.3",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-03-06-03",
+                  "level": 4,
+                  "parent": "CN-03-06",
+                  "name_official": "IEEE 802.11 无线局域网",
+                  "name_plain": "IEEE 802.11 无线局域网",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-03-06-04",
+                  "level": 4,
+                  "parent": "CN-03-06",
+                  "name_official": "VLAN 基本概念与基本原理",
+                  "name_plain": "VLAN 基本概念与基本原理",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CN-03-07",
+              "level": 3,
+              "parent": "CN-03",
+              "name_official": "广域网",
+              "name_plain": "广域网",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CN-03-07-01",
+                  "level": 4,
+                  "parent": "CN-03-07",
+                  "name_official": "广域网的基本概念",
+                  "name_plain": "广域网的基本概念",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-03-07-02",
+                  "level": 4,
+                  "parent": "CN-03-07",
+                  "name_official": "PPP 协议",
+                  "name_plain": "PPP 协议",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CN-03-08",
+              "level": 3,
+              "parent": "CN-03",
+              "name_official": "数据链路层设备",
+              "name_plain": "数据链路层设备",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "CN-04",
+          "level": 2,
+          "parent": "CN",
+          "name_official": "网络层",
+          "name_plain": "网络层",
+          "aliases": [],
+          "exam_freq": null,
+          "depends_on": [],
+          "children": [
+            {
+              "id": "CN-04-01",
+              "level": 3,
+              "parent": "CN-04",
+              "name_official": "网络层的功能",
+              "name_plain": "网络层的功能",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CN-04-01-01",
+                  "level": 4,
+                  "parent": "CN-04-01",
+                  "name_official": "异构网络互连",
+                  "name_plain": "异构网络互连",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-04-01-02",
+                  "level": 4,
+                  "parent": "CN-04-01",
+                  "name_official": "路由与转发",
+                  "name_plain": "路由与转发",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-04-01-03",
+                  "level": 4,
+                  "parent": "CN-04-01",
+                  "name_official": "SDN 基本概念",
+                  "name_plain": "SDN 基本概念",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-04-01-04",
+                  "level": 4,
+                  "parent": "CN-04-01",
+                  "name_official": "拥塞控制",
+                  "name_plain": "拥塞控制",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CN-04-02",
+              "level": 3,
+              "parent": "CN-04",
+              "name_official": "路由算法",
+              "name_plain": "路由算法",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CN-04-02-01",
+                  "level": 4,
+                  "parent": "CN-04-02",
+                  "name_official": "静态路由与动态路由",
+                  "name_plain": "静态路由与动态路由",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-04-02-02",
+                  "level": 4,
+                  "parent": "CN-04-02",
+                  "name_official": "距离-向量路由算法",
+                  "name_plain": "距离-向量路由算法",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-04-02-03",
+                  "level": 4,
+                  "parent": "CN-04-02",
+                  "name_official": "链路状态路由算法",
+                  "name_plain": "链路状态路由算法",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-04-02-04",
+                  "level": 4,
+                  "parent": "CN-04-02",
+                  "name_official": "层次路由",
+                  "name_plain": "层次路由",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CN-04-03",
+              "level": 3,
+              "parent": "CN-04",
+              "name_official": "IPv4",
+              "name_plain": "IPv4（子网/NAT/CIDR）",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CN-04-03-01",
+                  "level": 4,
+                  "parent": "CN-04-03",
+                  "name_official": "IPv4 分组",
+                  "name_plain": "IPv4 分组",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-04-03-02",
+                  "level": 4,
+                  "parent": "CN-04-03",
+                  "name_official": "IPv4 地址与 NAT",
+                  "name_plain": "IPv4 地址与 NAT",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-04-03-03",
+                  "level": 4,
+                  "parent": "CN-04-03",
+                  "name_official": "子网划分、路由聚集、子网掩码与 CIDR",
+                  "name_plain": "子网划分、路由聚集、子网掩码与 CIDR",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-04-03-04",
+                  "level": 4,
+                  "parent": "CN-04-03",
+                  "name_official": "ARP 协议、DHCP 协议、ICMP 协议",
+                  "name_plain": "ARP 协议、DHCP 协议、ICMP 协议",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CN-04-04",
+              "level": 3,
+              "parent": "CN-04",
+              "name_official": "IPv6",
+              "name_plain": "IPv6",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CN-04-04-01",
+                  "level": 4,
+                  "parent": "CN-04-04",
+                  "name_official": "IPv6 的主要特点",
+                  "name_plain": "IPv6 的主要特点",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-04-04-02",
+                  "level": 4,
+                  "parent": "CN-04-04",
+                  "name_official": "IPv6 地址",
+                  "name_plain": "IPv6 地址",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CN-04-05",
+              "level": 3,
+              "parent": "CN-04",
+              "name_official": "路由协议",
+              "name_plain": "路由协议（RIP/OSPF/BGP）",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CN-04-05-01",
+                  "level": 4,
+                  "parent": "CN-04-05",
+                  "name_official": "自治系统",
+                  "name_plain": "自治系统",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-04-05-02",
+                  "level": 4,
+                  "parent": "CN-04-05",
+                  "name_official": "域内路由与域间路由",
+                  "name_plain": "域内路由与域间路由",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-04-05-03",
+                  "level": 4,
+                  "parent": "CN-04-05",
+                  "name_official": "RIP 路由协议",
+                  "name_plain": "RIP 路由协议",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-04-05-04",
+                  "level": 4,
+                  "parent": "CN-04-05",
+                  "name_official": "OSPF 路由协议",
+                  "name_plain": "OSPF 路由协议",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-04-05-05",
+                  "level": 4,
+                  "parent": "CN-04-05",
+                  "name_official": "BGP 路由协议",
+                  "name_plain": "BGP 路由协议",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CN-04-06",
+              "level": 3,
+              "parent": "CN-04",
+              "name_official": "IP 组播",
+              "name_plain": "IP 组播",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CN-04-06-01",
+                  "level": 4,
+                  "parent": "CN-04-06",
+                  "name_official": "组播的概念",
+                  "name_plain": "组播的概念",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-04-06-02",
+                  "level": 4,
+                  "parent": "CN-04-06",
+                  "name_official": "IP 组播地址",
+                  "name_plain": "IP 组播地址",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CN-04-07",
+              "level": 3,
+              "parent": "CN-04",
+              "name_official": "移动 IP",
+              "name_plain": "移动 IP",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CN-04-07-01",
+                  "level": 4,
+                  "parent": "CN-04-07",
+                  "name_official": "移动 IP 的概念",
+                  "name_plain": "移动 IP 的概念",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-04-07-02",
+                  "level": 4,
+                  "parent": "CN-04-07",
+                  "name_official": "移动 IP 通信过程",
+                  "name_plain": "移动 IP 通信过程",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CN-04-08",
+              "level": 3,
+              "parent": "CN-04",
+              "name_official": "网络层设备",
+              "name_plain": "网络层设备",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CN-04-08-01",
+                  "level": 4,
+                  "parent": "CN-04-08",
+                  "name_official": "路由器的组成和功能",
+                  "name_plain": "路由器的组成和功能",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-04-08-02",
+                  "level": 4,
+                  "parent": "CN-04-08",
+                  "name_official": "路由表与路由转发",
+                  "name_plain": "路由表与路由转发",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "CN-05",
+          "level": 2,
+          "parent": "CN",
+          "name_official": "传输层",
+          "name_plain": "传输层",
+          "aliases": [],
+          "exam_freq": null,
+          "depends_on": [],
+          "children": [
+            {
+              "id": "CN-05-01",
+              "level": 3,
+              "parent": "CN-05",
+              "name_official": "传输层提供的服务",
+              "name_plain": "传输层提供的服务",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CN-05-01-01",
+                  "level": 4,
+                  "parent": "CN-05-01",
+                  "name_official": "传输层的功能",
+                  "name_plain": "传输层的功能",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-05-01-02",
+                  "level": 4,
+                  "parent": "CN-05-01",
+                  "name_official": "传输层寻址与端口",
+                  "name_plain": "传输层寻址与端口",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-05-01-03",
+                  "level": 4,
+                  "parent": "CN-05-01",
+                  "name_official": "无连接服务与面向连接服务",
+                  "name_plain": "无连接服务与面向连接服务",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CN-05-02",
+              "level": 3,
+              "parent": "CN-05",
+              "name_official": "UDP 协议",
+              "name_plain": "UDP 协议",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CN-05-02-01",
+                  "level": 4,
+                  "parent": "CN-05-02",
+                  "name_official": "UDP 数据段",
+                  "name_plain": "UDP 数据段",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-05-02-02",
+                  "level": 4,
+                  "parent": "CN-05-02",
+                  "name_official": "UDP 校验",
+                  "name_plain": "UDP 校验",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CN-05-03",
+              "level": 3,
+              "parent": "CN-05",
+              "name_official": "TCP 协议",
+              "name_plain": "TCP 协议",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CN-05-03-01",
+                  "level": 4,
+                  "parent": "CN-05-03",
+                  "name_official": "TCP 段",
+                  "name_plain": "TCP 段",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-05-03-02",
+                  "level": 4,
+                  "parent": "CN-05-03",
+                  "name_official": "TCP 连接管理",
+                  "name_plain": "TCP 连接管理",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-05-03-03",
+                  "level": 4,
+                  "parent": "CN-05-03",
+                  "name_official": "TCP 可靠传输",
+                  "name_plain": "TCP 可靠传输",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-05-03-04",
+                  "level": 4,
+                  "parent": "CN-05-03",
+                  "name_official": "TCP 流量控制",
+                  "name_plain": "TCP 流量控制",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-05-03-05",
+                  "level": 4,
+                  "parent": "CN-05-03",
+                  "name_official": "TCP 拥塞控制",
+                  "name_plain": "TCP 拥塞控制",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "CN-06",
+          "level": 2,
+          "parent": "CN",
+          "name_official": "应用层",
+          "name_plain": "应用层",
+          "aliases": [],
+          "exam_freq": null,
+          "depends_on": [],
+          "children": [
+            {
+              "id": "CN-06-01",
+              "level": 3,
+              "parent": "CN-06",
+              "name_official": "网络应用模型",
+              "name_plain": "网络应用模型",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CN-06-01-01",
+                  "level": 4,
+                  "parent": "CN-06-01",
+                  "name_official": "客户/服务器（C/S）模型",
+                  "name_plain": "客户/服务器（C/S）模型",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-06-01-02",
+                  "level": 4,
+                  "parent": "CN-06-01",
+                  "name_official": "对等（P2P）模型",
+                  "name_plain": "对等（P2P）模型",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CN-06-02",
+              "level": 3,
+              "parent": "CN-06",
+              "name_official": "DNS 系统",
+              "name_plain": "DNS 系统",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CN-06-02-01",
+                  "level": 4,
+                  "parent": "CN-06-02",
+                  "name_official": "层次域名空间",
+                  "name_plain": "层次域名空间",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-06-02-02",
+                  "level": 4,
+                  "parent": "CN-06-02",
+                  "name_official": "域名服务器",
+                  "name_plain": "域名服务器",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-06-02-03",
+                  "level": 4,
+                  "parent": "CN-06-02",
+                  "name_official": "域名解析过程",
+                  "name_plain": "域名解析过程",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CN-06-03",
+              "level": 3,
+              "parent": "CN-06",
+              "name_official": "FTP",
+              "name_plain": "FTP",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CN-06-03-01",
+                  "level": 4,
+                  "parent": "CN-06-03",
+                  "name_official": "FTP 协议的工作原理",
+                  "name_plain": "FTP 协议的工作原理",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-06-03-02",
+                  "level": 4,
+                  "parent": "CN-06-03",
+                  "name_official": "控制连接与数据连接",
+                  "name_plain": "控制连接与数据连接",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CN-06-04",
+              "level": 3,
+              "parent": "CN-06",
+              "name_official": "电子邮件",
+              "name_plain": "电子邮件",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CN-06-04-01",
+                  "level": 4,
+                  "parent": "CN-06-04",
+                  "name_official": "电子邮件系统的组成结构",
+                  "name_plain": "电子邮件系统的组成结构",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-06-04-02",
+                  "level": 4,
+                  "parent": "CN-06-04",
+                  "name_official": "电子邮件格式与 MIME",
+                  "name_plain": "电子邮件格式与 MIME",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-06-04-03",
+                  "level": 4,
+                  "parent": "CN-06-04",
+                  "name_official": "SMTP 协议与 POP3 协议",
+                  "name_plain": "SMTP 协议与 POP3 协议",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            },
+            {
+              "id": "CN-06-05",
+              "level": 3,
+              "parent": "CN-06",
+              "name_official": "WWW",
+              "name_plain": "WWW",
+              "aliases": [],
+              "exam_freq": null,
+              "depends_on": [],
+              "children": [
+                {
+                  "id": "CN-06-05-01",
+                  "level": 4,
+                  "parent": "CN-06-05",
+                  "name_official": "WWW 的概念与组成结构",
+                  "name_plain": "WWW 的概念与组成结构",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                },
+                {
+                  "id": "CN-06-05-02",
+                  "level": 4,
+                  "parent": "CN-06-05",
+                  "name_official": "HTTP",
+                  "name_plain": "HTTP",
+                  "aliases": [],
+                  "exam_freq": null,
+                  "depends_on": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
