@@ -28,6 +28,7 @@ import uuid
 import streamlit as st
 
 from yj import data, store, diagnose, profile, path, llm, graph
+from yj import snap as snap_mod
 
 st.set_page_config(page_title="优学鲸 · 408 考研", page_icon="🐳", layout="wide")
 
@@ -448,13 +449,22 @@ else:
         else:
             snap = st.selectbox("选择快照", _snaps)
             if st.button("▶ 回放快照", type="primary"):
-                with open(f"data/prewarm/{snap}.json", encoding="utf-8") as f:
-                    d = json.load(f)
-                st.session_state["run"] = d["结果"]
-                st.session_state["run_meta"] = (
-                    f"快照「{snap}」· 预跑于 {d['生成时间']} · "
-                    f"当时 LLM {'已配置' if d['LLM已配置'] else '未配置'} · "
-                    f"内容来源 {d['内容来源']}")
+                # 兜底路径必须比实时路径更稳: 快照文件若损坏(曾出现过写了一半的
+                # json), 这里给可读的提示而不是让页面抛异常 —— 路演现场不能崩。
+                try:
+                    with open(f"data/prewarm/{snap}.json", encoding="utf-8") as f:
+                        d = json.load(f)
+                    d = snap_mod.to_jsonable(d)
+                    st.session_state["run"] = d["结果"]
+                    st.session_state["run_meta"] = (
+                        f"快照「{snap}」· 预跑于 {d['生成时间']} · "
+                        f"当时 LLM {'已配置' if d['LLM已配置'] else '未配置'} · "
+                        f"内容来源 {d['内容来源']}")
+                except Exception as e:                  # noqa: BLE001
+                    st.error(f"快照「{snap}」读取失败，无法回放："
+                             f"{type(e).__name__}: {e}。"
+                             f"请在命令行重跑 `python scripts/prewarm.py "
+                             f"--name {snap} --path root` 重新生成。")
     else:
         names = [p["名称"] for p in rec["路径"]] or ["补根因"]
         sel_name = st.selectbox("选中要生成的路径", names)

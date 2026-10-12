@@ -25,6 +25,7 @@
 """
 import os
 import sys
+import json
 import tempfile
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -162,6 +163,58 @@ def main():
     v = generate.verify(bad_md)
     check("能识别出考纲外内容", not v["通过"], f"疑似={v['疑似考纲外']}")
     check("不误报考纲内考点", "平衡二叉树" not in str(v["疑似考纲外"]))
+
+    print("\n=== 9) 路演兜底：链路状态必须能存成 JSON 快照 ===")
+    # 这一节是补一个真实翻过的车: 链路状态里的 marks 是 set, json.dump 直接抛
+    # TypeError。它在预跑脚本**跑完 6 个 Agent、打印完复核通过之后**才崩,
+    # 所以平时跑界面完全发现不了, 只在"路演现场想用快照兜底"时暴露。
+    #
+    # ⚠️ 必须给这个用户写入作答记录再过图: 没有作答也没有标记时, 条件边会走
+    # "need_diagnosis" 分支直接返回 —— 那样 resources 为空, 断言会**空集通过**,
+    # 等于什么都没测到(第一版本就是这么写的, 只序列化了 286 字节)。
+    from yj import graph, snap
+    gu = "stubtest_user"
+    store.reset_user(gu)
+    # 必须造出**有对有错**的作答: 全对时掌握度很高, 路径会正确地给出
+    # 「暂无需补强」→ 0 个资源, 断言又会空集通过。这里按 3 对 1 错铺，
+    # 保证确实有薄弱考点被推荐出来。
+    for i, item in enumerate(data.diagnostic()["题目"]):
+        q = data.questions()[item["id"]]
+        right = (i % 4 != 0)
+        store.record_answer(gu, item["id"], item["答案"] if right else None,
+                            right, source="diagnostic")
+    st = graph.run(gu, selected_path="root")
+    res = st.get("resources") or []
+    check("条件边走到生成分支（确实产出了资源）", bool(res),
+          f"{len(res)} 个考点")
+    check("6 个 Agent 都留下轨迹", len(st.get("traced") or []) >= 6,
+          "、".join(t["agent"] for t in st.get("traced") or []))
+    try:
+        payload = json.dumps(snap.to_jsonable(st), ensure_ascii=False)
+        check("graph.run() 输出可 JSON 序列化", True, f"{len(payload):,} 字节")
+    except TypeError as e:
+        check("graph.run() 输出可 JSON 序列化", False, f"{e}")
+    check("marks 已被归一化成列表（不再是 set）",
+          not isinstance(snap.to_jsonable(st).get("marks"), set))
+    check("序列化后资源数与原始一致",
+          len(json.loads(json.dumps(snap.to_jsonable(st)))["resources"]) == len(res))
+
+    print("\n=== 10) 已落盘的快照文件都应能被界面回放 ===")
+    import glob
+    snaps = sorted(glob.glob(os.path.join(BASE, "data", "prewarm", "*.json")))
+    if not snaps:
+        check("存在预跑快照", False, "data/prewarm 为空, 路演将没有兜底")
+    for p in snaps:
+        nm = os.path.basename(p)
+        try:
+            with open(p, encoding="utf-8") as f:
+                d = json.load(f)
+            ok_struct = all(k in d for k in ("生成时间", "LLM已配置", "内容来源", "结果"))
+            ok_res = bool(d["结果"].get("resources"))
+            check(f"{nm} 可回放", ok_struct and ok_res,
+                  f"{len(d['结果'].get('resources') or [])} 个考点资源")
+        except Exception as e:                          # noqa: BLE001
+            check(f"{nm} 可回放", False, f"{type(e).__name__}: {e}")
 
     print("\n" + "=" * 60)
     if FAIL:

@@ -25,7 +25,7 @@ import datetime
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, BASE)
 
-from yj import store, graph, llm, data          # noqa: E402
+from yj import store, graph, llm, data, snap    # noqa: E402
 
 SNAP_DIR = os.path.join(BASE, "data", "prewarm")
 
@@ -72,8 +72,10 @@ def main():
         print("        配置 key 后重跑本脚本, 快照就会变成 LLM 生成内容。")
 
     # ---- 落快照
+    # 必须过 snap.to_jsonable: 链路状态里的 marks 是 set, json.dump 会直接抛
+    # TypeError(而且在跑完 6 个 Agent 之后才崩)。见 yj/snap.py 的说明。
     os.makedirs(SNAP_DIR, exist_ok=True)
-    snap = {
+    snap_obj = {
         "名称": args.name,
         "生成时间": datetime.datetime.now().isoformat(timespec="seconds"),
         "用户": args.user,
@@ -83,12 +85,21 @@ def main():
         "内容来源": srcs,
         "结果": r,
     }
+    # 先序列化到内存再写盘: 万一还有未知类型, 报错不会留下**半个损坏的快照文件**
+    # (之前就是这么坏了一份 roadshow.json, 界面回放时才炸)。
+    payload = json.dumps(snap.to_jsonable(snap_obj), ensure_ascii=False, indent=2)
     dst = os.path.join(SNAP_DIR, f"{args.name}.json")
     with open(dst, "w", encoding="utf-8") as f:
-        json.dump(snap, f, ensure_ascii=False, indent=2)
+        f.write(payload)
+    # 写完立刻读回校验一遍: 兜底机制必须自己先被验证
+    with open(dst, encoding="utf-8") as f:
+        back = json.load(f)
+    assert back["结果"]["resources"] == json.loads(
+        json.dumps(snap.to_jsonable(r), ensure_ascii=False))["resources"], \
+        "快照读回与源数据不一致"
     size = os.path.getsize(dst)
-    print(f"\n快照已保存: {dst}  ({size:,} 字节)")
-    print("现场如遇 API 不可用, 在界面「⑤ 资源生成」选择该快照回放即可。")
+    print(f"\n快照已保存并读回校验通过: {dst}  ({size:,} 字节)")
+    print("现场如遇 API 不可用, 在界面「⑤ 讲义生成」选择该快照回放即可。")
 
 
 if __name__ == "__main__":
