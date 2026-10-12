@@ -36,10 +36,11 @@ def main():
         for t in json.load(open(f, encoding="utf-8"))["标注"]:
             tags[(y, t["题号"])] = t
 
-    fixf = os.path.join(OUT, "tags_fix", "retag.json")
+    # 人工复核后的修正(可多批, 每批一个文件, 键均为 "重打")
     n_fix = 0
-    if os.path.exists(fixf):
-        for t in json.load(open(fixf, encoding="utf-8"))["重打"]:
+    for fixf in sorted(glob.glob(os.path.join(OUT, "tags_fix", "*.json"))):
+        doc = json.load(open(fixf, encoding="utf-8"))
+        for t in doc.get("重打", []):
             tags[(t["year"], t["题号"])] = t
             n_fix += 1
 
