@@ -34,6 +34,12 @@ CREATE TABLE IF NOT EXISTS answers (
     answered_at  TEXT NOT NULL,
     PRIMARY KEY (user_id, question_id)
 );
+CREATE TABLE IF NOT EXISTS marks (
+    user_id     TEXT NOT NULL,
+    node_id     TEXT NOT NULL,     -- 用户自己标记为薄弱的知识点(叶子考点)
+    created_at  TEXT NOT NULL,
+    PRIMARY KEY (user_id, node_id)
+);
 CREATE TABLE IF NOT EXISTS cache (
     key         TEXT PRIMARY KEY,
     value       TEXT NOT NULL,
@@ -95,6 +101,26 @@ def get_answers(user_id, source=None):
 def reset_user(user_id):
     with conn() as c:
         c.execute("DELETE FROM answers WHERE user_id=?", (user_id,))
+        c.execute("DELETE FROM marks WHERE user_id=?", (user_id,))
+
+
+# ---------------------------------------------------------------- 自报薄弱点
+def get_marks(user_id):
+    """用户自己勾选的薄弱考点集合。这是**不依赖做题**的画像来源。"""
+    with conn() as c:
+        rows = c.execute("SELECT node_id FROM marks WHERE user_id=?",
+                         (user_id,)).fetchall()
+    return {r["node_id"] for r in rows}
+
+
+def set_marks(user_id, node_ids):
+    """整体替换用户的标记(界面上的多选一次提交, 比逐个增删简单可靠)。"""
+    ensure_user(user_id)
+    node_ids = set(node_ids)
+    with conn() as c:
+        c.execute("DELETE FROM marks WHERE user_id=?", (user_id,))
+        c.executemany("INSERT OR IGNORE INTO marks(user_id,node_id,created_at) VALUES(?,?,?)",
+                      [(user_id, n, _now()) for n in node_ids])
 
 
 # ---------------------------------------------------------------- LLM 预跑缓存
@@ -116,6 +142,6 @@ if __name__ == "__main__":
     init_db()
     print(f"数据库就绪: {DB}")
     with conn() as c:
-        for t in ("users", "answers", "cache"):
+        for t in ("users", "answers", "marks", "cache"):
             n = c.execute(f"SELECT COUNT(*) n FROM {t}").fetchone()["n"]
             print(f"  {t}: {n} 行")

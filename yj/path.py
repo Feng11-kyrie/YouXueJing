@@ -24,14 +24,7 @@ TARGET = 0.85            # 补到这个水平算"可以过了"
 MAX_DEPTH = 3            # 依赖追溯的最大深度, 防止路径过长
 
 
-@lru_cache(maxsize=1)
-def _leaf_question_count():
-    """考点 -> 题库里有多少道真题可练"""
-    out = {}
-    for q in data.questions().values():
-        if q["题型"] == "单项选择题" and q.get("答案"):
-            out[q["主考点"]] = out.get(q["主考点"], 0) + 1
-    return out
+_leaf_question_count = data.leaf_question_count   # 统一到 data 层
 
 
 def _est_minutes(current):
@@ -129,14 +122,20 @@ def _path_补根因(chapter_mastery, mastery_leaf, weak_chapters, topn=5):
     return steps
 
 
+def _fmt_mastery(m):
+    """掌握度可能是 None(用户只标记、没测过), 格式化前必须处理。"""
+    return f"{m:.0%}" if m is not None else "未测"
+
+
 def _path_冲高频(mastery_leaf, weak_leaves, topn=6):
     """只挑考频最高的薄弱考点, 不考虑依赖顺序。"""
     steps = []
     for w in sorted(weak_leaves, key=lambda x: -data.freq().get(x["leaf"], {})
                     .get("考查总次数", 0))[:topn]:
+        n = data.freq().get(w["leaf"], {}).get("考查总次数", 0)
+        src = "（你标记的）" if w.get("来源") == "自报" else ""
         steps.append(_step(w["leaf"], mastery_leaf,
-                           f"18 年考了 {data.freq().get(w['leaf'], {}).get('考查总次数', 0)} 次，"
-                           f"你目前 {w['掌握度']:.0%}"))
+                           f"18 年考了 {n} 次，你目前 {_fmt_mastery(w['掌握度'])}{src}"))
     return steps
 
 
@@ -153,7 +152,7 @@ def _path_错题驱动(mastery_leaf, wrong_ids):
     return steps
 
 
-def recommend(answers, wrong_ids=None, weak_threshold=WEAK):
+def recommend(answers, wrong_ids=None, weak_threshold=WEAK, marks=None):
     """
     主入口。返回 2-4 条可选路径。
 
@@ -165,15 +164,15 @@ def recommend(answers, wrong_ids=None, weak_threshold=WEAK):
     from .diagnose import mastery_by_leaf, mastery_by_chapter
     mastery_leaf = mastery_by_leaf(answers)
     chapter_mastery = mastery_by_chapter(answers)
-    prof = __import__("yj.profile", fromlist=["build"]).build(answers)
+    prof = __import__("yj.profile", fromlist=["build"]).build(answers, marks)
     weak_leaves = prof["薄弱考点"]
     weak_chapters = prof["薄弱章节"]
 
     if wrong_ids is None:
         wrong_ids = [qid for qid, a in answers.items() if not a["is_correct"]]
 
-    if not mastery_leaf:
-        return {"提示": "还没有作答记录，请先完成诊断。", "路径": []}
+    if not mastery_leaf and not marks:
+        return {"提示": "还没有作答记录，也没有标记薄弱点。", "路径": []}
 
     paths = []
 

@@ -22,7 +22,7 @@ TASK_SUMMARY = "summary"
 
 
 # ---------------------------------------------------------------- 讲义
-def lesson(leaf, answers=None, use_llm=True):
+def lesson(leaf, answers=None, use_llm=True, marks=None):
     """生成某个考点的讲义。返回 {markdown, source, 校验}"""
     n = data.nodes().get(leaf, {})
     f = data.freq().get(leaf, {})
@@ -46,7 +46,8 @@ def lesson(leaf, answers=None, use_llm=True):
         "覆盖年份数": f.get("覆盖年份数", 0),
         "逐年": f.get("逐年", {}),
         "我的掌握度": (f"{mine['掌握度']:.0%}（{mine['答对']}/{mine['题数']}）"
-                       if mine else "未测"),
+                       if mine else ("未测（你标记为薄弱）"
+                                     if leaf in (marks or set()) else "未测")),
         "前置考点": [{"名称": data.node_name(p),
                       "我的掌握度": (f"{ml[p]['掌握度']:.0%}" if p in ml else "未测")}
                      for p in pres],

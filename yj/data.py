@@ -108,6 +108,16 @@ def chapter_leaves():
     return out
 
 
+@lru_cache(maxsize=1)
+def leaf_question_count():
+    """考点 -> 题库里有多少道**带答案的单选题**可练(界面选题时显示用)"""
+    out = {}
+    for q in questions().values():
+        if q["题型"] == "单项选择题" and q.get("答案"):
+            out[q["主考点"]] = out.get(q["主考点"], 0) + 1
+    return out
+
+
 def chapter_of(node_id):
     n = nodes().get(node_id)
     return n["chapter"] if n else None

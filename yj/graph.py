@@ -42,6 +42,7 @@ except Exception:                                   # noqa: BLE001
 class YJState(TypedDict, total=False):
     user_id: str
     answers: dict
+    marks: set            # 用户自报的薄弱考点(与作答同等重要)
     mastery: dict
     profile: dict
     path: dict
@@ -61,11 +62,13 @@ def _trace(state, agent, detail):
 
 # ---------------------------------------------------------------- 各 Agent
 def agent_load(state: YJState) -> YJState:
-    """准备 Agent：读作答记录。"""
+    """准备 Agent：读作答记录 + 用户自报的薄弱考点。"""
     a = store.get_answers(state["user_id"])
-    n = len(a)
-    return {"answers": a, "notes": [f"读取到 {n} 条作答记录"],
-            "traced": _trace(state, "准备 Agent", f"读取作答 {n} 条")}
+    mk = store.get_marks(state["user_id"])
+    return {"answers": a, "marks": mk,
+            "notes": [f"读取到 {len(a)} 条作答、{len(mk)} 个自报薄弱考点"],
+            "traced": _trace(state, "准备 Agent",
+                             f"读取作答 {len(a)} 条 / 自报薄弱 {len(mk)} 个")}
 
 
 def agent_diagnose(state: YJState) -> YJState:
@@ -79,8 +82,8 @@ def agent_diagnose(state: YJState) -> YJState:
 
 
 def agent_profile(state: YJState) -> YJState:
-    """画像 Agent：掌握度 → 薄弱点排序与文字画像。"""
-    p = profile_mod.build(state["answers"])
+    """画像 Agent：掌握度 + 自报薄弱 → 薄弱点排序与文字画像。"""
+    p = profile_mod.build(state["answers"], state.get("marks"))
     return {"profile": p,
             "notes": state.get("notes", []) + [p["文字画像"]],
             "traced": _trace(state, "画像 Agent",
@@ -90,7 +93,7 @@ def agent_profile(state: YJState) -> YJState:
 
 def agent_recommend(state: YJState) -> YJState:
     """路径 Agent：画像 + 依赖图 → 三条可选路径。"""
-    r = path_mod.recommend(state["answers"])
+    r = path_mod.recommend(state["answers"], marks=state.get("marks"))
     sel = state.get("selected_path")
     if not sel and r["路径"]:
         sel = r["路径"][0]["id"]
@@ -113,7 +116,8 @@ def agent_generate(state: YJState) -> YJState:
             "leaf": leaf,
             "考点名": s["考点名"],
             "章节": s["章节"],
-            "讲义": gen_mod.lesson(leaf, state["answers"]),
+            "讲义": gen_mod.lesson(leaf, state["answers"],
+                                   marks=state.get("marks")),
             "速记": gen_mod.summary(leaf),
             "习题": gen_mod.exercises(leaf, n=5),
         })
@@ -142,13 +146,23 @@ def agent_review(state: YJState) -> YJState:
 
 # ---------------------------------------------------------------- 条件边
 def route_after_load(state: YJState) -> Literal["diagnose", "need_diagnosis"]:
-    """没有作答记录时不去算掌握度, 直接要求先诊断 —— 这就是条件边的用处。"""
-    return "diagnose" if state.get("answers") else "need_diagnosis"
+    """
+    两条数据来源任一存在就继续:
+      - 作答记录(诊断/练习)
+      - 用户自报的薄弱考点
+    两者都没有才要求先给点输入 —— 这就是条件边的用处。
+
+    (早期只看作答记录, 导致"只勾选不作答"的用户被挡在链路外。)
+    """
+    return ("diagnose" if (state.get("answers") or state.get("marks"))
+            else "need_diagnosis")
 
 
 def agent_need_diagnosis(state: YJState) -> YJState:
-    return {"notes": state.get("notes", []) + ["还没有作答记录, 请先完成诊断"],
-            "traced": _trace(state, "准备 Agent", "作答为空 → 要求先诊断")}
+    return {"notes": state.get("notes", []) +
+                     ["既没有作答记录, 也没有标记薄弱考点, 请先给一个输入"],
+            "traced": _trace(state, "准备 Agent",
+                             "无作答且无标记 → 要求先给输入")}
 
 
 # ---------------------------------------------------------------- 组装
