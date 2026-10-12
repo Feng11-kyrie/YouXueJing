@@ -16,17 +16,22 @@
   - 用户身份用浏览器 localStorage 里的 uuid, **不做注册登录**(崩溃与拖延的第一来源)。
   - 所有结论都能追溯到具体答题记录, 界面上的数字与数据层严格一致。
 """
+import os
+import json
 import uuid
 import streamlit as st
 
-from yj import data, store, diagnose, profile, path
+from yj import data, store, diagnose, profile, path, llm, graph
 
 st.set_page_config(page_title="优学鲸 · 408 考研", page_icon="🐳", layout="wide")
 
 # ---------------------------------------------------------------- 用户身份
 # 不做账号体系: 用浏览器本地存一个 uuid。刷新不丢画像, 用户零门槛。
 if "user_id" not in st.session_state:
-    st.session_state.user_id = str(uuid.uuid4())[:8]
+    # 支持 ?u=demo 直接切到预置用户 —— 路演时一键跳到准备好的演示画像,
+    # 也方便调试(否则每次刷新都是新用户, 画像就空了)。
+    _qp = st.query_params.get("u")
+    st.session_state.user_id = _qp if _qp else str(uuid.uuid4())[:8]
 USER = st.session_state.user_id
 store.init_db()
 store.ensure_user(USER)
@@ -48,8 +53,12 @@ st.sidebar.markdown(
 - 诊断题 {o['诊断题数']} 道
 """
 )
-PAGES = ["① 诊断", "② 我的画像", "③ 学习路径", "④ 专项练习"]
+PAGES = ["① 诊断", "② 我的画像", "③ 学习路径", "④ 专项练习", "⑤ 资源生成"]
 page = st.sidebar.radio("导航", PAGES, label_visibility="collapsed")
+
+ok, msg = llm.status()
+st.sidebar.divider()
+st.sidebar.caption(("🟢 " if ok else "🟡 ") + msg)
 
 n_ans = len(answers())
 st.sidebar.divider()
@@ -216,7 +225,7 @@ elif page == PAGES[2]:
 
 
 # ================================================================ ④ 练习
-else:
+elif page == PAGES[3]:
     st.title("④ 专项练习")
     st.markdown("按考点练真题，**提交后立即判分并归因到考点**。")
 
@@ -280,3 +289,118 @@ else:
                 f"作答记录会实时更新你的掌握度与路径推荐。"
             )
             st.rerun()
+
+
+# ================================================================ ⑤ 资源生成
+else:
+    st.title("⑤ 资源生成（多智能体）")
+    ok_llm, msg_llm = llm.status()
+    if ok_llm:
+        st.success(msg_llm, icon="🟢")
+    else:
+        st.warning(
+            msg_llm + " —— 页面会照常跑通，"
+            "但讲义正文是**用真实数据填的模板**，不是 AI 写的。",
+            icon="🟡",
+        )
+
+    a = answers()
+    if not a:
+        st.info("还没有作答记录，请先到「① 诊断」做一次；"
+                "多智能体链路需要画像作为输入。")
+        st.stop()
+
+    st.markdown(
+        "点下面按钮，跑一次完整的 **LangGraph 多智能体链路**："
+        "准备 → 诊断 → 画像 → 路径 → 生成 → 复核。"
+    )
+    import glob as _glob
+    _snaps = sorted(os.path.basename(x)[:-5]
+                    for x in _glob.glob("data/prewarm/*.json"))
+    mode = st.radio("运行方式", ["实时运行", "回放预跑快照"], horizontal=True,
+                    help="路演兜底：API 不可用时用快照回放，输出与预跑时完全一致。")
+
+    sel_name = st.selectbox("选中要生成的路径",
+                            [p["名称"] for p in path.recommend(a)["路径"]])
+    if mode == "回放预跑快照":
+        if not _snaps:
+            st.warning("还没有快照。先在命令行跑："
+                       "`python scripts/prewarm.py --name roadshow`")
+        else:
+            snap_name = st.selectbox("选择快照", _snaps)
+            if st.button("▶ 回放快照", type="primary"):
+                with open(f"data/prewarm/{snap_name}.json", encoding="utf-8") as f:
+                    _d = json.load(f)
+                st.session_state["run"] = _d["结果"]
+                st.session_state["run_meta"] = (
+                    f"快照「{snap_name}」· 预跑于 {_d['生成时间']} · "
+                    f"当时 LLM {'已配置' if _d['LLM已配置'] else '未配置'} · "
+                    f"内容来源 {_d['内容来源']}")
+    else:
+        if st.button("▶ 运行多智能体链路", type="primary"):
+            with st.spinner("多智能体执行中…"):
+                st.session_state["run"] = graph.run(USER, selected_path={
+                    "补根因": "root", "冲高频": "freq", "错题驱动": "wrong",
+                    "暂无需补强": "none"}.get(sel_name, "root"))
+                st.session_state.pop("run_meta", None)
+
+    if st.session_state.get("run_meta"):
+        st.info("正在回放预跑快照 —— " + st.session_state["run_meta"], icon="📦")
+
+    R = st.session_state.get("run")
+    if not R:
+        st.caption("还没有运行。")
+        st.stop()
+
+    st.subheader("执行轨迹")
+    st.caption("每个 Agent 的职责与产出，便于核对链路每一步做了什么。")
+    for t in R.get("traced", []):
+        st.markdown(f"- **{t['agent']}** — {t['detail']}")
+
+    rv = R.get("review") or {}
+    if rv:
+        if rv.get("通过"):
+            st.success(f"复核 Agent：考纲校验通过（检查了 {rv.get('检查项数', 0)} 个考点）",
+                       icon="✅")
+        else:
+            st.error(f"复核 Agent：发现 {len(rv.get('越纲项', {}))} 个考点有越纲内容")
+
+    with st.expander("多智能体调度图（LangGraph StateGraph）"):
+        st.caption("这是实际编译出来的图，含一条条件边：没有作答记录时直接要求先诊断。")
+        st.code(graph.mermaid(), language="mermaid")
+
+    st.subheader("生成的资源")
+    res = R.get("resources") or []
+    if not res:
+        st.info("这条路径上没有需要生成的考点。")
+        st.stop()
+
+    for x in res:
+        src = x["讲义"]["source"]
+        label = {"llm": "LLM 生成", "cache": "LLM 生成（预跑缓存）",
+                 "template": "模板模式（真实数据）",
+                 "error": "LLM 失败，已降级为模板"}.get(src, src)
+        with st.expander(f"📘 {x['考点名']}　·　{x['章节']}　·　{label}",
+                         expanded=(x is res[0])):
+            t1, t2, t3 = st.tabs(["讲义", "知识点速记", "配套真题"])
+            with t1:
+                st.markdown(x["讲义"]["markdown"])
+                v = x["讲义"].get("校验") or {}
+                if v.get("通过"):
+                    st.caption("✅ 复核 Agent：内容未越出考纲考点范围")
+                else:
+                    st.caption(f"⚠️ 疑似考纲外内容：{v.get('疑似考纲外')}")
+            with t2:
+                st.markdown(x["速记"])
+            with t3:
+                if not x["习题"]:
+                    st.caption("该考点题库中暂无带答案的选择题。")
+                for i, q in enumerate(x["习题"], 1):
+                    with st.container(border=True):
+                        st.markdown(f"**{i}. {q['年份']} 年 第 {q['题号']} 题**"
+                                    f"（难度 {q['难度']}）")
+                        st.markdown(q["题干"])
+                        if q.get("图片"):
+                            st.image(f"data/{q['图片']}", width=360)
+                        with st.expander("查看答案"):
+                            st.markdown(f"正确答案：**{q['答案']}**")

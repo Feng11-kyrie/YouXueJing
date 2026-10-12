@@ -53,7 +53,10 @@
 │   ├── store.py                      #   SQLite（用户/作答/LLM 预跑缓存）
 │   ├── diagnose.py                   #   作答 → 章节/学科掌握度
 │   ├── profile.py                    #   掌握度 → 用户画像
-│   └── path.py                       #   画像 + 依赖图 → 推荐学习路径
+│   ├── path.py                       #   画像 + 依赖图 → 推荐学习路径
+│   ├── llm.py                        #   LLM 封装（可配置 / 无 key 时降级模板）
+│   ├── generate.py                   #   讲义 / 速记 / 习题生成 + 考纲校验
+│   └── graph.py                      #   LangGraph 多智能体编排
 ├── data/
 │   ├── syllabus/                     # 考纲知识点树
 │   │   ├── syllabus_tree.json        #   4 学科 / 24 章 / 116 节 / 214 考点
@@ -229,6 +232,62 @@ python demo.py                # 或先看命令行版的闭环演示
 
 依赖边的章级聚合说明见 `yj/data.py::chapter_prereqs()`：叶子级依赖有 339 条，
 但诊断只有 32 题、每章 1-2 题，叶子级掌握度太稀疏，因此聚合成 24 个章级依赖用于冷启动。
+
+## 多智能体编排（LangGraph StateGraph）
+
+```
+准备 Agent → 诊断 Agent → 画像 Agent → 路径 Agent → 生成 Agent → 复核 Agent
+     │
+     └─(条件边) 没有作答记录 → 直接要求先诊断，不进后续节点
+```
+
+六个节点各司其职，状态在节点间显式传递，因此每一步的输入输出都可检查。
+条件边让"数据不足就走另一条路"成为图的一部分，而不是散落在代码里的 if。
+实际编译出的图可在界面「⑤ 资源生成」里看到（含条件边）。
+
+**为什么「复核 Agent」不用 LLM**：它做的是**程序化校验** —— 检查生成文本里的
+小标题/加粗词是否都能在考纲 266 个叶子考点中找到。这是可重复、可验证的防幻觉措施，
+比"再让一个 LLM 审一遍"可靠得多。
+
+### LLM 可配置，且无 key 时不假装
+
+| 情形 | 行为 | 界面标注 |
+|---|---|---|
+| 配了 API key | 调 LLM 生成讲解正文 | "LLM 生成" |
+| 命中预跑缓存 | 直接读缓存 | "LLM 生成（预跑缓存）" |
+| 未配 key | **用真实数据填模板** | "模板模式（真实数据）" |
+| 调用失败 | 降级为模板 | "LLM 失败，已降级为模板" |
+
+**模板模式不是"假 AI 输出"**：它给的都是真数据（考频、真题清单、前置掌握度），
+只是没有 LLM 写的讲解文字。界面上必须标清 —— 对外表述要真实。
+
+配置方式（任选其一）：
+
+```bash
+export LLM_API_KEY=sk-xxx
+export LLM_BASE_URL=https://api.deepseek.com/v1
+export LLM_MODEL=deepseek-chat
+```
+
+或写进 `.streamlit/secrets.toml`：
+
+```toml
+[llm]
+api_key = "sk-xxx"
+base_url = "https://api.deepseek.com/v1"
+model = "deepseek-chat"
+```
+
+### 路演兜底
+
+```bash
+python scripts/prewarm.py --name roadshow --profile "DS:0.8,CO:0.65,OS:0.5,CN:0.35"
+```
+
+预跑一条完整链路，落成**状态快照**（LLM 输出同时进缓存）。现场即使 API 完全不可用，
+在「⑤ 资源生成」里选「回放预跑快照」即可一键回放**与预跑时完全一致**的结果。
+
+界面上还支持 `?u=demo` 直接切到预置用户 —— 路演时一键跳到准备好的演示画像。
 
 ## 数据质量清洗
 
