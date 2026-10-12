@@ -64,8 +64,21 @@ def status():
     return False, "未配置 API key —— 当前为演示模式（模板 + 真实数据，非 AI 生成）"
 
 
-def _cache_key(task, payload):
-    raw = json.dumps({"t": task, "p": payload}, ensure_ascii=False, sort_keys=True)
+PROMPT_VERSION = 1     # 提示词改版时递增, 避免旧缓存污染新提示词的输出
+
+
+def _cache_key(task, payload, cfg=None):
+    """
+    缓存键 = 任务 + 输入 + **模型/服务地址** + 提示词版本。
+
+    必须带上模型: 否则从 deepseek-chat 换到别的模型时会命中上一个模型的输出,
+    表现为"换了模型但结果没变", 极难排查。
+    """
+    cfg = cfg or _secrets()
+    raw = json.dumps({"t": task, "p": payload,
+                      "m": cfg.get("model"), "b": cfg.get("base_url"),
+                      "v": PROMPT_VERSION},
+                     ensure_ascii=False, sort_keys=True)
     return "llm:" + hashlib.sha256(raw.encode("utf-8")).hexdigest()[:32]
 
 
@@ -77,7 +90,7 @@ def complete(task, prompt, payload=None, use_cache=True):
     上层可据此在界面上标注内容来源 —— 这是"表述真实"的技术保障。
     """
     cfg = _secrets()
-    key = _cache_key(task, payload if payload is not None else prompt)
+    key = _cache_key(task, payload if payload is not None else prompt, cfg)
     if use_cache:
         hit = store.cache_get(key)
         if hit:
