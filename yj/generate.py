@@ -43,14 +43,21 @@ def lesson(leaf, answers=None, use_llm=True, marks=None):
         "考纲位置": f"{data.CODE2NAME.get(subj, '')} › {data.node_name(ch)}",
         "考查总次数": f.get("考查总次数", 0),
         "主考点次数": f.get("主考点次数", 0),
+        "次考点次数": f.get("次考点次数", 0),
         "覆盖年份数": f.get("覆盖年份数", 0),
-        "逐年": f.get("逐年", {}),
+        # 逐年从 dict 预格式化成文本: 早期版本直接把 dict 插进 f-string,
+        # 界面上会露出 {'2024': 1} 这种 Python 字面量(用户可见的观感缺陷)。
+        "逐年": "　".join(f"{y}:{c}" for y, c in sorted(f.get("逐年", {}).items()))
+                or "无",
+        "逐年年数": len(f.get("逐年", {})),
+        "占本学科": f.get("占本学科题量比"),
         "我的掌握度": (f"{mine['掌握度']:.0%}（{mine['答对']}/{mine['题数']}）"
                        if mine else ("未测（你标记为薄弱）"
                                      if leaf in (marks or set()) else "未测")),
         "前置考点": [{"名称": data.node_name(p),
                       "我的掌握度": (f"{ml[p]['掌握度']:.0%}" if p in ml else "未测")}
                      for p in pres],
+        "后续考点": [data.node_name(s) for s in data.successors().get(leaf, [])][:6],
         "相关真题": [{"年份": q["year"], "题号": q["题号"], "难度": q.get("难度"),
                       "题型": q["题型"]} for q in rel[:12]],
         "真题总数": len(rel),
@@ -78,6 +85,19 @@ def lesson(leaf, answers=None, use_llm=True, marks=None):
     return {"markdown": md, "source": source, "校验": verify(md), "数据": ctx}
 
 
+def _freq_chart(逐年_str):
+    """
+    逐年分布 → 单行字符图。考频分布是"这个考点该怎么投入时间"的直接依据,
+    一行图比一串数字更快读懂(路演时也更好讲)。
+    """
+    pairs = [p for p in (逐年_str or "").split("　") if ":" in p]
+    if not pairs:
+        return ""
+    items = [(p.split(":", 1)[0], int(p.split(":", 1)[1])) for p in pairs]
+    top = max(c for _y, c in items) or 1
+    return " ".join("▁▂▃▄▅▆▇█"[min(7, int(c / top * 7))] for _y, c in items)
+
+
 def _render_lesson(ctx, body, source):
     L = [f"## {ctx['考点']}", ""]
     L.append(f"**考纲位置**：{ctx['考纲位置']}　|　"
@@ -95,15 +115,35 @@ def _render_lesson(ctx, body, source):
         L.append("")
         L.append(body)
     else:
+        # 模板模式: 不出"讲解正文"(没有 LLM 就没有), 但把**真实数据**组织成
+        # 可执行的学习依据。早先这里只写了一句"请对照考纲自查" —— 那等于没给东西。
         L.append("> 以下为**模板模式**：未配置 LLM API，"
-                 "这里只列出真实数据，讲解正文留待接入 API 后生成。")
+                 "不生成讲解正文，只把该考点的真实考查数据整理出来。")
         L.append("")
-        L.append("**你需要掌握的（来自考纲）**：请对照考纲该考点的要求逐条自查。")
+        L.append("### 这个考点怎么考")
+        L.append(f"- **18 年共出现 {ctx['考查总次数']} 次**："
+                 f"作为主考点 {ctx['主考点次数']} 次，作为次考点 {ctx['次考点次数']} 次")
+        L.append(f"- **覆盖 {ctx['覆盖年份数']}/18 年**"
+                 + (f"，占本学科题量 {ctx['占本学科']:.1%}" if ctx["占本学科"] else "")
+                 + f"　→　{'常年必考，优先投入' if ctx['覆盖年份数'] >= 12 else ('反复出现，稳定考点' if ctx['覆盖年份数'] >= 6 else '偶考，按时间取舍')}")
+        L.append(f"- **逐年分布**：{ctx['逐年']}")
+        if _freq_chart(ctx["逐年"]):
+            L.append(f"- **分布图**：`{_freq_chart(ctx['逐年'])}`"
+                     f"（左起 2009 → 右至 2026）")
+        L.append("")
+        L.append("### 学完它之后要用到它的地方")
+        if ctx["后续考点"]:
+            L.append("　".join(f"`{s}`" for s in ctx["后续考点"])
+                     + "　——　这些考点把它当前置，先补它比硬练它们更省时间。")
+        else:
+            L.append("依赖图里没有以它为前置的考点，它更偏独立考点。")
         L.append("")
         L.append("**建议做法**：")
-        L.append(f"1. 先确认前置考点是否牢固；")
+        L.append("1. 先确认上面列出的前置考点是否牢固"
+                 + (f"（当前：{'、'.join(p['名称'] + ' ' + p['我的掌握度'] for p in ctx['前置考点'])}）"
+                    if ctx["前置考点"] else "（该考点无前置）"))
         L.append(f"2. 用下面 {ctx['真题总数']} 道真题自测，把错题按这个考点归档；")
-        L.append(f"3. 结合逐年分布（{ctx['逐年']}）判断它是常考还是偶考。")
+        L.append(f"3. 对着「分布图」判断投入：它出现在 {ctx['逐年年数']} 个年份里。")
     L.append("")
     L.append("### 相关真题")
     if ctx["相关真题"]:
@@ -138,9 +178,15 @@ def verify(markdown):
         if any(c == nm or c in nm or nm in c for nm in leaf_names):
             continue
         # 常见的非考点词白名单
+        # ⚠️ 这里必须包含**本模块自己输出的固定小标题** —— 否则模板模式会被
+        # 自己的标题误判为"越纲"(修 generate 的排版时踩过: 新增小节标题后
+        # 复核结果立刻变成"发现 6 个越纲项")。校验要拦的是 LLM 编造的考点,
+        # 不是我们自己的排版词。
         if any(k in c for k in ("建议", "做法", "易错", "重点", "复习", "概念",
                                 "结构", "相关真题", "需要掌握", "考纲位置",
-                                "模板模式", "前置", "考频", "掌握度")):
+                                "模板模式", "前置", "考频", "掌握度",
+                                "这个考点怎么考", "学完它之后", "分布图",
+                                "逐年分布", "覆盖", "用到它的地方", "年共出现")):
             continue
         unknown.append(c)
     return {
@@ -183,7 +229,9 @@ def summary(leaf):
          f"（主考点 {f.get('主考点次数', 0)}，次考点 {f.get('次考点次数', 0)}）",
          f"- **覆盖年份**：{f.get('覆盖年份数', 0)}/18"]
     if f.get("逐年"):
-        L.append(f"- **逐年分布**：{f['逐年']}")
+        # 与讲义同样处理: 不把 dict 字面量印到界面/文本里
+        L.append("- **逐年分布**："
+                 + "　".join(f"{y}:{c}" for y, c in sorted(f["逐年"].items())))
     if subs:
         L += ["", "## 包含的子考点"]
         L += [f"- {s}" for s in subs]

@@ -144,6 +144,22 @@ def prereqs():
 
 
 @lru_cache(maxsize=1)
+def successors():
+    """
+    节点 -> 以它为前置的节点列表(即 prereqs 的反向)。
+
+    用途: 讲义里回答"学完这个考点, 后面哪些考点要用到它" ——
+    依赖图此前只有向上的根因追溯, 这是第一个向下的用途。
+    同样只取置信度 >= 0.7 的高置信边。
+    """
+    out = {}
+    for e in depends():
+        if e["置信度"] >= 0.7:
+            out.setdefault(e["from"], []).append(e["to"])
+    return out
+
+
+@lru_cache(maxsize=1)
 def chapter_prereqs():
     """
     章 -> 前置章列表, 每项 {chapter, 依据, 置信度}。
