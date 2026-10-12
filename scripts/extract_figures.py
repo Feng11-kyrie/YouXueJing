@@ -232,8 +232,9 @@ def map_page(groups, caps, qstarts, qs, stats, y, pi, verbose):
                 if qs[n].get("需插图"):
                     pick, tier = n, "需插图标记"
                     break
-        if pick is None and above:
-            pick, tier = above[0][1], "就近回落"
+        # 刻意不做"盲配最近的一道题": 实测那会把图配给题干毫无插图引用的题
+        # (如 2010-09 折半查找配到有向图、2022-06 无向图配到 AOE 网)。
+        # 无题注又无引用时宁可留成显式缺口, 交由人工判断。
         if pick is not None:
             out.append((pick, g, tier))
             continue
