@@ -1,0 +1,12 @@
+# 优学鲸 · Streamlit 配置
+# 显式关掉 developmentMode: 该模式下 server.port 不生效, 会直接启动失败。
+[global]
+developmentMode = false
+
+[server]
+port = 8501
+headless = true
+fileWatcherType = "auto"
+
+[browser]
+gatherUsageStats = false
