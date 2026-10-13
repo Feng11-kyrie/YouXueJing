@@ -23,6 +23,7 @@
 """
 import argparse
 import contextlib
+import datetime
 import os
 import sys
 from collections import Counter, defaultdict
@@ -38,7 +39,8 @@ from proto import store_lite as store              # noqa: E402
 from proto.cards import question_card, SUBJECT_COLORS   # noqa: E402
 
 PER = 10
-NAV = [("/exam", "408 历年真题", "description"),
+NAV = [("/", "首页", "home"),
+       ("/exam", "408 历年真题", "description"),
        ("/practice", "挑考点练习", "school"),
        ("/diagnose", "快速诊断", "monitor_heart"),
        ("/profile", "我的画像", "insights"),
@@ -47,28 +49,52 @@ NAV = [("/exam", "408 历年真题", "description"),
 
 ui.add_head_html("""
 <style>
-  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; }
-  .qcard { border-left: 4px solid var(--sc, #2563EB); }
-  .opt { transition: background .12s; cursor: pointer; border: 1px solid #E3E8EF; }
-  .opt:hover { background: #F5F8FF; border-color: #B9CCF5; }
-  .opt.sel { background: #E7F0FE; border-color: #2563EB; }
-  .opt.right { background: #E6F6EC; border-color: #7DCB9A; }
-  .opt.wrong { background: #FDECEC; border-color: #E9A0A0; }
-  .cell { width: 26px; height: 24px; line-height: 24px; text-align: center;
-          font-size: 11px; border-radius: 5px; border: 1px solid #D7DEE8;
-          background: #fff; color: #46586D; cursor: pointer; }
-  .cell.ok { background: #E6F6EC; border-color: #7DCB9A; color: #1B5E36; }
-  .cell.bad { background: #FDECEC; border-color: #E9A0A0; color: #8C2C2C; }
-  .cell.cur { outline: 2px solid #2563EB; outline-offset: 1px; font-weight: 700; }
-  .bookcard { border: 1px solid #E3E8EF; transition: box-shadow .15s, transform .15s; }
-  .bookcard:hover { box-shadow: 0 4px 14px rgba(15,23,42,.09); transform: translateY(-1px); }
-  .chaprow, .leafrow { border: 1px solid transparent; transition: background .12s; cursor: pointer; }
-  .chaprow:hover, .leafrow:hover { background: #F3F6FB; border-color: #DCE3EC; }
-  .leafrow.on { background: #E7F0FE; border-color: #2563EB; }
-  .navlink { border-radius: 8px; padding: 6px 10px; }
-  .navlink:hover { background: #EEF3FB; }
-  .navlink.on { background: #DCE8FC; color: #17418F; font-weight: 650;
-                border-left: 3px solid #2563EB; }
+  /* ===== 设计变量：一处改，全局生效 =====
+     之前的毛病是颜色到处硬编码（侧栏 #EEF1F5、按钮 #2563EB、说明 #8A6D3B…），
+     结果"全是同一个半死不活的灰蓝、没有主次"。现在收敛成这几个 token：
+       --ink   正文主色（深灰，不用纯黑）
+       --sub   次要文字
+       --mut   弱化/辅助
+       --line  分割线
+       --accent 唯一主色（只给"主要行动点"和选中态用，不滥用）
+       --accent-weak 主色的浅底
+       --warn  提醒（缺数据、未配置）
+     规则：**一屏只允许一个主色按钮**，其余用描边/文字按钮 —— 视觉平权等于没有引导。 */
+  :root {
+    --ink:#1F2933; --sub:#5A6B80; --mut:#9AA5B1; --line:#E6EAF0;
+    --accent:#2563EB; --accent-weak:#EAF1FE; --warn:#B45309;
+    --bg-side:#F7F8FA;
+  }
+  body { font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+         color:var(--ink); }
+  a { color:inherit; }
+  .qcard { border-left:4px solid var(--sc, var(--accent)); }
+  .opt { transition:background .12s; cursor:pointer; border:1px solid var(--line); }
+  .opt:hover { background:#F5F8FF; border-color:#B9CCF5; }
+  .opt.sel { background:var(--accent-weak); border-color:var(--accent); }
+  .opt.right { background:#E6F6EC; border-color:#7DCB9A; }
+  .opt.wrong { background:#FDECEC; border-color:#E9A0A0; }
+  .cell { width:26px; height:24px; line-height:24px; text-align:center;
+          font-size:11px; border-radius:5px; border:1px solid #D7DEE8;
+          background:#fff; color:#46586D; cursor:pointer; }
+  .cell.ok { background:#E6F6EC; border-color:#7DCB9A; color:#1B5E36; }
+  .cell.bad { background:#FDECEC; border-color:#E9A0A0; color:#8C2C2C; }
+  .cell.cur { outline:2px solid var(--accent); outline-offset:1px; font-weight:700; }
+  /* 卡片：不再用"细灰框+白底"（像 Excel 导出的表格），改成无边框+浅底+悬停浮起 */
+  .softcard { background:#fff; border:1px solid var(--line); border-radius:12px;
+              transition:box-shadow .16s, transform .16s, border-color .16s; }
+  .softcard:hover { box-shadow:0 6px 20px rgba(15,23,42,.08);
+                    transform:translateY(-2px); border-color:#D3DCE8; }
+  /* 侧栏导航：整行可点 + 选中态明确 */
+  .navlink { display:flex; align-items:center; gap:10px; width:100%;
+             border-radius:8px; padding:7px 10px; cursor:pointer; text-decoration:none; }
+  .navlink:hover { background:#EDF1F7; }
+  .navlink.on { background:var(--accent-weak); color:#17418F; font-weight:650;
+                box-shadow:inset 3px 0 0 var(--accent); }
+  .navlink .ic { font-size:18px; opacity:.75; }
+  .kpi { font-size:26px; font-weight:700; line-height:1.1; }
+  .muted { color:var(--mut); }
+  .sub { color:var(--sub); }
 </style>
 """, shared=True)
 
@@ -92,70 +118,191 @@ def shell(active: str, user: str):
     marks = store.get_marks(user)
     with ui.row().classes("w-full no-wrap items-start"):
         # 侧栏
-        with ui.column().classes("w-56 shrink-0 p-3 gap-1 min-h-screen "
-                                "border-r border-gray-200 bg-[#EEF1F5]"):
-            with ui.row().classes("items-center gap-2 mb-2"):
+        with ui.column().classes("w-52 shrink-0 p-3 gap-1 min-h-screen "
+                                "border-r").style("background:var(--bg-side);"
+                                                  "border-color:var(--line)"):
+            with ui.row().classes("items-center gap-2 mb-3"):
                 ui.label("408").classes("w-9 h-9 rounded-lg text-white text-xs "
-                                       "font-bold flex items-center "
-                                       "justify-center") \
+                                       "font-bold flex items-center justify-center") \
                     .style("background:linear-gradient(135deg,#2563EB,#0D9488)")
                 with ui.column().classes("gap-0"):
                     ui.label("优学鲸").classes("text-lg font-bold leading-tight")
-                    ui.label("考研 · 个性化学习").classes("text-xs text-gray-500")
-            ui.label("功能").classes("text-[11px] tracking-wider "
-                                    "text-gray-400 mt-1 mb-0.5 ml-1")
+                    ui.label("408 考研").classes("text-[11px] muted")
+
             for href, label, icon in NAV:
-                cls = "navlink w-full " + ("on" if href == active else "")
-                with ui.row().classes(cls):
-                    ui.icon(icon).classes("text-[18px] text-gray-500")
-                    ui.link(label, f"{href}?user={user}") \
-                        .classes("no-underline text-[15px] text-inherit")
-            ui.label("我的进度").classes("text-[11px] tracking-wider "
-                                        "text-gray-400 mt-3 mb-0.5 ml-1")
-            ui.label(f"薄弱考点 {len(marks)} 个 · 已作答 {len(answers)} 题") \
-                .classes("text-[13px] text-gray-600 ml-1")
-            o = data.overview()
-            ui.label(f'{o["题目总数"]} 题 · {o["叶子考点"]} 考点 · '
-                     f'{o["依赖边"]} 依赖边').classes("text-[11px] text-gray-400 ml-1")
-            ok_llm, _msg = llm.status()
-            ui.label("● 已连接" if ok_llm else "● 演示模式（未配置 key）") \
-                .classes("text-[11px] ml-1") \
-                .style(f'color:{"#1B5E36" if ok_llm else "#8A6D3B"}')
-            ui.label(f"用户 {user}").classes("text-[11px] text-gray-400 ml-1")
+                with ui.link(target=f"{href}?user={user}").classes(
+                        "navlink" + (" on" if href == active else "")):
+                    ui.icon(icon).classes("ic")
+                    ui.label(label).classes("text-[14px]")
+
+            # 下面这块原来是"846 题·266 考点·339 依赖边 + 演示模式 + 用户 demo"，
+            # 全是**给开发看的字段**：
+            #   · "依赖边"是图数据库术语，学生看不懂
+            #   · "演示模式（未配置 key）"等于开场就说"我还没接真 AI"
+            #   · "薄弱考点 0 个"是空数据，没有兜底设计
+            # 改成：没有数据时给**行动指引**，不展示空值。
+            ui.separator().classes("mt-4").style("border-color:var(--line)")
+            if marks:
+                ui.label(f"已标记 {len(marks)} 个薄弱考点").classes("text-[12px] sub")
+            if answers:
+                ui.label(f"已作答 {len(answers)} 题").classes("text-[12px] sub")
+            if not marks and not answers:
+                # 空状态：告诉用户"先做什么"，而不是把 0 摆出来
+                ui.label("还没有学习记录").classes("text-[12px] sub")
+                with ui.link(target=f"/diagnose?user={user}").classes(
+                        "text-[12px] no-underline").style("color:var(--accent)"):
+                    ui.label("先花 20 分钟做一次诊断 →")
         # 内容区
-        with ui.column().classes("flex-1 p-6 gap-3 min-w-0"):
+        with ui.column().classes("flex-1 p-6 gap-3 min-w-0 max-w-6xl"):
             yield
 
 
 # ================================================================ 首页
 @ui.page("/")
 def home(user: str = "demo"):
+    """
+    首页。这一版是重做的，针对四条批评：
+
+      ① "首屏 2/3 死白" —— 真 bug：那行漏了 w-full，卡片按内容收缩撑不开
+      ② "没有任何个性化内容" —— 现在首屏就是**你自己的学情**（掌握度/薄弱章/错题）
+      ③ "三张卡片平级罗列，不知道点哪个" —— 改成一个**主行动点** + 次选项；
+         一屏只有一个主色按钮，其余是文字链接
+      ④ "文案是申报书/操作说明/技术术语" —— 全部改成学生话：
+         · 不说"依赖边"（图数据库术语）
+         · 不说"多智能体生成讲义"（学生不关心几个 agent）
+         · 不说"面向 408 考研的 AI 个性化学习资源生成平台"（申报书语言）
+    """
     store.ensure_user(user)
-    with shell("", user):
-        ui.label("优学鲸").classes("text-2xl font-bold")
-        ui.label("面向 408 考研的 AI 个性化学习资源生成平台").classes("text-gray-600")
-        ui.separator()
-        ui.label("从哪儿开始").classes("text-lg font-semibold")
-        with ui.row().classes("gap-4 items-stretch"):
-            with ui.card().classes("bookcard flex-1 p-4 gap-1 shadow-none"):
-                ui.label("① 直接做真题").classes("font-semibold")
-                ui.label("2009–2026 共 18 套，单选题可就地作答判分").classes("text-sm text-gray-600")
-                ui.button("打开 408 历年真题",
-                          on_click=lambda: ui.navigate.to(f"/exam?user={user}")) \
-                    .props("unelevated")
-            with ui.card().classes("bookcard flex-1 p-4 gap-1 shadow-none"):
-                ui.label("② 挑我薄弱的知识点").classes("font-semibold")
-                ui.label("选课 → 选章 → 勾考点 → 就地出题，无需先做测试") \
-                    .classes("text-sm text-gray-600")
-                ui.button("打开 挑考点练习",
-                          on_click=lambda: ui.navigate.to(f"/practice?user={user}")) \
-                    .props("unelevated")
-            with ui.card().classes("bookcard flex-1 p-4 gap-1 shadow-none"):
-                ui.label("③ 看我的学情").classes("font-semibold")
-                ui.label("画像 / 三条学习路径 / 多智能体生成讲义").classes("text-sm text-gray-600")
-                ui.button("打开 我的画像",
-                          on_click=lambda: ui.navigate.to(f"/profile?user={user}")) \
-                    .props("unelevated")
+    a, mk = store.get_answers(user), store.get_marks(user)
+
+    with shell("/", user):
+        # ---------- 首屏：自我介绍 + 我现在的学情 ----------
+        ui.label(f"你好，{user}").classes("text-2xl font-bold")
+        ui.label("离 408 还有多少天不重要，重要的是今天练哪几道。") \
+            .classes("text-[15px] sub")
+
+        if not a and not mk:
+            # ============ 空状态：给一个明确的第一步，而不是三张平级卡片
+            with ui.card().classes("softcard w-full p-6 gap-2 mt-2"):
+                ui.label("先花 20 分钟，让我知道你的底子") \
+                    .classes("text-xl font-bold")
+                ui.label("32 道题覆盖 408 全部 24 章。做完你会拿到："
+                         "四科掌握度、最该补的章节、以及三条学习路径。") \
+                    .classes("text-[15px] sub")
+                ui.label("也可以跳过测试，直接挑你觉得薄弱的知识点练 —— "
+                         "只是推荐会没那么准。").classes("text-[13px] muted")
+                with ui.row().classes("gap-3 mt-2"):
+                    ui.button("开始诊断（32 题）",
+                              on_click=lambda: ui.navigate.to(f"/diagnose?user={user}")) \
+                        .props("unelevated color=primary")
+                    ui.button("直接挑考点练习",
+                              on_click=lambda: ui.navigate.to(f"/practice?user={user}")) \
+                        .props("flat")
+            return
+
+        # ============ 有数据：首屏就是学情 + 一个主行动点
+        prof = profile_mod.build(a, mk)
+        m = diagnose.summarize(a)
+        weakest = prof["薄弱章节"][0] if prof["薄弱章节"] else None
+
+        # 三科掌握度并排（有数据才显示）
+        if prof["学科掌握度"]:
+            with ui.row().classes("w-full gap-3"):
+                for code, v in sorted(prof["学科掌握度"].items(),
+                                     key=lambda x: -x[1]["掌握度"]):
+                    with ui.card().classes("softcard flex-1 p-4 gap-0"):
+                        ui.label(v["学科"]).classes("text-[13px] sub")
+                        ui.label(f'{v["掌握度"]:.0%}').classes("kpi mt-1") \
+                            .style("color:var(--accent)")
+                        ui.label(f'{v["答对"]}/{v["题数"]} 题') \
+                            .classes("text-[12px] muted")
+
+        # ---------- 主行动点：只有这一个主色按钮
+        with ui.card().classes("softcard w-full p-5 gap-2"):
+            if weakest:
+                ui.label(f'今天建议先补：{weakest["章节名"]}') \
+                    .classes("text-lg font-bold")
+                ui.label(f'这一章 18 年考了 {weakest["考频"]} 次，'
+                         f'你的掌握度 {weakest["掌握度"]:.0%} —— '
+                         f'考得多、你又弱，性价比最高。').classes("text-[14px] sub")
+                ui.button("从这一章开始练",
+                          on_click=lambda: ui.navigate.to(
+                              f'/practice?subject={weakest.get("学科码", "DS")}'
+                              f'&user={user}')).props("unelevated color=primary")
+            else:
+                # 全科都不弱：给错题复习
+                wrong = [qid for qid, r in a.items() if not r["is_correct"]]
+                ui.label(f"你有 {len(wrong)} 道错题待复习" if wrong
+                         else "目前没有明显薄弱章节").classes("text-lg font-bold")
+                ui.label("做错的题最能暴露问题。按年份重做一遍这些题。" if wrong
+                         else "可以去真题页按年份刷卷子，或者挑新的考点。") \
+                    .classes("text-[14px] sub")
+                ui.button("去真题页错题模式",
+                          on_click=lambda: ui.navigate.to(
+                              f"/exam?view=只错题&user={user}")) \
+                    .props("unelevated color=primary")
+
+        # ---------- 下面两栏：左边"还能做什么"，右边"最近练了什么"
+        # 原来这里只有三个文字链接挤在左上角，下面 600px 全是空白
+        # （用户的第 1 条批评）。空白不该用装饰填，要用**用户想知道的东西**填。
+        from collections import Counter
+        wrong_n = sum(1 for r in a.values() if not r["is_correct"])
+        last7 = [r for r in a.values() if r.get("answered_at", "") >=
+                 (datetime.date.today() - datetime.timedelta(days=7)).isoformat()]
+        ui.separator().style("border-color:var(--line)")
+        with ui.row().classes("w-full items-start gap-10 no-wrap"):
+            # 左：学习概览 + 其他入口
+            with ui.column().classes("gap-2 flex-1 min-w-0"):
+                ui.label("我的练习").classes("text-[13px] muted")
+                with ui.row().classes("gap-8"):
+                    with ui.column().classes("gap-0"):
+                        ui.label(f'{len(a)}').classes("kpi")
+                        ui.label("累计作答").classes("text-[12px] muted")
+                    with ui.column().classes("gap-0"):
+                        ui.label(f'{len(a) - wrong_n}').classes("kpi") \
+                            .style("color:#1B5E36")
+                        ui.label("答对").classes("text-[12px] muted")
+                    with ui.column().classes("gap-0"):
+                        ui.label(f'{wrong_n}').classes("kpi") \
+                            .style("color:#8C2C2C")
+                        ui.label("待复习错题").classes("text-[12px] muted")
+                    with ui.column().classes("gap-0"):
+                        ui.label(f'{len(last7)}').classes("kpi")
+                        ui.label("近 7 天").classes("text-[12px] muted")
+                ui.label("其他入口").classes("text-[13px] muted mt-2")
+                for href, title, sub in [
+                        ("/exam", "按年份刷真题", "2009–2026 共 18 套，单选题就地判分"),
+                        ("/paths", "三条学习路径", "补根因 / 冲高频 / 错题驱动"),
+                        ("/notes", "生成讲义", "按薄弱考点出讲义和配套真题")]:
+                    with ui.column().classes("gap-0"):
+                        with ui.link(target=f"{href}?user={user}").classes("no-underline"):
+                            ui.label(f"{title} →").classes("text-[14px]") \
+                                .style("color:var(--accent)")
+                        ui.label(sub).classes("text-[12px] muted")
+
+            # 右：最近练了什么（用真实作答记录，不是占位装饰）
+            with ui.column().classes("gap-1 w-96 shrink-0"):
+                ui.label("最近练习").classes("text-[13px] muted")
+                qs = data.questions()
+                recent = sorted(a.items(), key=lambda kv: kv[1].get("answered_at", ""),
+                                reverse=True)[:6]
+                if not recent:
+                    ui.label("还没有练习记录").classes("text-[13px] muted")
+                for qid, r in recent:
+                    q = qs.get(qid)
+                    if not q:
+                        continue
+                    # 列宽给够 + nowrap：否则"2019 年第 26 题"会把"题"字挤到第二行
+                    # （实测踩过，很难看）
+                    with ui.row().classes("items-center gap-2 w-full no-wrap"):
+                        ui.icon("check_circle" if r["is_correct"] else "cancel") \
+                            .classes("text-[15px] shrink-0").style(
+                                f'color:{"#1B5E36" if r["is_correct"] else "#8C2C2C"}')
+                        ui.label(f'{q["year"]} 年第 {q["题号"]} 题') \
+                            .classes("text-[13px] shrink-0") \
+                            .style("white-space:nowrap;min-width:7.5rem")
+                        ui.label(data.node_name(q["主考点"])[:14]) \
+                            .classes("text-[12px] muted flex-1 truncate")
 
 
 # ================================================================ 真题页
