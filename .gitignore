@@ -59,3 +59,10 @@ data/prewarm/
 
 # ---- 界面截图（开发/评审用，不进仓库）----
 _shots/
+
+# ---- 综合题参考答案（从答案册 PDF 抽取，与原卷同属版权内容）----
+data/solutions
+
+# ---- SQLite WAL 模式产生的副文件（WAL 让 streamlit 与 nicegui 能并发读写）----
+data/*.db-wal
+data/*.db-shm

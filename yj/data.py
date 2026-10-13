@@ -208,6 +208,36 @@ def chapter_freq():
 
 
 @lru_cache(maxsize=1)
+def solutions():
+    """
+    综合应用题(41-47)的参考答案：{年份: {题号: 解答文本}}。
+
+    来自 scripts/extract_solutions.py（从 .cache/408/*-answer.pdf 抽取）。
+    **必须如实标注两点**：
+      ① 这些 PDF 的文字层是 OCR 结果，有噪声（如 "千"应为"于"、
+         数字 1/0 与字母 l/O 混用），不是逐字准确的官方解析；
+      ② 只有 13 个年份有文字层，2019/2021/2024/2025/2026 是纯扫描件取不到。
+    界面上不能把它说成"官方答案"，也不能对缺的年份假装有。
+    """
+    out = {}
+    import glob as _glob
+    d = os.path.join(BASE, "data", "solutions")
+    for f in sorted(_glob.glob(os.path.join(d, "*.json"))):
+        try:
+            with open(f, encoding="utf-8") as fh:
+                rec = json.load(fh)
+            out[rec["年份"]] = rec["解答"]
+        except Exception:                       # noqa: BLE001
+            continue
+    return out
+
+
+def solution(year, num):
+    """取某年某道综合题的参考答案；没有则返回 None"""
+    return (solutions().get(str(year)) or {}).get(str(num))
+
+
+@lru_cache(maxsize=1)
 def years():
     """有真题的年份, 从新到旧(界面默认给人看最新一套)"""
     return sorted({q["year"] for q in questions().values()}, reverse=True)

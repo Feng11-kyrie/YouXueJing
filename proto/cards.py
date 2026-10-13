@@ -60,8 +60,7 @@ def question_card(q, year, done, user):
             ui.image(f'data/{q["图片"]}').classes("max-w-md rounded")
 
         if not is_choice:
-            ui.label("综合应用题 — 题库暂无答案，本题不计分") \
-                .classes("text-xs font-semibold text-orange-700")
+            _comprehensive_block(q, year, user)
             return
 
         opts = q.get("选项") or {}
@@ -142,3 +141,67 @@ def question_card(q, year, done, user):
             result.set_text(f'已作答：你选 {prev["chosen"]}，'
                             f'正确答案 {q["答案"]}')
             result.style(f'color:{"#1B5E36" if prev["is_correct"] else "#8C2C2C"}')
+
+
+def _comprehensive_block(q, year, user):
+    """
+    综合应用题的作答区。
+
+    【为什么不能像单选题那样判分】
+    41–47 题在原卷里是**手写解答题**，题库里没有可机判的答案。
+    硬造一个"对/错"就是编数据 —— 这条不能做。
+
+    所以这里给三样东西，每样都能追溯到来源：
+      ① 参考答案：从答案册 PDF 提取（scripts/extract_solutions.py），
+         必须标注是 OCR 抽取、可能有错字，且 5 个年份取不到。
+      ② 自评：学生自己判断"做对了 / 要再看一遍"，作为学习记录存下来。
+         source='selfcheck' 与自动判分分开存，界面也不会说成"答对了"。
+      ③ 明说本题不计分 —— 自评不等于判分。
+    """
+    from yj import data as _data
+    sol = _data.solution(year, q["题号"]) if year else None
+
+    ui.label("综合应用题 · 手写解答题 —— 不做自动判分") \
+        .classes("t-xs font-semibold").style("color:#B45309")
+
+    if sol:
+        with ui.expansion("查看参考答案").classes("w-full"):
+            ui.label("以下解答抽取自答案册 PDF 的文字层（OCR），"
+                     "可能有错字或符号误识别（如「于」被识别成「千」、"
+                     "数字 1 与字母 l 混用）。请以教材为准，不要当成逐字准确的官方解析。") \
+                .classes("t-xs").style("color:#B45309")
+            ui.label(sol).classes("t-sm leading-7 whitespace-pre-wrap")
+    else:
+        ui.label("这一年的答案册是纯扫描件，没有文字层，取不到参考答案。"
+                 "建议对照教材自行核对。").classes("t-xs muted")
+
+    prev = store.get_selfcheck(user).get(q["id"])
+    box = {"v": prev}
+
+    def paint():
+        v = box["v"]
+        b_ok.props(f'color={"positive" if v == store.SELF_OK else "grey"}')
+        b_rev.props(f'color={"warning" if v == store.SELF_REVIEW else "grey"}')
+        if v == store.SELF_OK:
+            state.set_text("已记录：你标记为「做对了」")
+            state.style("color:#1B5E36")
+        elif v == store.SELF_REVIEW:
+            state.set_text("已记录：你标记为「要再看一遍」")
+            state.style("color:#B45309")
+        else:
+            state.set_text("")
+
+    def set_verdict(v):
+        store.set_selfcheck(user, q["id"], v)
+        box["v"] = v
+        paint()
+
+    with ui.row().classes("items-center gap-2 mt-1"):
+        ui.label("自评（本题不计分）：").classes("t-xs muted")
+        b_ok = ui.button("做对了", on_click=lambda: set_verdict(store.SELF_OK)) \
+            .props("flat dense")
+        b_rev = ui.button("要再看一遍",
+                          on_click=lambda: set_verdict(store.SELF_REVIEW)) \
+            .props("flat dense")
+        state = ui.label("").classes("t-xs")
+    paint()

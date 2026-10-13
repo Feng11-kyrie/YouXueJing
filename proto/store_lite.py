@@ -93,3 +93,29 @@ def set_marks(user_id, node_ids):
                       [(user_id, n, datetime.datetime.now().isoformat(timespec="seconds"))
                        for n in node_ids])
     return len(node_ids)
+
+
+# ---------------------------------------------------------------- 大题自评
+# 综合应用题没有标准答案可自动判分，但学生需要"我到底掌握了没有"的记录。
+# 这里用 answers 表存**自评**：source='selfcheck'，chosen 编码自评结果。
+# 为什么不猜一个对错：自评是用户自己给的判断，和自动判分是两回事，
+# 必须分开记录（source 字段区分），界面上也不能把自评说成"答对了"。
+SELF_OK = "self:ok"          # 我做对了
+SELF_REVIEW = "self:review"  # 需要再看一遍
+
+
+def get_selfcheck(user_id):
+    """返回 {question_id: 'self:ok' | 'self:review'}"""
+    with conn() as c:
+        rows = c.execute("SELECT question_id, chosen FROM answers "
+                         "WHERE user_id=? AND source='selfcheck'",
+                         (user_id,)).fetchall()
+    return {r["question_id"]: r["chosen"] for r in rows}
+
+
+def set_selfcheck(user_id, question_id, verdict):
+    """记录大题自评。verdict 取 SELF_OK / SELF_REVIEW。"""
+    if verdict not in (SELF_OK, SELF_REVIEW):
+        raise ValueError(f"未知自评结果: {verdict}")
+    return record_answer(user_id, question_id, verdict,
+                         is_correct=(verdict == SELF_OK), source="selfcheck")
