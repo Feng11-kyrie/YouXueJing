@@ -30,7 +30,7 @@ import streamlit as st
 from yj import data, store, diagnose, profile, path, llm, graph
 from yj import snap as snap_mod
 
-st.set_page_config(page_title="优学鲸 · 408 考研", page_icon="🐳", layout="wide")
+st.set_page_config(page_title="优学鲸 · 408 考研", layout="wide")
 
 # ---------------------------------------------------------------- 样式
 # 字号/字体/配色的大头在 .streamlit/config.toml 的原生主题变量里（那里改一次
@@ -52,10 +52,52 @@ st.markdown(
 
       /* 选中态/重点行更清楚 */
       [data-testid="stMarkdownContainer"] strong { font-weight: 650; }
+
+      /* ---- 卷面可读性（真题页） ----------------------------------------
+         47 道题堆在一页，默认间距会让它变成 47 个一模一样的白框：
+         没有节奏、单屏只能放两道题。下面三件事把它压紧并分出层次：
+           ① 收紧卡片内边距与块间距
+           ② 每题左侧一条学科色条（四科四色，扫一眼就知道换学科了）
+           ③ 选项行加行距，点选目标变大                              */
+      [data-testid="stVerticalBlockBorderWrapper"] {
+        position: relative;
+        padding: 0.15rem 0.35rem 0.35rem 0.9rem !important;
+      }
+      [data-testid="stVerticalBlockBorderWrapper"]::before {
+        content: ""; position: absolute; left: 0; top: 0; bottom: 0;
+        width: 4px; border-radius: 4px 0 0 4px;
+        background: var(--yj-subject-color, #2563EB);
+      }
+      [data-testid="stVerticalBlock"] { gap: 0.55rem !important; }
+      [data-testid="stElementContainer"] { margin-bottom: 0.1rem; }
+      /* 选项行距：A/B/C/D 挨得太近点不准 */
+      [data-testid="stRadio"] [role="radiogroup"] { gap: 0.5rem !important; }
+      [data-testid="stRadio"] [role="radiogroup"] label { padding: 0.1rem 0; }
+
+      /* ---- 答题卡 ------------------------------------------------------ */
+      .yj-card { display: flex; flex-wrap: wrap; gap: 6px; margin: 0.2rem 0 0.6rem 0; }
+      .yj-cell {
+        min-width: 2.1rem; text-align: center; padding: 0.18rem 0.3rem;
+        border: 1px solid #D7DEE8; border-radius: 0.45rem;
+        font-size: 0.82rem; font-variant-numeric: tabular-nums;
+        background: #FFFFFF; color: #3E4C59;
+      }
+      .yj-ok   { background: #E6F6EC; border-color: #7DCB9A; color: #1B5E36; }
+      .yj-bad  { background: #FDECEC; border-color: #E9A0A0; color: #8C2C2C; }
+      .yj-open { background: #F2F5F9; border-color: #C9D3E0; color: #556072; }
+      .yj-cur  { outline: 2px solid #2563EB; outline-offset: 1px; font-weight: 700; }
     </style>
     """,
     unsafe_allow_html=True,
 )
+
+# 学科 → 色条颜色（答题卡、色条共用一套，避免两处不一致）
+SUBJECT_COLORS = {
+    "数据结构": "#2563EB",
+    "计算机组成原理": "#7C3AED",
+    "操作系统": "#0D9488",
+    "计算机网络": "#C2410C",
+}
 
 
 # ---------------------------------------------------------------- 用户身份
@@ -97,7 +139,7 @@ def steps(active, items):
 
 
 # ---------------------------------------------------------------- 侧栏
-st.sidebar.title("🐳 优学鲸")
+st.sidebar.markdown("# 优学鲸")
 st.sidebar.markdown("**408 考研 · 个性化学习资源生成**")
 
 o = data.overview()
@@ -111,7 +153,8 @@ st.sidebar.markdown(
 考点 **{o['叶子考点']}** 个　·　依赖边 **{o['依赖边']}** 条
 """
 )
-st.sidebar.markdown(("🟢 " if ok_llm else "🟡 ") + msg_llm)
+st.sidebar.markdown(("**● 已连接：**" if ok_llm else "**● 演示模式：**")
+                    + msg_llm)
 
 st.sidebar.divider()
 st.sidebar.markdown(
@@ -126,8 +169,8 @@ if st.sidebar.button("清空我的全部记录", help="清空标记与作答"):
         st.session_state.pop(k, None)
     st.rerun()
 
-PAGES = ["📄 408 历年真题", "🎯 挑考点练习", "🧭 快速诊断",
-         "📊 我的画像", "🛣 学习路径", "📘 讲义生成"]
+PAGES = ["1  408 历年真题", "2  挑考点练习", "3  快速诊断",
+         "4  我的画像", "5  学习路径", "6  讲义生成"]
 page = st.sidebar.radio("导航", PAGES, label_visibility="collapsed")
 
 
@@ -151,7 +194,7 @@ def book_meta(code):
 def render_question(q, leaf, key_prefix, source="practice"):
     """渲染一道题并判分。"""
     if q.get("需插图") and not q.get("图片"):
-        st.info("这道题原卷有插图，但插图尚未抽取齐全，建议换一题。", icon="🖼️")
+        st.info("这道题原卷有插图，但插图尚未抽取齐全，建议换一题。", icon=":material/image:")
     if q.get("图片"):
         st.image(f"data/{q['图片']}", width=420)
     opts = q.get("选项") or {}
@@ -173,9 +216,9 @@ def render_question(q, leaf, key_prefix, source="practice"):
     r = st.session_state.get(done_key)
     if r:
         if r["ok"]:
-            st.success(f"答对了 ✓ 正确答案 {q['答案']}")
+            st.success(f"答对了 ✓　正确答案 {q['答案']}")
         else:
-            st.error(f"答错了 ✗ 你选 {r['mine']}，正确答案 {q['答案']}")
+            st.error(f"答错了 ✗　你选 {r['mine']}，正确答案 {q['答案']}")
         st.caption(f"已归因到考点「{data.node_name(leaf)}」，"
                    f"作答会实时更新你的掌握度与路径推荐。")
     # 再重跑一次，让"已作答 N 题""本卷成绩"这类**在写入之前**算好的统计刷新。
@@ -187,93 +230,179 @@ def render_question(q, leaf, key_prefix, source="practice"):
 # ================================================================ ⓪ 408 历年真题
 # 用户明确要的：一级选「408 历年真题」→ 二级选「2025 年真题」→ 直接看到整套卷子。
 # 这里把真题做成**产品功能**（逐题作答 + 判分），不是可下载的 PDF。
+#
+# 版式取舍：47 道题一次性铺开会有两个问题 ——
+#   ① 找不到答题进度（哪些做过、哪些做错了）
+#   ② 一页三屏，复习时只能靠滚动
+# 所以改成：顶部控制条 + 答题卡（状态+跳转）+ 筛选 + 分页（每页 10 题）。
 if page == PAGES[0]:
-    st.title("📄 408 历年真题")
-    st.markdown("**2009–2026 共 18 套卷子，按年份看整套原卷。**"
-                "单选题可以**直接在这里作答判分**，做完一道立刻看对错和考点归属。")
+    st.title("408 历年真题")
 
     papers = data.paper_index()
     years = [p["年份"] for p in papers]
 
-    c1, c2 = st.columns([2, 3])
+    # ---- 顶部控制条：选择 / 打开方式 / 筛选 挤在一行，把卷面尽早露出来
+    c1, c2, c3 = st.columns([1.1, 2.2, 1.6])
     with c1:
         yr = st.selectbox("选择年份", years,
                           format_func=lambda y: f"{y} 年真题")
     with c2:
-        st.write("")
-        # 「答题 / 浏览」两种用法：答题会写作答记录并影响画像，
-        # 浏览只是看卷子。不写清区别，用户会不知道自己刚才的点击做了什么。
-        mode = st.radio("打开方式", ["📝 作答模式（判分、计入画像）", "👀 浏览模式（只看不记）"],
-                        horizontal=True)
+        # 作答会写作答记录并影响画像；浏览只是看卷子 —— 不写清区别，
+        # 用户不知道自己刚才的点击做了什么。
+        mode = st.radio("打开方式", ["作答模式", "浏览模式"],
+                        horizontal=True,
+                        help="作答模式：判分、计入画像；浏览模式：只看不记")
+    with c3:
+        view = st.radio("显示", ["全部", "未做", "只错题"], horizontal=True)
 
     p = data.paper(yr)
-    st.divider()
-    st.subheader(f"{p['年份']} 年 408 真题")
-    m1, m2, m3, m4 = st.columns(4)
-    m1.metric("题数", f"{p['题数']} 题", f"单选 {p['单选数']} · 综合 {p['综合数']}")
-    m2.metric("总分", f"{p['总分']} 分")
-    m3.metric("可判分", f"{p['有答案数']} 题",
-              "单选全部有答案" if p["有答案数"] == p["单选数"] else None)
-    m4.metric("含插图", f"{p['需插图']} 题",
-              f"其中 {p['缺图']} 题缺图" if p["缺图"] else "插图齐全",
-              delta_color="off")
-
-    if p["综合数"]:
-        st.warning(f"**综合应用题 {p['综合数']} 题目前没有答案**"
-                   f"（题库里 720 道单选题有答案，126 道综合题暂缺），"
-                   f"所以这 {p['综合数']} 题只能看题、不能判分。"
-                   f"这是已知缺口，不做成\"可以判分\"的样子。", icon="⚠️")
-    if p["缺图"]:
-        st.info(f"另有 {p['缺图']} 题原卷带图但插图尚未抽取齐全，"
-                f"这些题会标注出来，建议对照原卷。", icon="🖼️")
-
-    # 学科分布：让人一眼看出这套卷子四科的配比
-    from collections import Counter as _Counter
-    dist = _Counter(q["学科"] for q in p["题目"])
-    st.markdown("　".join(f"**{k}** {v} 题" for k, v in dist.items()))
-
-    st.divider()
-    scoring = mode.startswith("📝")
+    scoring = mode == "作答模式"
     done = answers()
-    n_done = sum(1 for q in p["题目"] if q["id"] in done)
-    st.markdown(f"### 卷面（{p['题数']} 题）"
-                + (f"　·　你已作答 **{n_done}** 题" if scoring and n_done else ""))
-    if scoring and n_done:
-        # 这套卷子的自测成绩：只有单选题有答案，所以分母只算单选
-        rows = [done[q["id"]] for q in p["题目"] if q["id"] in done]
-        n_ok = sum(1 for r in rows if r["is_correct"])
-        st.markdown(f"这套卷子你已作答 **{len(rows)}/{p['单选数']}** 道单选题，"
-                    f"答对 **{n_ok}** 道（**{n_ok / len(rows):.0%}**）。"
-                    f"做错的题已自动归因到考点，会计入「📊 我的画像」。")
 
+    # ---- 一句话卷情（替代原来两整行的黄/蓝提示块：那是次要说明，
+    #      不该占主标题级别的视觉重量）
+    bits = [f"**{p['年份']}** 年 408 真题　·　{p['题数']} 题　·　{p['总分']} 分　·　"
+            f"可判分 {p['有答案数']} 题　·　需插图 {p['需插图']} 题"]
+    notes = []
+    if p["综合数"]:
+        notes.append(f"综合应用题 {p['综合数']} 题暂无答案，不计分")
+    if p["缺图"]:
+        notes.append(f"{p['缺图']} 题原卷带图但插图未抽取齐全")
+    st.markdown("　".join(bits))
+    if notes:
+        st.caption("说明：" + "；".join(notes) + "。")
+
+    # ---- 成绩（只在作答模式、且有记录时显示，换成一行紧凑表述）
+    choice_ids = [q["id"] for q in p["题目"] if q["题型"] == "单项选择题"]
+    rows = [done[i] for i in choice_ids if i in done]
+    n_ok = sum(1 for r in rows if r["is_correct"])
+    if scoring and rows:
+        st.markdown(
+            f"已作答 **{len(rows)}/{len(choice_ids)}** 道单选题　·　"
+            f"答对 **{n_ok}** 道　·　正确率 **{n_ok / len(rows):.0%}**")
+    elif scoring:
+        st.caption("还没有作答记录。下面每题选完点「提交答案」即判分，"
+                   "错题会自动归因到考点并计入画像。")
+
+    # ---- 筛选
+    def keep(q):
+        st_ = done.get(q["id"])
+        if view == "未做":
+            return st_ is None
+        if view == "只错题":
+            return bool(st_ and not st_["is_correct"])
+        return True
+
+    shown = [q for q in p["题目"] if keep(q)]
+    if view != "全部":
+        st.caption(f"筛选「{view}」：{len(shown)}/{p['题数']} 题"
+                   + ("　（全部做完了？切回「全部」看卷面）" if not shown else ""))
+
+    # ---- 答题卡：每个方格的底色就是答题状态，点它直接跳到那一题
+    if not scoring:
+        st.caption("浏览模式不计分，答题卡只显示卷面结构。")
+    st.markdown("**答题卡**　"
+                ":green[已答对]　:red[答错]　:gray[未做]　蓝框=当前题")
+    # 分页状态：换年份 / 换筛选 / 换模式都要复位，否则会停在越界的页码上
+    ctx = f"{p['年份']}|{view}|{mode}"
+    if st.session_state.get("paper_ctx") != ctx:
+        st.session_state["paper_ctx"] = ctx
+        st.session_state["paper_page"] = 0
+
+    PER = 10
+    pages_n = max(1, (len(shown) + PER - 1) // PER)
+    cur = min(st.session_state.get("paper_page", 0), pages_n - 1)
+
+    if shown:
+        # 答题卡按卷面顺序分组（每页一组），点格子跳页
+        for pi in range(pages_n):
+            group = shown[pi * PER:(pi + 1) * PER]
+            cells = []
+            for q in group:
+                st_ = done.get(q["id"])
+                cls = "yj-cell"
+                if st_:
+                    cls += " yj-ok" if st_["is_correct"] else " yj-bad"
+                else:
+                    cls += " yj-open"
+                if pi == cur:
+                    cls += " yj-cur"
+                cells.append(f'<span class="{cls}">{q["题号"]}</span>')
+            label = (f"第 {group[0]['题号']}–{group[-1]['题号']} 题"
+                     if len(group) > 1 else f"第 {group[0]['题号']} 题")
+            st.markdown(
+                f'<div class="yj-card">'
+                + "".join(cells)
+                + f'</div>', unsafe_allow_html=True)
+            if pages_n > 1:
+                b1, b2 = st.columns([1, 6])
+                if b1.button(("● " if pi == cur else "") + f"第 {pi + 1} 页",
+                             key=f"pg_{pi}", use_container_width=True):
+                    st.session_state["paper_page"] = pi
+                    st.rerun()
+                b2.caption(label + ("　← 当前" if pi == cur else ""))
+
+
+    if not shown:
+        st.info("这个筛选下没有题目。", icon=":material/filter_alt_off:")
+        st.stop()
+
+    # ---- 当前页的题目
+    page_items = shown[cur * PER:(cur + 1) * PER]
     from collections import defaultdict as _dd
     by_subj = _dd(list)
-    for q in p["题目"]:
+    for q in page_items:
         by_subj[q["学科"]].append(q)
+
+    st.divider()
+    c_l, c_r = st.columns([3, 2])
+    c_l.markdown(f"#### 第 {page_items[0]['题号']}–{page_items[-1]['题号']} 题"
+                 f"　（第 {cur + 1}/{pages_n} 页）")
+    with c_r:
+        n1, n2, _sp = st.columns([1, 1, 1])
+        if n1.button("← 上一页", disabled=(cur == 0), use_container_width=True):
+            st.session_state["paper_page"] = cur - 1
+            st.rerun()
+        if n2.button("下一页 →", disabled=(cur >= pages_n - 1),
+                     use_container_width=True):
+            st.session_state["paper_page"] = cur + 1
+            st.rerun()
 
     for subj_name in sorted(by_subj, key=lambda s: min(int(str(q["题号"]))
                                                       for q in by_subj[s])):
         qs = by_subj[subj_name]
-        st.markdown(f"#### {subj_name}　"
+        color = SUBJECT_COLORS.get(subj_name, "#2563EB")
+        st.markdown(f"##### :{'blue' if color == '#2563EB' else 'violet'}["
+                    f"{subj_name}]　"
                     f"（第 {qs[0]['题号']}–{qs[-1]['题号']} 题）")
         for q in qs:
             is_choice = q["题型"] == "单项选择题"
+            st_ = done.get(q["id"])
             with st.container(border=True):
-                head = (f"**第 {q['题号']} 题**　·　{q['题型']}　·　"
-                        f"{q.get('分值') or '?'} 分　·　`{data.node_name(q['主考点'])}`")
-                st.markdown(head)
+                # 左色条：色条在卡片自己的 wrapper 上（由 app 顶部的 CSS 画），
+                # 颜色靠 CSS 变量 --yj-subject-color 传进去。变量声明在这里的
+                # 子元素上，但自定义属性会向**祖先**继承，所以上面的 wrapper
+                # 也能读到它 —— 这是不重写整个组件样式就能区分学科的做法。
+                st.markdown(
+                    f'<style>[data-testid="stVerticalBlockBorderWrapper"]'
+                    f'{{--yj-subject-color:{color};}}</style>',
+                    unsafe_allow_html=True)
+                flag = ""
+                if st_:
+                    flag = "　:green[✓ 已答对]" if st_["is_correct"] else \
+                           f"　:red[✗ 已答错（你选 {st_['chosen']}）]"
+                # 表头并进一行，减少卡片高度
+                st.markdown(f"**第 {q['题号']} 题**　{q['题型']}　"
+                            f"{q.get('分值') or '?'} 分　·　"
+                            f":gray[`{data.node_name(q['主考点'])}`]{flag}")
                 st.markdown(q["题干"])
                 if q.get("需插图") and not q.get("图片"):
-                    st.info("这道题原卷有插图，但插图尚未抽取齐全，建议对照原卷。",
-                            icon="🖼️")
+                    st.caption("原卷有插图，但插图尚未抽取齐全，建议对照原卷。")
                 if q.get("图片"):
-                    st.image(f"data/{q['图片']}", width=460)
+                    st.image(f"data/{q['图片']}", width=420)
 
                 if not is_choice:
-                    # 综合题：不假装能判分
-                    st.markdown(f"**:orange[综合应用题 — 题库暂无答案，本题不计分]**")
-                    if scoring:
-                        st.caption("可以自己先在本子上写，再对照考纲/教材核对。")
+                    st.markdown("**:orange[综合应用题 — 题库暂无答案，本题不计分]**")
                     continue
 
                 if not scoring:
@@ -281,7 +410,6 @@ if page == PAGES[0]:
                         st.markdown(f"正确答案：**{q['答案']}**")
                     continue
 
-                # 作答模式：复用统一的判题组件（含图片、已答状态提示）
                 render_question(q, q["主考点"],
                                 key_prefix=f"paper_{p['年份']}_{q['id']}")
 
@@ -296,8 +424,8 @@ elif page == PAGES[1]:
         steps(1, ["选一门课", "挑薄弱知识点", "做真题"])
         st.markdown("先选一门课，再从这门课里挑出**你自己觉得薄弱的知识点**，"
                     "系统就用这些考点给你出真题。**不需要先做任何测试。**")
-        st.info("想更准？左侧「🧭 快速诊断」可以加做 32 题测出章节掌握度"
-                "—— 但那是可选的，不是门槛。", icon="💡")
+        st.info("想更准？左侧「快速诊断」可以加做 32 题测出章节掌握度"
+                "—— 但那是可选的，不是门槛。", icon=":material/lightbulb:")
         st.divider()
         cols = st.columns(4)
         for col, code in zip(cols, ["DS", "CO", "OS", "CN"]):
@@ -323,7 +451,7 @@ elif page == PAGES[1]:
     # ---------- 第二步：选章 ----------
     b = book_meta(subj)
     c1, c2 = st.columns([4, 1])
-    c1.markdown(f"## 📚 {b['name']}")
+    c1.markdown(f"## {b['name']}")
     if c2.button("← 换一门", use_container_width=True):
         st.session_state.pop("sel_subject", None)
         st.session_state.pop("sel_chapter", None)
@@ -361,7 +489,7 @@ elif page == PAGES[1]:
     st.divider()
     ch = st.session_state.get("sel_chapter")
     if not ch:
-        st.info("👆 点上面任意一章，展开它的知识点列表。", icon="🧭")
+        st.info("点上面任意一章，展开它的知识点列表。", icon=":material/touch_app:")
 
     # ---------- 第三步：选考点 ----------
     if ch:
@@ -373,7 +501,8 @@ elif page == PAGES[1]:
                         "标签上的 `频N` 是它 18 年被考的次数，`·M题` 是题库里"
                         "能拿它练的真题数。")
             st.info("标着 **·0题** 的考点题库里暂时没有对应真题（勾选后没题可练，"
-                    "但仍可用它生成讲义）。建议优先勾 `·N题` 且 N 大的。", icon="💡")
+                    "但仍可用它生成讲义）。建议优先勾 `·N题` 且 N 大的。",
+                    icon=":material/lightbulb:")
             label2leaf = {}
             for l in leaves:
                 f = freq.get(l, {})
@@ -435,12 +564,12 @@ elif page == PAGES[1]:
             store.set_marks(USER, set())
             st.session_state.pop("practice_now", None)
             st.rerun()
-        b3.markdown("选好后也可以到左侧「📘 讲义生成」按这些考点出讲义。")
+        b3.markdown("选好后也可以到左侧「讲义生成」按这些考点出讲义。")
 
     # ---------- 就地出题 ----------
     if st.session_state.get("practice_now") and sel:
         st.divider()
-        st.markdown(f"### 📝 练习：{len(sel)} 个考点里抽 5 道真题")
+        st.markdown(f"### 练习：{len(sel)} 个考点里抽 5 道真题")
         done = answers()
         pool = []
         for l in sorted(sel, key=lambda x: -data.leaf_question_count().get(x, 0)):
@@ -470,13 +599,14 @@ elif page == PAGES[1]:
 
 # ================================================================ ② 快速诊断
 elif page == PAGES[2]:
-    st.title("🧭 快速诊断（可选）")
+    st.title("快速诊断（可选）")
     st.markdown("32 道题　·　约 20-25 分钟　·　覆盖 408 全部 24 章")
     st.markdown("做完会得到**章节级掌握度**，之后推荐会更准。"
-                "这是可选的 —— 不做也能用：你可以在「🎯 挑考点练习」里"
+                "这是可选的 —— 不做也能用：你可以在「挑考点练习」里"
                 "直接勾选自己认为薄弱的知识点。")
     st.info("界面上的每个数字都能对到具体作答记录；"
-            "掌握度用 Laplace 平滑，避免只答 1 题就给出 0% 或 100%。", icon="📐")
+            "掌握度用 Laplace 平滑，避免只答 1 题就给出 0% 或 100%。",
+            icon=":material/straighten:")
 
     paper = data.diagnostic()["题目"]
     got = answers()
@@ -505,18 +635,18 @@ elif page == PAGES[2]:
                 store.record_answer(USER, item["id"], val[0],
                                     val[0] == q.get("答案"), source="diagnostic")
                 n += 1
-            st.success(f"已记录 {n} 题。到「📊 我的画像」查看结果。")
+            st.success(f"已记录 {n} 题。到「我的画像」查看结果。")
             st.rerun()
 
 
 # ================================================================ ③ 我的画像
 elif page == PAGES[3]:
-    st.title("📊 我的画像")
+    st.title("我的画像")
     a, mk = answers(), marks()
     if not a and not mk:
         st.info("还没有任何数据。你可以：\n\n"
-                "1. 到「🎯 挑考点练习」勾选自己觉得薄弱的知识点（最快）\n"
-                "2. 或到「🧭 快速诊断」做一次 32 题测试（更准）")
+                "1. 到「挑考点练习」勾选自己觉得薄弱的知识点（最快）\n"
+                "2. 或到「快速诊断」做一次 32 题测试（更准）")
         st.stop()
 
     prof = profile.build(a, mk)
@@ -563,16 +693,16 @@ elif page == PAGES[3]:
         st.divider()
         st.warning(f"还有 **{len(prof['未测章节'])}** 个章节没有测到："
                    + "、".join(x["章节名"] for x in prof["未测章节"][:8])
-                   + "。建议到「🧭 快速诊断」加测以完善画像。")
+                   + "。建议到「快速诊断」加测以完善画像。")
 
 
 # ================================================================ ④ 学习路径
 elif page == PAGES[4]:
-    st.title("🛣 学习路径")
+    st.title("学习路径")
     a, mk = answers(), marks()
     if not a and not mk:
-        st.info("还没有数据。先到「🎯 挑考点练习」勾选薄弱知识点，"
-                "或做一次「🧭 快速诊断」。")
+        st.info("还没有数据。先到「挑考点练习」勾选薄弱知识点，"
+                "或做一次「快速诊断」。")
         st.stop()
 
     rec = path.recommend(a, marks=mk)
@@ -610,20 +740,20 @@ elif page == PAGES[4]:
 
 # ================================================================ ⑤ 讲义生成
 elif page == PAGES[5]:
-    st.title("📘 讲义生成（多智能体）")
+    st.title("讲义生成（多智能体）")
     st.markdown("这一页跑的是 **LangGraph 六 Agent 链路**："
                 "准备 → 诊断 → 画像 → 路径 → 生成 → 复核，"
                 "按你的薄弱考点产出**讲义 / 知识点速记 / 配套真题**。")
     ok, msg = llm.status()
     if ok:
-        st.success(msg, icon="🟢")
+        st.success(msg, icon=":material/check_circle:")
     else:
         st.warning(msg + " —— 页面会照常跑通，但讲义正文是**用真实数据填的模板**，"
-                         "不是 AI 写的。", icon="🟡")
+                         "不是 AI 写的。", icon=":material/warning:")
 
     a, mk = answers(), marks()
     if not a and not mk:
-        st.info("还没有数据。先到「🎯 挑考点练习」勾选薄弱知识点。")
+        st.info("还没有数据。先到「挑考点练习」勾选薄弱知识点。")
         st.stop()
 
     rec = path.recommend(a, marks=mk)
@@ -672,7 +802,8 @@ elif page == PAGES[5]:
                 st.session_state.pop("run_meta", None)
 
     if st.session_state.get("run_meta"):
-        st.info("正在回放预跑快照 —— " + st.session_state["run_meta"], icon="📦")
+        st.info("正在回放预跑快照 —— " + st.session_state["run_meta"],
+                icon=":material/inventory_2:")
 
     R = st.session_state.get("run")
     if not R:
@@ -687,7 +818,7 @@ elif page == PAGES[5]:
     if rv:
         if rv.get("通过"):
             st.success(f"复核 Agent：考纲校验通过（检查了 {rv.get('检查项数', 0)} 个考点）",
-                       icon="✅")
+                       icon=":material/check_circle:")
         else:
             st.error(f"复核 Agent：发现 {len(rv.get('越纲项', {}))} 个考点有越纲内容")
 
@@ -705,14 +836,14 @@ elif page == PAGES[5]:
         label = {"llm": "LLM 生成", "cache": "LLM 生成（预跑缓存）",
                  "template": "模板模式（真实数据）",
                  "error": "LLM 失败，已降级为模板"}.get(src, src)
-        with st.expander(f"📘 {x['考点名']}　·　{x['章节']}　·　{label}",
+        with st.expander(f"{x['考点名']}　·　{x['章节']}　·　{label}",
                          expanded=(x is res[0])):
             t1, t2, t3 = st.tabs(["讲义", "知识点速记", "配套真题"])
             with t1:
                 st.markdown(x["讲义"]["markdown"])
                 v = x["讲义"].get("校验") or {}
-                st.caption("✅ 复核 Agent：内容未越出考纲考点范围" if v.get("通过")
-                           else f"⚠️ 疑似考纲外内容：{v.get('疑似考纲外')}")
+                st.caption("复核 Agent：内容未越出考纲考点范围 ✓" if v.get("通过")
+                           else f"复核 Agent 发现疑似考纲外内容：{v.get('疑似考纲外')}")
             with t2:
                 st.markdown(x["速记"])
             with t3:
