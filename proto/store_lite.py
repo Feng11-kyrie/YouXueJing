@@ -41,9 +41,11 @@ def get_answers(user_id, source=None):
         args.append(source)
     with conn() as c:
         rows = c.execute(sql, args).fetchall()
+    # 带上 answered_at：首页要用它画"近 14 天练习记录"（复习节奏）
     return {r["question_id"]: {"chosen": r["chosen"],
                                "is_correct": bool(r["is_correct"]),
-                               "source": r["source"]} for r in rows}
+                               "source": r["source"],
+                               "answered_at": r["answered_at"]} for r in rows}
 
 
 def record_answer(user_id, question_id, chosen, is_correct, source="practice"):

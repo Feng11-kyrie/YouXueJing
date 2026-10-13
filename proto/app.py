@@ -176,7 +176,7 @@ def shell(active: str, user: str):
                         "t-sm no-underline").style("color:var(--accent)"):
                     ui.label("先花 20 分钟做一次诊断 →")
         # 内容区
-        with ui.column().classes("flex-1 p-6 gap-3 min-w-0 max-w-6xl"):
+        with ui.column().classes("flex-1 p-6 gap-3 min-w-0"):
             yield
 
 
@@ -265,67 +265,114 @@ def home(user: str = "demo"):
                               f"/exam?view=只错题&user={user}")) \
                     .props("unelevated color=primary")
 
-        # ---------- 下面两栏：左边"还能做什么"，右边"最近练了什么"
-        # 原来这里只有三个文字链接挤在左上角，下面 600px 全是空白
-        # （用户的第 1 条批评）。空白不该用装饰填，要用**用户想知道的东西**填。
+        # ---------- 下面两栏
+        # 用户第三次指出"留白那么多"。实测（1540x1000）：
+        #   内容结束于 y=685，视口 1000 → 下方空 315px
+        #   内容区右边界 1434，视口 1540 → 横向空 106px（max-w-6xl 限制）
+        # 空白的正确解法不是加装饰，而是放进用户真的想知道的**数据**。
         from collections import Counter
         wrong_n = sum(1 for r in a.values() if not r["is_correct"])
         last7 = [r for r in a.values() if r.get("answered_at", "") >=
                  (datetime.date.today() - datetime.timedelta(days=7)).isoformat()]
         ui.separator().style("border-color:var(--line)")
+
         with ui.row().classes("w-full items-start gap-10 no-wrap"):
-            # 左：学习概览 + 其他入口
+            # 左栏：练习概览 + 题量分布（真数据，不是装饰）
             with ui.column().classes("gap-2 flex-1 min-w-0"):
                 ui.label("我的练习").classes("t-sm muted")
-                with ui.row().classes("gap-8"):
-                    with ui.column().classes("gap-0"):
-                        ui.label(f'{len(a)}').classes("kpi")
-                        ui.label("累计作答").classes("t-xs muted")
-                    with ui.column().classes("gap-0"):
-                        ui.label(f'{len(a) - wrong_n}').classes("kpi") \
-                            .style("color:#1B5E36")
-                        ui.label("答对").classes("t-xs muted")
-                    with ui.column().classes("gap-0"):
-                        ui.label(f'{wrong_n}').classes("kpi") \
-                            .style("color:#8C2C2C")
-                        ui.label("待复习错题").classes("t-xs muted")
-                    with ui.column().classes("gap-0"):
-                        ui.label(f'{len(last7)}').classes("kpi")
-                        ui.label("近 7 天").classes("t-xs muted")
-                ui.label("其他入口").classes("t-sm muted mt-2")
-                for href, title, sub in [
-                        ("/exam", "按年份刷真题", "2009–2026 共 18 套，单选题就地判分"),
-                        ("/paths", "三条学习路径", "补根因 / 冲高频 / 错题驱动"),
-                        ("/notes", "生成讲义", "按薄弱考点出讲义和配套真题")]:
-                    with ui.column().classes("gap-0"):
-                        with ui.link(target=f"{href}?user={user}").classes("no-underline"):
-                            ui.label(f"{title} →").classes("t-nav") \
-                                .style("color:var(--accent)")
-                        ui.label(sub).classes("t-xs muted")
+                with ui.row().classes("gap-10"):
+                    for val, name, color in [
+                            (len(a), "累计作答", "var(--ink)"),
+                            (len(a) - wrong_n, "答对", "#1B5E36"),
+                            (wrong_n, "待复习错题", "#8C2C2C"),
+                            (len(last7), "近 7 天", "var(--ink)")]:
+                        with ui.column().classes("gap-0"):
+                            ui.label(str(val)).classes("kpi") \
+                                .style(f"color:{color}"
+                                       + (";opacity:.35" if val == 0 else ""))
+                            ui.label(name).classes("t-xs muted")
 
-            # 右：最近练了什么（用真实作答记录，不是占位装饰）
-            with ui.column().classes("gap-1 w-96 shrink-0"):
+                # 近 14 天练习记录：复习节奏是学生真关心的事，也把这块留白填上
+                # （用户第三次指出"留白那么多"，实测内容底 685/视口 1000）
+                ui.label("近 14 天练习").classes("t-sm muted mt-1")
+                by_day = Counter(str(r.get("answered_at", ""))[:10]
+                                 for r in a.values())
+                days = [datetime.date.today() - datetime.timedelta(days=i)
+                        for i in range(13, -1, -1)]
+                mx = max([by_day.get(d.isoformat(), 0) for d in days] + [1])
+                with ui.row().classes("gap-1 items-end"):
+                    for d in days:
+                        n = by_day.get(d.isoformat(), 0)
+                        h = 6 + int(n / mx * 30)
+                        el = ui.element("div").classes("rounded") \
+                            .style(f"width:18px;height:{h}px;"
+                                   f"background:{'#2563EB' if n else '#E6EAF0'};"
+                                   f"opacity:{0.35 + 0.65 * (n / mx) if n else 1};")
+                        el.tooltip(f"{d.strftime('%m-%d')}：{n} 题")
+                # 只给一根柱子会让人以为图表坏了（demo 画像 32 题全在今天做的）。
+                # 补两条上下文：今天做了多少 + 如果全挤在一天就给一句建议。
+                total14 = sum(by_day.get(d.isoformat(), 0) for d in days)
+                today_n = by_day.get(datetime.date.today().isoformat(), 0)
+                active = sum(1 for d in days if by_day.get(d.isoformat(), 0))
+                msg = f"近 14 天共 {total14} 题　·　今天 {today_n} 题"
+                if total14 and active == 1:
+                    msg += "　·　都集中在一天 —— 分散到几天记得更牢"
+                elif not today_n:
+                    msg += "　·　今天还没练"
+                ui.label(msg).classes("t-xs muted")
+
+                ui.label("题库分布").classes("t-sm muted mt-2")
+                freq = data.freq()
+                rows = []
+                for code, name in data.CODE2NAME.items():
+                    leaves = [l for ch, _n in data.chapters()[code]
+                              for l in data.chapter_leaves().get(ch, [])]
+                    rows.append((name, sum(data.leaf_question_count().get(l, 0)
+                                           for l in leaves),
+                                 len(leaves)))
+                mx = max(r[1] for r in rows) or 1
+                for name, n, ln in rows:
+                    with ui.row().classes("items-center gap-2 no-wrap"):
+                        ui.label(name).classes("t-sm w-32 shrink-0")
+                        ui.element("div").classes("h-2 rounded") \
+                            .style(f"width:{int(n / mx * 200)}px;"
+                                   f"background:{SUBJECT_COLORS.get(name, '#2563EB')};"
+                                   f"opacity:.75")
+                        ui.label(f"{n} 题 · {ln} 考点").classes("t-xs muted")
+
+                ui.label("其他入口").classes("t-sm muted mt-2")
+                # 横排：原来竖排三行占掉 110px 高度，也是留白的一部分
+                with ui.row().classes("gap-6"):
+                    for href, title in [("/exam", "按年份刷真题"),
+                                        ("/paths", "三条学习路径"),
+                                        ("/notes", "生成讲义")]:
+                        with ui.link(target=f"{href}?user={user}") \
+                                .classes("no-underline"):
+                            ui.label(f"{title} →").classes("t-body") \
+                                .style("color:var(--accent)")
+
+            # 右栏：最近练习（显示更多，填满这一侧）
+            with ui.column().classes("gap-1 w-[26rem] shrink-0"):
                 ui.label("最近练习").classes("t-sm muted")
                 qs = data.questions()
                 recent = sorted(a.items(), key=lambda kv: kv[1].get("answered_at", ""),
-                                reverse=True)[:6]
+                                reverse=True)[:10]
                 if not recent:
                     ui.label("还没有练习记录").classes("t-sm muted")
                 for qid, r in recent:
                     q = qs.get(qid)
                     if not q:
                         continue
-                    # 列宽给够 + nowrap：否则"2019 年第 26 题"会把"题"字挤到第二行
-                    # （实测踩过，很难看）
                     with ui.row().classes("items-center gap-2 w-full no-wrap"):
                         ui.icon("check_circle" if r["is_correct"] else "cancel") \
-                            .classes("t-body shrink-0").style(
+                            .classes("shrink-0").style(
+                                "font-size:16px;"
                                 f'color:{"#1B5E36" if r["is_correct"] else "#8C2C2C"}')
                         ui.label(f'{q["year"]} 年第 {q["题号"]} 题') \
                             .classes("t-sm shrink-0") \
                             .style("white-space:nowrap;min-width:7.5rem")
-                        ui.label(data.node_name(q["主考点"])[:14]) \
-                            .classes("t-xs muted flex-1 truncate")
+                        ui.label(data.node_name(q["主考点"])[:16]) \
+                            .classes("t-sm muted flex-1 truncate")
 
 
 # ================================================================ 真题页
