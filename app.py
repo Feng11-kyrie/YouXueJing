@@ -65,46 +65,61 @@ st.markdown(
       [data-testid="stSidebar"] [role="radiogroup"] label { font-size: 1.05rem; }
       [data-testid="stSidebar"] [role="radiogroup"] label p { font-size: 1.05rem; }
       /* ---- 侧栏导航：卡片式选中态 --------------------------------
-         用户给的参照是飞书/Notion 那种左侧导航：选中项是**白色圆角卡片**，
-         图标在左、行距宽松、未选中项是灰字。
-         st.radio 做不到这个形态（它的选中态是圆点），所以导航改成
-         一列 st.button + 下面这套样式：
-           · 所有按钮去边框、透明底、文字左对齐
-           · 选中项（kind="primary"）给白底 + 圆角 + 淡阴影
-           · 图标与文字之间留固定间距，形成对齐的图标列              */
-      [data-testid="stSidebar"] .stButton { margin: 0; }
+         实测数据（playwright 量的，不是猜的）：
+           侧栏背景 rgb(242,243,247)，选中卡片 background-color rgb(255,255,255)
+         → 白卡配极浅灰 = 对比度接近 0，用户截图里"看不出哪项是选中的"。
+         所以选中态不靠白卡，改成**淡蓝底 + 左侧蓝竖条 + 蓝字**，
+         这个组合在任何底色上都能看出来。                              */
+      [data-testid="stSidebar"] {
+        background: #EEF1F5;
+        border-right: 1px solid #E1E6ED;
+      }
+      /* 导航行距收紧：原来每项约 54px（43px 高 + 间距），六项占掉侧栏上半屏 */
+      [data-testid="stSidebar"] .stButton {
+        margin: 0 !important;
+      }
       [data-testid="stSidebar"] .stButton > button {
         justify-content: flex-start;
         text-align: left;
-        font-size: 1.02rem;
-        padding: 0.5rem 0.7rem;
+        font-size: 1rem;
+        padding: 0.34rem 0.7rem;
+        min-height: 0;
+        height: auto;
+        line-height: 1.5;
         border: none;
         background: transparent;
-        color: #44505F;
+        color: #45566B;
         font-weight: 500;
         width: 100%;
+        border-left: 3px solid transparent;
+        border-radius: 0.5rem;
       }
       [data-testid="stSidebar"] .stButton > button:hover {
-        background: rgba(15, 23, 42, 0.06);
+        background: rgba(37, 99, 235, 0.07);
         color: #1F2933;
       }
-      /* 选中项：白卡片（靠 kind="primary" 区分） */
-      [data-testid="stSidebar"] .stButton > button[kind="primary"] {
-        background: #FFFFFF;
-        color: #1F2933;
-        font-weight: 650;
-        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08),
-                    0 1px 8px rgba(15, 23, 42, 0.05);
+      /* 选中项：淡蓝底 + 左侧蓝竖条 + 蓝字（对比明确，不依赖白卡） */
+      [data-testid="stSidebar"] button[kind="primary"],
+      [data-testid="stSidebar"] button[data-testid="stBaseButton-primary"] {
+        background: #DCE8FC !important;
+        color: #17418F !important;
+        font-weight: 650 !important;
+        border-left: 3px solid #2563EB !important;
+        box-shadow: none !important;
       }
-      [data-testid="stSidebar"] .stButton > button[kind="primary"]:hover {
-        background: #FFFFFF;
+      /* 图标列对齐：Material 图标固定宽度 + 居中，形成整齐的一列 */
+      [data-testid="stSidebar"] .stButton > button p {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
       }
-      /* 图标列对齐：Material 图标固定宽度，后面留出间距 */
       [data-testid="stSidebar"] [data-testid="stIconMaterial"] {
-        width: 1.4rem;
-        margin-right: 0.15rem;
-        vertical-align: -0.18rem;
-        font-size: 1.2rem;
+        width: 1.35rem;
+        flex: 0 0 1.35rem;
+        text-align: center;
+        font-size: 1.15rem;
+        margin: 0;
+        vertical-align: middle;
       }
       /* 分组小标题（"功能" / "存档状态"）低调一点 */
       [data-testid="stSidebar"] .yj-sec {
@@ -120,18 +135,18 @@ st.markdown(
 
       /* ---- 卷面可读性（真题页） ----------------------------------------
          47 道题堆在一页，默认间距会让它变成 47 个一模一样的白框：
-         没有节奏、单屏只能放两道题。下面三件事把它压紧并分出层次：
-           ① 收紧卡片内边距与块间距
-           ② 每题左侧一条学科色条（四科四色，扫一眼就知道换学科了）
-           ③ 选项行加行距，点选目标变大                              */
-      [data-testid="stVerticalBlockBorderWrapper"] {
-        position: relative;
-        padding: 0.15rem 0.35rem 0.35rem 0.9rem !important;
-      }
-      [data-testid="stVerticalBlockBorderWrapper"]::before {
-        content: ""; position: absolute; left: 0; top: 0; bottom: 0;
-        width: 4px; border-radius: 4px 0 0 4px;
-        background: var(--yj-subject-color, #2563EB);
+         没有节奏、单屏只能放两道题。下面几件事把它压紧并分出层次。
+
+         实测记录的坑：ST 1.65 里带边框的卡片就是
+         `div[data-testid="stVerticalBlock"]`（1px 边框、圆角 11.9px、
+         padding 16px）。早先我按 `stVerticalBlockBorderWrapper` 写选择器，
+         playwright 实测命中 **0 个** —— 那段样式一直没生效。
+         精确命中"卡片"的选择器是：
+         `div[data-testid="stVerticalBlock"]:has([data-testid="stForm"])`
+         （一页 10 张题卡正好命中 10 个）。学科色条则用 st.container 的 key
+         生成的 `.st-key-*` class 单独指定（见题目渲染处）。                  */
+      div[data-testid="stVerticalBlock"]:has([data-testid="stForm"]) {
+        padding: 0.55rem 0.9rem 0.7rem 1rem !important;
       }
       [data-testid="stVerticalBlock"] { gap: 0.55rem !important; }
       [data-testid="stElementContainer"] { margin-bottom: 0.1rem; }
@@ -139,18 +154,45 @@ st.markdown(
       [data-testid="stRadio"] [role="radiogroup"] { gap: 0.5rem !important; }
       [data-testid="stRadio"] [role="radiogroup"] label { padding: 0.1rem 0; }
 
-      /* ---- 答题卡 ------------------------------------------------------ */
-      .yj-card { display: flex; flex-wrap: wrap; gap: 6px; margin: 0.2rem 0 0.6rem 0; }
+      /* ---- 答题卡 ------------------------------------------------------
+         实测：每页 3 行（格子行 + 跳页按钮 + 页码说明）× 5 页 ≈ 460px，
+         把第一道题推到了折线以下。改成每页 1 行：页码按钮在最左，格子紧跟。 */
+      .yj-card { display: flex; flex-wrap: wrap; gap: 5px; align-items: center;
+                 margin: 0.25rem 0 0.35rem 0; }
       .yj-cell {
-        min-width: 2.1rem; text-align: center; padding: 0.18rem 0.3rem;
-        border: 1px solid #D7DEE8; border-radius: 0.45rem;
-        font-size: 0.82rem; font-variant-numeric: tabular-nums;
-        background: #FFFFFF; color: #3E4C59;
+        min-width: 1.95rem; text-align: center; padding: 0.12rem 0.25rem;
+        border: 1px solid #D7DEE8; border-radius: 0.4rem;
+        font-size: 0.8rem; font-variant-numeric: tabular-nums;
+        background: #FFFFFF; color: #46586D; line-height: 1.5;
       }
       .yj-ok   { background: #E6F6EC; border-color: #7DCB9A; color: #1B5E36; }
       .yj-bad  { background: #FDECEC; border-color: #E9A0A0; color: #8C2C2C; }
       .yj-open { background: #F2F5F9; border-color: #C9D3E0; color: #556072; }
       .yj-cur  { outline: 2px solid #2563EB; outline-offset: 1px; font-weight: 700; }
+      /* 页码标签：等宽，与格子同一行对齐 */
+      .yj-pglabel {
+        display: inline-block; min-width: 3.6rem; text-align: center;
+        font-size: 0.74rem; color: #6B7A8D; font-weight: 600;
+        letter-spacing: 0.02em;
+      }
+      /* 跳页按钮收小：分页是答题卡的附属功能，不该和主按钮一样抢眼。
+         用 st-key-pg_* 精确命中，避免影响页面上其它按钮。 */
+      [class*="st-key-pg_"] button {
+        min-height: 0 !important;
+        padding: 0.15rem 0.4rem !important;
+        font-size: 0.82rem !important;
+        box-shadow: none !important;
+      }
+      /* 控制条：让三个控件的标签与输入对齐一致。
+         （原来"显示"那一组的标签与单选钮对不齐，看起来像没做完的排版） */
+      [data-testid="stSelectbox"] div[data-baseweb="select"] { min-height: 2.4rem; }
+      [data-testid="stRadio"] > label { margin-bottom: 0.15rem; }
+      /* 宽屏治理：正文区放宽一点，别让右侧留出四分之一屏的空白
+         （原 1180px 在 1600px 视口下右侧空约 420px）。
+         注意必须带 !important —— 上面第 48 行那条没带，后写的规则虽然靠后
+         但同优先级下后者胜，加 !important 是为了避免以后再被别处覆盖时
+         出现"改了没效果"这种难查的问题。 */
+      .block-container { max-width: 1320px !important; }
     </style>
     """,
     unsafe_allow_html=True,
@@ -405,7 +447,11 @@ if page == "408 历年真题":
     cur = min(st.session_state.get("paper_page", 0), pages_n - 1)
 
     if shown:
-        # 答题卡按卷面顺序分组（每页一组），点格子跳页
+        # 每页只占一行：页码标签在最左（可点击跳页），方格紧跟。
+        # 原来每页 3 行（格子 / 跳页按钮 / 页码说明），5 页吃掉约 460px，
+        # 把第一道题推到折线以下 —— 实测截图确认过。
+        cell_rows = []
+        jump_rows = []
         for pi in range(pages_n):
             group = shown[pi * PER:(pi + 1) * PER]
             cells = []
@@ -419,19 +465,26 @@ if page == "408 历年真题":
                 if pi == cur:
                     cls += " yj-cur"
                 cells.append(f'<span class="{cls}">{q["题号"]}</span>')
-            label = (f"第 {group[0]['题号']}–{group[-1]['题号']} 题"
-                     if len(group) > 1 else f"第 {group[0]['题号']} 题")
-            st.markdown(
+            mark = "●" if pi == cur else ""
+            cell_rows.append(
                 f'<div class="yj-card">'
-                + "".join(cells)
-                + f'</div>', unsafe_allow_html=True)
+                f'<span class="yj-pglabel">{mark} 第 {pi + 1} 页</span>'
+                + "".join(cells) + '</div>')
             if pages_n > 1:
-                b1, b2 = st.columns([1, 6])
-                if b1.button(("● " if pi == cur else "") + f"第 {pi + 1} 页",
-                             key=f"pg_{pi}", use_container_width=True):
+                jump_rows.append((pi, group))
+        st.markdown("".join(cell_rows), unsafe_allow_html=True)
+        # 跳页按钮：只在有多页时给。用 5 列 + container_width=True 会让每个按钮
+        # 撑到 260px 宽，看起来像 5 个主按钮，喧宾夺主 —— 改成一行小按钮，
+        # 当前页用主色标识（分页是答题卡的附属功能，不该抢视觉）。
+        if pages_n > 1:
+            st.markdown('<div class="yj-jump">', unsafe_allow_html=True)
+            cols = st.columns(pages_n)
+            for pi, group in jump_rows:
+                if cols[pi].button(f"第 {pi + 1} 页", key=f"pg_{pi}",
+                                   type="primary" if pi == cur else "secondary"):
                     st.session_state["paper_page"] = pi
                     st.rerun()
-                b2.caption(label + ("　← 当前" if pi == cur else ""))
+            st.markdown('</div>', unsafe_allow_html=True)
 
 
     if not shown:
@@ -463,25 +516,27 @@ if page == "408 历年真题":
                                                       for q in by_subj[s])):
         qs = by_subj[subj_name]
         color = SUBJECT_COLORS.get(subj_name, "#2563EB")
-        st.markdown(f"##### :{'blue' if color == '#2563EB' else 'violet'}["
-                    f"{subj_name}]　"
-                    f"（第 {qs[0]['题号']}–{qs[-1]['题号']} 题）")
+        st.markdown(f"##### {subj_name}　（第 {qs[0]['题号']}–{qs[-1]['题号']} 题）")
         for q in qs:
             is_choice = q["题型"] == "单项选择题"
             st_ = done.get(q["id"])
-            with st.container(border=True):
-                # 左色条：色条在卡片自己的 wrapper 上（由 app 顶部的 CSS 画），
-                # 颜色靠 CSS 变量 --yj-subject-color 传进去。变量声明在这里的
-                # 子元素上，但自定义属性会向**祖先**继承，所以上面的 wrapper
-                # 也能读到它 —— 这是不重写整个组件样式就能区分学科的做法。
-                st.markdown(
-                    f'<style>[data-testid="stVerticalBlockBorderWrapper"]'
-                    f'{{--yj-subject-color:{color};}}</style>',
-                    unsafe_allow_html=True)
+            # 学科色条怎么传进卡片：
+            # st.container 不接受 style，但接受 key —— key 会变成 DOM 上的
+            # 稳定 class `st-key-<key>`，于是可以用它精确命名单张卡片。
+            # （早先试过在卡片内部写 CSS 变量给卡片自己的 ::before 读，
+            #   实测拿不到：自定义属性只向**下**继承，父级 ::before 读不到子级
+            #   声明的变量。这条弯路不要再走。）
+            with st.container(border=True, key=f"q{q['id']}"):
                 flag = ""
                 if st_:
                     flag = "　:green[✓ 已答对]" if st_["is_correct"] else \
                            f"　:red[✗ 已答错（你选 {st_['chosen']}）]"
+                st.markdown(
+                    f'<style>.st-key-q{q["id"]} {{'
+                    f'border-left: 4px solid {color} !important;'
+                    f'border-radius: 0.55rem !important;'
+                    f'padding: 0.55rem 0.9rem 0.7rem 1rem !important;'
+                    f'}}</style>', unsafe_allow_html=True)
                 # 表头并进一行，减少卡片高度
                 st.markdown(f"**第 {q['题号']} 题**　{q['题型']}　"
                             f"{q.get('分值') or '?'} 分　·　"
