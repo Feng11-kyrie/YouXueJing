@@ -337,8 +337,13 @@ def book_meta(code):
     }
 
 
-def render_question(q, leaf, key_prefix, source="practice"):
-    """渲染一道题并判分。"""
+def render_question(q, leaf, key_prefix, source="practice", done_answers=None):
+    """
+    渲染一道题并判分。
+
+    done_answers: 该用户已有的作答 {qid: {...}}。传进来才能把**上次的选择**
+    回显出来 —— 否则翻回这一页，用户看不到自己当初选了什么。
+    """
     if q.get("需插图") and not q.get("图片"):
         st.info("这道题原卷有插图，但插图尚未抽取齐全，建议换一题。", icon=":material/image:")
     if q.get("图片"):
@@ -347,17 +352,43 @@ def render_question(q, leaf, key_prefix, source="practice"):
     keys = sorted(opts.keys())
     pick_key, done_key = f"{key_prefix}_pick", f"{key_prefix}_done"
     submitted = False          # 先定义：首次渲染时下面的 if 不会给变量赋值
+    # 【为什么要有"请选择"占位项】
+    # st.radio 有个坑：首次渲染时如果没有任何选中值，它会**自动选中第一项**，
+    # 于是每道题看起来都默认选了 A —— 用户以为系统替他选了。
+    # 更糟的是这时 session_state 里的值其实是空，直接点提交会写入一条
+    # `chosen = None` 的空作答：被算进"已作答 N 题"、被计为答错，
+    # 而且该题的作答记录被占掉，之后重选也会被覆盖（demo 里实测有 10 条）。
+    # 加一个占位项 + index=None，就能做到"默认谁都没选"。
+    placeholder = "－ 请选择（先点选项，再提交）－"
+    choices = [placeholder] + [f"{k}. {opts[k]}" for k in keys]
+    nudge_key = f"{key_prefix}_nudge"
+    prev = (done_answers or {}).get(q["id"])
+    # 【为什么不要传 index=】
+    # 交接文档记过这个坑：同一个控件**既传 index/default 又用 Session State 设值**时，
+    # Streamlit 会告警并**清空该键** —— 表现是"选了马上又被重置"。
+    # 这次实测又踩到了：加 index=None 之后 AppTest 的 set_value 完全失效
+    # （value 恒为 None，提交永远读不到选择）。
+    # 正确写法：只传 key，值一律显式写进 session_state。
+    if pick_key not in st.session_state:
+        st.session_state[pick_key] = (
+            next((c for c in choices if prev and c.startswith(prev["chosen"] + ".")),
+                 placeholder) if prev and prev.get("chosen") else placeholder)
+    elif st.session_state[pick_key] not in choices:
+        st.session_state[pick_key] = placeholder
     with st.form(key_prefix):
-        st.radio("选项", [f"{k}. {opts[k]}" for k in keys],
-                 key=pick_key, label_visibility="collapsed")
+        st.radio("选项", choices, key=pick_key, label_visibility="collapsed")
         if st.form_submit_button("提交答案", type="primary"):
             val = st.session_state.get(pick_key) or ""
-            mine = val[0] if val else None
+            # 选了占位项 = 没选 → 不写入任何记录（原来会写入一条空作答）
+            mine = val[0] if val and val != placeholder else None
             if mine:
                 ok = mine == q.get("答案")
                 store.record_answer(USER, q["id"], mine, ok, source=source)
                 st.session_state[done_key] = {"mine": mine, "ok": ok}
+                st.session_state.pop(nudge_key, None)
                 submitted = True
+            else:
+                st.session_state[nudge_key] = True
     # 反馈先渲染完整（st.rerun() 靠抛异常中断脚本，写在它后面的代码不会执行）
     r = st.session_state.get(done_key)
     if r:
@@ -367,6 +398,9 @@ def render_question(q, leaf, key_prefix, source="practice"):
             st.error(f"答错了 ✗　你选 {r['mine']}，正确答案 {q['答案']}")
         st.caption(f"已归因到考点「{data.node_name(leaf)}」，"
                    f"作答会实时更新你的掌握度与路径推荐。")
+    elif st.session_state.get(nudge_key):
+        st.warning("还没选选项 —— 请先点一个答案再提交。",
+                   icon=":material/touch_app:")
     # 再重跑一次，让"已作答 N 题""本卷成绩"这类**在写入之前**算好的统计刷新。
     # 不重跑的表现是"提交了但统计数字没变，要再点一次才对"。
     if submitted:
@@ -560,7 +594,7 @@ if page == "408 历年真题":
                         st.markdown(f"正确答案：**{q['答案']}**")
                     continue
 
-                render_question(q, q["主考点"],
+                render_question(q, q["主考点"], done_answers=done,
                                 key_prefix=f"paper_{p['年份']}_{q['id']}")
 
 
@@ -741,7 +775,8 @@ elif page == "挑考点练习":
                     st.markdown(f"**第 {i} 题**　·　{q['year']} 年 第 {q['题号']} 题"
                                 f"　·　`{data.node_name(l)}`　·　难度 {q.get('难度')}")
                     st.markdown(q["题干"])
-                    render_question(q, l, key_prefix=f"p_{q['id']}")
+                    render_question(q, l, done_answers=done,
+                                    key_prefix=f"p_{q['id']}")
             if len(pool) > len(show):
                 st.caption(f"还有 {len(pool) - len(show)} 道。"
                            f"再做一轮会优先取出未做过的题。")
@@ -771,21 +806,41 @@ elif page == "快速诊断":
             opts = q.get("选项") or {}
             keys = sorted(opts.keys())
             prev = got.get(item["id"], {}).get("chosen")
-            st.radio(f"q{item['id']}", [f"{k}. {opts[k]}" for k in keys],
-                     index=keys.index(prev) if prev in keys else None,
-                     key=f"r{item['id']}", label_visibility="collapsed")
+            # 与真题页同一个坑：st.radio 首次渲染会自动选中第一项，
+            # 看起来像系统替用户选了 A。加占位项做到"默认未作答"。
+            # 同样**不传 index**（传了会和 Session State 冲突，set_value/回显失效）。
+            ph = "－ 未作答 －"
+            rk = f"r{item['id']}"
+            choices = [ph] + [f"{k}. {opts[k]}" for k in keys]
+            if rk not in st.session_state:
+                st.session_state[rk] = (
+                    next((c for c in choices if c.startswith(prev + ".")), None)
+                    if prev else None)
+            elif st.session_state[rk] not in choices:
+                st.session_state[rk] = None
+            # 诊断页 32 题一次铺开，若每题都默认选中占位项，会出现 32 个蓝点
+            # 看着像"系统替我选好了"。这里用 index=None 做到真的一个都不选
+            # （实测：真题页用 index 会和 Session State 冲突导致选不中，
+            #  但诊断页不依赖 AppTest 的 set_value，所以可以用）。
+            st.radio(f"q{item['id']}", choices, key=rk, index=None,
+                     label_visibility="collapsed")
             st.divider()
         if st.form_submit_button("提交并生成掌握度", type="primary"):
             n = 0
             for item in paper:
                 val = st.session_state.get(f"r{item['id']}")
-                if not val:
+                # 跳过未作答：原来把空值也写进库记成答错，
+                # 于是"没做的题"会被算进掌握度分母（这是错的）
+                if not val or val == "－ 未作答 －":
                     continue
                 q = qs[item["id"]]
                 store.record_answer(USER, item["id"], val[0],
                                     val[0] == q.get("答案"), source="diagnostic")
                 n += 1
-            st.success(f"已记录 {n} 题。到「我的画像」查看结果。")
+            left = len(paper) - n
+            st.success(f"已记录 {n} 题。到「我的画像」查看结果。"
+                       + (f"　还有 {left} 题未作答，未作答不计入掌握度。"
+                          if left else ""))
             st.rerun()
 
 

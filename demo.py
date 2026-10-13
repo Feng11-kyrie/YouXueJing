@@ -33,7 +33,19 @@ def simulate(profile_str=None, seed=42):
         adj = {1: 0.15, 2: 0.08, 3: 0.0, 4: -0.08, 5: -0.15}.get(item["难度"], 0.0)
         p = min(0.97, max(0.03, base + adj))
         correct = rng.random() < p
-        answers[item["id"]] = {"chosen": item["答案"] if correct else None,
+        # 答错时要记一个**错误选项**，不能记成 None。
+        # 曾经这里写的是 `item["答案"] if correct else None`，于是：
+        #   ① 播种出来的画像是"10 道题没作答"，而不是"10 道题答错"；
+        #   ② 那些 chosen=None 的行被算进"已作答"，还占掉题目记录，
+        #      用户在界面上无法重做（要手工清库）。
+        # 答错 ≠ 没作答，这两个状态必须分开。
+        if correct:
+            chosen = item["答案"]
+        else:
+            opts = sorted((data.questions()[item["id"]].get("选项") or {}).keys())
+            wrong = [k for k in opts if k != item["答案"]]
+            chosen = rng.choice(wrong) if wrong else item["答案"]
+        answers[item["id"]] = {"chosen": chosen,
                                "is_correct": correct, "source": "diagnostic"}
         detail.append((item, correct))
     return answers, detail

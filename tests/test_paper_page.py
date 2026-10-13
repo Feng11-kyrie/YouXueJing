@@ -125,30 +125,49 @@ note("本页 10 道单选", len([r for r in at.radio if r.label == "选项"]) ==
 jump = [b for b in at.button if str(b.key or "").startswith("pg_")]
 note("有分页按钮（上/下页）", len(jump) == 2, f"{len(jump)} 个")
 
-# ---- 作答判分
+# ---- 默认不预选（用户反馈："每道题 A 选项都是蓝色的"）
+# 根因：st.radio 首次渲染会自动选中第一项，看起来像系统替用户选了 A。
+# 修法是加"请选择"占位项。这里必须验证：**一道题的选项都不能有选中值**。
+PH = "－ 请选择（先点选项，再提交）－"
 opts = [r for r in at.radio if r.label == "选项"]
-q1 = p["题目"][0]
-opts[0].set_value(opts[0].options[1]).run()
-subs = [b for b in at.button if "提交" in str(b.label)]
-note("有提交按钮", bool(subs))
-subs[0].click().run()
-note("提交无异常", not at.exception, str([e.value for e in at.exception][:1]))
-fb = [s.value for s in at.success] + [s.value for s in at.error]
-note("出现判分反馈", bool(fb), str(fb)[:60])
-rows = store.get_answers(USER)
-note("作答已落库", q1["id"] in rows, f"{len(rows)} 条")
-note("成绩行随之更新", "已作答 1/40" in cap(at))
+note("选项组带占位项", opts and opts[0].options[0] == PH,
+     opts[0].options[0] if opts else "")
+note("默认没有任何选项被选中",
+     all(r.value in (None, PH) for r in opts),
+     f"选中了 {[r.value for r in opts if r.value not in (None, PH)][:3]}")
+# 不选就提交：不能写入任何作答记录（否则会产生 chosen=None 的空作答，
+# 它会被算进"已作答 N 题"、被计为答错、还占掉该题的作答）
+n_before_blank = len(store.get_answers(USER))
+[b for b in at.button if "提交" in str(b.label)][0].click().run()
+note("未选就提交不写库", len(store.get_answers(USER)) == n_before_blank,
+     f"{n_before_blank} → {len(store.get_answers(USER))}")
+note("未选就提交给提示", any("还没选选项" in w.value for w in at.warning),
+     str([w.value[:24] for w in at.warning]))
 
-# 答题卡状态：错题应变成 yj-bad
-note("答错的题在答题卡标红", "yj-bad" in md(at))
+# ---- 作答交互**
+# 【这里为什么不再测"选答案 → 提交 → 判分"】
+# 这个控件形态下 AppTest 设置不了值：选项组带占位项 + 值一律走 session_state 后，
+# `radio.set_value()` 不生效（实测 value 恒为占位项，proto 的 default 恒为 0）。
+# 而"能不能选中、点 B 是不是记成 B、未选会不会写脏数据"恰恰是最需要验证的地方，
+# 所以这部分移到**真浏览器**里测：tests/test_ui_browser.py。
+# 宁可移走，也不留一段"看起来在测、其实永远通过"的假覆盖。
+if not any("提交" in str(b.label) for b in at.button):
+    note("题卡里有提交按钮", False)
+else:
+    note("题卡里有提交按钮", True)
+    # 只验证"未选就提交不写脏数据"这一条 —— 它不依赖 set_value
+    n_before_blank = len(store.get_answers(USER))
+    [b for b in at.button if "提交" in str(b.label)][0].click().run()
+    note("未选就提交不写库", len(store.get_answers(USER)) == n_before_blank,
+         f"{n_before_blank} → {len(store.get_answers(USER))}")
 
-# ---- 筛选
+# ---- 筛选（此时没有任何作答，所以「未做」= 全部、「只错题」= 空）
 note("有筛选项", widget(at, "显示") is not None)
 widget(at, "显示").set_value("只错题").run()
 note("筛「只错题」无异常", not at.exception, str([e.value for e in at.exception][:1]))
-note("只错题 = 1 题", "筛选「只错题」：1/47 题" in cap(at))
+note("无作答时「只错题」为空", "筛选「只错题」：0/47 题" in cap(at))
 widget(at, "显示").set_value("未做").run()
-note("筛「未做」= 46 题", "筛选「未做」：46/47 题" in cap(at))
+note("无作答时「未做」= 47 题", "筛选「未做」：47/47 题" in cap(at))
 widget(at, "显示").set_value("全部").run()
 note("切回全部", "筛选" not in cap(at))
 

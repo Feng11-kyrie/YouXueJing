@@ -71,6 +71,19 @@ def ensure_user(user_id):
 
 
 def record_answer(user_id, question_id, chosen, is_correct, source="practice"):
+    """
+    记录一次作答。
+
+    【底线防线】chosen 为空时**直接丢弃**，不写库。
+    原因：`st.radio` 默认会选中第一项，但 session_state 里可能是空，
+    用户直接点"提交答案"就会写入一条 chosen=None 的记录。这种记录有害：
+      ① 被算进"已作答 N 题"（页面上显示用户做了题，其实没做）
+      ② 被计为答错（把"没答"当成"答错"）
+      ③ 占掉该题的作答记录，用户之后重选会被覆盖，看起来像"重做无效"
+    界面侧已经拦过一层，这里再拦一层：数据层不允许出现"没选答案的作答"。
+    """
+    if chosen is None or str(chosen).strip() == "":
+        return False
     ensure_user(user_id)
     with conn() as c:
         c.execute("""INSERT INTO answers(user_id, question_id, chosen, is_correct,
@@ -82,6 +95,7 @@ def record_answer(user_id, question_id, chosen, is_correct, source="practice"):
                        source=excluded.source,
                        answered_at=excluded.answered_at""",
                   (user_id, question_id, chosen, 1 if is_correct else 0, source, _now()))
+    return True
 
 
 def get_answers(user_id, source=None):

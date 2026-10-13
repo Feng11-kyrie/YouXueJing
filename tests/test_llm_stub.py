@@ -181,8 +181,17 @@ def main():
     for i, item in enumerate(data.diagnostic()["题目"]):
         q = data.questions()[item["id"]]
         right = (i % 4 != 0)
-        store.record_answer(gu, item["id"], item["答案"] if right else None,
-                            right, source="diagnostic")
+        if right:
+            chosen = item["答案"]
+        else:
+            # 答错要记一个**真的错误选项**，不能写 None：
+            # 数据层现在会丢弃 chosen 为空的作答（"没作答"≠"答错"），
+            # 写 None 会让这条作答根本不存在 → 全变成答对 → 没有薄弱考点
+            # → 资源 0 个，断言空集通过。（这个测试自己踩过一次）
+            opts = [k for k in sorted((q.get("选项") or {}).keys())
+                    if k != item["答案"]]
+            chosen = opts[0] if opts else item["答案"]
+        store.record_answer(gu, item["id"], chosen, right, source="diagnostic")
     st = graph.run(gu, selected_path="root")
     res = st.get("resources") or []
     check("条件边走到生成分支（确实产出了资源）", bool(res),
@@ -199,7 +208,27 @@ def main():
     check("序列化后资源数与原始一致",
           len(json.loads(json.dumps(snap.to_jsonable(st)))["resources"]) == len(res))
 
-    print("\n=== 10) 已落盘的快照文件都应能被界面回放 ===")
+    print("\n=== 10) 数据层底线：不允许写入「没选答案的作答」 ===")
+    # 这个坑来自 st.radio 默认选中第一项：用户直接点提交会写入 chosen=None 的
+    # 记录，它会被算进"已作答"、被计为答错，还占掉该题记录导致无法重做。
+    # 界面侧已拦一层，这里验证数据层也拦住了。
+    bu = "stubtest_blank"
+    store.reset_user(bu)
+    store.record_answer(bu, "408-2026-01", None, False, source="practice")
+    store.record_answer(bu, "408-2026-02", "", False, source="practice")
+    store.record_answer(bu, "408-2026-03", "  ", False, source="practice")
+    check("空值作答被丢弃", len(store.get_answers(bu)) == 0,
+          f"写入 {len(store.get_answers(bu))} 条")
+    store.record_answer(bu, "408-2026-04", "B", True, source="practice")
+    check("正常作答仍然写入", len(store.get_answers(bu)) == 1)
+    # 播种出的画像也不应含空作答（曾经 simulate 把答错记成 None）
+    from demo import simulate
+    seeded, _ = simulate("DS:0.80,CO:0.65,OS:0.50,CN:0.35")
+    check("演示画像播种无空作答",
+          all(v["chosen"] for v in seeded.values()),
+          f"{sum(1 for v in seeded.values() if not v['chosen'])} 条为空")
+
+    print("\n=== 11) 已落盘的快照文件都应能被界面回放 ===")
     import glob
     snaps = sorted(glob.glob(os.path.join(BASE, "data", "prewarm", "*.json")))
     if not snaps:
