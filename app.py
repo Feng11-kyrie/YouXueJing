@@ -47,8 +47,26 @@ st.markdown(
       /* 宽屏行长治理：正文区限宽并居中，避免一行横跨整个 27 寸屏 */
       .block-container { max-width: 1180px; padding-top: 2.4rem; }
 
-      /* 侧栏信息层级：指标行给正文字号，不再是最小号字 */
-      [data-testid="stSidebar"] .stMarkdown p { font-size: 0.95rem; }
+      /* ---- 侧栏字号（用户反馈：左侧栏字太小）-----------------------
+         【注意】上一轮这里写的是 `font-size: 0.95rem` —— 主题基准是 17px，
+            0.95rem(15.3px) **比基准还小**，等于我把侧栏文字改小了。
+            这类"用 rem 猜字号"很容易悄悄变小，所以下面改成直接给明确值，
+            并且把标题/正文/注释分三档拉开层次。                        */
+      [data-testid="stSidebar"] { font-size: 1.05rem; }
+      [data-testid="stSidebar"] .stMarkdown p,
+      [data-testid="stSidebar"] .stMarkdown li { font-size: 1.05rem; }
+      [data-testid="stSidebar"] .stMarkdown h1 { font-size: 1.7rem; }
+      [data-testid="stSidebar"] .stMarkdown h2 { font-size: 1.35rem; }
+      [data-testid="stSidebar"] .stMarkdown h3 { font-size: 1.2rem; }
+      /* 注释/状态行也比默认最小号字大一档 */
+      [data-testid="stSidebar"] [data-testid="stCaptionContainer"] { font-size: 0.95rem; }
+      /* 导航项：字号 + 可点区域一起放大（原来是最小号字且很挤） */
+      [data-testid="stSidebar"] [role="radiogroup"] { gap: 0.35rem; }
+      [data-testid="stSidebar"] [role="radiogroup"] label { font-size: 1.05rem; }
+      [data-testid="stSidebar"] [role="radiogroup"] label p { font-size: 1.05rem; }
+      /* 侧栏分区之间留口气 */
+      [data-testid="stSidebar"] hr { margin: 0.7rem 0; }
+      [data-testid="stSidebar"] [data-testid="stElementContainer"] { margin-bottom: 0.3rem; }
 
       /* 选中态/重点行更清楚 */
       [data-testid="stMarkdownContainer"] strong { font-weight: 650; }
@@ -140,29 +158,30 @@ def steps(active, items):
 
 # ---------------------------------------------------------------- 侧栏
 st.sidebar.markdown("# 优学鲸")
-st.sidebar.markdown("**408 考研 · 个性化学习资源生成**")
+st.sidebar.markdown("408 考研 · 个性化学习资源生成")
 
 o = data.overview()
 ok_llm, msg_llm = llm.status()
+# 侧栏信息层级用真标题，而不是靠一行小字全糊在一起：
+# 原来"知识库 / 真题 846 题 / 考点 266 个 / 状态提示 / 我的进度"全是同一号字，
+# 分不清哪块是数据、哪块是状态。
+st.sidebar.markdown("### 知识库")
 st.sidebar.markdown(
-    f"""
-**知识库**
-
-真题 **{o['题目总数']}** 题　·　{o['年份范围']}
-
-考点 **{o['叶子考点']}** 个　·　依赖边 **{o['依赖边']}** 条
-"""
+    f"真题 **{o['题目总数']}** 题　·　{o['年份范围']}\n\n"
+    f"考点 **{o['叶子考点']}** 个\n\n"
+    f"依赖边 **{o['依赖边']}** 条"
 )
-st.sidebar.markdown(("**● 已连接：**" if ok_llm else "**● 演示模式：**")
-                    + msg_llm)
+st.sidebar.caption(("● 已连接　" if ok_llm else "● 演示模式　") + msg_llm)
 
 st.sidebar.divider()
+st.sidebar.markdown("### 我的进度")
 st.sidebar.markdown(
-    f"已勾选薄弱考点 **{len(marks())}** 个\n\n"
+    f"薄弱考点 **{len(marks())}** 个\n\n"
     f"已作答 **{len(answers())}** 题"
 )
-st.sidebar.caption(f"用户 `{USER}`")
-if st.sidebar.button("清空我的全部记录", help="清空标记与作答"):
+st.sidebar.caption(f"用户 {USER}")
+if st.sidebar.button("清空我的全部记录", help="清空标记与作答",
+                     use_container_width=True):
     store.reset_user(USER)
     for k in [k for k in st.session_state if k.startswith(("cb_", "pill_", "sel_",
                                                            "practice_", "run"))]:
