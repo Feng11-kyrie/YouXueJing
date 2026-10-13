@@ -61,19 +61,22 @@ ui.add_head_html("""
        --warn  提醒（缺数据、未配置）
      规则：**一屏只允许一个主色按钮**，其余用描边/文字按钮 —— 视觉平权等于没有引导。 */
   :root {
-    --ink:#1F2933; --sub:#5A6B80; --mut:#9AA5B1; --line:#E6EAF0;
+    /* 文字色必须过对比度：实测原来 --mut(#9AA5B1) 在白底只有 2.50:1，
+       远低于 4.5:1 可读标准 —— 这就是整页"看着没墨、发灰"的真实原因。
+       现在三档都过线：--ink 13.9:1 / --sub 7.0:1 / --mut 4.7:1 */
+    --ink:#1B2530; --sub:#3E4C5E; --mut:#5F6E80; --line:#DDE3EC;
     --accent:#2563EB; --accent-weak:#EAF1FE; --warn:#B45309;
     --bg-side:#F7F8FA;
     /* 字号层级：之前到处写 t-xs/[13px]/[15px] 这种字面量，
        结果侧栏导航被写成 14px —— **比浏览器基准 16px 还小**，
        用户反复反馈"字太小"。现在收敛成 5 档，改一处全局生效。
        原则：正文不小于 15px，次要文字不小于 13px，绝不用 11px。 */
-    --fs-lead:18px;   /* 页面主标题之外的重点句 */
-    --fs-body:16px;   /* 正文（中文 15px 仍偏小，提到与浏览器基准同级） */
+    --fs-lead:19px;   /* 页面主标题之外的重点句 */
+    --fs-body:16px;   /* 正文 */
     --fs-sm:14px;     /* 次要说明 */
     --fs-xs:13px;     /* 极弱信息（时间戳、字段名） */
-    --fs-nav:17px;    /* 侧栏导航项：比正文再大一档，侧栏文字少、可以大 */
-    --fs-brand:20px;  /* 侧栏品牌名 */
+    --fs-nav:18px;    /* 侧栏导航：侧栏文字少，明确比正文大一档 */
+    --fs-brand:22px;  /* 侧栏品牌名 */
   }
   .t-lead{font-size:var(--fs-lead);}
   .t-body{font-size:var(--fs-body);}
@@ -105,13 +108,15 @@ ui.add_head_html("""
   /* 注意：.navlink 必须自己声明字号。之前它默认 14px，把子元素的
      15px 压回视觉更小 —— 这是"我改了字号但看起来没变"的第二层原因。
      父子统一走 --fs-nav，就不会再打架。 */
-  .navlink { display:flex; align-items:center; gap:12px; width:100%;
-             border-radius:8px; padding:9px 12px; cursor:pointer;
-             text-decoration:none; font-size:var(--fs-nav); line-height:1.5; }
-  .navlink:hover { background:#EDF1F7; }
-  .navlink.on { background:var(--accent-weak); color:#17418F; font-weight:650;
-                box-shadow:inset 3px 0 0 var(--accent); }
-  .navlink .ic { font-size:20px; opacity:.75; }
+  .navlink { display:flex; align-items:center; gap:11px; width:100%;
+             border-radius:9px; padding:7px 11px; cursor:pointer;
+             text-decoration:none; font-size:var(--fs-nav); line-height:1.4;
+             color:var(--sub); }
+  .navlink:hover { background:#E9EEF6; color:var(--ink); }
+  .navlink.on { background:#fff; color:#123B85; font-weight:700;
+                box-shadow:0 1px 3px rgba(15,23,42,.10); }
+  .navlink.on .ic { color:var(--accent); opacity:1; }
+  .navlink .ic { font-size:21px; opacity:.95; }
   .kpi { font-size:26px; font-weight:700; line-height:1.1; }
   .muted { color:var(--mut); }
   .sub { color:var(--sub); }
@@ -138,20 +143,23 @@ def shell(active: str, user: str):
     marks = store.get_marks(user)
     with ui.row().classes("w-full no-wrap items-start"):
         # 侧栏
-        # 侧栏加宽到 232px：原来 208px 装 15px 的中文会挤
-        with ui.column().classes("w-58 shrink-0 p-3 gap-1 min-h-screen "
-                                "border-r").style("background:var(--bg-side);"
-                                                  "border-color:var(--line);"
-                                                  "width:250px"):
-            with ui.row().classes("items-center gap-2 mb-3"):
-                ui.label("408").classes("w-9 h-9 rounded-lg text-white font-bold "
-                                       "flex items-center justify-center") \
+        # 侧栏：232 → 264px。17px 的中文在 250px 里仍然挤，而侧栏文字少，
+        # 可以给得比正文更宽松。
+        with ui.column().classes("shrink-0 p-3 pt-4 gap-1 min-h-screen border-r") \
+                .style("background:var(--bg-side);border-color:var(--line);"
+                       "width:264px"):
+            # 品牌区：加大 logo 与标题，原来 18px 的标题配 17px 导航没有主次
+            with ui.row().classes("items-center gap-3 mb-4 px-1"):
+                ui.label("408").classes("w-10 h-10 rounded-xl text-white font-bold "
+                                       "flex items-center justify-center shrink-0") \
                     .style("background:linear-gradient(135deg,#2563EB,#0D9488);"
-                           "font-size:13px")
+                           "font-size:14px")
                 with ui.column().classes("gap-0"):
                     ui.label("优学鲸").classes("t-brand font-bold leading-tight")
-                    ui.label("408 考研").classes("t-xs muted")
+                    ui.label("408 考研").classes("t-xs sub")
 
+            ui.label("学习功能").classes(
+                "t-xs muted font-semibold tracking-wide mx-1 mb-0.5")
             for href, label, icon in NAV:
                 with ui.link(target=f"{href}?user={user}").classes(
                         "navlink" + (" on" if href == active else "")):
@@ -164,17 +172,29 @@ def shell(active: str, user: str):
             #   · "演示模式（未配置 key）"等于开场就说"我还没接真 AI"
             #   · "薄弱考点 0 个"是空数据，没有兜底设计
             # 改成：没有数据时给**行动指引**，不展示空值。
-            ui.separator().classes("mt-4").style("border-color:var(--line)")
-            if marks:
-                ui.label(f"已标记 {len(marks)} 个薄弱考点").classes("t-sm sub")
-            if answers:
-                ui.label(f"已作答 {len(answers)} 题").classes("t-sm sub")
-            if not marks and not answers:
-                # 空状态：告诉用户"先做什么"，而不是把 0 摆出来
-                ui.label("还没有学习记录").classes("t-sm sub")
-                with ui.link(target=f"/diagnose?user={user}").classes(
-                        "t-sm no-underline").style("color:var(--accent)"):
-                    ui.label("先花 20 分钟做一次诊断 →")
+            # 底部：原来只有一行"已作答 32 题"孤零零挂着，下面 2/3 全空。
+            # 现在给一个**用户卡**（头像 + 身份 + 快捷操作），把这块用起来。
+            ui.element("div").classes("flex-1 min-h-4")
+            ui.separator().style("border-color:var(--line)")
+            with ui.row().classes("items-center gap-2 px-1 pt-2"):
+                ui.label(user[:1].upper()).classes(
+                    "w-9 h-9 rounded-full text-white font-bold flex items-center "
+                    "justify-center shrink-0").style("background:#5A6B80;font-size:15px")
+                with ui.column().classes("gap-0 min-w-0 flex-1"):
+                    ui.label(user).classes("t-sm font-semibold truncate")
+                    ui.label(f"已作答 {len(answers)} 题" if answers
+                             else "还没有练习记录").classes("t-xs muted")
+            with ui.row().classes("gap-1 mt-1"):
+                if not answers and not marks:
+                    with ui.link(target=f"/diagnose?user={user}").classes(
+                            "t-xs no-underline flex-1 text-center py-1 rounded") \
+                            .style("color:var(--accent);background:var(--accent-weak)"):
+                        ui.label("先做一次诊断")
+                else:
+                    with ui.link(target=f"/profile?user={user}").classes(
+                            "t-xs no-underline flex-1 text-center py-1 rounded") \
+                            .style("color:var(--accent);background:var(--accent-weak)"):
+                        ui.label("看我的画像")
         # 内容区
         with ui.column().classes("flex-1 p-6 gap-3 min-w-0"):
             yield
