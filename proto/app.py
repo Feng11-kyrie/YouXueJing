@@ -488,10 +488,12 @@ def practice(subject: str = None, chapter: str = None,
                             .classes("t-sm sub")
                         ui.label(f'18 年考频 {b["考频"]} 次 · 题库 {b["可练题"]} 题') \
                             .classes("t-sm sub")
-                        ui.label(f'我的掌握度 {b["掌握度"]:.0%}'
-                                 if b["掌握度"] is not None else "我的掌握度：未测") \
+                        # 不显示掌握度百分比，只显示"做过几题"（可追溯）
+                        _bm = diagnose.mastery_by_subject(
+                            store.get_answers(user)).get(code)
+                        ui.label(f'已作答 {_bm["题数"]} 题' if _bm else "还没测过") \
                             .classes("t-sm font-semibold") \
-                            .style(f'color:{"#17418F" if b["掌握度"] is not None else "#9AA5B1"}')
+                            .style(f'color:{"#17418F" if _bm else "#9AA5B1"}')
                         if b["已标记"]:
                             ui.label(f'★ 已标记 {b["已标记"]} 个薄弱考点') \
                                 .classes("t-xs").style("color:#C2410C")
@@ -519,7 +521,7 @@ def practice(subject: str = None, chapter: str = None,
                 ui.label(f'考频 {cf.get(ch, 0)} 次 · {len(cl.get(ch, []))} 个考点'
                          + (f' · ★ 已勾选 {n_mark}' if n_mark else "")) \
                     .classes("t-sm muted flex-1")
-                ui.label(f'掌握度 {cm["掌握度"]:.0%}' if cm else "掌握度 未测") \
+                ui.label(f'做过 {cm["题数"]} 题' if cm else "未测") \
                     .classes("t-sm font-semibold") \
                     .style(f'color:{"#17418F" if cm else "#9AA5B1"}')
             row.on("click", lambda _=None, c=ch: goto(chapter=c))
@@ -608,7 +610,9 @@ def diagnose_page(user: str = "demo"):
         _title("快速诊断（可选）")
         ui.label("32 道题　·　约 20-25 分钟　·　覆盖 408 全部 24 章") \
             .classes("t-body font-semibold")
-        ui.label("做完会得到章节级掌握度，之后的推荐会更准。这是可选的 —— "
+        # 文案要跟界面一致：这里已经不展示"掌握度百分比"了，
+        # 所以不能再承诺"做完会得到章节级掌握度"（承诺了却看不到，更糟）
+        ui.label("做完 24 章的作答记录就有了，之后的推荐会更准。这是可选的 —— "
                  "不做也能用：你可以在「挑考点练习」里直接勾选自认薄弱的知识点。") \
             .classes("t-sm sub")
         done_n = sum(1 for x in paper if x["id"] in got)
@@ -660,50 +664,67 @@ def profile_page(user: str = "demo"):
             return
         prof = profile_mod.build(a, mk)
         ui.label(prof["文字画像"]).classes("t-body leading-7")
-        # 用户质疑过"这个掌握度是不是在瞎猜"。诚实做法：把**样本量**摆在数字旁，
-        # 并明说它的局限 —— 否则 1 题算出的 67% 会被当真。
-        ui.label(f"这些百分比来自 {len(a)} 道诊断题，算法是 (答对+1)/(题数+2) 的平滑。"
-                 f"样本越小越不可信：某章只做过 1 题时，答对就显示 67%、"
-                 f"答错也显示 33% —— 那只是平滑的结果，不代表真实水平。"
-                 f"看数字请以它后面的题数为准。").classes("t-sm muted")
+        # 【为什么一个百分比都不显示】
+        # 用户质疑"这个掌握度是不是在瞎猜"，随后要求撤掉。核实后他是对的：
+        #   学科级每科仅 8 题；章节级 16 个章节只做过 1 题、8 个只做过 2 题。
+        #   公式 (答对+1)/(题数+2) 的平滑 → 1 题答对显示 67%，1 题答错显示 33%。
+        # 这种数字**看着精确、实际证明不了任何事**，而且答辩时经不起追问。
+        # 所以这里只显示原始事实：答对几题 / 做过几题。排序仍然用内部掌握度
+        # 计算（算法需要），但不把它摆给用户看。
+        ui.label("做题记录").classes("t-lead font-semibold")
+        ui.label("只列原始作答数，不做换算 —— 题数少时百分比没有意义。") \
+            .classes("t-sm muted")
 
         if prof["学科掌握度"]:
             with ui.row().classes("gap-8"):
+                # 按答对率排序（内部仍用掌握度，只是不显示）
                 for code, v in sorted(prof["学科掌握度"].items(),
                                      key=lambda x: -x[1]["掌握度"]):
                     with ui.column().classes("gap-0"):
                         ui.label(v["学科"]).classes("t-sm muted")
-                        ui.label(f'{v["掌握度"]:.0%}').classes("text-2xl font-bold")
-                        ui.label(f'{v["答对"]}/{v["题数"]} 题') \
-                            .classes("t-xs").style("color:#1B5E36")
+                        ui.label(f'{v["答对"]} / {v["题数"]}').classes("text-2xl font-bold") \
+                            .style("color:var(--accent)")
+                        ui.label("答对 / 做过").classes("t-xs muted")
         if mk:
             ui.label(f"另有你自报的 {len(mk)} 个薄弱考点，已计入下方排序。") \
                 .classes("t-sm")
 
         ui.separator()
-        ui.label("各章掌握度").classes("t-lead font-semibold")
-        ui.label("按学科分组；括号里是答对/答过题数。").classes("t-sm muted")
+        ui.label("各章作答记录").classes("t-lead font-semibold")
+        ui.label("按学科分组。右侧是这一章你做过几题、对了几题；"
+                 "未测章节表示还没做过题。").classes("t-sm muted")
         m = diagnose.summarize(a)
         for code, name in data.CODE2NAME.items():
             rows = [c for c in m["章节"].values() if c["学科码"] == code]
             if not rows:
                 continue
-            ui.label(name).classes("font-semibold mt-1")
-            for c in sorted(rows, key=lambda x: x["掌握度"]):
-                ui.linear_progress(value=c["掌握度"], show_value=False).classes("w-full")
-                ui.label(f'{c["章节名"]} — {c["掌握度"]:.0%}'
-                         f'（{c["答对"]}/{c["题数"]}）').classes("t-xs sub")
+            ui.label(name).classes("t-body font-semibold mt-2")
+            # 用表格而不是进度条：进度条本身就是"百分比"的可视化，
+            # 留着它等于换个形式继续暗示精度。
+            for c in sorted(rows, key=lambda x: (x["题数"], x["答对"])):
+                with ui.row().classes("items-center gap-3 w-full no-wrap"):
+                    ui.label(c["章节名"]).classes("t-sm flex-1 truncate")
+                    ui.label(f'考频 {data.chapter_freq().get(c["chapter"], 0)} 次') \
+                        .classes("t-xs muted").style("white-space:nowrap")
+                    if c["题数"]:
+                        ui.label(f'答对 {c["答对"]} / {c["题数"]} 题') \
+                            .classes("t-sm font-semibold").style("white-space:nowrap")
+                    else:
+                        ui.label("未测").classes("t-sm muted") \
+                            .style("white-space:nowrap")
 
         if prof["薄弱章节"]:
             ui.separator()
             ui.label("最该先补的章节").classes("t-lead font-semibold")
-            ui.label("排序依据：考频 ×（1 − 掌握度）。考得越多、你越弱，越该先补。") \
+            ui.label("排序依据：考频 ×（1 − 掌握度）。考得越多、你越弱，越该先补。"
+                     "（掌握度只用于排序，不对外显示 —— 样本小时它不可靠，"
+                     "所以上面只给你原始作答数）") \
                 .classes("t-sm muted")
             for c in prof["薄弱章节"]:
-                lvl = f'{c["掌握度"]:.0%}' if c["掌握度"] is not None else "未测"
+                # 同样不显示掌握度百分比；给出考频与来源，都可追溯
                 src = f'　·　{c.get("来源", "")}' if c.get("来源") else ""
-                ui.label(f'{c["章节名"]}　掌握度 {lvl}　18 年考频 {c["考频"]} 次　'
-                         f'优先级分 {c["优先级分"]}{src}').classes("t-sm")
+                ui.label(f'{c["章节名"]}　18 年考频 {c["考频"]} 次{src}') \
+                    .classes("t-sm")
 
 
 # ================================================================ 学习路径
@@ -740,9 +761,9 @@ def paths_page(user: str = "demo"):
                                 ui.label(f'{s["学科"]} · {s["章节"]}') \
                                     .classes("t-xs muted")
                             with ui.row().classes("items-center gap-6"):
-                                ui.label("当前掌握度 "
-                                         + (f'{s["当前掌握度"]:.0%}'
-                                            if s["是否已测"] else "未测")) \
+                                # 不显示"当前掌握度 XX%"：那一章可能只做过 1 题
+                                ui.label("尚未测过" if not s["是否已测"]
+                                         else f'做过 {s["可练真题"]} 题中的一部分') \
                                     .classes("t-sm")
                                 ui.label(f'预计用时 {s["预计分钟"]} 分钟').classes("t-sm")
                                 ui.label(f'考频 {s["考频"]} 次 · 可练 {s["可练真题"]} 题') \
