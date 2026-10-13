@@ -87,7 +87,13 @@ def question_card(q, year, done, user):
             hint.set_text("")
 
         for k in sorted(opts):
-            row = ui.row().classes("opt w-full max-w-3xl items-center gap-2 "
+            # 这里原来有 max-w-3xl(768px) —— 题卡宽 950px 而选项行只到 768px，
+            # 右边空出 180px，看起来像"内容只占一半"（用户两次指出右侧留白）。
+            #
+            # 我上次把这条改动写进了 proto/app.py，但题卡组件其实在**本文件**，
+            # 所以那次"修好了"是假的（浏览器实测选项行仍是 768px 才发现）。
+            # 教训：改样式前先用 --style 量实际生效的元素，别只看改了哪个文件。
+            row = ui.row().classes("opt w-full items-center gap-2 "
                                    "rounded-lg px-3 py-1 cursor-pointer")
             rows[k] = row
             with row:
