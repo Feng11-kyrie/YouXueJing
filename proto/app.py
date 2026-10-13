@@ -219,55 +219,37 @@ def home(user: str = "demo"):
     a, mk = store.get_answers(user), store.get_marks(user)
 
     with shell("/", user):
-        # ---------- 首屏：自我介绍 + 我现在的学情 ----------
-        ui.label(f"你好，{user}").classes("text-2xl font-bold")
+        # ---------- 首屏
+        # 用户两条要求，都采纳：
+        #   ① 删掉"你好，demo" —— demo 是用户 id，不是名字，喊出来很怪
+        #   ② 掌握度不上首页 —— 见下方说明
+        #
+        # 为什么要拿掉掌握度：它来自 32 道诊断题，分摊到 4 科是**每科 8 题**，
+        # 章节级更薄：16 个章节只做了 1 题、8 个只做了 2 题。
+        # 公式是 (答对+1)/(题数+2) 的平滑 —— 数字是真算的，但 1 题答对就显示
+        # "67% 掌握度"属于**伪精确**：看着可信，实际证明不了任何事。
+        # 所以首页不再放这个百分比，改为只陈述事实（做了多少、对了多少）。
+        # 精确数字留在「我的画像」页，那里会同时标出样本量。
+        ui.label("今天练哪几道").classes("text-2xl font-bold")
         ui.label("离 408 还有多少天不重要，重要的是今天练哪几道。") \
             .classes("t-body sub")
 
-        if not a and not mk:
-            # ============ 空状态：给一个明确的第一步，而不是三张平级卡片
-            with ui.card().classes("softcard w-full p-6 gap-2 mt-2"):
-                ui.label("先花 20 分钟，让我知道你的底子") \
-                    .classes("text-xl font-bold")
-                ui.label("32 道题覆盖 408 全部 24 章。做完你会拿到："
-                         "四科掌握度、最该补的章节、以及三条学习路径。") \
-                    .classes("t-body sub")
-                ui.label("也可以跳过测试，直接挑你觉得薄弱的知识点练 —— "
-                         "只是推荐会没那么准。").classes("t-sm muted")
-                with ui.row().classes("gap-3 mt-2"):
-                    ui.button("开始诊断（32 题）",
-                              on_click=lambda: ui.navigate.to(f"/diagnose?user={user}")) \
-                        .props("unelevated color=primary")
-                    ui.button("直接挑考点练习",
-                              on_click=lambda: ui.navigate.to(f"/practice?user={user}")) \
-                        .props("flat")
-            return
-
-        # ============ 有数据：首屏就是学情 + 一个主行动点
+        # 注意：删掌握度卡片时不要把下面这两行一起删了 ——
+        # weakest 是"今天建议先补"的依据，删掉首页直接 500（实测踩过）。
         prof = profile_mod.build(a, mk)
-        m = diagnose.summarize(a)
         weakest = prof["薄弱章节"][0] if prof["薄弱章节"] else None
-
-        # 三科掌握度并排（有数据才显示）
-        if prof["学科掌握度"]:
-            with ui.row().classes("w-full gap-3"):
-                for code, v in sorted(prof["学科掌握度"].items(),
-                                     key=lambda x: -x[1]["掌握度"]):
-                    with ui.card().classes("softcard flex-1 p-4 gap-0"):
-                        ui.label(v["学科"]).classes("t-sm sub")
-                        ui.label(f'{v["掌握度"]:.0%}').classes("kpi mt-1") \
-                            .style("color:var(--accent)")
-                        ui.label(f'{v["答对"]}/{v["题数"]} 题') \
-                            .classes("t-xs muted")
 
         # ---------- 主行动点：只有这一个主色按钮
         with ui.card().classes("softcard w-full p-5 gap-2"):
             if weakest:
                 ui.label(f'今天建议先补：{weakest["章节名"]}') \
-                    .classes("text-lg font-bold")
+                    .classes("t-lead font-bold")
+                # 不写"你的掌握度 XX%"：那一章可能只做过 1 题，百分比没意义。
+                # 只给可追溯的事实：这一章 18 年考了多少次。
+                # （顺带修一个我的笔误：这段说明被写成了 t-nav，字号比正文小）
                 ui.label(f'这一章 18 年考了 {weakest["考频"]} 次，'
-                         f'你的掌握度 {weakest["掌握度"]:.0%} —— '
-                         f'考得多、你又弱，性价比最高。').classes("t-nav sub")
+                         f'是考频最高的薄弱章节之一 —— 先补它性价比最高。') \
+                    .classes("t-body sub")
                 ui.button("从这一章开始练",
                           on_click=lambda: ui.navigate.to(
                               f'/practice?subject={weakest.get("学科码", "DS")}'
@@ -276,7 +258,7 @@ def home(user: str = "demo"):
                 # 全科都不弱：给错题复习
                 wrong = [qid for qid, r in a.items() if not r["is_correct"]]
                 ui.label(f"你有 {len(wrong)} 道错题待复习" if wrong
-                         else "目前没有明显薄弱章节").classes("text-lg font-bold")
+                         else "目前没有明显薄弱章节").classes("t-lead font-bold")
                 ui.label("做错的题最能暴露问题。按年份重做一遍这些题。" if wrong
                          else "可以去真题页按年份刷卷子，或者挑新的考点。") \
                     .classes("t-nav sub")
@@ -434,11 +416,11 @@ def exam(year: str = None, page: int = 1, view: str = "全部", user: str = "dem
             info = (f'{p["题数"]} 题 · {p["总分"]} 分 · 可判分 {p["有答案数"]}'
                     + (f'　|　已作答 {len(answered)}/{p["单选数"]} · 答对 {n_ok} · '
                        f'正确率 {n_ok / len(answered):.0%}' if answered else ""))
-            ui.label(info).classes("text-sm text-gray-500")
+            ui.label(info).classes("t-sm muted")
 
         with ui.row().classes("w-full items-start gap-5"):
             with ui.column().classes("w-56 shrink-0 sticky top-2 gap-1"):
-                ui.label("答题卡").classes("text-sm font-semibold text-gray-500")
+                ui.label("答题卡").classes("t-sm font-semibold muted")
                 with ui.element("div").classes("flex flex-wrap gap-1"):
                     for i, q in enumerate(shown):
                         st_ = done.get(q["id"])
@@ -450,29 +432,29 @@ def exam(year: str = None, page: int = 1, view: str = "全部", user: str = "dem
                         cell = ui.element("div").classes(cls)
                         cell.on("click", lambda _=None, n=i // PER + 1: goto(page=n))
                         with cell:
-                            ui.label(q["题号"]).classes("text-xs")
+                            ui.label(q["题号"]).classes("t-xs")
                 with ui.row().classes("gap-2 items-center"):
                     ui.button(icon="chevron_left",
                               on_click=lambda: goto(page=max(1, cur - 1))) \
                         .props("flat dense").set_enabled(cur > 1)
-                    ui.label(f"{cur} / {pages_n} 页").classes("text-sm")
+                    ui.label(f"{cur} / {pages_n} 页").classes("t-sm")
                     ui.button(icon="chevron_right",
                               on_click=lambda: goto(page=min(pages_n, cur + 1))) \
                         .props("flat dense").set_enabled(cur < pages_n)
-                ui.label("绿=对 · 红=错 · 白=未做").classes("text-xs text-gray-400")
+                ui.label("绿=对 · 红=错 · 白=未做").classes("t-xs muted")
 
             with ui.column().classes("flex-1 gap-2 min-w-0"):
                 if not shown:
-                    ui.label(f"筛选「{view}」下没有题目。").classes("text-sm text-gray-500")
+                    ui.label(f"筛选「{view}」下没有题目。").classes("t-sm muted")
                     return
                 items = shown[(cur - 1) * PER: cur * PER]
                 ui.label(f'第 {items[0]["题号"]}–{items[-1]["题号"]} 题') \
-                    .classes("text-lg font-semibold")
+                    .classes("t-lead font-semibold")
                 subj = None
                 for q in items:
                     if q["学科"] != subj:
                         subj = q["学科"]
-                        ui.label(subj).classes("text-base font-semibold mt-1") \
+                        ui.label(subj).classes("t-body font-semibold mt-1") \
                             .style(f'color:{SUBJECT_COLORS.get(subj, "#2563EB")}')
                     question_card(q, p["年份"], done, user)
 
@@ -501,18 +483,18 @@ def practice(subject: str = None, chapter: str = None,
                 for code in ("DS", "CO", "OS", "CN"):
                     b = _book_meta(code, user)
                     with ui.card().classes("bookcard flex-1 p-4 gap-1 shadow-none"):
-                        ui.label(b["name"]).classes("text-lg font-bold")
+                        ui.label(b["name"]).classes("t-lead font-bold")
                         ui.label(f'{b["章数"]} 章 · {b["考点数"]} 个考点') \
-                            .classes("text-sm text-gray-600")
+                            .classes("t-sm sub")
                         ui.label(f'18 年考频 {b["考频"]} 次 · 题库 {b["可练题"]} 题') \
-                            .classes("text-sm text-gray-600")
+                            .classes("t-sm sub")
                         ui.label(f'我的掌握度 {b["掌握度"]:.0%}'
                                  if b["掌握度"] is not None else "我的掌握度：未测") \
-                            .classes("text-sm font-semibold") \
+                            .classes("t-sm font-semibold") \
                             .style(f'color:{"#17418F" if b["掌握度"] is not None else "#9AA5B1"}')
                         if b["已标记"]:
                             ui.label(f'★ 已标记 {b["已标记"]} 个薄弱考点') \
-                                .classes("text-xs").style("color:#C2410C")
+                                .classes("t-xs").style("color:#C2410C")
                         ui.button(f'进入{b["name"]}',
                                   on_click=lambda _=None, c=code:
                                   goto(subject=c, chapter=None)).props("unelevated") \
@@ -521,7 +503,7 @@ def practice(subject: str = None, chapter: str = None,
 
         bm = _book_meta(subject, user)
         with ui.row().classes("items-center gap-2"):
-            ui.label(bm["name"]).classes("text-lg font-bold")
+            ui.label(bm["name"]).classes("t-lead font-bold")
             ui.button("← 换一门", on_click=lambda: goto(subject=None, chapter=None)) \
                 .props("flat dense")
         ui.label(f'这门课有 {bm["章数"]} 章 —— 点章名直接进去挑知识点') \
@@ -536,21 +518,21 @@ def practice(subject: str = None, chapter: str = None,
                 ui.label(nm).classes("font-semibold w-40 shrink-0")
                 ui.label(f'考频 {cf.get(ch, 0)} 次 · {len(cl.get(ch, []))} 个考点'
                          + (f' · ★ 已勾选 {n_mark}' if n_mark else "")) \
-                    .classes("text-sm text-gray-500 flex-1")
+                    .classes("t-sm muted flex-1")
                 ui.label(f'掌握度 {cm["掌握度"]:.0%}' if cm else "掌握度 未测") \
-                    .classes("text-sm font-semibold") \
+                    .classes("t-sm font-semibold") \
                     .style(f'color:{"#17418F" if cm else "#9AA5B1"}')
             row.on("click", lambda _=None, c=ch: goto(chapter=c))
 
         if not chapter:
-            ui.label("点上面任意一章，展开它的知识点列表。").classes("text-sm text-gray-500")
+            ui.label("点上面任意一章，展开它的知识点列表。").classes("t-sm muted")
             return
 
         leaves = cl.get(chapter, [])
         ui.label(f'勾出「{data.node_name(chapter)}」里你觉得薄弱的知识点') \
-            .classes("text-lg font-bold")
+            .classes("t-lead font-bold")
         ui.label("可以多选；「换章再回来勾选会保留」。标签里的 频N 是它 18 年被考的次数，"
-                 "·M题 是题库里能拿它练的题数。").classes("text-sm text-gray-600")
+                 "·M题 是题库里能拿它练的题数。").classes("t-sm sub")
         freq, lqc = data.freq(), data.leaf_question_count()
         with ui.row().classes("gap-x-6 gap-y-0"):
             for l in leaves:
@@ -574,12 +556,12 @@ def practice(subject: str = None, chapter: str = None,
 
         marks = store.get_marks(user)
         if not marks:
-            ui.label("勾选考点后，这里会出现「开始练习」。").classes("text-sm text-gray-400")
+            ui.label("勾选考点后，这里会出现「开始练习」。").classes("t-sm muted")
             return
         total_q = sum(lqc.get(l, 0) for l in marks)
         ui.separator()
         ui.label(f"你已勾选 {len(marks)} 个考点，题库里共 {total_q} 道真题可练") \
-            .classes("text-lg font-bold")
+            .classes("t-lead font-bold")
         no_q = [l for l in marks if not lqc.get(l, 0)]
         if no_q:
             ui.label("其中 " + "、".join(data.node_name(l) for l in no_q)
@@ -608,7 +590,7 @@ def practice(subject: str = None, chapter: str = None,
             return
         show = pool[:5]
         ui.label(f"练习：抽 {len(show)} 道（优先你没做过的、难度低的）") \
-            .classes("text-lg font-bold")
+            .classes("t-lead font-bold")
         for l, q in show:
             question_card(q, q["year"], done, user)
 
@@ -628,11 +610,11 @@ def diagnose_page(user: str = "demo"):
             .classes("t-body font-semibold")
         ui.label("做完会得到章节级掌握度，之后的推荐会更准。这是可选的 —— "
                  "不做也能用：你可以在「挑考点练习」里直接勾选自认薄弱的知识点。") \
-            .classes("text-sm text-gray-600")
+            .classes("t-sm sub")
         done_n = sum(1 for x in paper if x["id"] in got)
         ui.linear_progress(value=done_n / len(paper), show_value=False).classes("w-full")
         ui.label(f"进度 {done_n}/{len(paper)}　（未作答不计入掌握度）") \
-            .classes("text-sm text-gray-500")
+            .classes("t-sm muted")
 
         for item in paper:
             q = qs[item["id"]]
@@ -640,7 +622,7 @@ def diagnose_page(user: str = "demo"):
             with ui.card().classes("w-full p-3 gap-1 shadow-none"):
                 ui.label(f'{item["order"]}. [{item["学科"]} · '
                          f'{item["诊断章节名"]} · 难度 {item["难度"]}]') \
-                    .classes("text-xs text-gray-500")
+                    .classes("t-xs muted")
                 ui.label(q["题干"]).classes("t-body leading-6 whitespace-pre-wrap")
                 opts = q.get("选项") or {}
                 # 用 radio，且 value 默认 None → 不预选任何一项
@@ -672,32 +654,35 @@ def profile_page(user: str = "demo"):
         _title("我的画像")
         if not a and not mk:
             ui.label("还没有任何数据。你可以：") \
-                .classes("text-sm").style("color:#8A6D3B")
-            ui.label("1. 到「挑考点练习」勾选自己觉得薄弱的知识点（最快）").classes("text-sm")
-            ui.label("2. 或到「快速诊断」做一次 32 题测试（更准）").classes("text-sm")
+                .classes("t-sm").style("color:#8A6D3B")
+            ui.label("1. 到「挑考点练习」勾选自己觉得薄弱的知识点（最快）").classes("t-sm")
+            ui.label("2. 或到「快速诊断」做一次 32 题测试（更准）").classes("t-sm")
             return
         prof = profile_mod.build(a, mk)
         ui.label(prof["文字画像"]).classes("t-body leading-7")
-        ui.label("掌握度算法：（答对+1）/（题数+2），Laplace 平滑，"
-                 "避免只答 1 题就给出 0% 或 100%。你自报的薄弱点与做题数据同等计入。") \
-            .classes("text-xs text-gray-500")
+        # 用户质疑过"这个掌握度是不是在瞎猜"。诚实做法：把**样本量**摆在数字旁，
+        # 并明说它的局限 —— 否则 1 题算出的 67% 会被当真。
+        ui.label(f"这些百分比来自 {len(a)} 道诊断题，算法是 (答对+1)/(题数+2) 的平滑。"
+                 f"样本越小越不可信：某章只做过 1 题时，答对就显示 67%、"
+                 f"答错也显示 33% —— 那只是平滑的结果，不代表真实水平。"
+                 f"看数字请以它后面的题数为准。").classes("t-sm muted")
 
         if prof["学科掌握度"]:
             with ui.row().classes("gap-8"):
                 for code, v in sorted(prof["学科掌握度"].items(),
                                      key=lambda x: -x[1]["掌握度"]):
                     with ui.column().classes("gap-0"):
-                        ui.label(v["学科"]).classes("text-sm text-gray-500")
+                        ui.label(v["学科"]).classes("t-sm muted")
                         ui.label(f'{v["掌握度"]:.0%}').classes("text-2xl font-bold")
                         ui.label(f'{v["答对"]}/{v["题数"]} 题') \
-                            .classes("text-xs").style("color:#1B5E36")
+                            .classes("t-xs").style("color:#1B5E36")
         if mk:
             ui.label(f"另有你自报的 {len(mk)} 个薄弱考点，已计入下方排序。") \
-                .classes("text-sm")
+                .classes("t-sm")
 
         ui.separator()
-        ui.label("各章掌握度").classes("text-lg font-semibold")
-        ui.label("按学科分组；括号里是答对/答过题数。").classes("text-sm text-gray-500")
+        ui.label("各章掌握度").classes("t-lead font-semibold")
+        ui.label("按学科分组；括号里是答对/答过题数。").classes("t-sm muted")
         m = diagnose.summarize(a)
         for code, name in data.CODE2NAME.items():
             rows = [c for c in m["章节"].values() if c["学科码"] == code]
@@ -707,18 +692,18 @@ def profile_page(user: str = "demo"):
             for c in sorted(rows, key=lambda x: x["掌握度"]):
                 ui.linear_progress(value=c["掌握度"], show_value=False).classes("w-full")
                 ui.label(f'{c["章节名"]} — {c["掌握度"]:.0%}'
-                         f'（{c["答对"]}/{c["题数"]}）').classes("text-xs text-gray-600")
+                         f'（{c["答对"]}/{c["题数"]}）').classes("t-xs sub")
 
         if prof["薄弱章节"]:
             ui.separator()
-            ui.label("最该先补的章节").classes("text-lg font-semibold")
+            ui.label("最该先补的章节").classes("t-lead font-semibold")
             ui.label("排序依据：考频 ×（1 − 掌握度）。考得越多、你越弱，越该先补。") \
-                .classes("text-sm text-gray-500")
+                .classes("t-sm muted")
             for c in prof["薄弱章节"]:
                 lvl = f'{c["掌握度"]:.0%}' if c["掌握度"] is not None else "未测"
                 src = f'　·　{c.get("来源", "")}' if c.get("来源") else ""
                 ui.label(f'{c["章节名"]}　掌握度 {lvl}　18 年考频 {c["考频"]} 次　'
-                         f'优先级分 {c["优先级分"]}{src}').classes("text-sm")
+                         f'优先级分 {c["优先级分"]}{src}').classes("t-sm")
 
 
 # ================================================================ 学习路径
@@ -729,42 +714,42 @@ def paths_page(user: str = "demo"):
         _title("学习路径")
         if not a and not mk:
             ui.label("还没有数据。先到「挑考点练习」勾选薄弱知识点，"
-                     "或做一次「快速诊断」。").classes("text-sm").style("color:#8A6D3B")
+                     "或做一次「快速诊断」。").classes("t-sm").style("color:#8A6D3B")
             return
         rec = path_mod.recommend(a, marks=mk)
         if not rec.get("路径"):
-            ui.label(rec.get("提示", "暂无推荐")).classes("text-sm")
+            ui.label(rec.get("提示", "暂无推荐")).classes("t-sm")
             return
         ui.label(f'根据你的学情（含你自己勾选的薄弱点），系统找出 '
                  f'{rec["薄弱考点数"]} 个未掌握考点，组织成下面几条路径。') \
             .classes("t-body")
         ui.label("三条路径不互斥，选一条开始就行 —— 差别只在「先补什么」的依据。") \
-            .classes("text-sm text-gray-600")
+            .classes("t-sm sub")
         with ui.tabs().classes("w-full") as tabs:
             for p in rec["路径"]:
                 ui.tab(p["名称"], label=f'{p["名称"]}（{p["合计分钟"]} 分钟）')
         with ui.tab_panels(tabs, value=rec["路径"][0]["名称"]).classes("w-full"):
             for p in rec["路径"]:
                 with ui.tab_panel(p["名称"]):
-                    ui.label(f'适合：{p["适用"]}').classes("text-sm font-semibold")
-                    ui.label(p["说明"]).classes("text-sm text-gray-600")
+                    ui.label(f'适合：{p["适用"]}').classes("t-sm font-semibold")
+                    ui.label(p["说明"]).classes("t-sm sub")
                     for i, s in enumerate(p["步骤"], 1):
                         with ui.card().classes("w-full p-3 gap-1 shadow-none mt-2"):
                             with ui.row().classes("items-center gap-4"):
                                 ui.label(f'{i}. {s["考点名"]}').classes("font-semibold")
                                 ui.label(f'{s["学科"]} · {s["章节"]}') \
-                                    .classes("text-xs text-gray-500")
+                                    .classes("t-xs muted")
                             with ui.row().classes("items-center gap-6"):
                                 ui.label("当前掌握度 "
                                          + (f'{s["当前掌握度"]:.0%}'
                                             if s["是否已测"] else "未测")) \
-                                    .classes("text-sm")
-                                ui.label(f'预计用时 {s["预计分钟"]} 分钟').classes("text-sm")
+                                    .classes("t-sm")
+                                ui.label(f'预计用时 {s["预计分钟"]} 分钟').classes("t-sm")
                                 ui.label(f'考频 {s["考频"]} 次 · 可练 {s["可练真题"]} 题') \
-                                    .classes("text-sm text-gray-500")
-                            ui.label(s["推荐理由"]).classes("text-xs text-gray-500")
+                                    .classes("t-sm muted")
+                            ui.label(s["推荐理由"]).classes("t-xs muted")
         ui.label("「补根因」的机制：沿知识点依赖图向上追溯，找到最靠前的断裂点再开始补，"
-                 "而不是直接练你表面最弱的那一章。").classes("text-xs text-gray-500")
+                 "而不是直接练你表面最弱的那一章。").classes("t-xs muted")
 
 
 # ================================================================ 讲义生成
@@ -779,13 +764,13 @@ def notes_page(user: str = "demo"):
             .classes("t-body")
         ok, msg = llm.status()
         (ui.label if ok else ui.label)(("● " + msg) if ok else ("● " + msg)) \
-            .classes("text-sm").style(f'color:{"#1B5E36" if ok else "#8A6D3B"}')
+            .classes("t-sm").style(f'color:{"#1B5E36" if ok else "#8A6D3B"}')
         if not ok:
             ui.label("页面会照常跑通，但讲义正文是用真实数据填的模板，不是 AI 写的。") \
-                .classes("text-sm text-gray-600")
+                .classes("t-sm sub")
         if not a and not mk:
             ui.label("还没有数据。先到「挑考点练习」勾选薄弱知识点。") \
-                .classes("text-sm").style("color:#8A6D3B")
+                .classes("t-sm").style("color:#8A6D3B")
             return
 
         rec = path_mod.recommend(a, marks=mk)
@@ -797,22 +782,22 @@ def notes_page(user: str = "demo"):
             result.clear()
             with result:
                 if holder["meta"]:
-                    ui.label(holder["meta"]).classes("text-sm") \
+                    ui.label(holder["meta"]).classes("t-sm") \
                         .style("color:#1B5E36")
                 with ui.expansion("执行轨迹", value=True).classes("w-full"):
                     for t in R.get("traced", []):
-                        ui.label(f'{t["agent"]} — {t["detail"]}').classes("text-sm")
+                        ui.label(f'{t["agent"]} — {t["detail"]}').classes("t-sm")
                 rv = R.get("review") or {}
                 if rv:
                     ui.label("复核 Agent：考纲校验通过"
                              f'（检查了 {rv.get("检查项数", 0)} 个考点）'
                              if rv.get("通过") else
                              f'复核 Agent：发现 {len(rv.get("越纲项", {}))} 个考点越纲') \
-                        .classes("text-sm") \
+                        .classes("t-sm") \
                         .style(f'color:{"#1B5E36" if rv.get("通过") else "#8C2C2C"}')
                 res = R.get("resources") or []
                 if not res:
-                    ui.label("这条路径上没有需要生成的考点。").classes("text-sm")
+                    ui.label("这条路径上没有需要生成的考点。").classes("t-sm")
                     return
                 for x in res:
                     src = x["讲义"]["source"]
@@ -832,14 +817,14 @@ def notes_page(user: str = "demo"):
                                 ui.label("复核 Agent：内容未越出考纲考点范围"
                                          if v.get("通过") else
                                          f'疑似考纲外内容：{v.get("疑似考纲外")}') \
-                                    .classes("text-xs text-gray-500")
+                                    .classes("t-xs muted")
                             with ui.tab_panel("知识点速记"):
                                 ui.markdown(x["速记"])
                             with ui.tab_panel("配套真题"):
                                 for i, q in enumerate(x["习题"], 1):
                                     ui.label(f'{i}. {q["年份"]} 年 第 {q["题号"]} 题'
-                                             f'（难度 {q["难度"]}）').classes("text-sm")
-                                    ui.label(q["题干"]).classes("text-sm")
+                                             f'（难度 {q["难度"]}）').classes("t-sm")
+                                    ui.label(q["题干"]).classes("t-sm")
                                     with ui.expansion("查看答案"):
                                         ui.label(f'正确答案：{q["答案"]}')
 
@@ -883,7 +868,7 @@ def notes_page(user: str = "demo"):
 
 # ================================================================ 小工具
 def _title(text):
-    ui.label(text).classes("text-xl font-bold")
+    ui.label(text).classes("text-2xl font-bold")
 
 
 def _steps(active):
