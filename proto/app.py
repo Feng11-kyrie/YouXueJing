@@ -145,56 +145,87 @@ def shell(active: str, user: str):
         # 侧栏
         # 侧栏：232 → 264px。17px 的中文在 250px 里仍然挤，而侧栏文字少，
         # 可以给得比正文更宽松。
-        with ui.column().classes("shrink-0 p-3 pt-4 gap-1 min-h-screen border-r") \
+        # 侧栏高度这件事，两条路各有一个代价，我试过后选了第二个：
+        #   ① min-h-screen（拉满整屏）：背景完整，但导航只占 ~300px，
+        #      下面 700px 是纯背景色 → 用户两次指出"下方留那么大空白"
+        #   ② 贴内容高度（self-start）：高度问题解决了，但**背景色块会断开**，
+        #      下面露出白色，看着像侧栏被截断（我实测截图看到了）
+        # 最终做法：全高背景 + 内容吸顶。
+        # 外层负责"背景铺满整个高度"，内层 sticky 负责"滚动时导航还在"。
+        # self-stretch 是必须的：父级 flex 行设了 items-start，
+        # 子元素默认不拉伸 → 背景块只有 644px 高（实测），下面露出白色。
+        with ui.column().classes("shrink-0 border-r self-stretch") \
                 .style("background:var(--bg-side);border-color:var(--line);"
-                       "width:264px"):
-            # 品牌区：加大 logo 与标题，原来 18px 的标题配 17px 导航没有主次
-            with ui.row().classes("items-center gap-3 mb-4 px-1"):
-                ui.label("408").classes("w-10 h-10 rounded-xl text-white font-bold "
-                                       "flex items-center justify-center shrink-0") \
-                    .style("background:linear-gradient(135deg,#2563EB,#0D9488);"
-                           "font-size:14px")
-                with ui.column().classes("gap-0"):
-                    ui.label("优学鲸").classes("t-brand font-bold leading-tight")
-                    ui.label("408 考研").classes("t-xs sub")
+                       "width:264px;min-height:100vh"):
+          with ui.column().classes("p-3 pt-4 gap-1 sticky top-0 w-full"):
+              # 品牌区：加大 logo 与标题，原来 18px 的标题配 17px 导航没有主次
+              with ui.row().classes("items-center gap-3 mb-4 px-1"):
+                  ui.label("408").classes("w-10 h-10 rounded-xl text-white font-bold "
+                                         "flex items-center justify-center shrink-0") \
+                      .style("background:linear-gradient(135deg,#2563EB,#0D9488);"
+                             "font-size:14px")
+                  with ui.column().classes("gap-0"):
+                      ui.label("优学鲸").classes("t-brand font-bold leading-tight")
+                      ui.label("408 考研").classes("t-xs sub")
 
-            ui.label("学习功能").classes(
-                "t-xs muted font-semibold tracking-wide mx-1 mb-0.5")
-            for href, label, icon in NAV:
-                with ui.link(target=f"{href}?user={user}").classes(
-                        "navlink" + (" on" if href == active else "")):
-                    ui.icon(icon).classes("ic")
-                    ui.label(label).classes("t-nav")
+              ui.label("学习功能").classes(
+                  "t-xs muted font-semibold tracking-wide mx-1 mb-0.5")
+              for href, label, icon in NAV:
+                  with ui.link(target=f"{href}?user={user}").classes(
+                          "navlink" + (" on" if href == active else "")):
+                      ui.icon(icon).classes("ic")
+                      ui.label(label).classes("t-nav")
 
-            # 下面这块原来是"846 题·266 考点·339 依赖边 + 演示模式 + 用户 demo"，
-            # 全是**给开发看的字段**：
-            #   · "依赖边"是图数据库术语，学生看不懂
-            #   · "演示模式（未配置 key）"等于开场就说"我还没接真 AI"
-            #   · "薄弱考点 0 个"是空数据，没有兜底设计
-            # 改成：没有数据时给**行动指引**，不展示空值。
-            # 底部：原来只有一行"已作答 32 题"孤零零挂着，下面 2/3 全空。
-            # 现在给一个**用户卡**（头像 + 身份 + 快捷操作），把这块用起来。
-            ui.element("div").classes("flex-1 min-h-4")
-            ui.separator().style("border-color:var(--line)")
-            with ui.row().classes("items-center gap-2 px-1 pt-2"):
-                ui.label(user[:1].upper()).classes(
-                    "w-9 h-9 rounded-full text-white font-bold flex items-center "
-                    "justify-center shrink-0").style("background:#5A6B80;font-size:15px")
-                with ui.column().classes("gap-0 min-w-0 flex-1"):
-                    ui.label(user).classes("t-sm font-semibold truncate")
-                    ui.label(f"已作答 {len(answers)} 题" if answers
-                             else "还没有练习记录").classes("t-xs muted")
-            with ui.row().classes("gap-1 mt-1"):
-                if not answers and not marks:
-                    with ui.link(target=f"/diagnose?user={user}").classes(
-                            "t-xs no-underline flex-1 text-center py-1 rounded") \
-                            .style("color:var(--accent);background:var(--accent-weak)"):
-                        ui.label("先做一次诊断")
-                else:
-                    with ui.link(target=f"/profile?user={user}").classes(
-                            "t-xs no-underline flex-1 text-center py-1 rounded") \
-                            .style("color:var(--accent);background:var(--accent-weak)"):
-                        ui.label("看我的画像")
+              # 下面这块原来是"846 题·266 考点·339 依赖边 + 演示模式 + 用户 demo"，
+              # 全是**给开发看的字段**：
+              #   · "依赖边"是图数据库术语，学生看不懂
+              #   · "演示模式（未配置 key）"等于开场就说"我还没接真 AI"
+              #   · "薄弱考点 0 个"是空数据，没有兜底设计
+              # 改成：没有数据时给**行动指引**，不展示空值。
+              # 侧栏不再靠"拉满屏幕"占位，但内容本身也该给够：
+              # 「我的进度」用进度条式的直观数字（可追溯的原始计数，不用百分比）
+              ui.label("我的进度").classes(
+                  "t-xs muted font-semibold tracking-wide mx-1 mt-3 mb-0.5")
+              if answers:
+                  _ok = sum(1 for r in answers.values() if r["is_correct"])
+                  with ui.column().classes("gap-1 px-1"):
+                      for label, val, total, color in [
+                              ("已作答", len(answers), len(data.questions()), "#2563EB"),
+                              ("答对", _ok, len(answers), "#1B5E36"),
+                              ("待复习", len(answers) - _ok, len(answers), "#B45309")]:
+                          with ui.row().classes("items-center gap-2 w-full no-wrap"):
+                              ui.label(label).classes("t-xs muted w-12 shrink-0")
+                              ui.label(f"{val}").classes("t-sm font-semibold w-8")
+                              ui.element("div").classes("h-1.5 rounded flex-1") \
+                                  .style(f"background:{color};opacity:.85;"
+                                         f"max-width:{int(val / max(total, 1) * 100)}%")
+                  if marks:
+                      ui.label(f"自报薄弱考点 {len(marks)} 个").classes("t-xs muted mx-1")
+              else:
+                  ui.label("还没有练习记录").classes("t-xs muted mx-1")
+
+              # 底部：原来只有一行"已作答 32 题"孤零零挂着。
+              ui.element("div").classes("flex-1 min-h-4")
+              ui.separator().style("border-color:var(--line)")
+              with ui.row().classes("items-center gap-2 px-1 pt-2"):
+                  ui.label(user[:1].upper()).classes(
+                      "w-9 h-9 rounded-full text-white font-bold flex items-center "
+                      "justify-center shrink-0").style("background:#5A6B80;font-size:15px")
+                  with ui.column().classes("gap-0 min-w-0 flex-1"):
+                      ui.label(user).classes("t-sm font-semibold truncate")
+                      ui.label(f"已作答 {len(answers)} 题" if answers
+                               else "还没有练习记录").classes("t-xs muted")
+              with ui.row().classes("gap-1 mt-1"):
+                  if not answers and not marks:
+                      with ui.link(target=f"/diagnose?user={user}").classes(
+                              "t-xs no-underline flex-1 text-center py-1 rounded") \
+                              .style("color:var(--accent);background:var(--accent-weak)"):
+                          ui.label("先做一次诊断")
+                  else:
+                      with ui.link(target=f"/profile?user={user}").classes(
+                              "t-xs no-underline flex-1 text-center py-1 rounded") \
+                              .style("color:var(--accent);background:var(--accent-weak)"):
+                          ui.label("看我的画像")
         # 内容区
         with ui.column().classes("flex-1 p-6 gap-3 min-w-0"):
             yield
