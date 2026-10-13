@@ -119,6 +119,19 @@ ui.add_head_html("""
   .navlink .ic { font-size:21px; opacity:.95; }
   .kpi { font-size:26px; font-weight:700; line-height:1.1; }
   .muted { color:var(--mut); }
+  /* ===== 宽屏收紧密度 =====
+     用户反馈"100% 缩放有点大"。注意：**不能靠缩小字号解决** ——
+     字号一降，中文可读性立刻变差（而且前面几轮刚把对比度和字号调够）。
+     正解是收紧**间距与留白**，字号保持不动。
+     另外侧栏用 min() 跟随视口：宽屏下按比例略宽（视觉权重不失衡），
+     窄屏下不低于 240px。 */
+  @media (min-width: 1500px) {
+    .qcard { padding: 0.55rem 0.8rem 0.6rem 0.9rem !important; }
+    .opt { padding-top: 3px !important; padding-bottom: 3px !important; }
+    [class*="gap-3"] { gap: 0.5rem !important; }
+    .navlink { padding-top: 6px; padding-bottom: 6px; }
+  }
+
   .sub { color:var(--sub); }
 </style>
 """, shared=True)
@@ -156,7 +169,7 @@ def shell(active: str, user: str):
         # 子元素默认不拉伸 → 背景块只有 644px 高（实测），下面露出白色。
         with ui.column().classes("shrink-0 border-r self-stretch") \
                 .style("background:var(--bg-side);border-color:var(--line);"
-                       "width:264px;min-height:100vh"):
+                       "width:min(17vw,300px);min-height:100vh"):
           with ui.column().classes("p-3 pt-4 gap-1 sticky top-0 w-full"):
               # 品牌区：加大 logo 与标题，原来 18px 的标题配 17px 导航没有主次
               with ui.row().classes("items-center gap-3 mb-4 px-1"):
