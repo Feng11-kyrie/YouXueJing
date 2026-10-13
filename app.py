@@ -155,32 +155,45 @@ st.markdown(
       [data-testid="stRadio"] [role="radiogroup"] label { padding: 0.1rem 0; }
 
       /* ---- 答题卡 ------------------------------------------------------
-         实测：每页 3 行（格子行 + 跳页按钮 + 页码说明）× 5 页 ≈ 460px，
-         把第一道题推到了折线以下。改成每页 1 行：页码按钮在最左，格子紧跟。 */
-      .yj-card { display: flex; flex-wrap: wrap; gap: 5px; align-items: center;
-                 margin: 0.25rem 0 0.35rem 0; }
+         所有方格在一个 flex 容器里自动换行；每页之间用分隔留白替代
+         "第 N 页"文字标签（实测：每页一行标签 + 一行格子 + 一行跳页按钮，
+         5 页吃掉约 330px，把第一道题推到 y=785）。图例做成有底色的小格子，
+         省掉上方一整行说明。 */
+      .yj-card {
+        display: flex; flex-wrap: wrap; gap: 10px 0;
+        align-items: center; margin: 0.1rem 0 0.3rem 0;
+      }
+      .yj-pgblock { display: inline-flex; flex-wrap: wrap; gap: 4px;
+                    padding-right: 12px; }
+      .yj-pgblock + .yj-pgblock { border-left: 1px solid #E3E8EF;
+                                  padding-left: 12px; }
       .yj-cell {
-        min-width: 1.95rem; text-align: center; padding: 0.12rem 0.25rem;
-        border: 1px solid #D7DEE8; border-radius: 0.4rem;
-        font-size: 0.8rem; font-variant-numeric: tabular-nums;
-        background: #FFFFFF; color: #46586D; line-height: 1.5;
+        min-width: 1.85rem; text-align: center; padding: 0.1rem 0.22rem;
+        border: 1px solid #D7DEE8; border-radius: 0.38rem;
+        font-size: 0.78rem; font-variant-numeric: tabular-nums;
+        background: #FFFFFF; color: #46586D; line-height: 1.45;
+        font-style: normal;
       }
       .yj-ok   { background: #E6F6EC; border-color: #7DCB9A; color: #1B5E36; }
       .yj-bad  { background: #FDECEC; border-color: #E9A0A0; color: #8C2C2C; }
       .yj-open { background: #F2F5F9; border-color: #C9D3E0; color: #556072; }
       .yj-cur  { outline: 2px solid #2563EB; outline-offset: 1px; font-weight: 700; }
-      /* 页码标签：等宽，与格子同一行对齐 */
-      .yj-pglabel {
-        display: inline-block; min-width: 3.6rem; text-align: center;
-        font-size: 0.74rem; color: #6B7A8D; font-weight: 600;
-        letter-spacing: 0.02em;
+      /* 图例：三个有底色的小格子 + 一句说明，贴右对齐 */
+      .yj-legend {
+        display: inline-flex; align-items: center; gap: 5px;
+        margin-left: auto; padding-left: 14px;
+        font-size: 0.74rem; color: #6B7A8D; white-space: nowrap;
       }
-      /* 跳页按钮收小：分页是答题卡的附属功能，不该和主按钮一样抢眼。
-         用 st-key-pg_* 精确命中，避免影响页面上其它按钮。 */
+      .yj-legend .yj-cell { min-width: 1.5rem; }
+      @media (max-width: 1100px) {
+        /* 窄屏时把图例说明藏掉，避免它自己换行把答题卡撑高 */
+        .yj-legend-note { display: none; }
+      }
+      /* 分页按钮收小（分页是附属功能，不该像主按钮一样抢眼） */
       [class*="st-key-pg_"] button {
         min-height: 0 !important;
-        padding: 0.15rem 0.4rem !important;
-        font-size: 0.82rem !important;
+        padding: 0.2rem 0.5rem !important;
+        font-size: 0.85rem !important;
         box-shadow: none !important;
       }
       /* 控制条：让三个控件的标签与输入对齐一致。
@@ -369,53 +382,45 @@ def render_question(q, leaf, key_prefix, source="practice"):
 #   ② 一页三屏，复习时只能靠滚动
 # 所以改成：顶部控制条 + 答题卡（状态+跳转）+ 筛选 + 分页（每页 10 题）。
 if page == "408 历年真题":
-    st.title("408 历年真题")
-
     papers = data.paper_index()
     years = [p["年份"] for p in papers]
 
-    # ---- 顶部控制条：选择 / 打开方式 / 筛选 挤在一行，把卷面尽早露出来
-    c1, c2, c3 = st.columns([1.1, 2.2, 1.6])
+    # ---- 控制条：三个控件挤一行，标签与控件同排（原先是三块各占两行，
+    #      加上大标题和两行卷情，实测把第一道题推到 y=785 ——
+    #      1440x900 的笔记本上，选项和提交按钮全在折叠线以下，
+    #      学生打开卷子连一道完整的题都看不到）。
+    c0, c1, c2, c3 = st.columns([2.6, 1.35, 2.2, 1.7])
+    with c0:
+        st.markdown("### 408 历年真题")
     with c1:
-        yr = st.selectbox("选择年份", years,
-                          format_func=lambda y: f"{y} 年真题")
+        yr = st.selectbox("年份", years, format_func=lambda y: f"{y} 真题",
+                          label_visibility="collapsed")
     with c2:
-        # 作答会写作答记录并影响画像；浏览只是看卷子 —— 不写清区别，
-        # 用户不知道自己刚才的点击做了什么。
-        mode = st.radio("打开方式", ["作答模式", "浏览模式"],
-                        horizontal=True,
+        mode = st.radio("打开方式", ["作答模式", "浏览模式"], horizontal=True,
+                        label_visibility="collapsed",
                         help="作答模式：判分、计入画像；浏览模式：只看不记")
     with c3:
-        view = st.radio("显示", ["全部", "未做", "只错题"], horizontal=True)
+        view = st.radio("显示", ["全部", "未做", "只错题"], horizontal=True,
+                        label_visibility="collapsed")
 
     p = data.paper(yr)
     scoring = mode == "作答模式"
     done = answers()
-
-    # ---- 一句话卷情（替代原来两整行的黄/蓝提示块：那是次要说明，
-    #      不该占主标题级别的视觉重量）
-    bits = [f"**{p['年份']}** 年 408 真题　·　{p['题数']} 题　·　{p['总分']} 分　·　"
-            f"可判分 {p['有答案数']} 题　·　需插图 {p['需插图']} 题"]
-    notes = []
-    if p["综合数"]:
-        notes.append(f"综合应用题 {p['综合数']} 题暂无答案，不计分")
-    if p["缺图"]:
-        notes.append(f"{p['缺图']} 题原卷带图但插图未抽取齐全")
-    st.markdown("　".join(bits))
-    if notes:
-        st.caption("说明：" + "；".join(notes) + "。")
-
-    # ---- 成绩（只在作答模式、且有记录时显示，换成一行紧凑表述）
     choice_ids = [q["id"] for q in p["题目"] if q["题型"] == "单项选择题"]
     rows = [done[i] for i in choice_ids if i in done]
     n_ok = sum(1 for r in rows if r["is_correct"])
+
+    # ---- 卷情 + 成绩 + 缺口说明压成一行小字（原先是两行正文 + 一行成绩）
+    info = (f"{p['年份']} 年 · {p['题数']} 题 · {p['总分']} 分 · "
+            f"可判分 {p['有答案数']}")
+    if p["综合数"]:
+        info += f" · 综合 {p['综合数']} 题无答案不计分"
+    if p["缺图"]:
+        info += f" · {p['缺图']} 题缺插图"
     if scoring and rows:
-        st.markdown(
-            f"已作答 **{len(rows)}/{len(choice_ids)}** 道单选题　·　"
-            f"答对 **{n_ok}** 道　·　正确率 **{n_ok / len(rows):.0%}**")
-    elif scoring:
-        st.caption("还没有作答记录。下面每题选完点「提交答案」即判分，"
-                   "错题会自动归因到考点并计入画像。")
+        info += f"　|　已作答 {len(rows)}/{len(choice_ids)} · 答对 {n_ok} · " \
+                f"正确率 {n_ok / len(rows):.0%}"
+    st.caption(info)
 
     # ---- 筛选
     def keep(q):
@@ -431,11 +436,9 @@ if page == "408 历年真题":
         st.caption(f"筛选「{view}」：{len(shown)}/{p['题数']} 题"
                    + ("　（全部做完了？切回「全部」看卷面）" if not shown else ""))
 
-    # ---- 答题卡：每个方格的底色就是答题状态，点它直接跳到那一题
-    if not scoring:
-        st.caption("浏览模式不计分，答题卡只显示卷面结构。")
-    st.markdown("**答题卡**　"
-                ":green[已答对]　:red[答错]　:gray[未做]　蓝框=当前题")
+    # ---- 答题卡：方格底色 = 答题状态；图例并进答题卡同一行（见下方渲染）。
+    #      原来在答题卡上方还有一行"答题卡 已答对 答错 未做 蓝框=当前题"，
+    #      现在图例直接用有底色的小方块示例，省掉一整行。
     # 分页状态：换年份 / 换筛选 / 换模式都要复位，否则会停在越界的页码上
     ctx = f"{p['年份']}|{view}|{mode}"
     if st.session_state.get("paper_ctx") != ctx:
@@ -447,11 +450,11 @@ if page == "408 历年真题":
     cur = min(st.session_state.get("paper_page", 0), pages_n - 1)
 
     if shown:
-        # 每页只占一行：页码标签在最左（可点击跳页），方格紧跟。
-        # 原来每页 3 行（格子 / 跳页按钮 / 页码说明），5 页吃掉约 460px，
-        # 把第一道题推到折线以下 —— 实测截图确认过。
-        cell_rows = []
-        jump_rows = []
+        # 答题卡：所有方格在一个 flex 容器里自动换行，每页之间留一点间隔
+        # 作为分页的视觉暗示 —— 不再给每页单独一行加"第 N 页"标签。
+        # 实测：原来每页一行标签 + 一行格子 + 一行跳页按钮 = 5 页吃掉约 330px，
+        # 加上大标题/卷情/成绩/答题卡说明，把第一道题推到 y=785。
+        blocks = []
         for pi in range(pages_n):
             group = shown[pi * PER:(pi + 1) * PER]
             cells = []
@@ -465,26 +468,38 @@ if page == "408 历年真题":
                 if pi == cur:
                     cls += " yj-cur"
                 cells.append(f'<span class="{cls}">{q["题号"]}</span>')
-            mark = "●" if pi == cur else ""
-            cell_rows.append(
-                f'<div class="yj-card">'
-                f'<span class="yj-pglabel">{mark} 第 {pi + 1} 页</span>'
-                + "".join(cells) + '</div>')
-            if pages_n > 1:
-                jump_rows.append((pi, group))
-        st.markdown("".join(cell_rows), unsafe_allow_html=True)
-        # 跳页按钮：只在有多页时给。用 5 列 + container_width=True 会让每个按钮
-        # 撑到 260px 宽，看起来像 5 个主按钮，喧宾夺主 —— 改成一行小按钮，
-        # 当前页用主色标识（分页是答题卡的附属功能，不该抢视觉）。
+            blocks.append(f'<span class="yj-pgblock">' + "".join(cells) + '</span>')
+        st.markdown(
+            '<div class="yj-card">' + "".join(blocks)
+            + '<span class="yj-legend">'
+              '<i class="yj-cell yj-ok">对</i>'
+              '<i class="yj-cell yj-bad">错</i>'
+              '<i class="yj-cell yj-open">未做</i>'
+              '<span class="yj-legend-note">＝ 方框底色即答题状态</span>'
+              '</span></div>', unsafe_allow_html=True)
+        # 分页：只在多页时给，做成"上一页 / 第 N/M 页 / 下一页"的紧凑导航。
+        # 原来把 5 个页码按钮平铺成一行（每个撑到 260px 宽），像 5 个主按钮 ——
+        # 分页是附属功能，不该抢题目的视觉重量。
         if pages_n > 1:
-            st.markdown('<div class="yj-jump">', unsafe_allow_html=True)
-            cols = st.columns(pages_n)
-            for pi, group in jump_rows:
-                if cols[pi].button(f"第 {pi + 1} 页", key=f"pg_{pi}",
-                                   type="primary" if pi == cur else "secondary"):
-                    st.session_state["paper_page"] = pi
-                    st.rerun()
-            st.markdown('</div>', unsafe_allow_html=True)
+            # 列宽要给够：按钮文字是"← 上一页"，列太窄会被截成"← 上…"
+            # （实测踩过）。所以按钮列用 1.5，中间页信息用 2.2。
+            nav1, nav2, nav3, _sp = st.columns([1.5, 2.2, 1.5, 4.8])
+            if nav1.button("上一页", key="pg_prev", disabled=(cur == 0),
+                           use_container_width=True):
+                st.session_state["paper_page"] = cur - 1
+                st.rerun()
+            # nowrap：列宽不够时这行会折成两行（实测发生过），很难看
+            nav2.markdown(
+                f"<div style='text-align:center;padding-top:0.4rem;"
+                f"white-space:nowrap;font-size:0.88rem;color:#5A6B80'>"
+                f"第 <b>{cur + 1}</b> / {pages_n} 页　·　"
+                f"第 {shown[cur * PER]['题号']}–"
+                f"{shown[min((cur + 1) * PER, len(shown)) - 1]['题号']} 题</div>",
+                unsafe_allow_html=True)
+            if nav3.button("下一页", key="pg_next", disabled=(cur >= pages_n - 1),
+                           use_container_width=True):
+                st.session_state["paper_page"] = cur + 1
+                st.rerun()
 
 
     if not shown:
@@ -498,20 +513,9 @@ if page == "408 历年真题":
     for q in page_items:
         by_subj[q["学科"]].append(q)
 
-    st.divider()
-    c_l, c_r = st.columns([3, 2])
-    c_l.markdown(f"#### 第 {page_items[0]['题号']}–{page_items[-1]['题号']} 题"
-                 f"　（第 {cur + 1}/{pages_n} 页）")
-    with c_r:
-        n1, n2, _sp = st.columns([1, 1, 1])
-        if n1.button("← 上一页", disabled=(cur == 0), use_container_width=True):
-            st.session_state["paper_page"] = cur - 1
-            st.rerun()
-        if n2.button("下一页 →", disabled=(cur >= pages_n - 1),
-                     use_container_width=True):
-            st.session_state["paper_page"] = cur + 1
-            st.rerun()
-
+    # 分页导航已经放在答题卡下方（上一页 / 第 N/M 页 / 下一页），
+    # 这里不再重复一遍页码和按钮 —— 原来两处都在说"第几页"，
+    # 实测占了约 110px，纯属重复。
     for subj_name in sorted(by_subj, key=lambda s: min(int(str(q["题号"]))
                                                       for q in by_subj[s])):
         qs = by_subj[subj_name]

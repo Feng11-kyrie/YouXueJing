@@ -89,8 +89,7 @@ nav2 = [b for b in at.sidebar.button if str(b.key or "").startswith("nav_")]
 sel = [b.label for b in nav2 if btype(b).lower() == "primary"]
 note("选中态跟着移动", sel and "学习路径" in sel[0], str(sel))
 at.sidebar.button(key="nav_408 历年真题").click().run()
-note("切回真题页", any("408 历年真题" in t.value for t in at.title)
-     and bool(at.selectbox), str([t.value for t in at.title]))
+note("切回真题页", "408 历年真题" in md(at) and bool(at.selectbox))
 
 # ---- 选择 2025
 at.selectbox[0].set_value("2025").run()
@@ -99,24 +98,32 @@ p = data.paper(2025)
 
 # 卷情一行 + 说明一行（不再是两个整行的黄/蓝提示块）
 head = md(at)
+# 首屏被"元信息天花板"压过：现在标题+控件同排、卷情+成绩+缺口说明合并成
+# 一行 caption，所以断言要看 caption 而不是 markdown
+info = cap(at)
 note("卷情含年份/题数/总分",
-     all(k in head for k in ("408 真题", "47 题", "150 分")))
-note("综合题缺口写在说明行", "综合应用题 7 题暂无答案" in cap(at))
-note("缺图写在说明行", "插图未抽取齐全" in cap(at))
+     all(k in info for k in ("2025 年", "47 题", "150 分")), info[:50])
+note("综合题缺口写在卷情行", "综合 7 题无答案不计分" in info)
+# 缺图数逐年不同（2026 是 3、2025 是 1），断言只查"有没有写出来"，
+# 不要把某一年份的具体数字写死 —— 第一版就是这么写错的
+note("缺图写在卷情行", "题缺插图" in info, info[-24:])
 
-# 答题卡
-note("出现答题卡", "答题卡" in head)
-# 注意：样式表里也有一次 .yj-cell 定义，所以减去 1
-n_cells = head.count("yj-cell") - 1
+# 答题卡：图例并进同一行（省掉原来上方一整行说明），方格按页分组
+note("出现答题卡图例", "方框底色即答题状态" in head)
+note("答题卡按页分组", head.count("yj-pgblock") - 1 >= 5,
+     f"pgblock={head.count('yj-pgblock') - 1}")
+# 计数要扣掉样式表里的定义：.yj-cell 定义 1 次、.yj-legend .yj-cell 1 次，
+# 再加图例本身的 3 个格子
+n_cells = head.count("yj-cell") - 2 - 3
 note("答题卡方格子数 = 题数", n_cells == p["题数"],
      f"cells={n_cells} 题数={p['题数']}")
 
-# 分页：一页 10 题
-note("分页：第 1/5 页", "第 1/5 页" in md(at))
+# 分页：一页 10 题（分页导航是"上一页 / 第 N/M 页 / 下一页"）
+note("分页信息显示第 1/5 页", "第 <b>1</b> / 5 页" in md(at), )
 note("本页 10 道单选", len([r for r in at.radio if r.label == "选项"]) == 10,
      f"实际 {len([r for r in at.radio if r.label == '选项'])}")
 jump = [b for b in at.button if str(b.key or "").startswith("pg_")]
-note("有跳页按钮", len(jump) == 5, f"{len(jump)} 个")
+note("有分页按钮（上/下页）", len(jump) == 2, f"{len(jump)} 个")
 
 # ---- 作答判分
 opts = [r for r in at.radio if r.label == "选项"]
@@ -130,7 +137,7 @@ fb = [s.value for s in at.success] + [s.value for s in at.error]
 note("出现判分反馈", bool(fb), str(fb)[:60])
 rows = store.get_answers(USER)
 note("作答已落库", q1["id"] in rows, f"{len(rows)} 条")
-note("成绩行随之更新", "已作答 **1/40**" in md(at))
+note("成绩行随之更新", "已作答 1/40" in cap(at))
 
 # 答题卡状态：错题应变成 yj-bad
 note("答错的题在答题卡标红", "yj-bad" in md(at))
@@ -145,11 +152,12 @@ note("筛「未做」= 46 题", "筛选「未做」：46/47 题" in cap(at))
 widget(at, "显示").set_value("全部").run()
 note("切回全部", "筛选" not in cap(at))
 
-# ---- 分页跳转
-jump = [b for b in at.button if str(b.key or "").startswith("pg_")]
-jump[2].click().run()
-note("跳到第 3 页", "第 3/5 页" in md(at))
-note("第 3 页仍是 10 题", len([r for r in at.radio if r.label == "选项"]) == 10)
+# ---- 分页跳转（用"下一页"按钮）
+at.button(key="pg_next").click().run()
+note("下一页后是第 2 页", "第 <b>2</b> / 5 页" in md(at))
+note("第 2 页仍是 10 题", len([r for r in at.radio if r.label == "选项"]) == 10)
+at.button(key="pg_prev").click().run()
+note("上一页回到第 1 页", "第 <b>1</b> / 5 页" in md(at))
 
 # ---- 浏览模式
 w = widget(at, "打开方式")
