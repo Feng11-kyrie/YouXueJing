@@ -64,7 +64,23 @@ ui.add_head_html("""
     --ink:#1F2933; --sub:#5A6B80; --mut:#9AA5B1; --line:#E6EAF0;
     --accent:#2563EB; --accent-weak:#EAF1FE; --warn:#B45309;
     --bg-side:#F7F8FA;
+    /* 字号层级：之前到处写 t-xs/[13px]/[15px] 这种字面量，
+       结果侧栏导航被写成 14px —— **比浏览器基准 16px 还小**，
+       用户反复反馈"字太小"。现在收敛成 5 档，改一处全局生效。
+       原则：正文不小于 15px，次要文字不小于 13px，绝不用 11px。 */
+    --fs-lead:17px;   /* 页面主标题之外的重点句 */
+    --fs-body:15px;   /* 正文 */
+    --fs-sm:13px;     /* 次要说明 */
+    --fs-xs:12px;     /* 极弱信息（时间戳、字段名） */
+    --fs-nav:15px;    /* 侧栏导航项 —— 与正文同级，不该更小 */
+    --fs-brand:18px;  /* 侧栏品牌名 */
   }
+  .t-lead{font-size:var(--fs-lead);}
+  .t-body{font-size:var(--fs-body);}
+  .t-sm{font-size:var(--fs-sm);}
+  .t-xs{font-size:var(--fs-xs);}
+  .t-nav{font-size:var(--fs-nav);}
+  .t-brand{font-size:var(--fs-brand);}
   body { font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
          color:var(--ink); }
   a { color:inherit; }
@@ -118,22 +134,25 @@ def shell(active: str, user: str):
     marks = store.get_marks(user)
     with ui.row().classes("w-full no-wrap items-start"):
         # 侧栏
-        with ui.column().classes("w-52 shrink-0 p-3 gap-1 min-h-screen "
+        # 侧栏加宽到 232px：原来 208px 装 15px 的中文会挤
+        with ui.column().classes("w-58 shrink-0 p-3 gap-1 min-h-screen "
                                 "border-r").style("background:var(--bg-side);"
-                                                  "border-color:var(--line)"):
+                                                  "border-color:var(--line);"
+                                                  "width:232px"):
             with ui.row().classes("items-center gap-2 mb-3"):
-                ui.label("408").classes("w-9 h-9 rounded-lg text-white text-xs "
-                                       "font-bold flex items-center justify-center") \
-                    .style("background:linear-gradient(135deg,#2563EB,#0D9488)")
+                ui.label("408").classes("w-9 h-9 rounded-lg text-white font-bold "
+                                       "flex items-center justify-center") \
+                    .style("background:linear-gradient(135deg,#2563EB,#0D9488);"
+                           "font-size:13px")
                 with ui.column().classes("gap-0"):
-                    ui.label("优学鲸").classes("text-lg font-bold leading-tight")
-                    ui.label("408 考研").classes("text-[11px] muted")
+                    ui.label("优学鲸").classes("t-brand font-bold leading-tight")
+                    ui.label("408 考研").classes("t-xs muted")
 
             for href, label, icon in NAV:
                 with ui.link(target=f"{href}?user={user}").classes(
                         "navlink" + (" on" if href == active else "")):
                     ui.icon(icon).classes("ic")
-                    ui.label(label).classes("text-[14px]")
+                    ui.label(label).classes("t-nav")
 
             # 下面这块原来是"846 题·266 考点·339 依赖边 + 演示模式 + 用户 demo"，
             # 全是**给开发看的字段**：
@@ -143,14 +162,14 @@ def shell(active: str, user: str):
             # 改成：没有数据时给**行动指引**，不展示空值。
             ui.separator().classes("mt-4").style("border-color:var(--line)")
             if marks:
-                ui.label(f"已标记 {len(marks)} 个薄弱考点").classes("text-[12px] sub")
+                ui.label(f"已标记 {len(marks)} 个薄弱考点").classes("t-sm sub")
             if answers:
-                ui.label(f"已作答 {len(answers)} 题").classes("text-[12px] sub")
+                ui.label(f"已作答 {len(answers)} 题").classes("t-sm sub")
             if not marks and not answers:
                 # 空状态：告诉用户"先做什么"，而不是把 0 摆出来
-                ui.label("还没有学习记录").classes("text-[12px] sub")
+                ui.label("还没有学习记录").classes("t-sm sub")
                 with ui.link(target=f"/diagnose?user={user}").classes(
-                        "text-[12px] no-underline").style("color:var(--accent)"):
+                        "t-sm no-underline").style("color:var(--accent)"):
                     ui.label("先花 20 分钟做一次诊断 →")
         # 内容区
         with ui.column().classes("flex-1 p-6 gap-3 min-w-0 max-w-6xl"):
@@ -179,7 +198,7 @@ def home(user: str = "demo"):
         # ---------- 首屏：自我介绍 + 我现在的学情 ----------
         ui.label(f"你好，{user}").classes("text-2xl font-bold")
         ui.label("离 408 还有多少天不重要，重要的是今天练哪几道。") \
-            .classes("text-[15px] sub")
+            .classes("t-body sub")
 
         if not a and not mk:
             # ============ 空状态：给一个明确的第一步，而不是三张平级卡片
@@ -188,9 +207,9 @@ def home(user: str = "demo"):
                     .classes("text-xl font-bold")
                 ui.label("32 道题覆盖 408 全部 24 章。做完你会拿到："
                          "四科掌握度、最该补的章节、以及三条学习路径。") \
-                    .classes("text-[15px] sub")
+                    .classes("t-body sub")
                 ui.label("也可以跳过测试，直接挑你觉得薄弱的知识点练 —— "
-                         "只是推荐会没那么准。").classes("text-[13px] muted")
+                         "只是推荐会没那么准。").classes("t-sm muted")
                 with ui.row().classes("gap-3 mt-2"):
                     ui.button("开始诊断（32 题）",
                               on_click=lambda: ui.navigate.to(f"/diagnose?user={user}")) \
@@ -211,11 +230,11 @@ def home(user: str = "demo"):
                 for code, v in sorted(prof["学科掌握度"].items(),
                                      key=lambda x: -x[1]["掌握度"]):
                     with ui.card().classes("softcard flex-1 p-4 gap-0"):
-                        ui.label(v["学科"]).classes("text-[13px] sub")
+                        ui.label(v["学科"]).classes("t-sm sub")
                         ui.label(f'{v["掌握度"]:.0%}').classes("kpi mt-1") \
                             .style("color:var(--accent)")
                         ui.label(f'{v["答对"]}/{v["题数"]} 题') \
-                            .classes("text-[12px] muted")
+                            .classes("t-xs muted")
 
         # ---------- 主行动点：只有这一个主色按钮
         with ui.card().classes("softcard w-full p-5 gap-2"):
@@ -224,7 +243,7 @@ def home(user: str = "demo"):
                     .classes("text-lg font-bold")
                 ui.label(f'这一章 18 年考了 {weakest["考频"]} 次，'
                          f'你的掌握度 {weakest["掌握度"]:.0%} —— '
-                         f'考得多、你又弱，性价比最高。').classes("text-[14px] sub")
+                         f'考得多、你又弱，性价比最高。').classes("t-nav sub")
                 ui.button("从这一章开始练",
                           on_click=lambda: ui.navigate.to(
                               f'/practice?subject={weakest.get("学科码", "DS")}'
@@ -236,7 +255,7 @@ def home(user: str = "demo"):
                          else "目前没有明显薄弱章节").classes("text-lg font-bold")
                 ui.label("做错的题最能暴露问题。按年份重做一遍这些题。" if wrong
                          else "可以去真题页按年份刷卷子，或者挑新的考点。") \
-                    .classes("text-[14px] sub")
+                    .classes("t-nav sub")
                 ui.button("去真题页错题模式",
                           on_click=lambda: ui.navigate.to(
                               f"/exam?view=只错题&user={user}")) \
@@ -253,41 +272,41 @@ def home(user: str = "demo"):
         with ui.row().classes("w-full items-start gap-10 no-wrap"):
             # 左：学习概览 + 其他入口
             with ui.column().classes("gap-2 flex-1 min-w-0"):
-                ui.label("我的练习").classes("text-[13px] muted")
+                ui.label("我的练习").classes("t-sm muted")
                 with ui.row().classes("gap-8"):
                     with ui.column().classes("gap-0"):
                         ui.label(f'{len(a)}').classes("kpi")
-                        ui.label("累计作答").classes("text-[12px] muted")
+                        ui.label("累计作答").classes("t-xs muted")
                     with ui.column().classes("gap-0"):
                         ui.label(f'{len(a) - wrong_n}').classes("kpi") \
                             .style("color:#1B5E36")
-                        ui.label("答对").classes("text-[12px] muted")
+                        ui.label("答对").classes("t-xs muted")
                     with ui.column().classes("gap-0"):
                         ui.label(f'{wrong_n}').classes("kpi") \
                             .style("color:#8C2C2C")
-                        ui.label("待复习错题").classes("text-[12px] muted")
+                        ui.label("待复习错题").classes("t-xs muted")
                     with ui.column().classes("gap-0"):
                         ui.label(f'{len(last7)}').classes("kpi")
-                        ui.label("近 7 天").classes("text-[12px] muted")
-                ui.label("其他入口").classes("text-[13px] muted mt-2")
+                        ui.label("近 7 天").classes("t-xs muted")
+                ui.label("其他入口").classes("t-sm muted mt-2")
                 for href, title, sub in [
                         ("/exam", "按年份刷真题", "2009–2026 共 18 套，单选题就地判分"),
                         ("/paths", "三条学习路径", "补根因 / 冲高频 / 错题驱动"),
                         ("/notes", "生成讲义", "按薄弱考点出讲义和配套真题")]:
                     with ui.column().classes("gap-0"):
                         with ui.link(target=f"{href}?user={user}").classes("no-underline"):
-                            ui.label(f"{title} →").classes("text-[14px]") \
+                            ui.label(f"{title} →").classes("t-nav") \
                                 .style("color:var(--accent)")
-                        ui.label(sub).classes("text-[12px] muted")
+                        ui.label(sub).classes("t-xs muted")
 
             # 右：最近练了什么（用真实作答记录，不是占位装饰）
             with ui.column().classes("gap-1 w-96 shrink-0"):
-                ui.label("最近练习").classes("text-[13px] muted")
+                ui.label("最近练习").classes("t-sm muted")
                 qs = data.questions()
                 recent = sorted(a.items(), key=lambda kv: kv[1].get("answered_at", ""),
                                 reverse=True)[:6]
                 if not recent:
-                    ui.label("还没有练习记录").classes("text-[13px] muted")
+                    ui.label("还没有练习记录").classes("t-sm muted")
                 for qid, r in recent:
                     q = qs.get(qid)
                     if not q:
@@ -296,13 +315,13 @@ def home(user: str = "demo"):
                     # （实测踩过，很难看）
                     with ui.row().classes("items-center gap-2 w-full no-wrap"):
                         ui.icon("check_circle" if r["is_correct"] else "cancel") \
-                            .classes("text-[15px] shrink-0").style(
+                            .classes("t-body shrink-0").style(
                                 f'color:{"#1B5E36" if r["is_correct"] else "#8C2C2C"}')
                         ui.label(f'{q["year"]} 年第 {q["题号"]} 题') \
-                            .classes("text-[13px] shrink-0") \
+                            .classes("t-sm shrink-0") \
                             .style("white-space:nowrap;min-width:7.5rem")
                         ui.label(data.node_name(q["主考点"])[:14]) \
-                            .classes("text-[12px] muted flex-1 truncate")
+                            .classes("t-xs muted flex-1 truncate")
 
 
 # ================================================================ 真题页
@@ -406,7 +425,7 @@ def practice(subject: str = None, chapter: str = None,
         if not subject:
             ui.label("先选一门课，再从这门课里挑出你自己觉得薄弱的知识点，"
                      "系统就用这些考点给你出真题。不需要先做任何测试。") \
-                .classes("text-[15px]")
+                .classes("t-body")
             with ui.row().classes("w-full gap-4 items-stretch"):
                 for code in ("DS", "CO", "OS", "CN"):
                     b = _book_meta(code, user)
@@ -435,7 +454,7 @@ def practice(subject: str = None, chapter: str = None,
             ui.button("← 换一门", on_click=lambda: goto(subject=None, chapter=None)) \
                 .props("flat dense")
         ui.label(f'这门课有 {bm["章数"]} 章 —— 点章名直接进去挑知识点') \
-            .classes("text-[15px]")
+            .classes("t-body")
         chs = data.chapters()[subject]
         m_ch = diagnose.mastery_by_chapter(store.get_answers(user))
         cf, cl = data.chapter_freq(), data.chapter_leaves()
@@ -479,7 +498,7 @@ def practice(subject: str = None, chapter: str = None,
 
                     cb.on_value_change(toggle)
                     ui.label(f'{data.node_name(l)}　频{f.get("考查总次数", 0)}·{n}题') \
-                        .classes("text-[15px]")
+                        .classes("t-body")
                 row.on("click", lambda _=None, x=cb: x.set_value(not x.value))
 
         marks = store.get_marks(user)
@@ -535,7 +554,7 @@ def diagnose_page(user: str = "demo"):
     with shell("/diagnose", user):
         _title("快速诊断（可选）")
         ui.label("32 道题　·　约 20-25 分钟　·　覆盖 408 全部 24 章") \
-            .classes("text-[15px] font-semibold")
+            .classes("t-body font-semibold")
         ui.label("做完会得到章节级掌握度，之后的推荐会更准。这是可选的 —— "
                  "不做也能用：你可以在「挑考点练习」里直接勾选自认薄弱的知识点。") \
             .classes("text-sm text-gray-600")
@@ -551,7 +570,7 @@ def diagnose_page(user: str = "demo"):
                 ui.label(f'{item["order"]}. [{item["学科"]} · '
                          f'{item["诊断章节名"]} · 难度 {item["难度"]}]') \
                     .classes("text-xs text-gray-500")
-                ui.label(q["题干"]).classes("text-[15px] leading-6 whitespace-pre-wrap")
+                ui.label(q["题干"]).classes("t-body leading-6 whitespace-pre-wrap")
                 opts = q.get("选项") or {}
                 # 用 radio，且 value 默认 None → 不预选任何一项
                 r = ui.radio({k: f'{k}. {opts[k]}' for k in sorted(opts)},
@@ -587,7 +606,7 @@ def profile_page(user: str = "demo"):
             ui.label("2. 或到「快速诊断」做一次 32 题测试（更准）").classes("text-sm")
             return
         prof = profile_mod.build(a, mk)
-        ui.label(prof["文字画像"]).classes("text-[15px] leading-7")
+        ui.label(prof["文字画像"]).classes("t-body leading-7")
         ui.label("掌握度算法：（答对+1）/（题数+2），Laplace 平滑，"
                  "避免只答 1 题就给出 0% 或 100%。你自报的薄弱点与做题数据同等计入。") \
             .classes("text-xs text-gray-500")
@@ -647,7 +666,7 @@ def paths_page(user: str = "demo"):
             return
         ui.label(f'根据你的学情（含你自己勾选的薄弱点），系统找出 '
                  f'{rec["薄弱考点数"]} 个未掌握考点，组织成下面几条路径。') \
-            .classes("text-[15px]")
+            .classes("t-body")
         ui.label("三条路径不互斥，选一条开始就行 —— 差别只在「先补什么」的依据。") \
             .classes("text-sm text-gray-600")
         with ui.tabs().classes("w-full") as tabs:
@@ -686,7 +705,7 @@ def notes_page(user: str = "demo"):
         _title("讲义生成（多智能体）")
         ui.label("这一页跑的是 LangGraph 六 Agent 链路："
                  "准备 → 诊断 → 画像 → 路径 → 生成 → 复核。") \
-            .classes("text-[15px]")
+            .classes("t-body")
         ok, msg = llm.status()
         (ui.label if ok else ui.label)(("● " + msg) if ok else ("● " + msg)) \
             .classes("text-sm").style(f'color:{"#1B5E36" if ok else "#8A6D3B"}')
