@@ -32,6 +32,32 @@ from yj import snap as snap_mod
 
 st.set_page_config(page_title="优学鲸 · 408 考研", page_icon="🐳", layout="wide")
 
+# ---------------------------------------------------------------- 样式
+# 字号/字体/配色的大头在 .streamlit/config.toml 的原生主题变量里（那里改一次
+# 全局生效，也不会随组件改版失效）。这里只补原生变量覆盖不到的两件事：
+#   ① 中文正文行高（默认行高对中文偏挤）
+#   ② 宽屏下的正文行长（全宽布局行长过长，读起来累）
+st.markdown(
+    """
+    <style>
+      /* 中文正文行高：默认对中文偏挤，1.75 更接近阅读习惯 */
+      [data-testid="stMarkdownContainer"] p,
+      [data-testid="stMarkdownContainer"] li { line-height: 1.75; }
+
+      /* 宽屏行长治理：正文区限宽并居中，避免一行横跨整个 27 寸屏 */
+      .block-container { max-width: 1180px; padding-top: 2.4rem; }
+
+      /* 侧栏信息层级：指标行给正文字号，不再是最小号字 */
+      [data-testid="stSidebar"] .stMarkdown p { font-size: 0.95rem; }
+
+      /* 选中态/重点行更清楚 */
+      [data-testid="stMarkdownContainer"] strong { font-weight: 650; }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+
 # ---------------------------------------------------------------- 用户身份
 # 不做账号体系：浏览器本地存一个 uuid。支持 ?u=demo 一键切到预置演示画像。
 if "user_id" not in st.session_state:
@@ -50,24 +76,48 @@ def marks():
     return store.get_marks(USER)
 
 
+def steps(active, items):
+    """
+    顶部步骤指示：回答"我现在在哪一步、还剩几步"。
+
+    之前界面是"点进去才出现下一步"，用户不知道自己走到哪了 ——
+    这是"功能显示不明确"的主要来源之一。用一行文字讲清路径，
+    比加导航栏轻，也不影响主流程。
+    """
+    bar = []
+    for i, name in enumerate(items, 1):
+        if i == active:
+            bar.append(f"**:blue[{i}. {name}]**")
+        elif i < active:
+            bar.append(f"~~{i}. {name}~~ ✓")
+        else:
+            bar.append(f":gray[{i}. {name}]")
+    st.markdown("　→　".join(bar))
+    st.write("")
+
+
 # ---------------------------------------------------------------- 侧栏
 st.sidebar.title("🐳 优学鲸")
-st.sidebar.caption("408 考研 · 个性化学习资源生成")
+st.sidebar.markdown("**408 考研 · 个性化学习资源生成**")
 
 o = data.overview()
 ok_llm, msg_llm = llm.status()
 st.sidebar.markdown(
     f"""
-**数据层**
-- 真题 {o['题目总数']} 题（{o['年份范围']}）
-- 考点 {o['叶子考点']} 个 · 依赖边 {o['依赖边']} 条
+**知识库**
+
+真题 **{o['题目总数']}** 题　·　{o['年份范围']}
+
+考点 **{o['叶子考点']}** 个　·　依赖边 **{o['依赖边']}** 条
 """
 )
-st.sidebar.caption(("🟢 " if ok_llm else "🟡 ") + msg_llm)
+st.sidebar.markdown(("🟢 " if ok_llm else "🟡 ") + msg_llm)
 
 st.sidebar.divider()
-st.sidebar.caption(f"已标记 **{len(marks())}** 个薄弱考点 · "
-                   f"已作答 **{len(answers())}** 题")
+st.sidebar.markdown(
+    f"已勾选薄弱考点 **{len(marks())}** 个\n\n"
+    f"已作答 **{len(answers())}** 题"
+)
 st.sidebar.caption(f"用户 `{USER}`")
 if st.sidebar.button("清空我的全部记录", help="清空标记与作答"):
     store.reset_user(USER)
@@ -133,25 +183,28 @@ if page == PAGES[0]:
     # ---------- 第一步：选书 ----------
     if not subj:
         st.title("挑考点练习")
-        st.markdown("**先选一门课，再挑你觉得薄弱的知识点，系统从这些考点给你出真题。**"
-                    "不需要先做任何测试。")
-        st.caption("想更准？也可以先做一次「🧭 快速诊断」—— 但那是可选的，不是门槛。")
+        steps(1, ["选一门课", "挑薄弱知识点", "做真题"])
+        st.markdown("先选一门课，再从这门课里挑出**你自己觉得薄弱的知识点**，"
+                    "系统就用这些考点给你出真题。**不需要先做任何测试。**")
+        st.info("想更准？左侧「🧭 快速诊断」可以加做 32 题测出章节掌握度"
+                "—— 但那是可选的，不是门槛。", icon="💡")
         st.divider()
         cols = st.columns(4)
         for col, code in zip(cols, ["DS", "CO", "OS", "CN"]):
             b = book_meta(code)
             with col, st.container(border=True):
                 st.markdown(f"### {b['name']}")
-                st.caption(f"{b['章数']} 章 · {b['考点数']} 个考点")
-                st.caption(f"18 年考频 {b['考频']} 次 · 题库 {b['可练题']} 题可练")
+                st.markdown(f"**{b['章数']}** 章　·　**{b['考点数']}** 个考点")
+                st.markdown(f"18 年考频 **{b['考频']}** 次")
+                st.markdown(f"题库 **{b['可练题']}** 题可练")
                 if b["掌握度"] is not None:
                     st.metric("我的掌握度", f"{b['掌握度']:.0%}")
                 else:
-                    st.caption("我的掌握度：未测")
+                    st.markdown("我的掌握度：**未测**")
                 if b["已标记"]:
-                    st.caption(f"已标记 {b['已标记']} 个薄弱考点")
-                if st.button(f"进入 {b['name']}", key=f"go_{code}",
-                             use_container_width=True):
+                    st.markdown(f"★ 已标记 **{b['已标记']}** 个薄弱考点")
+                if st.button(f"① 进入{b['name']}", key=f"go_{code}",
+                             use_container_width=True, type="primary"):
                     st.session_state["sel_subject"] = code
                     st.session_state.pop("sel_chapter", None)
                     st.rerun()
@@ -166,39 +219,51 @@ if page == PAGES[0]:
         st.session_state.pop("sel_chapter", None)
         st.rerun()
 
+    steps(2, ["选一门课", "挑薄弱知识点", "做真题"])
+
     chs = data.chapters()[subj]
     m_ch = diagnose.mastery_by_chapter(answers())
     freq, lqc, my_marks = data.freq(), data.leaf_question_count(), marks()
 
-    st.caption("各章概况。掌握度未测的章节，就按你勾选的考点来推荐。")
-    for ch, nm in chs:
+    st.markdown(f"### 这门课有 {len(chs)} 章 —— 点章名直接进去挑知识点")
+    st.markdown("下面标注了每章的**考频**（18 年考了多少次）、**考点数**"
+                "和**你的掌握度**（未测就是还没做过题）。")
+    # 章行改成"可点击的整行"：之前只有一行灰色小字，用户不知道该点哪里。
+    # 用两列而不是四列 —— 四列会把章名挤到换行，反而更难读。
+    for i, (ch, nm) in enumerate(chs):
         cm = m_ch.get(ch)
         n_mark = len([l for l in data.chapter_leaves().get(ch, []) if l in my_marks])
-        a1, a2, a3 = st.columns([3, 3, 1])
-        a1.markdown(f"**{nm}**")
-        a2.caption(f"考频 {data.chapter_freq().get(ch, 0)} 次 · "
-                   f"{len(data.chapter_leaves().get(ch, []))} 个考点"
-                   + (f" · 已标记 {n_mark}" if n_mark else ""))
-        a3.caption(f"掌握度 {cm['掌握度']:.0%}" if cm else "未测")
+        a1, a2 = st.columns([5, 2])
+        with a1:
+            label = f"**{nm}**　·　考频 {data.chapter_freq().get(ch, 0)} 次　·　" \
+                    f"{len(data.chapter_leaves().get(ch, []))} 个考点" \
+                    + (f"　·　★ 已勾选 {n_mark}" if n_mark else "")
+            if st.button(label, key=f"ch_{ch}", use_container_width=True):
+                st.session_state["sel_chapter"] = ch
+                st.rerun()
+        with a2:
+            if cm:
+                st.markdown(f"掌握度 **{cm['掌握度']:.0%}**"
+                            f"（{cm['答对']}/{cm['题数']} 题）")
+            else:
+                st.markdown("掌握度 **未测**")
 
     st.divider()
-    st.markdown("#### 选择章节")
-    ch_labels = {nm: ch for ch, nm in chs}
-    sel_label = st.pills("章节", list(ch_labels.keys()), selection_mode="single",
-                         key=f"pill_ch_{subj}", label_visibility="collapsed")
-    if sel_label:
-        st.session_state["sel_chapter"] = ch_labels[sel_label]
     ch = st.session_state.get("sel_chapter")
+    if not ch:
+        st.info("👆 点上面任意一章，展开它的知识点列表。", icon="🧭")
 
     # ---------- 第三步：选考点 ----------
     if ch:
         leaves = data.chapter_leaves().get(ch, [])
         if leaves:
             st.divider()
-            st.markdown(f"#### {data.node_name(ch)} — 勾选你觉得薄弱的知识点")
-            st.caption("可多选。换章再回来，之前的勾选会保留。"
-                       "标 **·0题** 的考点题库里暂无对应真题，勾选后不会有题可练"
-                       "（但仍可用来生成讲义）。")
+            st.markdown(f"### 第 3 步：勾出「{data.node_name(ch)}」里你觉得薄弱的知识点")
+            st.markdown("可以多选；**换章再回来勾选会保留**。"
+                        "标签上的 `频N` 是它 18 年被考的次数，`·M题` 是题库里"
+                        "能拿它练的真题数。")
+            st.info("标着 **·0题** 的考点题库里暂时没有对应真题（勾选后没题可练，"
+                    "但仍可用它生成讲义）。建议优先勾 `·N题` 且 N 大的。", icon="💡")
             label2leaf = {}
             for l in leaves:
                 f = freq.get(l, {})
@@ -235,34 +300,37 @@ if page == PAGES[0]:
     sel = marks()
     if sel:
         st.divider()
+        steps(3, ["选一门课", "挑薄弱知识点", "做真题"])
         by_ch = {}
         for l in sel:
             by_ch.setdefault(data.chapter_of(l), []).append(l)
         total_q = sum(data.leaf_question_count().get(l, 0) for l in sel)
         no_q = [l for l in sel if not data.leaf_question_count().get(l, 0)]
-        st.markdown(f"### 已选 **{len(sel)}** 个考点 · 题库共 **{total_q}** 道真题可练")
+        st.markdown(f"### 你已勾选 {len(sel)} 个考点，题库里共 **{total_q}** 道真题可练")
         if no_q:
-            st.caption("其中 "
-                       + "、".join(data.node_name(l) for l in no_q)
-                       + f" 共 {len(no_q)} 个考点暂无题目，只能用于生成讲义。")
+            st.markdown("其中 "
+                        + "、".join(data.node_name(l) for l in no_q)
+                        + f" 共 {len(no_q)} 个考点**暂无题目**，只能用于生成讲义。")
         for c, ls in sorted(by_ch.items(),
                             key=lambda kv: -data.chapter_freq().get(kv[0], 0)):
-            st.caption(f"　{data.node_name(c)}："
-                       + "、".join(data.node_name(l) for l in ls))
+            st.markdown(f"- **{data.node_name(c)}**："
+                        + "、".join(data.node_name(l) for l in ls))
 
+        st.write("")
         b1, b2, b3 = st.columns([2, 2, 3])
-        if b1.button("▶ 开始练习", type="primary", use_container_width=True):
+        if b1.button("▶ 开始练习（出 5 道真题）", type="primary",
+                     use_container_width=True):
             st.session_state["practice_now"] = True
         if b2.button("清空选择", use_container_width=True):
             store.set_marks(USER, set())
             st.session_state.pop("practice_now", None)
             st.rerun()
-        b3.caption("选好后也可以到左侧「📘 讲义生成」按这些考点生成讲义。")
+        b3.markdown("选好后也可以到左侧「📘 讲义生成」按这些考点出讲义。")
 
     # ---------- 就地出题 ----------
     if st.session_state.get("practice_now") and sel:
         st.divider()
-        st.markdown("### 开始练习")
+        st.markdown(f"### 📝 练习：{len(sel)} 个考点里抽 5 道真题")
         done = answers()
         pool = []
         for l in sorted(sel, key=lambda x: -data.leaf_question_count().get(x, 0)):
@@ -275,13 +343,14 @@ if page == PAGES[0]:
             st.warning("你选的这些考点在题库里暂时没有对应的真题。"
                        "建议回到上面换几个标着「·N题」的考点。")
         else:
-            st.caption(f"从你选的考点里抽题：优先没做过的、难度较低的先来。"
-                       f"共 {len(pool)} 道可选。")
+            st.markdown(f"抽题规则：**优先你没做过的、难度低的先来**；"
+                        f"你勾的考点共 {len(pool)} 道可选。"
+                        f"提交后会立刻判分、把错题归因到考点，并更新掌握度与路径。")
             show = pool[:5]
             for i, (l, q) in enumerate(show, 1):
                 with st.container(border=True):
-                    st.markdown(f"**{i}. {q['year']} 年 第 {q['题号']} 题**"
-                                f"　·　{data.node_name(l)}　·　难度 {q.get('难度')}")
+                    st.markdown(f"**第 {i} 题**　·　{q['year']} 年 第 {q['题号']} 题"
+                                f"　·　`{data.node_name(l)}`　·　难度 {q.get('难度')}")
                     st.markdown(q["题干"])
                     render_question(q, l, key_prefix=f"p_{q['id']}")
             if len(pool) > len(show):
@@ -292,10 +361,12 @@ if page == PAGES[0]:
 # ================================================================ ② 快速诊断
 elif page == PAGES[1]:
     st.title("🧭 快速诊断（可选）")
-    st.markdown("**32 道题，约 20-25 分钟，覆盖 408 全部 24 章。**"
-                "做完会得到章节级掌握度，让推荐更准。")
-    st.info("这一步是**可选**的。不做也能用 —— 你可以在「🎯 挑考点练习」里"
-            "直接勾选自己认为薄弱的知识点。", icon="💡")
+    st.markdown("32 道题　·　约 20-25 分钟　·　覆盖 408 全部 24 章")
+    st.markdown("做完会得到**章节级掌握度**，之后推荐会更准。"
+                "这是可选的 —— 不做也能用：你可以在「🎯 挑考点练习」里"
+                "直接勾选自己认为薄弱的知识点。")
+    st.info("界面上的每个数字都能对到具体作答记录；"
+            "掌握度用 Laplace 平滑，避免只答 1 题就给出 0% 或 100%。", icon="📐")
 
     paper = data.diagnostic()["题目"]
     got = answers()
@@ -339,6 +410,7 @@ elif page == PAGES[2]:
         st.stop()
 
     prof = profile.build(a, mk)
+    st.markdown("这一页是你当前学情的汇总：**做题数据 + 你自己勾选的薄弱点**。")
     st.markdown(f"> {prof['文字画像']}")
     st.caption("掌握度算法：（答对 + 1）/（题数 + 2），Laplace 平滑，"
                "避免只答 1 题就给出 0% 或 100% 的极端结论。"
@@ -350,10 +422,11 @@ elif page == PAGES[2]:
                                               key=lambda x: -x[1]["掌握度"])):
             col.metric(v["学科"], f"{v['掌握度']:.0%}", f"{v['答对']}/{v['题数']} 题")
     if mk:
-        st.caption(f"另有你自报的 {len(mk)} 个薄弱考点，已计入下方排序。")
+        st.markdown(f"另有你自报的 **{len(mk)}** 个薄弱考点，已计入下方排序。")
 
     st.divider()
-    st.subheader("章节掌握度")
+    st.subheader("各章掌握度")
+    st.markdown("按学科分组，**每章一条进度条**（括号里是答对/答过题数）。")
     m = diagnose.summarize(a)
     for code, name in data.CODE2NAME.items():
         rows = [c for c in m["章节"].values() if c["学科码"] == code]
@@ -367,8 +440,9 @@ elif page == PAGES[2]:
 
     if prof["薄弱章节"]:
         st.divider()
-        st.subheader("薄弱优先级")
-        st.caption("排序依据：**考频 ×（1 − 掌握度）**。考得越多、你越弱，越该先补。")
+        st.subheader("最该先补的章节")
+        st.markdown("排序依据：**考频 ×（1 − 掌握度）**。"
+                    "考得越多、你越弱，性价比越高，越该先补。")
         for c in prof["薄弱章节"]:
             lvl = f"{c['掌握度']:.0%}" if c["掌握度"] is not None else "未测"
             src = f"　·　{c.get('来源', '')}" if c.get("来源") else ""
@@ -396,13 +470,15 @@ elif page == PAGES[3]:
         st.info(rec.get("提示", "暂无推荐"))
         st.stop()
 
-    st.markdown(f"根据你的画像（含自报薄弱点），找出 **{rec['薄弱考点数']}** 个未掌握考点，"
-                f"生成下面几条路径。**路径不互斥，选一条开始就行。**")
+    st.markdown(f"根据你的学情（含你自己勾选的薄弱点），系统找出 "
+                f"**{rec['薄弱考点数']} 个未掌握考点**，组织成下面几条路径。")
+    st.markdown("**三条路径不互斥，选一条开始就行** —— 差别只在"
+                "「先补什么」的判断依据：")
     tabs = st.tabs([f"{p['名称']}（{p['合计分钟']} 分钟）" for p in rec["路径"]])
     for tab, p in zip(tabs, rec["路径"]):
         with tab:
-            st.markdown(f"**适用**：{p['适用']}")
-            st.caption(p["说明"])
+            st.markdown(f"**适合**：{p['适用']}")
+            st.markdown(p["说明"])
             if not p["步骤"]:
                 st.info("这条路径当前没有需要补的考点。")
                 continue
@@ -410,20 +486,24 @@ elif page == PAGES[3]:
                 with st.container(border=True):
                     c1, c2, c3 = st.columns([3, 1, 1])
                     c1.markdown(f"**{i}. {s['考点名']}**")
-                    c1.caption(f"{s['学科']} · {s['章节']}")
+                    c1.markdown(f"{s['学科']} · {s['章节']}")
                     c2.metric("当前掌握度",
                               f"{s['当前掌握度']:.0%}" if s["是否已测"] else "未测")
                     c3.metric("预计用时", f"{s['预计分钟']} 分钟")
-                    st.caption(f"考频 {s['考频']} 次 · 题库可练 {s['可练真题']} 题　|　"
-                               f"{s['推荐理由']}")
+                    st.markdown(f"考频 **{s['考频']}** 次　·　题库可练 "
+                                f"**{s['可练真题']}** 题　|　{s['推荐理由']}")
     st.divider()
-    st.caption("「补根因」的机制：沿知识点依赖图向上追溯，找到最靠前的**断裂点**再开始补，"
-               "而不是直接练你表面最弱的那一章。依赖边来自 18 年真题的考点共现与考纲编排顺序。")
+    st.markdown("**「补根因」是怎么算的**：沿知识点依赖图向上追溯，找到最靠前的"
+                "**断裂点**再开始补，而不是直接练你表面最弱的那一章。"
+                "依赖边来自 18 年真题的考点共现与考纲编排顺序。")
 
 
 # ================================================================ ⑤ 讲义生成
 else:
     st.title("📘 讲义生成（多智能体）")
+    st.markdown("这一页跑的是 **LangGraph 六 Agent 链路**："
+                "准备 → 诊断 → 画像 → 路径 → 生成 → 复核，"
+                "按你的薄弱考点产出**讲义 / 知识点速记 / 配套真题**。")
     ok, msg = llm.status()
     if ok:
         st.success(msg, icon="🟢")
@@ -439,8 +519,11 @@ else:
     rec = path.recommend(a, marks=mk)
     import glob as _glob
     _snaps = sorted(os.path.basename(x)[:-5] for x in _glob.glob("data/prewarm/*.json"))
+    st.markdown("#### 第一步：选运行方式")
     mode = st.radio("运行方式", ["实时运行", "回放预跑快照"], horizontal=True,
                     help="路演兜底：API 不可用时用快照回放，输出与预跑时完全一致。")
+    st.caption("「实时运行」当场调 LLM（慢、且依赖网络与额度）；"
+               "「回放预跑快照」读提前跑好并落盘的结果（秒出、离线可用、输出一致）。")
 
     if mode == "回放预跑快照":
         if not _snaps:
@@ -467,9 +550,10 @@ else:
                              f"--name {snap} --path root` 重新生成。")
     else:
         names = [p["名称"] for p in rec["路径"]] or ["补根因"]
+        st.markdown("#### 第二步：选要生成的路径，然后运行")
         sel_name = st.selectbox("选中要生成的路径", names)
         if not a:
-            st.caption("提示：你没有做题记录，链路会依据**你勾选的薄弱考点**生成。")
+            st.markdown("提示：你没有做题记录，链路会依据**你勾选的薄弱考点**生成。")
         if st.button("▶ 运行多智能体链路", type="primary"):
             with st.spinner("多智能体执行中…"):
                 st.session_state["run"] = graph.run(
@@ -482,7 +566,8 @@ else:
 
     R = st.session_state.get("run")
     if not R:
-        st.caption("还没有运行。")
+        st.markdown("还没有运行 —— 上面选好方式后点「▶ 运行多智能体链路」"
+                    "或「▶ 回放快照」。")
         st.stop()
 
     st.subheader("执行轨迹")

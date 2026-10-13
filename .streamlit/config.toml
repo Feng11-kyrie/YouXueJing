@@ -10,3 +10,41 @@ fileWatcherType = "auto"
 
 [browser]
 gatherUsageStats = false
+
+# ============================================================
+#  主题 / 排版（用户反馈：前端字太小、信息层级不清）
+#
+#  为什么放在这里而不是靠 CSS 覆盖：
+#  下面这些是 Streamlit 1.65 的**原生主题变量**，作用于所有内置组件
+#  （caption / metric / tab / expander / 表格…），不会随组件改版失效。
+#  自定义 CSS 只用来补原生变量覆盖不到的地方。
+#
+#  关键是 baseFontSize：它整体抬高正文字号基数，
+#  界面里大量使用的 st.caption（最小号字）按比例跟着变大 ——
+#  这是"字小"的根因修复，不是逐处打补丁。
+# ============================================================
+[theme]
+base = "light"
+
+# 中文优先字体栈：原主题栈不含中文字体，中文会落到字重较细的默认字体上，
+# 同一字号下看起来比英文更小更糊。
+font = "-apple-system, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif"
+headingFont = "-apple-system, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif"
+
+baseFontSize = 17              # 默认 16
+headingFontSizes = ["2.1rem", "1.6rem", "1.3rem"]   # h1/h2/h3，默认偏小
+headingFontWeights = [700, 650, 600]
+
+codeFont = "ui-monospace, SFMono-Regular, Menlo, monospace"
+codeFontSize = "0.85rem"
+
+baseRadius = "0.7rem"          # 卡片/按钮圆角，比默认更柔和
+borderColor = "#E3E8EF"
+showSidebarBorder = true
+
+# 配色：白底 + 蓝主色 + 淡灰次背景（对比度更高，投影仪上也看得清）
+primaryColor = "#2563EB"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F5F7FA"
+textColor = "#1F2933"
+linkColor = "#2563EB"
