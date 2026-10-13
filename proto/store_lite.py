@@ -61,3 +61,33 @@ def record_answer(user_id, question_id, chosen, is_correct, source="practice"):
                   (user_id, question_id, chosen, 1 if is_correct else 0, source,
                    datetime.datetime.now().isoformat(timespec="seconds")))
     return True
+
+
+# ---------------------------------------------------------------- 自报薄弱点
+# 与 yj/store.py 的 marks 表结构一致，数据互通
+def get_marks(user_id):
+    """用户自己勾选的薄弱考点（不依赖做题，是画像的第二个数据来源）"""
+    with conn() as c:
+        rows = c.execute("SELECT node_id FROM marks WHERE user_id=?",
+                         (user_id,)).fetchall()
+    return {r["node_id"] for r in rows}
+
+
+def set_marks(user_id, node_ids):
+    """
+    整体替换：界面上的多选一次提交，比逐个增删简单可靠。
+
+    防御：传进来单个字符串时报错而不是**按字符拆开**（"DS-01-01" 会变成
+    {'D','S','-','0','1'} 写进库，这种脏数据很难查）。实测踩过。
+    """
+    if isinstance(node_ids, str):
+        raise TypeError("set_marks 需要集合，收到单个字符串；"
+                        "传 {node_id} 而不是 node_id")
+    ensure_user(user_id)
+    with conn() as c:
+        c.execute("DELETE FROM marks WHERE user_id=?", (user_id,))
+        c.executemany("INSERT OR IGNORE INTO marks(user_id, node_id, created_at) "
+                      "VALUES(?,?,?)",
+                      [(user_id, n, datetime.datetime.now().isoformat(timespec="seconds"))
+                       for n in node_ids])
+    return len(node_ids)
