@@ -68,12 +68,12 @@ ui.add_head_html("""
        结果侧栏导航被写成 14px —— **比浏览器基准 16px 还小**，
        用户反复反馈"字太小"。现在收敛成 5 档，改一处全局生效。
        原则：正文不小于 15px，次要文字不小于 13px，绝不用 11px。 */
-    --fs-lead:17px;   /* 页面主标题之外的重点句 */
-    --fs-body:15px;   /* 正文 */
-    --fs-sm:13px;     /* 次要说明 */
-    --fs-xs:12px;     /* 极弱信息（时间戳、字段名） */
-    --fs-nav:15px;    /* 侧栏导航项 —— 与正文同级，不该更小 */
-    --fs-brand:18px;  /* 侧栏品牌名 */
+    --fs-lead:18px;   /* 页面主标题之外的重点句 */
+    --fs-body:16px;   /* 正文（中文 15px 仍偏小，提到与浏览器基准同级） */
+    --fs-sm:14px;     /* 次要说明 */
+    --fs-xs:13px;     /* 极弱信息（时间戳、字段名） */
+    --fs-nav:17px;    /* 侧栏导航项：比正文再大一档，侧栏文字少、可以大 */
+    --fs-brand:20px;  /* 侧栏品牌名 */
   }
   .t-lead{font-size:var(--fs-lead);}
   .t-body{font-size:var(--fs-body);}
@@ -102,12 +102,16 @@ ui.add_head_html("""
   .softcard:hover { box-shadow:0 6px 20px rgba(15,23,42,.08);
                     transform:translateY(-2px); border-color:#D3DCE8; }
   /* 侧栏导航：整行可点 + 选中态明确 */
-  .navlink { display:flex; align-items:center; gap:10px; width:100%;
-             border-radius:8px; padding:7px 10px; cursor:pointer; text-decoration:none; }
+  /* 注意：.navlink 必须自己声明字号。之前它默认 14px，把子元素的
+     15px 压回视觉更小 —— 这是"我改了字号但看起来没变"的第二层原因。
+     父子统一走 --fs-nav，就不会再打架。 */
+  .navlink { display:flex; align-items:center; gap:12px; width:100%;
+             border-radius:8px; padding:9px 12px; cursor:pointer;
+             text-decoration:none; font-size:var(--fs-nav); line-height:1.5; }
   .navlink:hover { background:#EDF1F7; }
   .navlink.on { background:var(--accent-weak); color:#17418F; font-weight:650;
                 box-shadow:inset 3px 0 0 var(--accent); }
-  .navlink .ic { font-size:18px; opacity:.75; }
+  .navlink .ic { font-size:20px; opacity:.75; }
   .kpi { font-size:26px; font-weight:700; line-height:1.1; }
   .muted { color:var(--mut); }
   .sub { color:var(--sub); }
@@ -138,7 +142,7 @@ def shell(active: str, user: str):
         with ui.column().classes("w-58 shrink-0 p-3 gap-1 min-h-screen "
                                 "border-r").style("background:var(--bg-side);"
                                                   "border-color:var(--line);"
-                                                  "width:232px"):
+                                                  "width:250px"):
             with ui.row().classes("items-center gap-2 mb-3"):
                 ui.label("408").classes("w-9 h-9 rounded-lg text-white font-bold "
                                        "flex items-center justify-center") \
