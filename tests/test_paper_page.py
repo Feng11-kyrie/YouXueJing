@@ -62,10 +62,35 @@ def cap(at):
 at = AppTest.from_file(os.path.join(BASE, "app.py"), default_timeout=300)
 at.query_params["u"] = USER
 at.run()
-note("真题页是导航第一项", at.sidebar.radio[0].options[0].endswith("408 历年真题"))
+# 导航已改为卡片式（一列 st.button，选中项白卡片），不再是 st.radio
+nav = [b for b in at.sidebar.button if str(b.key or "").startswith("nav_")]
+note("侧栏是按钮式导航", len(nav) == 6, f"{len(nav)} 个")
+note("真题页是第一项", nav and nav[0].label.endswith("408 历年真题"), 
+     nav[0].label if nav else "")
+# AppTest 上按钮的 type 只在 proto 上（element 没有 .type/.kind）
+def btype(b):
+    t = b.proto.type
+    return getattr(t, "name", t) if not isinstance(t, str) else t
+
+note("默认选中真题页", btype(nav[0]).lower() == "primary",
+     f"type={btype(nav[0])}")
+note("同时只有一个选中项",
+     sum(1 for b in nav if btype(b).lower() == "primary") == 1)
 note("首屏无异常", not at.exception, str([e.value for e in at.exception][:1]))
 note("默认停在最新年份 2026", at.selectbox[0].value == "2026",
      f"got={at.selectbox[0].value}")
+
+# ---- 导航点击真的切页（按钮式导航是这次改动的核心，必须验证）
+at.sidebar.button(key="nav_学习路径").click().run()
+note("点导航切到学习路径", "学习路径" in [h.value for h in at.title]
+     or any("学习路径" in m.value for m in at.markdown),
+     f"title={[h.value for h in at.title]}")
+nav2 = [b for b in at.sidebar.button if str(b.key or "").startswith("nav_")]
+sel = [b.label for b in nav2 if btype(b).lower() == "primary"]
+note("选中态跟着移动", sel and "学习路径" in sel[0], str(sel))
+at.sidebar.button(key="nav_408 历年真题").click().run()
+note("切回真题页", any("408 历年真题" in t.value for t in at.title)
+     and bool(at.selectbox), str([t.value for t in at.title]))
 
 # ---- 选择 2025
 at.selectbox[0].set_value("2025").run()

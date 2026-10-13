@@ -64,9 +64,56 @@ st.markdown(
       [data-testid="stSidebar"] [role="radiogroup"] { gap: 0.35rem; }
       [data-testid="stSidebar"] [role="radiogroup"] label { font-size: 1.05rem; }
       [data-testid="stSidebar"] [role="radiogroup"] label p { font-size: 1.05rem; }
-      /* 侧栏分区之间留口气 */
-      [data-testid="stSidebar"] hr { margin: 0.7rem 0; }
-      [data-testid="stSidebar"] [data-testid="stElementContainer"] { margin-bottom: 0.3rem; }
+      /* ---- 侧栏导航：卡片式选中态 --------------------------------
+         用户给的参照是飞书/Notion 那种左侧导航：选中项是**白色圆角卡片**，
+         图标在左、行距宽松、未选中项是灰字。
+         st.radio 做不到这个形态（它的选中态是圆点），所以导航改成
+         一列 st.button + 下面这套样式：
+           · 所有按钮去边框、透明底、文字左对齐
+           · 选中项（kind="primary"）给白底 + 圆角 + 淡阴影
+           · 图标与文字之间留固定间距，形成对齐的图标列              */
+      [data-testid="stSidebar"] .stButton { margin: 0; }
+      [data-testid="stSidebar"] .stButton > button {
+        justify-content: flex-start;
+        text-align: left;
+        font-size: 1.02rem;
+        padding: 0.5rem 0.7rem;
+        border: none;
+        background: transparent;
+        color: #44505F;
+        font-weight: 500;
+        width: 100%;
+      }
+      [data-testid="stSidebar"] .stButton > button:hover {
+        background: rgba(15, 23, 42, 0.06);
+        color: #1F2933;
+      }
+      /* 选中项：白卡片（靠 kind="primary" 区分） */
+      [data-testid="stSidebar"] .stButton > button[kind="primary"] {
+        background: #FFFFFF;
+        color: #1F2933;
+        font-weight: 650;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08),
+                    0 1px 8px rgba(15, 23, 42, 0.05);
+      }
+      [data-testid="stSidebar"] .stButton > button[kind="primary"]:hover {
+        background: #FFFFFF;
+      }
+      /* 图标列对齐：Material 图标固定宽度，后面留出间距 */
+      [data-testid="stSidebar"] [data-testid="stIconMaterial"] {
+        width: 1.4rem;
+        margin-right: 0.15rem;
+        vertical-align: -0.18rem;
+        font-size: 1.2rem;
+      }
+      /* 分组小标题（"功能" / "存档状态"）低调一点 */
+      [data-testid="stSidebar"] .yj-sec {
+        font-size: 0.78rem;
+        letter-spacing: 0.06em;
+        color: #8A94A6;
+        margin: 0.9rem 0 0.25rem 0.2rem;
+        font-weight: 600;
+      }
 
       /* 选中态/重点行更清楚 */
       [data-testid="stMarkdownContainer"] strong { font-weight: 650; }
@@ -157,40 +204,65 @@ def steps(active, items):
 
 
 # ---------------------------------------------------------------- 侧栏
-st.sidebar.markdown("# 优学鲸")
-st.sidebar.markdown("408 考研 · 个性化学习资源生成")
+# 导航形态参考用户给的截图（飞书/Notion 那种左侧导航）：
+# 选中项是白色圆角卡片、图标在左、行距宽松。
+# st.radio 的选中态是圆点，做不出这个形态 —— 所以换成一列 st.button，
+# 选中态靠 type="primary" + 侧栏专用 CSS（见文件顶部）实现。
+NAV = [
+    ("408 历年真题", "description"),
+    ("挑考点练习", "school"),
+    ("快速诊断", "monitor_heart"),
+    ("我的画像", "insights"),
+    ("学习路径", "route"),
+    ("讲义生成", "menu_book"),
+]
+
+if "nav" not in st.session_state:
+    st.session_state["nav"] = NAV[0][0]
+
+st.sidebar.markdown(
+    '<div style="display:flex;align-items:center;gap:0.6rem;margin:0.2rem 0 0.9rem 0">'
+    # Logo 用 CSS 画，不再用 emoji —— 否则又要押注某个字符能在用户机器上
+    # 正常渲染（上一轮标题的破图就是这么来的）
+    '<div style="width:2.2rem;height:2.2rem;border-radius:0.6rem;flex:0 0 auto;'
+    'background:linear-gradient(135deg,#2563EB,#0D9488);color:#fff;'
+    'display:flex;align-items:center;justify-content:center;'
+    'font-weight:700;font-size:0.95rem">408</div>'
+    '<div><div style="font-size:1.4rem;font-weight:700;line-height:1.2">优学鲸</div>'
+    '<div style="font-size:0.82rem;color:#8A94A6">考研 · 个性化学习</div></div>'
+    '</div>', unsafe_allow_html=True)
+
+st.sidebar.markdown('<div class="yj-sec">功能</div>', unsafe_allow_html=True)
+for label, icon in NAV:
+    if st.sidebar.button(f":material/{icon}:　{label}", key=f"nav_{label}",
+                         use_container_width=True,
+                         type="primary" if st.session_state["nav"] == label
+                         else "secondary"):
+        st.session_state["nav"] = label
+        st.rerun()
+
+page = st.session_state["nav"]
 
 o = data.overview()
 ok_llm, msg_llm = llm.status()
-# 侧栏信息层级用真标题，而不是靠一行小字全糊在一起：
-# 原来"知识库 / 真题 846 题 / 考点 266 个 / 状态提示 / 我的进度"全是同一号字，
-# 分不清哪块是数据、哪块是状态。
-st.sidebar.markdown("### 知识库")
+
+st.sidebar.markdown('<div class="yj-sec">我的进度</div>', unsafe_allow_html=True)
 st.sidebar.markdown(
-    f"真题 **{o['题目总数']}** 题　·　{o['年份范围']}\n\n"
-    f"考点 **{o['叶子考点']}** 个\n\n"
-    f"依赖边 **{o['依赖边']}** 条"
+    f"薄弱考点 **{len(marks())}** 个　·　已作答 **{len(answers())}** 题"
 )
+st.sidebar.caption(f"{o['题目总数']} 题 · {o['叶子考点']} 考点 · {o['依赖边']} 依赖边")
 st.sidebar.caption(("● 已连接　" if ok_llm else "● 演示模式　") + msg_llm)
-
-st.sidebar.divider()
-st.sidebar.markdown("### 我的进度")
-st.sidebar.markdown(
-    f"薄弱考点 **{len(marks())}** 个\n\n"
-    f"已作答 **{len(answers())}** 题"
-)
 st.sidebar.caption(f"用户 {USER}")
-if st.sidebar.button("清空我的全部记录", help="清空标记与作答",
-                     use_container_width=True):
-    store.reset_user(USER)
-    for k in [k for k in st.session_state if k.startswith(("cb_", "pill_", "sel_",
-                                                           "practice_", "run"))]:
-        st.session_state.pop(k, None)
-    st.rerun()
 
-PAGES = ["1  408 历年真题", "2  挑考点练习", "3  快速诊断",
-         "4  我的画像", "5  学习路径", "6  讲义生成"]
-page = st.sidebar.radio("导航", PAGES, label_visibility="collapsed")
+with st.sidebar.expander("设置"):
+    if st.button("清空我的全部记录", help="清空标记与作答",
+                 use_container_width=True):
+        store.reset_user(USER)
+        for k in [k for k in st.session_state if k.startswith(("cb_", "pill_",
+                                                               "sel_", "practice_",
+                                                               "run"))]:
+            st.session_state.pop(k, None)
+        st.rerun()
 
 
 # ================================================================ 工具函数
@@ -254,7 +326,7 @@ def render_question(q, leaf, key_prefix, source="practice"):
 #   ① 找不到答题进度（哪些做过、哪些做错了）
 #   ② 一页三屏，复习时只能靠滚动
 # 所以改成：顶部控制条 + 答题卡（状态+跳转）+ 筛选 + 分页（每页 10 题）。
-if page == PAGES[0]:
+if page == "408 历年真题":
     st.title("408 历年真题")
 
     papers = data.paper_index()
@@ -434,7 +506,7 @@ if page == PAGES[0]:
 
 
 # ================================================================ ① 挑考点练习
-elif page == PAGES[1]:
+elif page == "挑考点练习":
     subj = st.session_state.get("sel_subject")
 
     # ---------- 第一步：选书 ----------
@@ -617,7 +689,7 @@ elif page == PAGES[1]:
 
 
 # ================================================================ ② 快速诊断
-elif page == PAGES[2]:
+elif page == "快速诊断":
     st.title("快速诊断（可选）")
     st.markdown("32 道题　·　约 20-25 分钟　·　覆盖 408 全部 24 章")
     st.markdown("做完会得到**章节级掌握度**，之后推荐会更准。"
@@ -659,7 +731,7 @@ elif page == PAGES[2]:
 
 
 # ================================================================ ③ 我的画像
-elif page == PAGES[3]:
+elif page == "我的画像":
     st.title("我的画像")
     a, mk = answers(), marks()
     if not a and not mk:
@@ -716,7 +788,7 @@ elif page == PAGES[3]:
 
 
 # ================================================================ ④ 学习路径
-elif page == PAGES[4]:
+elif page == "学习路径":
     st.title("学习路径")
     a, mk = answers(), marks()
     if not a and not mk:
@@ -758,7 +830,7 @@ elif page == PAGES[4]:
 
 
 # ================================================================ ⑤ 讲义生成
-elif page == PAGES[5]:
+elif page == "讲义生成":
     st.title("讲义生成（多智能体）")
     st.markdown("这一页跑的是 **LangGraph 六 Agent 链路**："
                 "准备 → 诊断 → 画像 → 路径 → 生成 → 复核，"
