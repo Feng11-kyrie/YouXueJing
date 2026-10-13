@@ -145,36 +145,41 @@ def question_card(q, year, done, user):
 
 def _comprehensive_block(q, year, user):
     """
-    综合应用题的作答区。
+    综合应用题（41–47）的作答区。
 
-    【为什么不能像单选题那样判分】
-    41–47 题在原卷里是**手写解答题**，题库里没有可机判的答案。
-    硬造一个"对/错"就是编数据 —— 这条不能做。
+    【为什么没有"打字作答"的输入框】
+    用户一句话点破了我第一版的错误设计：
+        "用户如果作答大题他要怎么作答，肯定不能够在键盘上打字作答吧"
 
-    所以这里给三样东西，每样都能追溯到来源：
-      ① 参考答案：从答案册 PDF 提取（scripts/extract_solutions.py），
-         必须标注是 OCR 抽取、可能有错字，且 5 个年份取不到。
-      ② 自评：学生自己判断"做对了 / 要再看一遍"，作为学习记录存下来。
-         source='selfcheck' 与自动判分分开存，界面也不会说成"答对了"。
-      ③ 明说本题不计分 —— 自评不等于判分。
+    他说得对。408 综合题是「写出算法设计思想 + 用 C/C++ 描述算法」，
+    在输入框里敲伪代码既不现实、也偏离真实考试形态 —— **考场上就是手写**。
+    做一个"打字作答"的框，等于照搬一个错的交互。
+
+    所以这里不提供作答框，而是明确三步流程（贴合真实做题方式）：
+        ① 自己拿纸写（题目里就给了作答区示意，不抢注意力）
+        ② 自我评估：做对了 / 要再看一遍
+        ③ 需要时展开参考答案对照
+    自评按真实情况记录（source='selfcheck'），并且**本题不计分** ——
+    自评不等于判分，这一点界面上必须写清。
     """
     from yj import data as _data
     sol = _data.solution(year, q["题号"]) if year else None
 
-    ui.label("综合应用题 · 手写解答题 —— 不做自动判分") \
+    ui.label("综合应用题 · 手写解答题（本题不做自动判分）") \
         .classes("t-xs font-semibold").style("color:#B45309")
 
-    if sol:
-        with ui.expansion("查看参考答案").classes("w-full"):
-            ui.label("以下解答抽取自答案册 PDF 的文字层（OCR），"
-                     "可能有错字或符号误识别（如「于」被识别成「千」、"
-                     "数字 1 与字母 l 混用）。请以教材为准，不要当成逐字准确的官方解析。") \
-                .classes("t-xs").style("color:#B45309")
-            ui.label(sol).classes("t-sm leading-7 whitespace-pre-wrap")
-    else:
-        ui.label("这一年的答案册是纯扫描件，没有文字层，取不到参考答案。"
-                 "建议对照教材自行核对。").classes("t-xs muted")
+    # ① 作答区示意：告诉用户"在纸上写"，而不是给一个错误的输入框
+    with ui.element("div").classes("w-full rounded-lg") \
+            .style("border:1px dashed #D7DEE8;background:#FBFCFE;"
+                   "padding:10px 14px"):
+        ui.label("在纸上作答") \
+            .classes("t-sm font-semibold").style("color:var(--sub)")
+        ui.label("这题是手写解答题：先自己在纸上写答案（建议分两段 —— "
+                 "① 算法设计思想 ② 用 C/C++ 描述算法）。写完后回来做自评，"
+                 "再对照参考答案。") \
+            .classes("t-xs muted").style("line-height:1.7")
 
+    # ② 自评：放在参考答案**之前** —— 先判断自己，再看答案，避免"看完才觉得自己会"
     prev = store.get_selfcheck(user).get(q["id"])
     box = {"v": prev}
 
@@ -183,10 +188,10 @@ def _comprehensive_block(q, year, user):
         b_ok.props(f'color={"positive" if v == store.SELF_OK else "grey"}')
         b_rev.props(f'color={"warning" if v == store.SELF_REVIEW else "grey"}')
         if v == store.SELF_OK:
-            state.set_text("已记录：你标记为「做对了」")
+            state.set_text("已记录：做对了")
             state.style("color:#1B5E36")
         elif v == store.SELF_REVIEW:
-            state.set_text("已记录：你标记为「要再看一遍」")
+            state.set_text("已记录：要再看一遍")
             state.style("color:#B45309")
         else:
             state.set_text("")
@@ -196,12 +201,26 @@ def _comprehensive_block(q, year, user):
         box["v"] = v
         paint()
 
-    with ui.row().classes("items-center gap-2 mt-1"):
-        ui.label("自评（本题不计分）：").classes("t-xs muted")
+    with ui.row().classes("items-center gap-2 no-wrap"):
+        ui.label("写完后自评：").classes("t-sm muted shrink-0")
         b_ok = ui.button("做对了", on_click=lambda: set_verdict(store.SELF_OK)) \
             .props("flat dense")
         b_rev = ui.button("要再看一遍",
                           on_click=lambda: set_verdict(store.SELF_REVIEW)) \
             .props("flat dense")
-        state = ui.label("").classes("t-xs")
+        state = ui.label("").classes("t-sm shrink-0")
+
+    # ③ 参考答案
+    if sol:
+        with ui.expansion("对照参考答案").classes("w-full"):
+            ui.label("以下解答抽取自答案册 PDF 的文字层（OCR），可能有错字或符号"
+                     "误识别（如「于」被识别成「千」、数字 1 与字母 l 混用）。"
+                     "请以教材为准，不要当成逐字准确的官方解析。") \
+                .classes("t-xs").style("color:#B45309")
+            ui.label(sol).classes("t-sm whitespace-pre-wrap") \
+                .style("line-height:1.9")
+    else:
+        ui.label("这一年的答案册是纯扫描件，没有文字层，取不到参考答案。"
+                 "建议对照教材自行核对。").classes("t-xs muted")
+
     paint()
