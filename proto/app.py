@@ -462,10 +462,15 @@ def exam(year: str = None, page: int = 1, view: str = "全部", user: str = "dem
                        f'正确率 {n_ok / len(answered):.0%}' if answered else ""))
             ui.label(info).classes("t-sm muted")
 
-        with ui.row().classes("w-full items-start gap-5"):
-            with ui.column().classes("w-56 shrink-0 sticky top-2 gap-1"):
-                ui.label("答题卡").classes("t-sm font-semibold muted")
-                with ui.element("div").classes("flex flex-wrap gap-1"):
+        # ---- 答题卡：从左侧竖栏改成**题目区上方的一条横卡**
+        # 用户要求"答题卡放第一题上面"。改完有两个实际收益：
+        #   ① 题目区宽 +240px（原来左侧那列占 220px + 间距 20px）
+        #   ② 综合题页面本来就没有判分状态可显示，那列纯属浪费
+        # 横向排布下 47 个格子只占 2 行左右，比竖栏省纵向空间。
+        with ui.card().classes("softcard w-full p-2 gap-1"):
+            with ui.row().classes("items-center gap-3 w-full no-wrap"):
+                ui.label("答题卡").classes("t-sm font-semibold muted shrink-0")
+                with ui.element("div").classes("flex flex-wrap gap-1 flex-1"):
                     for i, q in enumerate(shown):
                         st_ = done.get(q["id"])
                         cls = "cell"
@@ -477,30 +482,30 @@ def exam(year: str = None, page: int = 1, view: str = "全部", user: str = "dem
                         cell.on("click", lambda _=None, n=i // PER + 1: goto(page=n))
                         with cell:
                             ui.label(q["题号"]).classes("t-xs")
-                with ui.row().classes("gap-2 items-center"):
-                    ui.button(icon="chevron_left",
-                              on_click=lambda: goto(page=max(1, cur - 1))) \
-                        .props("flat dense").set_enabled(cur > 1)
-                    ui.label(f"{cur} / {pages_n} 页").classes("t-sm")
-                    ui.button(icon="chevron_right",
-                              on_click=lambda: goto(page=min(pages_n, cur + 1))) \
-                        .props("flat dense").set_enabled(cur < pages_n)
-                ui.label("绿=对 · 红=错 · 白=未做").classes("t-xs muted")
+                ui.label("绿=对 · 红=错 · 白=未做").classes("t-xs muted shrink-0")
+                ui.button(icon="chevron_left",
+                          on_click=lambda: goto(page=max(1, cur - 1))) \
+                    .props("flat dense").set_enabled(cur > 1)
+                ui.label(f"{cur} / {pages_n}").classes("t-sm shrink-0") \
+                    .style("white-space:nowrap")
+                ui.button(icon="chevron_right",
+                          on_click=lambda: goto(page=min(pages_n, cur + 1))) \
+                    .props("flat dense").set_enabled(cur < pages_n)
 
-            with ui.column().classes("flex-1 gap-2 min-w-0"):
-                if not shown:
-                    ui.label(f"筛选「{view}」下没有题目。").classes("t-sm muted")
-                    return
-                items = shown[(cur - 1) * PER: cur * PER]
-                ui.label(f'第 {items[0]["题号"]}–{items[-1]["题号"]} 题') \
-                    .classes("t-lead font-semibold")
-                subj = None
-                for q in items:
-                    if q["学科"] != subj:
-                        subj = q["学科"]
-                        ui.label(subj).classes("t-body font-semibold mt-1") \
-                            .style(f'color:{SUBJECT_COLORS.get(subj, "#2563EB")}')
-                    question_card(q, p["年份"], done, user)
+        with ui.column().classes("w-full gap-2 min-w-0"):
+            if not shown:
+                ui.label(f"筛选「{view}」下没有题目。").classes("t-sm muted")
+                return
+            items = shown[(cur - 1) * PER: cur * PER]
+            ui.label(f'第 {items[0]["题号"]}–{items[-1]["题号"]} 题') \
+                .classes("t-lead font-semibold")
+            subj = None
+            for q in items:
+                if q["学科"] != subj:
+                    subj = q["学科"]
+                    ui.label(subj).classes("t-body font-semibold mt-1") \
+                        .style(f'color:{SUBJECT_COLORS.get(subj, "#2563EB")}')
+                question_card(q, p["年份"], done, user)
 
 
 # ================================================================ 挑考点练习
