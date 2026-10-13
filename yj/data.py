@@ -207,6 +207,62 @@ def chapter_freq():
     return out
 
 
+@lru_cache(maxsize=1)
+def years():
+    """有真题的年份, 从新到旧(界面默认给人看最新一套)"""
+    return sorted({q["year"] for q in questions().values()}, reverse=True)
+
+
+@lru_cache(maxsize=1)
+def paper(year):
+    """
+    某一年的整套卷子。
+
+    返回 {年份, 题目:[...], 题数, 单选数, 综合数, 有答案数, 总分, 需插图, 缺图}
+    题目按题号排序(卷面顺序), 而不是按考点/难度 —— 看"某一年的真题卷"要的是
+    原卷顺序。
+
+    注意: 综合应用题目前没有答案(846 题里只有 720 道单选有答案),
+    界面必须如实标注, 不能让人以为可以判分。
+    """
+    year = str(year)
+    qs = [q for q in questions().values() if str(q["year"]) == year]
+
+    def num(q):
+        # 题号在数据里是字符串, 直接排会得到 1,10,11,2… 的顺序
+        try:
+            return int(str(q["题号"]).strip())
+        except (TypeError, ValueError):
+            return 999
+
+    qs.sort(key=num)
+
+    def score(q):
+        try:
+            return int(str(q.get("分值") or 0).strip())
+        except (TypeError, ValueError):
+            return 0
+
+    choice = [q for q in qs if q["题型"] == "单项选择题"]
+    return {
+        "年份": year,
+        "题目": qs,
+        "题数": len(qs),
+        "单选数": len(choice),
+        "综合数": len(qs) - len(choice),
+        "有答案数": sum(1 for q in qs if q.get("答案")),
+        "总分": sum(score(q) for q in qs),
+        "需插图": sum(1 for q in qs if q.get("需插图")),
+        "缺图": sum(1 for q in qs if q.get("缺图")),
+    }
+
+
+@lru_cache(maxsize=1)
+def paper_index():
+    """全部年份的卷子概览(年份选择列表用), 从新到旧"""
+    return [paper(y) for y in years()]
+
+
 def overview():
     """给界面用的一句话概览"""
     q = questions()
