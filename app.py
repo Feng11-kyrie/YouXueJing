@@ -306,7 +306,10 @@ st.sidebar.markdown(
     f"薄弱考点 **{len(marks())}** 个　·　已作答 **{len(answers())}** 题"
 )
 st.sidebar.caption(f"{o['题目总数']} 题 · {o['叶子考点']} 考点 · {o['依赖边']} 依赖边")
-st.sidebar.caption(("● 已连接　" if ok_llm else "● 演示模式　") + msg_llm)
+# 【只报异常】原来侧栏始终显示"● 已连接　已配置：请求模型 deepseek-chat @ …"，
+# 用户要求删掉（对使用者没有价值）。但未配置时必须提示 —— 那时内容是模板而非 AI。
+if not ok_llm:
+    st.sidebar.caption("● 演示模式　未配置 LLM，内容是模板而非 AI 生成")
 st.sidebar.caption(f"用户 {USER}")
 
 with st.sidebar.expander("设置"):
@@ -948,15 +951,15 @@ elif page == "我的薄弱点":
     st.title("我的薄弱点")
     st.caption("按你答错和自报的薄弱考点，生成讲义 · 知识点速记 · 配套真题"
                "（只给最该补的几个考点）")
-    st.markdown("这一页跑的是 **LangGraph 六 Agent 链路**："
-                "准备 → 诊断 → 画像 → 路径 → 生成 → 复核，"
-                "按你的薄弱考点产出**讲义 / 知识点速记 / 配套真题**。")
+    # 【已删除】这里原有"这一页跑的是 LangGraph 六 Agent 链路…"一行。
+    # 用户要求不显示这类实现细节（NiceGUI 版已删）。链路与模型信息在有需要时
+    # 从运行结果的"生成过程"折叠项里看。
     ok, msg = llm.status()
-    if ok:
-        st.success(msg, icon=":material/check_circle:")
-    else:
-        st.warning(msg + " —— 页面会照常跑通，但讲义正文是**用真实数据填的模板**，"
-                         "不是 AI 写的。", icon=":material/warning:")
+    # 【只报异常】NiceGUI 版已不显示"● 已配置：请求模型…"（用户要求删除，
+    # 对使用者无价值），这里保持一致：仅在未配置时警告 —— 那时正文会降级成模板。
+    if not ok:
+        st.warning("未配置 LLM —— 生成的内容会是「用真实数据填的模板」，"
+                   "不是 AI 写的。", icon=":material/warning:")
 
     a, mk = answers(), marks()
     if not a and not mk:
@@ -964,58 +967,23 @@ elif page == "我的薄弱点":
         st.stop()
 
     rec = path.recommend(a, marks=mk)
-    import glob as _glob
-    _snaps = sorted(os.path.basename(x)[:-5] for x in _glob.glob("data/prewarm/*.json"))
-    st.markdown("#### 第一步：选运行方式")
-    mode = st.radio("运行方式", ["实时运行", "回放预跑快照"], horizontal=True,
-                    help="路演兜底：API 不可用时用快照回放，输出与预跑时完全一致。")
-    st.caption("「实时运行」当场调 LLM（慢、且依赖网络与额度）；"
-               "「回放预跑快照」读提前跑好并落盘的结果（秒出、离线可用、输出一致）。")
+    names = [p["名称"] for p in rec["路径"]] or ["补根因"]
 
-    if mode == "回放预跑快照":
-        if not _snaps:
-            st.warning("还没有快照。先在命令行跑：\n\n"
-                       "`python scripts/prewarm.py --name roadshow`")
-        else:
-            snap = st.selectbox("选择快照", _snaps)
-            if st.button("▶ 回放快照", type="primary"):
-                # 兜底路径必须比实时路径更稳: 快照文件若损坏(曾出现过写了一半的
-                # json), 这里给可读的提示而不是让页面抛异常 —— 路演现场不能崩。
-                try:
-                    with open(f"data/prewarm/{snap}.json", encoding="utf-8") as f:
-                        d = json.load(f)
-                    d = snap_mod.to_jsonable(d)
-                    st.session_state["run"] = d["结果"]
-                    st.session_state["run_meta"] = (
-                        f"快照「{snap}」· 预跑于 {d['生成时间']} · "
-                        f"当时 LLM {'已配置' if d['LLM已配置'] else '未配置'} · "
-                        f"内容来源 {d['内容来源']}")
-                except Exception as e:                  # noqa: BLE001
-                    st.error(f"快照「{snap}」读取失败，无法回放："
-                             f"{type(e).__name__}: {e}。"
-                             f"请在命令行重跑 `python scripts/prewarm.py "
-                             f"--name {snap} --path root` 重新生成。")
-    else:
-        names = [p["名称"] for p in rec["路径"]] or ["补根因"]
-        st.markdown("#### 第二步：选要生成的路径，然后运行")
-        sel_name = st.selectbox("选中要生成的路径", names)
-        if not a:
-            st.markdown("提示：你没有做题记录，链路会依据**你勾选的薄弱考点**生成。")
-        if st.button("▶ 运行多智能体链路", type="primary"):
-            with st.spinner("多智能体执行中…"):
-                st.session_state["run"] = graph.run(
-                    USER, selected_path={"补根因": "root", "冲高频": "freq",
-                                         "错题驱动": "wrong"}.get(sel_name, "root"))
-                st.session_state.pop("run_meta", None)
-
-    if st.session_state.get("run_meta"):
-        st.info("正在回放预跑快照 —— " + st.session_state["run_meta"],
-                icon=":material/inventory_2:")
+    # 【注意】删回放功能时我漏掉了这块"选路径 + 运行"的代码，导致页面上没有
+    # 任何入口（与之前删错 NiceGUI 版是同一个错误：按区间替换会连带删掉相邻块）。
+    # 这里补回，措辞与 NiceGUI 版保持一致。
+    sel_name = st.selectbox("选中要生成的路径", names, key="path_sel")
+    if not a:
+        st.caption("提示：你没有做题记录，链路会依据你勾选的薄弱考点生成。")
+    if st.button("▶ 生成我的学习资料", type="primary"):
+        with st.spinner("正在生成…"):
+            st.session_state["run"] = graph.run(
+                USER, selected_path={"补根因": "root", "冲高频": "freq",
+                                     "错题驱动": "wrong"}.get(sel_name, "root"))
 
     R = st.session_state.get("run")
     if not R:
-        st.markdown("还没有运行 —— 上面选好方式后点「▶ 运行多智能体链路」"
-                    "或「▶ 回放快照」。")
+        st.markdown("选好路径后点上面的「▶ 生成我的学习资料」。")
         st.stop()
 
     st.subheader("执行轨迹")

@@ -860,15 +860,15 @@ def notes_page(user: str = "demo"):
         ui.label("按你答错和自报的薄弱考点，生成讲义 · 知识点速记 · 配套真题"
                  "（只给系统算出来最该补的那几个考点，不是把 266 个考点全生成）。") \
             .classes("t-body")
-        ui.label("背后是 LangGraph 六 Agent 链路："
-                 "准备 → 诊断 → 画像 → 路径 → 生成 → 复核。") \
-            .classes("t-sm muted")
-        ok, msg = llm.status()
-        (ui.label if ok else ui.label)(("● " + msg) if ok else ("● " + msg)) \
-            .classes("t-sm").style(f'color:{"#1B5E36" if ok else "#8A6D3B"}')
+        # 【只报异常】原来这里始终显示"● 已配置：请求模型 deepseek-chat @ …"，
+        # 用户明确要求删掉 —— 对使用者没有价值（模型名、base_url 是技术细节）。
+        # 但**未配置时必须警告**：那时正文会降级成模板，不说明就等于拿模板冒充 AI。
+        # 技术细节挪到下方"生成过程"折叠项里，需要时可查。
+        ok, _msg = llm.status()
         if not ok:
-            ui.label("页面会照常跑通，但讲义正文是用真实数据填的模板，不是 AI 写的。") \
-                .classes("t-sm sub")
+            ui.label("⚠ 未配置 LLM —— 生成的内容会是「用真实数据填的模板」，"
+                     "不是 AI 写的。") \
+                .classes("t-sm").style("color:#8A6D3B")
         if not a and not mk:
             ui.label("还没有数据。先到「挑考点练习」勾选薄弱知识点。") \
                 .classes("t-sm").style("color:#8A6D3B")
@@ -889,6 +889,12 @@ def notes_page(user: str = "demo"):
                 # 调度的"时，展开它是最直接的证据，所以收进默认折叠的技术细节里。
                 with ui.expansion("生成过程（技术细节，一般不用看）",
                                   value=False).classes("w-full"):
+                    # 模型与接口信息挪到这里 —— 页面上不显示（用户明确要求），
+                    # 但被问"你用的什么模型"时能当场展开给出来。
+                    _ok, _msg = llm.status()
+                    ui.label(_msg).classes("t-xs muted")
+                    ui.label("链路：准备 → 诊断 → 画像 → 路径 → 生成 → 复核"
+                             "（LangGraph 六 Agent）").classes("t-xs muted")
                     for t in R.get("traced", []):
                         ui.label(f'{t["agent"]} — {t["detail"]}').classes("t-sm")
                 rv = R.get("review") or {}
@@ -967,7 +973,9 @@ def notes_page(user: str = "demo"):
         with ui.row().classes("items-center gap-3"):
             sel = ui.select(names, value=names[0], label="要生成的路径") \
                 .props("dense outlined").classes("w-56")
-            ui.button("▶ 运行多智能体链路", on_click=lambda: run_live()) \
+            # 措辞从"运行多智能体链路"（实现视角）改为"生成我的学习资料"
+            # （用户视角，且与副标题的三种产出对应）。
+            ui.button("▶ 生成我的学习资料", on_click=lambda: run_live()) \
                 .props("unelevated")
 
         def run_live():

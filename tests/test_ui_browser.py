@@ -17,6 +17,28 @@ AppTest 覆盖不了两件事，而这两件恰好都出过问题：
 用法（先把服务跑起来）：
     .venv/bin/python tests/test_ui_browser.py
     .venv/bin/python tests/test_ui_browser.py --url http://localhost:8501
+
+⚠️ 已知限制：必须用**独立测试库**启动服务，否则会有 3 项假失败
+-----------------------------------------------------------------
+本脚本会把 store.DB 指向 /tmp/yj_test_browser.db，但浏览器里的应用是另一个
+进程、写的是它自己的 data/yj.db。如果服务是用默认库启动的，就会出现：
+
+    ✗ 第一题默认选中占位项（不是 A）  checked=2
+    ✗ 给出提示
+    ✗ 落库 0 条  1 条
+
+原因是共享库里 demo 已经答过 2026 年第 1 题（卡片变成"已作答"形态、
+不再渲染 radio），脚本挑到的"第一张卡"其实是第 2 题 —— 也就是说这些断言
+**检查的不是它想检查的东西**，并非产品缺陷。
+
+要跑干净，用同一个测试库启动服务：
+    YJ_DB=/tmp/yj_test_browser.db .venv/bin/streamlit run app.py --server.port 8501
+    YJ_DB=/tmp/yj_test_browser.db .venv/bin/python proto/app.py --port 8890
+（NiceGUI 版读的是 proto/store_lite 的 DB，同样需要指向测试库。）
+
+产品行为的独立核对结论（2026-10-14，真实浏览器逐题检查 NiceGUI 版）：
+    第 1/2/3 题默认选中样式数 = 0   → 默认确实不预选
+    未选就提交 → 出现提示且落库 0 条 → 行为正确
 """
 import argparse
 import os
