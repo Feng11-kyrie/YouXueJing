@@ -882,7 +882,8 @@ def notes_page(user: str = "demo"):
                         with ui.tabs().classes("w-full") as t2:
                             ui.tab("讲义")
                             ui.tab("知识点速记")
-                            ui.tab("配套真题")
+                            ui.tab(f'配套真题（{len(x["习题"])}）'
+                                   if x.get("习题") else '配套真题')
                         with ui.tab_panels(t2, value="讲义").classes("w-full"):
                             with ui.tab_panel("讲义"):
                                 ui.markdown(x["讲义"]["markdown"])
@@ -893,7 +894,8 @@ def notes_page(user: str = "demo"):
                                     .classes("t-xs muted")
                             with ui.tab_panel("知识点速记"):
                                 ui.markdown(x["速记"])
-                            with ui.tab_panel("配套真题"):
+                            with ui.tab_panel(f'配套真题（{len(x["习题"])}）'
+                                              if x.get("习题") else '配套真题'):
                                 # 【一键全展开】用户反复强调"不用一个 一个查找"。
                                 #
                                 # 我第一版让每题返回一个 set_shown 函数、总开关循环调用
@@ -917,6 +919,14 @@ def notes_page(user: str = "demo"):
                                          .forEach(b => { if (b.innerText.trim() === '收起答案') b.click(); })""")) \
                                     .props("flat dense")
 
+                                if not x.get("习题"):
+                                    # 有的考点确实一道真题都没有（266 个考点里
+                                    # 有 65 个是 0 道）。空页签会让人以为坏了，
+                                    # 所以如实说明并指向可用的替代。
+                                    ui.label("这个考点在 18 年真题里没有出过单选题，"
+                                             "所以没有配套真题。可以看「讲义」页签里的"
+                                             "考频数据，或到「408 历年真题」按学科浏览。") \
+                                        .classes("t-sm muted")
                                 for i, q in enumerate(x["习题"], 1):
                                     _exam_item(q, i, user)
 

@@ -119,7 +119,7 @@ def agent_generate(state: YJState) -> YJState:
             "讲义": gen_mod.lesson(leaf, state["answers"],
                                    marks=state.get("marks")),
             "速记": gen_mod.summary(leaf),
-            "习题": gen_mod.exercises(leaf, n=5),
+            "习题": gen_mod.exercises(leaf),   # 默认全量（见 generate.EXERCISE_MAX）
         })
     srcs = {x["讲义"]["source"] for x in out}
     return {"resources": out,
