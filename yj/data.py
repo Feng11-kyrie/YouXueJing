@@ -233,8 +233,35 @@ def solutions():
 
 
 def solution(year, num):
-    """取某年某道综合题的参考答案；没有则返回 None"""
-    return (solutions().get(str(year)) or {}).get(str(num))
+    """
+    取某年某道综合题的参考答案；没有则返回 None。
+
+    返回 {文本, 是否AI生成}：
+      · 答案册 OCR 抽取的那批「是否AI生成」为 False
+      · scripts/gen_solutions.py 补的缺失题目标记为 True
+    界面必须据此**分开标注** —— 把 AI 生成的解法标成官方答案就是编造。
+    """
+    rec = solution_records().get(str(year)) or {}
+    item = (rec.get("解答") or {}).get(str(num))
+    if not item:
+        return None
+    return {"文本": item, "是否AI生成": str(num) in (rec.get("生成") or [])}
+
+
+@lru_cache(maxsize=1)
+def solution_records():
+    """{年份: {"解答": {...}, "生成": [...], "来源": str}}（整份读取）"""
+    out = {}
+    import glob as _glob
+    d = os.path.join(BASE, "data", "solutions")
+    for f in sorted(_glob.glob(os.path.join(d, "*.json"))):
+        try:
+            with open(f, encoding="utf-8") as fh:
+                rec = json.load(fh)
+            out[str(rec["年份"])] = rec
+        except Exception:                       # noqa: BLE001
+            continue
+    return out
 
 
 @lru_cache(maxsize=1)

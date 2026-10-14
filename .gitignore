@@ -66,3 +66,6 @@ data/solutions
 # ---- SQLite WAL 模式产生的副文件（WAL 让 streamlit 与 nicegui 能并发读写）----
 data/*.db-wal
 data/*.db-shm
+
+# ---- LLM 密钥（绝不进仓库）----
+.streamlit/secrets.toml

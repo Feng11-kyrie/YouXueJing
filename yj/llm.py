@@ -35,18 +35,44 @@ DEFAULTS = {
 }
 
 
+def _read_toml():
+    """
+    直接读 .streamlit/secrets.toml。
+
+    为什么要自己读、而不是只用 st.secrets：
+    **st.secrets 只在 streamlit 运行时可用** —— NiceGUI 版（proto/app.py）
+    调用时会取不到值，表现为"配了 key 却显示未配置"（实测踩到）。
+    用标准库 tomllib 直接读文件，两个应用都能拿到同一份配置。
+    """
+    import tomllib
+    path = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+        ".streamlit", "secrets.toml")
+    try:
+        with open(path, "rb") as f:
+            return (tomllib.load(f) or {}).get("llm", {}) or {}
+    except (FileNotFoundError, OSError, tomllib.TOMLDecodeError):
+        return {}
+
+
 def _secrets():
-    """从 streamlit secrets 或环境变量读配置(两者都没有则视为未配置)"""
+    """配置来源优先级：环境变量 > secrets.toml（含 st.secrets）> 默认值"""
     cfg = dict(DEFAULTS)
-    # 1) st.secrets（部署时用）
+    # 1) secrets.toml（自己读文件，streamlit 之外也能用）
+    sec = _read_toml()
+    # 1b) 若在 streamlit 运行时里，也读一次 st.secrets（兼容部署平台注入）
     try:
         import streamlit as st
-        sec = st.secrets.get("llm", {}) if hasattr(st, "secrets") else {}
-        for k in cfg:
-            if k in sec:
-                cfg[k] = sec[k]
+        for k, v in (st.secrets.get("llm", {}) or {}).items():
+            sec.setdefault(k, v)
     except Exception:
         pass
+    # 【必须遍历 sec 而不是 cfg】cfg 只有 DEFAULTS 里的键，
+    # 而 api_key **不在 DEFAULTS 里** —— 写成 `for k in cfg` 会把
+    # 配置文件里的 api_key 直接丢掉，表现为"配了 key 却说未配置"。
+    # 这个 bug 一直存在：st.secrets 那条路同样没生效过（实测踩到）。
+    for k, v in (sec or {}).items():
+        cfg[k] = v
     # 2) 环境变量（覆盖）
     env_map = {"LLM_API_KEY": "api_key", "LLM_BASE_URL": "base_url",
                "LLM_MODEL": "model"}

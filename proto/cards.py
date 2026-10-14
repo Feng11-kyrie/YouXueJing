@@ -162,7 +162,7 @@ def _comprehensive_block(q, year, user):
          界面也绝不说成"判分结果" —— 这是用户自己给的判断。
     """
     from yj import data as _data
-    sol = _data.solution(year, q["题号"]) if year else None
+    sol = _data.solution(year, q["题号"]) if year else None   # {文本, 是否AI生成}
     try:
         total = int(q.get("分值") or 0)
     except (TypeError, ValueError):
@@ -194,14 +194,26 @@ def _comprehensive_block(q, year, user):
         with holder:
             if sol:
                 with ui.card().classes("softcard w-full p-3 gap-1"):
-                    ui.label("参考答案（答案解析）") \
-                        .classes("t-sm font-semibold") \
-                        .style("color:var(--accent)")
-                    ui.label("抽取自答案册 PDF 的文字层（OCR），可能有错字或符号"
-                             "误识别（如「于」被识别成「千」、数字 1 与字母 l 混用）。"
-                             "请以教材为准，不要当成逐字准确的官方解析。") \
-                        .classes("t-xs").style("color:#B45309")
-                    ui.label(sol).classes("t-sm whitespace-pre-wrap") \
+                    # 来源标注必须分开：答案册抽取 ≠ AI 生成。
+                    # 把 AI 写的解法说成官方答案就是编造，这条是红线。
+                    if sol["是否AI生成"]:
+                        ui.label("参考答案（AI 生成，未经官方核验）") \
+                            .classes("t-sm font-semibold") \
+                            .style("color:#B45309")
+                        ui.label("这道题本地答案册没有可提取的解析（扫描件残缺或倾斜"
+                                 "无法识别），下面这份是 AI 依据题干与分值结构生成的，"
+                                 "**可能有错**。请以教材与老师讲解为准，"
+                                 "不要把它当成标准答案。") \
+                            .classes("t-xs").style("color:#B45309")
+                    else:
+                        ui.label("参考答案（答案册抽取）") \
+                            .classes("t-sm font-semibold") \
+                            .style("color:var(--accent)")
+                        ui.label("抽取自答案册 PDF 的文字层（OCR），可能有错字或符号"
+                                 "误识别（如「于」被识别成「千」、数字 1 与字母 l 混用）。"
+                                 "请以教材为准，不要当成逐字准确的官方解析。") \
+                            .classes("t-xs").style("color:#B45309")
+                    ui.label(sol["文本"]).classes("t-sm whitespace-pre-wrap") \
                         .style("line-height:1.9")
             ui.label(f"对照题干括号里的步骤分值逐项给分，把总分填到下面并保存。"
                      f"本题满分 {total} 分。").classes("t-sm muted")
