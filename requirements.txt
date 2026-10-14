@@ -11,3 +11,10 @@ pandas>=2.0                  # 表格展示
 # 原型只用到 yj/ 数据层，不影响现有应用；装不装都不影响 streamlit 版运行。
 # 启动:  .venv/bin/python proto/app_nicegui.py --port 8899
 nicegui>=2.0
+
+# ---- 可选：OCR 抽取扫描版答案册（scripts/ocr_solutions.py）----
+# 只有"从纯扫描的答案册里补综合题解析"时才需要，**运行应用不需要**。
+# 体积很大（paddlepaddle 约 200MB + 首次运行自动下载模型约 30MB），
+# 因此不放进主依赖。需要时：
+#   .venv/bin/pip install paddlepaddle paddleocr pyobjc-framework-Quartz
+# 注意：它会替换项目里的 numpy 版本（实测 2.5.4 → 2.3.5），装完请重跑测试。
