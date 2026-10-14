@@ -28,7 +28,8 @@ import time
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(BASE, "_shots")
 
-NAV = ["408 历年真题", "挑考点练习", "快速诊断", "我的画像", "学习路径", "讲义生成"]
+NAV = ["408 历年真题", "挑考点练习", "快速诊断", "我的画像", "我的薄弱点"]
+# 注：「学习路径」页已按用户要求删除；页面名"讲义生成"也已改为"我的薄弱点"
 
 
 def main():

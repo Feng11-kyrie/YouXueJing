@@ -92,14 +92,20 @@ def agent_profile(state: YJState) -> YJState:
 
 
 def agent_recommend(state: YJState) -> YJState:
-    """路径 Agent：画像 + 依赖图 → 三条可选路径。"""
+    """路径 Agent：画像 + 依赖图 → 排定"先补哪些考点"的顺序。
+
+    注意：原来它产出**三条路径让用户选**，但用户否掉了那个交互形式
+    （"感觉不到用处"）—— 三条路径高度重合，用户仍要自己判断选哪条。
+    现在只在内部产出一条排序结果，供生成 Agent 决定生成哪几个考点；
+    对外不再出现"选路径"这一步。
+    """
     r = path_mod.recommend(state["answers"], marks=state.get("marks"))
     sel = state.get("selected_path")
     if not sel and r["路径"]:
         sel = r["路径"][0]["id"]
     return {"path": r, "selected_path": sel,
             "traced": _trace(state, "路径 Agent",
-                             f"生成 {len(r['路径'])} 条路径, 选中「{sel}」")}
+                             f"按依赖与考频排定考点顺序（策略「{sel}」）")}
 
 
 def agent_generate(state: YJState) -> YJState:

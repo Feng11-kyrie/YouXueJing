@@ -64,7 +64,9 @@ at.query_params["u"] = USER
 at.run()
 # 导航已改为卡片式（一列 st.button，选中项白卡片），不再是 st.radio
 nav = [b for b in at.sidebar.button if str(b.key or "").startswith("nav_")]
-note("侧栏是按钮式导航", len(nav) == 6, f"{len(nav)} 个")
+# 6 → 5：原来是 真题/练习/诊断/画像/学习路径/讲义生成，
+# 「学习路径」已按用户要求删除（用处不大），「讲义生成」改名为「我的薄弱点」。
+note("侧栏是按钮式导航", len(nav) == 5, f"{len(nav)} 个")
 note("真题页是第一项", nav and nav[0].label.endswith("408 历年真题"), 
      nav[0].label if nav else "")
 # AppTest 上按钮的 type 只在 proto 上（element 没有 .type/.kind）
@@ -81,13 +83,15 @@ note("默认停在最新年份 2026", at.selectbox[0].value == "2026",
      f"got={at.selectbox[0].value}")
 
 # ---- 导航点击真的切页（按钮式导航是这次改动的核心，必须验证）
-at.sidebar.button(key="nav_学习路径").click().run()
-note("点导航切到学习路径", "学习路径" in [h.value for h in at.title]
-     or any("学习路径" in m.value for m in at.markdown),
+# 原来这里点「学习路径」验证导航切页 —— 该页已按用户要求删除
+# （"感觉不到用处，对用户来讲没多大用处"），改点「我的薄弱点」做同样的验证。
+at.sidebar.button(key="nav_我的薄弱点").click().run()
+note("点导航切到我的薄弱点", "我的薄弱点" in [h.value for h in at.title]
+     or any("我的薄弱点" in m.value for m in at.markdown),
      f"title={[h.value for h in at.title]}")
 nav2 = [b for b in at.sidebar.button if str(b.key or "").startswith("nav_")]
 sel = [b.label for b in nav2 if btype(b).lower() == "primary"]
-note("选中态跟着移动", sel and "学习路径" in sel[0], str(sel))
+note("选中态跟着移动", sel and "我的薄弱点" in sel[0], str(sel))
 at.sidebar.button(key="nav_408 历年真题").click().run()
 note("切回真题页", "408 历年真题" in md(at) and bool(at.selectbox))
 

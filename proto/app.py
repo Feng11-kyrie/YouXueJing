@@ -15,7 +15,6 @@
     /practice?subject=DS&chapter=DS-03   挑考点练习
     /diagnose               快速诊断（32 题）
     /profile                我的画像
-    /paths                  学习路径
     /notes                  我的薄弱点（原"讲义生成"）
 
 与 Streamlit 版的能力对应关系写在 README 段落里；本文件不删旧版，
@@ -44,7 +43,6 @@ NAV = [("/", "首页", "home"),
        ("/practice", "挑考点练习", "school"),
        ("/diagnose", "快速诊断", "monitor_heart"),
        ("/profile", "我的画像", "insights"),
-       ("/paths", "学习路径", "route"),
        ("/notes", "我的薄弱点", "menu_book")]
 
 ui.add_head_html("""
@@ -390,8 +388,7 @@ def home(user: str = "demo"):
                 # 横排：原来竖排三行占掉 110px 高度，也是留白的一部分
                 with ui.row().classes("gap-6"):
                     for href, title in [("/exam", "按年份刷真题"),
-                                        ("/paths", "三条学习路径"),
-                                        ("/notes", "生成讲义")]:
+                                        ("/notes", "我的薄弱点")]:
                         with ui.link(target=f"{href}?user={user}") \
                                 .classes("no-underline"):
                             ui.label(f"{title} →").classes("t-body") \
@@ -794,53 +791,14 @@ def profile_page(user: str = "demo"):
                     .classes("t-sm")
 
 
-# ================================================================ 学习路径
-@ui.page("/paths")
-def paths_page(user: str = "demo"):
-    a, mk = store.get_answers(user), store.get_marks(user)
-    with shell("/paths", user):
-        _title("学习路径")
-        if not a and not mk:
-            ui.label("还没有数据。先到「挑考点练习」勾选薄弱知识点，"
-                     "或做一次「快速诊断」。").classes("t-sm").style("color:#8A6D3B")
-            return
-        rec = path_mod.recommend(a, marks=mk)
-        if not rec.get("路径"):
-            ui.label(rec.get("提示", "暂无推荐")).classes("t-sm")
-            return
-        ui.label(f'根据你的学情（含你自己勾选的薄弱点），系统找出 '
-                 f'{rec["薄弱考点数"]} 个未掌握考点，组织成下面几条路径。') \
-            .classes("t-body")
-        ui.label("三条路径不互斥，选一条开始就行 —— 差别只在「先补什么」的依据。") \
-            .classes("t-sm sub")
-        with ui.tabs().classes("w-full") as tabs:
-            for p in rec["路径"]:
-                ui.tab(p["名称"], label=f'{p["名称"]}（{p["合计分钟"]} 分钟）')
-        with ui.tab_panels(tabs, value=rec["路径"][0]["名称"]).classes("w-full"):
-            for p in rec["路径"]:
-                with ui.tab_panel(p["名称"]):
-                    ui.label(f'适合：{p["适用"]}').classes("t-sm font-semibold")
-                    ui.label(p["说明"]).classes("t-sm sub")
-                    for i, s in enumerate(p["步骤"], 1):
-                        with ui.card().classes("w-full p-3 gap-1 shadow-none mt-2"):
-                            with ui.row().classes("items-center gap-4"):
-                                ui.label(f'{i}. {s["考点名"]}').classes("font-semibold")
-                                ui.label(f'{s["学科"]} · {s["章节"]}') \
-                                    .classes("t-xs muted")
-                            with ui.row().classes("items-center gap-6"):
-                                # 不显示"当前掌握度 XX%"：那一章可能只做过 1 题
-                                ui.label("尚未测过" if not s["是否已测"]
-                                         else f'做过 {s["可练真题"]} 题中的一部分') \
-                                    .classes("t-sm")
-                                ui.label(f'预计用时 {s["预计分钟"]} 分钟').classes("t-sm")
-                                ui.label(f'考频 {s["考频"]} 次 · 可练 {s["可练真题"]} 题') \
-                                    .classes("t-sm muted")
-                            ui.label(s["推荐理由"]).classes("t-xs muted")
-        ui.label("「补根因」的机制：沿知识点依赖图向上追溯，找到最靠前的断裂点再开始补，"
-                 "而不是直接练你表面最弱的那一章。").classes("t-xs muted")
+# 【已删除】/paths「学习路径」页面 —— 用户判断"感觉不到用处，对用户来讲没多大
+# 用处"，要求删除。
+# 删的是**用户可见的页面**（三条路径让你自己选）。yj/path.py 算法**保留** ——
+# 六 Agent 链路里的「路径 Agent」靠它决定给「我的薄弱点」生成哪几个考点，
+# 连算法一起删会让那个页面不知道生成什么（已确认依赖，见 yj/graph.py）。
+# 若要恢复该页面：git show 6d0d528:proto/app.py（或本次提交的父提交）
 
 
-# ================================================================ 我的薄弱点
 @ui.page("/notes")
 def notes_page(user: str = "demo"):
     snap_name = {"v": None}
@@ -874,8 +832,11 @@ def notes_page(user: str = "demo"):
                 .classes("t-sm").style("color:#8A6D3B")
             return
 
+        # 不再让用户选路径（三条路径高度重合、还得用户自己判断，用户已否掉这个
+        # 交互形式）。内部仍跑路径 Agent，自动取第一条作为生成依据。
         rec = path_mod.recommend(a, marks=mk)
-        names = [p["名称"] for p in rec["路径"]] or ["补根因"]
+        _picked = (rec["路径"] or [{}])[0]
+        names = [_picked.get("名称", "补根因")]
         holder = {"run": None}
         result = ui.column().classes("w-full gap-2")
 
@@ -967,24 +928,20 @@ def notes_page(user: str = "demo"):
                                 for i, q in enumerate(x["习题"], 1):
                                     _exam_item(q, i, user)
 
-        # 【注意】路径下拉与运行按钮必须在 run_live 之前创建（run_live 用 sel.value）。
-        # 我因为用"脚本按区间替换"做改动，把这块**删除过两次**（同一个错犯三回），
-        # 表现为页面上按钮全无。以后改这一带务必用精确编辑、改完立刻看页面。
         with ui.row().classes("items-center gap-3"):
-            sel = ui.select(names, value=names[0], label="要生成的路径") \
-                .props("dense outlined").classes("w-56")
-            # 措辞从"运行多智能体链路"（实现视角）改为"生成我的学习资料"
-            # （用户视角，且与副标题的三种产出对应）。
+            # 「要生成的路径」下拉框已删除：内部自动选第一条路径，
+            # 用户只需要点一个按钮。
             ui.button("▶ 生成我的学习资料", on_click=lambda: run_live()) \
                 .props("unelevated")
 
         def run_live():
-            key = {"补根因": "root", "冲高频": "freq", "错题驱动": "wrong"}
+            # 路径不再由用户选：不传 selected_path，graph 内部会取路径 Agent
+            # 给出的第一条（见 yj/graph.py: agent_recommend）。
             with ui.dialog() as d, ui.card():
                 ui.label("多智能体执行中…").classes("font-semibold")
                 sp = ui.spinner(size="lg")
             d.open()
-            R = graph.run(user, selected_path=key.get(sel.value, "root"))
+            R = graph.run(user)
             d.close()
             render_run(R)
 
