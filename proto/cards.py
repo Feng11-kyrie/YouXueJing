@@ -110,6 +110,21 @@ def question_card(q, year, done, user):
         with ui.row().classes("items-center gap-3 mt-1"):
             result = ui.label("").classes("text-sm")
 
+            # 解析区：提交后显示。做题时看到解析就等于直接看答案，
+            # 所以只在**提交之后**（或这道题此前已作答）才出现。
+            exp_box = ui.column().classes("w-full gap-0 mt-1")
+
+            def show_explanation():
+                exp_box.clear()
+                sol = data.solution(year, q["题号"]) if year else None
+                if not sol:
+                    return
+                with exp_box:
+                    ui.label(f'解析（{sol["来源标注"]}）：') \
+                        .classes("t-xs").style("color:#B45309")
+                    ui.label(sol["文本"]).classes("t-sm whitespace-pre-wrap") \
+                        .style("line-height:1.9")
+
             def do_submit():
                 if not chosen["v"]:
                     hint.set_text("还没选选项 —— 请先点一个答案再提交。")
@@ -128,6 +143,7 @@ def question_card(q, year, done, user):
                     result.set_text(f'答错了 ✗　你选 {chosen["v"]}，'
                                     f'正确答案 {q["答案"]}')
                     result.style("color:#8C2C2C")
+                show_explanation()
 
             # 按钮**始终可点**：先前的做法是"未选就 disabled"，结果
             # "请先选一个答案"这个提示永远触发不到（按钮点不动 = 死代码），
@@ -141,6 +157,7 @@ def question_card(q, year, done, user):
             result.set_text(f'已作答：你选 {prev["chosen"]}，'
                             f'正确答案 {q["答案"]}')
             result.style(f'color:{"#1B5E36" if prev["is_correct"] else "#8C2C2C"}')
+            show_explanation()
 
 
 def _comprehensive_block(q, year, user):

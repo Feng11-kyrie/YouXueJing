@@ -967,15 +967,14 @@ def _exam_item(q, idx, user):
                     .classes("t-sm font-semibold").style("color:#1B5E36")
                 sol = _data.solution(q["年份"], q["题号"])
                 if sol:
-                    tag = ("AI 生成，未经官方核验" if sol["是否AI生成"]
-                           else "答案册抽取（OCR，可能有错字）")
-                    ui.label(f'解析（{tag}）：').classes("t-xs").style("color:#B45309")
+                    ui.label(f'解析（{sol["来源标注"]}）：') \
+                        .classes("t-xs").style("color:#B45309")
                     ui.label(sol["文本"]).classes("t-sm whitespace-pre-wrap") \
                         .style("line-height:1.9")
                 else:
-                    # 单选题目前没有解析来源 —— 如实说明，不编造
-                    ui.label("这道题暂无解析（本地答案册未覆盖单选题）。"
-                             "可对照教材或题库自行核对。").classes("t-xs muted")
+                    # 还没有解析时如实说明，不编造
+                    ui.label("这道题暂无解析。可对照教材或题库自行核对。") \
+                        .classes("t-xs muted")
 
         def toggle():
             shown["v"] = not shown["v"]

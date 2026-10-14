@@ -234,18 +234,51 @@ def solutions():
 
 def solution(year, num):
     """
-    取某年某道综合题的参考答案；没有则返回 None。
+    取某年某题的解析；没有则返回 None。
 
-    返回 {文本, 是否AI生成}：
-      · 答案册 OCR 抽取的那批「是否AI生成」为 False
-      · scripts/gen_solutions.py 补的缺失题目标记为 True
-    界面必须据此**分开标注** —— 把 AI 生成的解法标成官方答案就是编造。
+    两种来源，按题型分开存放：
+      · 综合题（41–47）→ data/solutions/<年>.json
+            答案册 OCR 抽取 + 缺失部分由 LLM 生成（gen_solutions.py）
+      · 单选题（1–40） → data/solutions/<年>-choice.json
+            全部由 LLM 生成（gen_choice_explanations.py）——
+            答案册不覆盖单选题，所以没有"官方解析"这一说
+
+    返回 {文本, 是否AI生成, 来源标注}。
+    界面必须据此**分开标注** —— 把 AI 写的解析标成官方答案就是编造。
     """
-    rec = solution_records().get(str(year)) or {}
-    item = (rec.get("解答") or {}).get(str(num))
-    if not item:
-        return None
-    return {"文本": item, "是否AI生成": str(num) in (rec.get("生成") or [])}
+    y = str(year)
+    n = str(num)
+    # 1) 综合题解析文件
+    rec = solution_records().get(y) or {}
+    item = (rec.get("解答") or {}).get(n)
+    if item:
+        is_ai = n in (rec.get("生成") or [])
+        return {"文本": item, "是否AI生成": is_ai,
+                "来源标注": ("AI 生成，未经官方核验" if is_ai
+                         else "答案册抽取（OCR，可能有错字）")}
+    # 2) 单选解析文件
+    cr = choice_records().get(y) or {}
+    item = (cr.get("解答") or {}).get(n)
+    if item:
+        return {"文本": item, "是否AI生成": True,
+                "来源标注": "AI 生成（未经官方核验）"}
+    return None
+
+
+@lru_cache(maxsize=1)
+def choice_records():
+    """{年份: {"解答": {题号: 解析}}} —— 单选题的 AI 解析"""
+    out = {}
+    import glob as _glob
+    for f in sorted(_glob.glob(os.path.join(BASE, "data", "solutions",
+                                            "*-choice.json"))):
+        try:
+            with open(f, encoding="utf-8") as fh:
+                rec = json.load(fh)
+            out[str(rec["年份"])] = rec
+        except Exception:                       # noqa: BLE001
+            continue
+    return out
 
 
 @lru_cache(maxsize=1)
