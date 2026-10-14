@@ -228,22 +228,48 @@ def main():
           all(v["chosen"] for v in seeded.values()),
           f"{sum(1 for v in seeded.values() if not v['chosen'])} 条为空")
 
-    print("\n=== 11) 已落盘的快照文件都应能被界面回放 ===")
-    import glob
-    snaps = sorted(glob.glob(os.path.join(BASE, "data", "prewarm", "*.json")))
-    if not snaps:
-        check("存在预跑快照", False, "data/prewarm 为空, 路演将没有兜底")
-    for p in snaps:
-        nm = os.path.basename(p)
-        try:
-            with open(p, encoding="utf-8") as f:
-                d = json.load(f)
-            ok_struct = all(k in d for k in ("生成时间", "LLM已配置", "内容来源", "结果"))
-            ok_res = bool(d["结果"].get("resources"))
-            check(f"{nm} 可回放", ok_struct and ok_res,
-                  f"{len(d['结果'].get('resources') or [])} 个考点资源")
-        except Exception as e:                          # noqa: BLE001
-            check(f"{nm} 可回放", False, f"{type(e).__name__}: {e}")
+    # 【原第 11 项已废弃】原来这里断言"data/prewarm 快照存在，否则路演没兜底"。
+    # 2026-10-14 用户明确要求删除回放快照功能（含 data/prewarm/ 与界面按钮），
+    # 所以"快照存在"不再是本项目的正确状态 —— 继续断言它反而会误导。
+    # 换成验证**现在真正该守的不变量**：解析覆盖率。
+    print("\n=== 11) 解析覆盖（真题/讲义都要能看到解析）===")
+    import glob as _glob
+    from yj import data as _data
+    _data.solution_records.cache_clear()
+    _data.choice_records.cache_clear()
+
+    choice_files = _glob.glob(os.path.join(BASE, "data", "solutions", "*-choice.json"))
+    n_choice = 0
+    for f in choice_files:
+        with open(f, encoding="utf-8") as fh:
+            n_choice += len(json.load(fh).get("解答") or {})
+    check("单选题解析已生成", n_choice >= 700,
+          f"{n_choice} 道（{len(choice_files)} 个年份文件）")
+
+    lv_files = [f for f in _glob.glob(os.path.join(BASE, "data", "solutions", "*.json"))
+                if not f.endswith("-choice.json")]
+    n_lv, missing = 0, []
+    for f in lv_files:
+        with open(f, encoding="utf-8") as fh:
+            rec = json.load(fh)
+        sol = rec.get("解答") or {}
+        n_lv += len(sol)
+        for num in range(41, 48):
+            if str(num) not in sol:
+                missing.append(f"{rec['年份']}-{num}")
+    check("综合题解析 18 年全覆盖", not missing,
+          f"{n_lv} 道" + (f"，缺 {missing[:6]}" if missing else "，无缺口"))
+
+    # 讲义配套真题必须都能取到解析（否则界面上会显示"暂无解析"）。
+    # 注意：不能用 graph.run("demo") —— 本测试为了隔离会把 store.DB 指向临时库，
+    # 临时库里没有 demo 的作答，路径会为空（实测返回 0/0 的假失败）。
+    # 所以直接对**题库全量**校验解析可取，不依赖任何用户数据。
+    from yj import data as _d2
+    _qs = [q for q in _d2.questions().values()
+           if q.get("题型") == "单项选择题"]
+    _cov = sum(1 for q in _qs if _d2.solution(q["year"], q["题号"]))
+    check("全部单选题都能取到解析", _qs and _cov == len(_qs),
+          f"{_cov}/{len(_qs)}")
 
     print("\n" + "=" * 60)
     if FAIL:
