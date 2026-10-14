@@ -16,7 +16,7 @@
     /diagnose               快速诊断（32 题）
     /profile                我的画像
     /paths                  学习路径
-    /notes                  讲义生成（多智能体）
+    /notes                  我的薄弱点（原"讲义生成"）
 
 与 Streamlit 版的能力对应关系写在 README 段落里；本文件不删旧版，
 两条路并存便于对照与回退。
@@ -45,7 +45,7 @@ NAV = [("/", "首页", "home"),
        ("/diagnose", "快速诊断", "monitor_heart"),
        ("/profile", "我的画像", "insights"),
        ("/paths", "学习路径", "route"),
-       ("/notes", "讲义生成", "menu_book")]
+       ("/notes", "我的薄弱点", "menu_book")]
 
 ui.add_head_html("""
 <style>
@@ -840,16 +840,29 @@ def paths_page(user: str = "demo"):
                  "而不是直接练你表面最弱的那一章。").classes("t-xs muted")
 
 
-# ================================================================ 讲义生成
+# ================================================================ 我的薄弱点
 @ui.page("/notes")
 def notes_page(user: str = "demo"):
     snap_name = {"v": None}
     a, mk = store.get_answers(user), store.get_marks(user)
     with shell("/notes", user):
-        _title("讲义生成（多智能体）")
-        ui.label("这一页跑的是 LangGraph 六 Agent 链路："
-                 "准备 → 诊断 → 画像 → 路径 → 生成 → 复核。") \
+        # 【改名理由】原名"讲义生成"是实现视角（生成是工具的动作），
+        # 而且把最有价值的部分盖住了 —— 整条链路的重点是"前面的诊断决定给你
+        # 生成哪几个考点"。用户提议的"个人薄弱点追踪"定位更好，但"追踪"描述
+        # 的不是这页在做的事（追踪在「我的画像」那页）：
+        #   画像   = 我现在的数据长什么样
+        #   薄弱点 = 针对这些弱点，给我讲义/速记/配套真题
+        # 所以采用"我的薄弱点"作名字，用副标题说清产出与链路。
+        _title("我的薄弱点")
+        # 用 ui.label 就**不能写 Markdown 加粗** —— 星号会原样显示出来
+        # （实测：副标题里出现了字面的 **）。要加粗得改用 ui.markdown。
+        # 这里选择不加粗：靠 ui.label 的体量已经够突出。
+        ui.label("按你答错和自报的薄弱考点，生成讲义 · 知识点速记 · 配套真题"
+                 "（只给系统算出来最该补的那几个考点，不是把 266 个考点全生成）。") \
             .classes("t-body")
+        ui.label("背后是 LangGraph 六 Agent 链路："
+                 "准备 → 诊断 → 画像 → 路径 → 生成 → 复核。") \
+            .classes("t-sm muted")
         ok, msg = llm.status()
         (ui.label if ok else ui.label)(("● " + msg) if ok else ("● " + msg)) \
             .classes("t-sm").style(f'color:{"#1B5E36" if ok else "#8A6D3B"}')
