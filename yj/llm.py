@@ -32,6 +32,14 @@ DEFAULTS = {
     "timeout": 60,
     "retries": 2,
     "temperature": 0.3,
+    # 【必须显式设 max_tokens】提示词要求讲义 600 字以内，中文约 1 字 1.5 token，
+    # 600 字 ≈ 900 token —— 原来的默认值（服务端若按 1024 之类的上限）刚好卡线，
+    # 而且**换成推理模型会直接崩**：实测 deepseek-v4-pro 一次回答里
+    # 952 个输出 token 中有 833 个是"思考"，正文只剩 195 字；
+    # 若上限给小了（我用 20 试过），思考占满配额，**正文返回空字符串**，
+    # 表现为"调用成功但讲义是空的"，极难排查。
+    # 给 4000 留足余量：普通模型够用，推理模型的思考也吃得下。
+    "max_tokens": 4000,
 }
 
 
@@ -83,10 +91,18 @@ def _secrets():
 
 
 def status():
-    """返回 (是否已配置, 说明文字)"""
+    """
+    返回 (是否已配置, 说明文字)。
+
+    说明文字里给的是**请求用的模型名**，并注明别名可能被路由。
+    真实服务的模型名在 llm.complete() 的返回里（resp.model），
+    因为只有发起调用后才知道 —— 实测 deepseek-chat 会被路由到
+    deepseek-flash。界面上要展示"真正干活的模型"时用那个值。
+    """
     cfg = _secrets()
     if cfg.get("api_key"):
-        return True, f"已配置：{cfg['model']} @ {cfg['base_url']}"
+        return True, (f"已配置：请求模型 {cfg['model']} @ {cfg['base_url']}"
+                      f"（别名可能被路由到实际模型，以调用返回为准）")
     return False, "未配置 API key —— 当前为演示模式（模板 + 真实数据，非 AI 生成）"
 
 
@@ -126,6 +142,7 @@ def complete(task, prompt, payload=None, use_cache=True):
         return {"text": None, "source": "template"}
 
     last_err = None
+    _served = {}          # 服务端实际服务的模型名（resp.model）
     for attempt in range(cfg["retries"] + 1):
         try:
             from openai import OpenAI
@@ -134,6 +151,7 @@ def complete(task, prompt, payload=None, use_cache=True):
             resp = client.chat.completions.create(
                 model=cfg["model"],
                 temperature=cfg["temperature"],
+                max_tokens=cfg.get("max_tokens", 4000),
                 messages=[
                     {"role": "system",
                      "content": "你是 408 考研学习助理。只依据给定的考点与真题统计作答，"
@@ -142,9 +160,15 @@ def complete(task, prompt, payload=None, use_cache=True):
                 ],
             )
             text = resp.choices[0].message.content or ""
+            # 【记录"真正干活的模型"】实测：请求 deepseek-chat 时服务端返回的
+            # resp.model 是 deepseek-flash —— 即别名会被路由到别的模型上。
+            # 如果界面只显示我们"请求的名字"，就是在说一个不准确的模型名
+            # （本项目红线要求表述真实，所以这里以服务端返回为准）。
+            _served["model"] = getattr(resp, "model", None) or cfg["model"]
             if use_cache:
                 store.cache_set(key, {"text": text, "task": task})
-            return {"text": text, "source": "llm"}
+            return {"text": text, "source": "llm",
+                    "模型": _served.get("model", cfg["model"])}
         except Exception as e:                      # noqa: BLE001
             last_err = e
             if attempt < cfg["retries"]:
