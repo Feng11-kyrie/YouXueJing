@@ -619,8 +619,14 @@ def practice(subject: str = None, chapter: str = None,
                      + f" 共 {len(no_q)} 个考点暂无题目，只能用于生成讲义。") \
                 .classes("text-sm text-amber-700")
         with ui.row().classes("gap-3 items-center"):
-            ui.button("▶ 开始练习（抽 5 道）", on_click=lambda: goto(go=1)) \
-                .props("unelevated")
+            # 按钮文案要给出**真实题数**，不能写死"抽 5 道"（那是旧的截断行为）。
+            # 用勾选考点在题库里的单选题总数计算。
+            _pool_n = sum(1 for l in marks
+                          for q in data.questions().values()
+                          if q["主考点"] == l
+                          and q["题型"] == "单项选择题" and q.get("答案"))
+            ui.button(f"▶ 开始练习（共 {_pool_n} 道真题）",
+                      on_click=lambda: goto(go=1)).props("unelevated")
             ui.button("清空选择", on_click=lambda: (store.set_marks(user, set()),
                                                   ui.navigate.reload())).props("flat")
         if not go:
@@ -639,9 +645,15 @@ def practice(subject: str = None, chapter: str = None,
             ui.label("你选的这些考点在题库里暂时没有对应的真题。"
                      "建议换几个标着「·N题」的考点。").classes("text-sm text-orange-700")
             return
-        show = pool[:5]
-        ui.label(f"练习：抽 {len(show)} 道（优先你没做过的、难度低的）") \
+        # 【不截断】用户明确要求："题库里有几道就几道"。
+        # 原来这里写死 pool[:5] —— 与讲义页同一个毛病（那边也把 5 改成了全量）。
+        # 实测规模可控：单考点最多 17 道；勾 5 个热点考点 76 道、勾 10 个 139 道。
+        # 排序仍是"没做过的优先 → 难度低优先 → 年份新优先"，越靠前越该先做。
+        show = pool
+        ui.label(f"练习：共 {len(show)} 道（优先你没做过的、难度低的）") \
             .classes("t-lead font-bold")
+        ui.label("按「未做过 → 难度低 → 年份新」排序；已做过的题会显示你的作答与解析。") \
+            .classes("t-sm muted")
         for l, q in show:
             question_card(q, q["year"], done, user)
 
