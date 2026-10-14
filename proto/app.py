@@ -894,12 +894,11 @@ def notes_page(user: str = "demo"):
                             with ui.tab_panel("知识点速记"):
                                 ui.markdown(x["速记"])
                             with ui.tab_panel("配套真题"):
+                                ui.label("这些题都来自该考点的历年真题，题干与选项直接列出，"
+                                         "点「查看答案」才显示答案与解析。") \
+                                    .classes("t-sm muted mb-1")
                                 for i, q in enumerate(x["习题"], 1):
-                                    ui.label(f'{i}. {q["年份"]} 年 第 {q["题号"]} 题'
-                                             f'（难度 {q["难度"]}）').classes("t-sm")
-                                    ui.label(q["题干"]).classes("t-sm")
-                                    with ui.expansion("查看答案"):
-                                        ui.label(f'正确答案：{q["答案"]}')
+                                    _exam_item(q, i, user)
 
         # 【注意】这一块（下拉 + 运行按钮）必须在 run_live 之前创建：
         # run_live 里用到了 sel.value。我上一轮删"回放快照"时用脚本按区间切除，
@@ -920,6 +919,70 @@ def notes_page(user: str = "demo"):
             d.close()
             render_run(R)
 
+
+
+# ================================================================ 小工具
+def _exam_item(q, idx, user):
+    """
+    讲义页「配套真题」里的一道题。
+
+    用户的要求（原话）：
+      "希望讲义生成中的相关真题中直接把这些题目以及答案解析（如果用户点了
+       答案这个选项再显示）直接显示出来，不用让用户再去一个个查找"
+
+    所以这里不再只给"年份 + 题号"让人自己去翻，而是**题干、选项全部铺出来**；
+    答案与解析默认隐藏，点按钮才显示 —— 保留自测空间。
+
+    解析来源分三种，界面分别标注（诚实红线）：
+      · 综合题 41–47  → 答案册抽取 / AI 生成（data/solutions）
+      · 单选题        → 目前没有解析，只显示正确答案（不编造）
+    """
+    from yj import data as _data
+    with ui.card().classes("softcard w-full p-3 gap-1"):
+        with ui.row().classes("items-center gap-2 no-wrap"):
+            ui.label(f'{idx}. {q["年份"]} 年 第 {q["题号"]} 题').classes("t-sm font-semibold")
+            ui.label(f'难度 {q.get("难度")}').classes("t-xs muted")
+            if q.get("需插图") and not q.get("图片"):
+                ui.label("原卷有插图（未抽取）").classes("t-xs").style("color:#B45309")
+
+        ui.label(q["题干"]).classes("t-sm whitespace-pre-wrap").style("line-height:1.9")
+        if q.get("图片"):
+            ui.image(f'data/{q["图片"]}').classes("max-w-md rounded")
+
+        opts = q.get("选项") or {}
+        if opts:
+            with ui.column().classes("gap-0 mt-1"):
+                for k in sorted(opts):
+                    ui.label(f'{k}. {opts[k]}').classes("t-sm").style("line-height:1.8")
+
+        holder = ui.column().classes("w-full gap-1 mt-1")
+        shown = {"v": False}
+
+        def render():
+            holder.clear()
+            if not shown["v"]:
+                return
+            with holder:
+                ui.label(f'正确答案：{q["答案"]}') \
+                    .classes("t-sm font-semibold").style("color:#1B5E36")
+                sol = _data.solution(q["年份"], q["题号"])
+                if sol:
+                    tag = ("AI 生成，未经官方核验" if sol["是否AI生成"]
+                           else "答案册抽取（OCR，可能有错字）")
+                    ui.label(f'解析（{tag}）：').classes("t-xs").style("color:#B45309")
+                    ui.label(sol["文本"]).classes("t-sm whitespace-pre-wrap") \
+                        .style("line-height:1.9")
+                else:
+                    # 单选题目前没有解析来源 —— 如实说明，不编造
+                    ui.label("这道题暂无解析（本地答案册未覆盖单选题）。"
+                             "可对照教材或题库自行核对。").classes("t-xs muted")
+
+        def toggle():
+            shown["v"] = not shown["v"]
+            btn.set_text("收起答案" if shown["v"] else "查看答案")
+            render()
+
+        btn = ui.button("查看答案", on_click=toggle).props("flat dense")
 
 
 # ================================================================ 小工具
