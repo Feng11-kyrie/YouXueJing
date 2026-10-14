@@ -845,16 +845,19 @@ def notes_page(user: str = "demo"):
 
         rec = path_mod.recommend(a, marks=mk)
         names = [p["名称"] for p in rec["路径"]] or ["补根因"]
-        holder = {"run": None, "meta": None}
+        holder = {"run": None}
         result = ui.column().classes("w-full gap-2")
 
         def render_run(R):
             result.clear()
             with result:
-                if holder["meta"]:
-                    ui.label(holder["meta"]).classes("t-sm") \
-                        .style("color:#1B5E36")
-                with ui.expansion("执行轨迹", value=True).classes("w-full"):
+                # 【默认不展开】用户明确要求："运行的时候过程不要显示，
+                # 用户又不会看这个。"（原话）
+                # 这个判断是对的：学生只关心讲义内容，"准备 Agent/诊断 Agent…"
+                # 那串是给开发看的。但也不删掉 —— 面试/路演被问到"多智能体怎么
+                # 调度的"时，展开它是最直接的证据，所以收进默认折叠的技术细节里。
+                with ui.expansion("生成过程（技术细节，一般不用看）",
+                                  value=False).classes("w-full"):
                     for t in R.get("traced", []):
                         ui.label(f'{t["agent"]} — {t["detail"]}').classes("t-sm")
                 rv = R.get("review") or {}
@@ -898,6 +901,15 @@ def notes_page(user: str = "demo"):
                                     with ui.expansion("查看答案"):
                                         ui.label(f'正确答案：{q["答案"]}')
 
+        # 【注意】这一块（下拉 + 运行按钮）必须在 run_live 之前创建：
+        # run_live 里用到了 sel.value。我上一轮删"回放快照"时用脚本按区间切除，
+        # 把这块一起删掉了 —— 表现为页面只剩标题、按钮全无（截图确认）。
+        with ui.row().classes("items-center gap-3"):
+            sel = ui.select(names, value=names[0], label="要生成的路径") \
+                .props("dense outlined").classes("w-56")
+            ui.button("▶ 运行多智能体链路", on_click=lambda: run_live()) \
+                .props("unelevated")
+
         def run_live():
             key = {"补根因": "root", "冲高频": "freq", "错题驱动": "wrong"}
             with ui.dialog() as d, ui.card():
@@ -906,34 +918,8 @@ def notes_page(user: str = "demo"):
             d.open()
             R = graph.run(user, selected_path=key.get(sel.value, "root"))
             d.close()
-            holder["meta"] = None
             render_run(R)
 
-        def replay():
-            if not snaps:
-                ui.notify("没有预跑快照，请先跑 scripts/prewarm.py", type="warning")
-                return
-            import json
-            with open(f'data/prewarm/{snap_sel.value}.json', encoding="utf-8") as f:
-                d = json.load(f)
-            holder["meta"] = (f'快照「{snap_sel.value}」· 预跑于 {d["生成时间"]} · '
-                              f'当时 LLM {"已配置" if d["LLM已配置"] else "未配置"} · '
-                              f'内容来源 {d["内容来源"]}')
-            render_run(d["结果"])
-
-        import glob
-        snaps = sorted(os.path.basename(x)[:-5]
-                       for x in glob.glob("data/prewarm/*.json"))
-        with ui.row().classes("items-center gap-3"):
-            sel = ui.select(names, value=names[0], label="要生成的路径") \
-                .props("dense outlined").classes("w-56")
-            ui.button("▶ 运行多智能体链路", on_click=run_live).props("unelevated")
-        if snaps:
-            with ui.row().classes("items-center gap-3"):
-                snap_sel = ui.select(snaps, value=snaps[0], label="预跑快照") \
-                    .props("dense outlined").classes("w-56")
-                ui.button("回放快照（路演兜底）", on_click=replay).props("flat")
-        render_run({"traced": [], "review": {}, "resources": []})
 
 
 # ================================================================ 小工具
