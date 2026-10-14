@@ -157,3 +157,62 @@ def get_selfscore(user_id):
         except (IndexError, ValueError):
             continue
     return out
+
+
+# ---------------------------------------------------------------- 清空历史
+# 为什么需要：测评时最怕"这条作答是我之前随手点出来的" —— 画像、诊断、路径
+# 全都建立在作答记录上，脏数据会让演示结果不可信。
+#
+# 【绝对不能碰的表】cache —— 里面是 742 条 LLM 生成结果（讲义、720 道单选解析、
+# 综合题解析）。清掉它等于把花过钱和时间生成的内容全扔了，下次运行要重新生成。
+# 所以下面所有清空函数都**只操作 answers / marks / users**。
+def reset_user(user_id):
+    """
+    清空**某个用户**的全部历史：作答记录 + 考点勾选。
+    保留 users 里那一行（用户还在，只是没数据了）。
+
+    返回被清掉的 (作答条数, 勾选条数) —— 让界面能如实报告做了什么，
+    而不是只说"已清空"。
+    """
+    with conn() as c:
+        n_a = c.execute("SELECT COUNT(*) FROM answers WHERE user_id=?",
+                        (user_id,)).fetchone()[0]
+        n_m = c.execute("SELECT COUNT(*) FROM marks WHERE user_id=?",
+                        (user_id,)).fetchone()[0]
+        c.execute("DELETE FROM answers WHERE user_id=?", (user_id,))
+        c.execute("DELETE FROM marks WHERE user_id=?", (user_id,))
+    return n_a, n_m
+
+
+def purge_others(keep=("demo",)):
+    """
+    清掉**除白名单外**所有用户的历史与用户记录（测评环境清理用）。
+
+    实测积累情况：76 个用户里只有 1 个是真人（demo），其余 75 个是开发/测试
+    留下的（bw_paper、reg_ok、testuser、各种 8 位随机 id）。它们不影响正确性，
+    但会让"用户数"之类的统计看起来很脏。
+
+    keep：保留的用户 id（默认保留 demo —— 它是有 32 条作答的演示画像）。
+    返回 {清除的作答数, 清除的勾选数, 清除的用户数}。
+    """
+    keep = tuple(keep or ())
+    ph = ",".join("?" for _ in keep) or "''"
+    with conn() as c:
+        n_a = c.execute(f"DELETE FROM answers WHERE user_id NOT IN ({ph})",
+                        keep).rowcount
+        n_m = c.execute(f"DELETE FROM marks WHERE user_id NOT IN ({ph})",
+                        keep).rowcount
+        n_u = c.execute(f"DELETE FROM users WHERE user_id NOT IN ({ph})",
+                        keep).rowcount
+    return {"作答": n_a, "勾选": n_m, "用户": n_u}
+
+
+def stats():
+    """给界面显示"现在库里有什么" —— 清空前让用户知道自己在删什么"""
+    with conn() as c:
+        return {
+            "用户数": c.execute("SELECT COUNT(*) FROM users").fetchone()[0],
+            "作答条数": c.execute("SELECT COUNT(*) FROM answers").fetchone()[0],
+            "勾选条数": c.execute("SELECT COUNT(*) FROM marks").fetchone()[0],
+            "LLM缓存条数": c.execute("SELECT COUNT(*) FROM cache").fetchone()[0],
+        }

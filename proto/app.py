@@ -705,6 +705,12 @@ def profile_page(user: str = "demo"):
     a, mk = store.get_answers(user), store.get_marks(user)
     with shell("/profile", user):
         _title("我的画像")
+
+        # 【位置很关键】历史清空入口必须在"没有数据就 return"之前 ——
+        # 清空之后本页就没有数据了，如果把入口放在后面，用户清完就再也找不到它，
+        # 只能再手动做几道题把页面"喂"出数据才能再来清一次（实测的荒谬循环）。
+        _reset_panel(user)
+
         if not a and not mk:
             ui.label("还没有任何数据。你可以：") \
                 .classes("t-sm").style("color:#8A6D3B")
@@ -949,6 +955,71 @@ def notes_page(user: str = "demo"):
             d.close()
             render_run(R)
 
+
+
+def _reset_panel(user):
+    """
+    历史记录清空面板（用户要求："一键刷新历史纪录的选项，
+    这样我测评的时候就不会有脏数据出现了"）。
+
+    三个必须做对的地方：
+      ① **绝不碰 cache 表** —— 那里是 742 条 LLM 生成结果（讲义、解析），
+         清掉等于把花过钱和时间生成的内容扔了，下次运行要重新生成。
+      ② **二次确认** —— 清空不可撤销，用对话框明确说出"将删除 N 条作答记录"，
+         而不是点一下就没了。
+      ③ **如实报告删了什么** —— 清空后显示"已清空 X 条作答、Y 个勾选"，
+         不用"操作成功"这种什么都没说的话糊过去。
+    """
+    st = store.stats()
+    n_my_a = len(store.get_answers(user))
+    n_my_m = len(store.get_marks(user))
+
+    with ui.expansion("⚙ 历史记录管理（测评前清空脏数据）").classes("w-full"):
+        ui.label(f'当前库内：用户 {st["用户数"]} 个 · 作答 {st["作答条数"]} 条 · '
+                 f'勾选 {st["勾选条数"]} 条 · LLM 缓存 {st["LLM缓存条数"]} 条') \
+            .classes("t-sm muted")
+        ui.label(f'你（{user}）名下：作答 {n_my_a} 条 · 勾选 {n_my_m} 个') \
+            .classes("t-sm font-semibold")
+        ui.label("清空只影响作答记录与考点勾选 —— "
+                 "LLM 生成的讲义与解析缓存会保留（否则要重新花钱生成）。") \
+            .classes("t-xs").style("color:#B45309")
+
+        result = ui.label("").classes("t-sm")
+        radio = ui.radio(
+            {"me": f"只清空我自己（{user}）的历史",
+             "others": "清空所有测试账号（保留 demo 演示画像）"},
+            value="me").props("dense")
+
+        def do_reset():
+            if radio.value == "me":
+                na, nm = store.reset_user(user)
+                result.set_text(f"已清空 {user}：作答 {na} 条、勾选 {nm} 个")
+            else:
+                d = store.purge_others(keep=("demo",))
+                result.set_text(f'已清空其他账号：作答 {d["作答"]} 条、'
+                                f'勾选 {d["勾选"]} 个、用户 {d["用户"]} 个')
+            result.style("color:#1B5E36")
+            ui.navigate.reload()
+
+        def ask():
+            with ui.dialog() as d, ui.card():
+                ui.label("确认清空？").classes("t-lead font-semibold")
+                if radio.value == "me":
+                    ui.label(f"将删除你（{user}）的 {n_my_a} 条作答记录"
+                             f"和 {n_my_m} 个考点勾选。此操作不可撤销。").classes("t-sm")
+                else:
+                    ui.label(f'将删除除 demo 外所有账号的数据'
+                             f'（共 {st["作答条数"] - n_my_a} 条作答）。'
+                             f"此操作不可撤销。").classes("t-sm")
+                ui.label("LLM 缓存（讲义、解析）不会被删除。") \
+                    .classes("t-xs muted")
+                with ui.row().classes("gap-2"):
+                    ui.button("取消", on_click=d.close).props("flat")
+                    ui.button("确认清空", on_click=lambda: (d.close(), do_reset())) \
+                        .props("unelevated color=negative")
+            d.open()
+
+        ui.button("清空历史记录", on_click=ask).props("outline color=negative")
 
 
 # ================================================================ 小工具
