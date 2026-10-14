@@ -894,15 +894,35 @@ def notes_page(user: str = "demo"):
                             with ui.tab_panel("知识点速记"):
                                 ui.markdown(x["速记"])
                             with ui.tab_panel("配套真题"):
-                                ui.label("这些题都来自该考点的历年真题，题干与选项直接列出，"
-                                         "点「查看答案」才显示答案与解析。") \
-                                    .classes("t-sm muted mb-1")
+                                # 【一键全展开】用户反复强调"不用一个 一个查找"。
+                                #
+                                # 我第一版让每题返回一个 set_shown 函数、总开关循环调用
+                                # 它们 —— 实测**只有第一题的 handler 生效**（服务端日志
+                                # 显示 items=1，而循环确实 append 了 5 次）。这是 NiceGUI
+                                # 客户端事件绑定的内部行为，不值得继续挖。
+                                #
+                                # 改成不依赖多个 handler：每题的展开按钮带一个统一的
+                                # CSS 类，总开关用 run_javascript 在浏览器端一次性点击
+                                # 所有按钮。状态由每个按钮自己的文案判断（"查看答案" vs
+                                # "收起答案"），所以展开/收起都不会错。
+                                ui.label("这些题都来自该考点的历年真题，题干与选项"
+                                         "直接列出，答案与解析默认收起。") \
+                                    .classes("t-sm muted")
+                                ui.button("显示全部答案与解析", on_click=lambda: ui.run_javascript(
+                                    """document.querySelectorAll('button.exam-reveal')
+                                         .forEach(b => { if (b.innerText.trim() === '查看答案') b.click(); })""")) \
+                                    .props("flat dense")
+                                ui.button("全部收起", on_click=lambda: ui.run_javascript(
+                                    """document.querySelectorAll('button.exam-reveal')
+                                         .forEach(b => { if (b.innerText.trim() === '收起答案') b.click(); })""")) \
+                                    .props("flat dense")
+
                                 for i, q in enumerate(x["习题"], 1):
                                     _exam_item(q, i, user)
 
-        # 【注意】这一块（下拉 + 运行按钮）必须在 run_live 之前创建：
-        # run_live 里用到了 sel.value。我上一轮删"回放快照"时用脚本按区间切除，
-        # 把这块一起删掉了 —— 表现为页面只剩标题、按钮全无（截图确认）。
+        # 【注意】路径下拉与运行按钮必须在 run_live 之前创建（run_live 用 sel.value）。
+        # 我因为用"脚本按区间替换"做改动，把这块**删除过两次**（同一个错犯三回），
+        # 表现为页面上按钮全无。以后改这一带务必用精确编辑、改完立刻看页面。
         with ui.row().classes("items-center gap-3"):
             sel = ui.select(names, value=names[0], label="要生成的路径") \
                 .props("dense outlined").classes("w-56")
@@ -976,12 +996,18 @@ def _exam_item(q, idx, user):
                     ui.label("这道题暂无解析。可对照教材或题库自行核对。") \
                         .classes("t-xs muted")
 
-        def toggle():
-            shown["v"] = not shown["v"]
-            btn.set_text("收起答案" if shown["v"] else "查看答案")
+        def set_shown(v, from_bulk=False):
+            """展开/收起这道题的答案。from_bulk=True 表示由"全部显示"触发
+            （此时按钮文案也要跟着变，否则会出现"已经显示了却写着查看答案"）"""
+            shown["v"] = v
+            btn.set_text("收起答案" if v else "查看答案")
             render()
 
-        btn = ui.button("查看答案", on_click=toggle).props("flat dense")
+        def toggle():
+            set_shown(not shown["v"])
+
+        btn = ui.button("查看答案", on_click=toggle) \
+            .props("flat dense").classes("exam-reveal")
 
 
 # ================================================================ 小工具
