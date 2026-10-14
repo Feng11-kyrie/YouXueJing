@@ -70,9 +70,15 @@ def ensure_user(user_id):
                   (user_id, _now()))
 
 
-def record_answer(user_id, question_id, chosen, is_correct, source="practice"):
+def record_answer(user_id, question_id, chosen, is_correct,
+                   source="practice", at=None):
     """
     记录一次作答。
+
+    at: 可选，指定作答时间（ISO 字符串或 datetime）。默认取当前时间。
+    **播种演示数据时必须能指定** —— 否则一批作答的时间戳会完全相同
+    （实测踩到：32 条都在同一秒），首页的学习记录图只有一根柱、
+    "今天 N 题"也成了假象。
 
     【底线防线】chosen 为空时**直接丢弃**，不写库。
     原因：`st.radio` 默认会选中第一项，但 session_state 里可能是空，
@@ -94,12 +100,21 @@ def record_answer(user_id, question_id, chosen, is_correct, source="practice"):
                        is_correct=excluded.is_correct,
                        source=excluded.source,
                        answered_at=excluded.answered_at""",
-                  (user_id, question_id, chosen, 1 if is_correct else 0, source, _now()))
+                  (user_id, question_id, chosen, 1 if is_correct else 0, source,
+                   (at.isoformat(timespec="seconds") if hasattr(at, "isoformat")
+                    else at) or _now()))
     return True
 
 
 def get_answers(user_id, source=None):
-    """返回 {question_id: {'chosen':.., 'is_correct':bool, 'source':..}}"""
+    """
+    返回 {question_id: {'chosen':.., 'is_correct':bool, 'source':..,
+                        'answered_at':..}}
+
+    answered_at 是给首页"做题记录总结"用的（学习时间线按天聚合）。
+    原来这里不返回它，与 proto/store_lite.py 的行为不一致 —— 两个应用读同一个
+    库，字段应当一致，否则同一份数据在两边能算出的东西不一样。
+    """
     sql = "SELECT * FROM answers WHERE user_id=?"
     args = [user_id]
     if source:
@@ -109,7 +124,8 @@ def get_answers(user_id, source=None):
         rows = c.execute(sql, args).fetchall()
     return {r["question_id"]: {"chosen": r["chosen"],
                                "is_correct": bool(r["is_correct"]),
-                               "source": r["source"]} for r in rows}
+                               "source": r["source"],
+                               "answered_at": r["answered_at"]} for r in rows}
 
 
 def reset_user(user_id):

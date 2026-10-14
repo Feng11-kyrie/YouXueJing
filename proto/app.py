@@ -246,176 +246,185 @@ def shell(active: str, user: str):
 @ui.page("/")
 def home(user: str = "demo"):
     """
-    首页。这一版是重做的，针对四条批评：
+    首页 = **我的做题记录**（用户要求："首页去总结用户的做题记录什么的"）。
 
-      ① "首屏 2/3 死白" —— 真 bug：那行漏了 w-full，卡片按内容收缩撑不开
-      ② "没有任何个性化内容" —— 现在首屏就是**你自己的学情**（掌握度/薄弱章/错题）
-      ③ "三张卡片平级罗列，不知道点哪个" —— 改成一个**主行动点** + 次选项；
-         一屏只有一个主色按钮，其余是文字链接
-      ④ "文案是申报书/操作说明/技术术语" —— 全部改成学生话：
-         · 不说"依赖边"（图数据库术语）
-         · 不说"多智能体生成讲义"（学生不关心几个 agent）
-         · 不说"面向 408 考研的 AI 个性化学习资源生成平台"（申报书语言）
+    为什么改成这个定位
+    ------------------
+    原来的首页想同时做三件事，结果每件都不彻底，而且**有两处是冗余的**：
+      · 「题库分布」（197 题 · 56 考点…）—— 静态数字，与用户无关，用户从不
+        需要知道题库有多少题
+      · 累计 KPI 四个数字 —— 与「我的画像」页首屏**完全相同**
+      · 「最近练习」12 条清单 —— 与真题页"错题模式"重复
+    所以现在只做一件事：**把做题记录总结清楚**。
+
+    与「我的画像」页的分工（避免又一次重复）：
+        首页     = 我最近在做什么（时间线、节奏、趋势）
+        我的画像 = 我现在会什么（章节强弱、知识结构）
+    两页都基于同一份作答记录，但视角不同。
+
+    数据前提：演示画像的时间戳必须**分散到多天**。原来 32 条全写在同一秒
+    （seed_user 的旧实现），柱图上只有一根柱、"今天 N 题"也是假象 ——
+    一个显示不出一周趋势的记录面板比没有更糟。已修见 scripts/prewarm.py。
     """
     store.ensure_user(user)
     a, mk = store.get_answers(user), store.get_marks(user)
 
     with shell("/", user):
-        # ---------- 首屏
-        # 用户两条要求，都采纳：
-        #   ① 删掉"你好，demo" —— demo 是用户 id，不是名字，喊出来很怪
-        #   ② 掌握度不上首页 —— 见下方说明
-        #
-        # 为什么要拿掉掌握度：它来自 32 道诊断题，分摊到 4 科是**每科 8 题**，
-        # 章节级更薄：16 个章节只做了 1 题、8 个只做了 2 题。
-        # 公式是 (答对+1)/(题数+2) 的平滑 —— 数字是真算的，但 1 题答对就显示
-        # "67% 掌握度"属于**伪精确**：看着可信，实际证明不了任何事。
-        # 所以首页不再放这个百分比，改为只陈述事实（做了多少、对了多少）。
-        # 精确数字留在「我的画像」页，那里会同时标出样本量。
-        ui.label("今天练哪几道").classes("text-2xl font-bold")
-        ui.label("离 408 还有多少天不重要，重要的是今天练哪几道。") \
-            .classes("t-body sub")
-
-        # 注意：删掌握度卡片时不要把下面这两行一起删了 ——
-        # weakest 是"今天建议先补"的依据，删掉首页直接 500（实测踩过）。
+        from collections import Counter
+        today = datetime.date.today()
+        wrong_ids = [qid for qid, r in a.items() if not r["is_correct"]]
         prof = profile_mod.build(a, mk)
         weakest = prof["薄弱章节"][0] if prof["薄弱章节"] else None
 
-        # ---------- 主行动点：只有这一个主色按钮
-        with ui.card().classes("softcard w-full p-5 gap-2"):
-            if weakest:
+        # ---------- 首屏：一句话说清"你最近练了多少"
+        ui.label("我的做题记录").classes("text-2xl font-bold")
+        if not a:
+            ui.label("还没有做题记录。先做一次诊断，或挑几个考点练几道。") \
+                .classes("t-body sub")
+        else:
+            by_day = Counter(str(r.get("answered_at", ""))[:10]
+                             for r in a.values())
+            wk_start = today - datetime.timedelta(days=6)
+            wk = [v for k, v in by_day.items()
+                  if k >= wk_start.isoformat()]
+            ui.label(f"共 {len(a)} 题　·　答对 {len(a) - len(wrong_ids)} 题　·　"
+                     f"近 7 天做了 {sum(wk)} 题") \
+                .classes("t-body sub")
+
+        # ---------- 主行动点：仍然只给一个按钮（保留"今天该干嘛"的入口）
+        if weakest:
+            with ui.card().classes("softcard w-full p-4 gap-1").style("max-width:52rem"):
                 ui.label(f'今天建议先补：{weakest["章节名"]}') \
                     .classes("t-lead font-bold")
-                # 不写"你的掌握度 XX%"：那一章可能只做过 1 题，百分比没意义。
-                # 只给可追溯的事实：这一章 18 年考了多少次。
-                # （顺带修一个我的笔误：这段说明被写成了 t-nav，字号比正文小）
-                ui.label(f'这一章 18 年考了 {weakest["考频"]} 次，'
-                         f'是考频最高的薄弱章节之一 —— 先补它性价比最高。') \
-                    .classes("t-body sub")
+                # 【措辞修正】原来写"这一章 18 年考了 141 次" —— 会被读成
+                # "考了 141 场"。核实：141 是**该章 21 个叶子考点的考查次数之和**
+                # （单考点最高才 24 次）。必须说清口径，否则是夸大。
+                _ch = weakest.get("chapter")
+                _lv = data.chapter_leaves().get(_ch, [])
+                _fq = data.freq()
+                _q = sum(data.leaf_question_count().get(l, 0) for l in _lv)
+                ui.label(f'这一章有 {len(_lv)} 个考点，18 年真题里共出现 '
+                         f'{weakest["考频"]} 次（各考点累计）；'
+                         f'题库里有 {_q} 道该章的真题可练。') \
+                    .classes("t-sm sub")
+                ui.label("它是你目前最薄弱、同时考得又多的一章 —— 先补它性价比最高。") \
+                    .classes("t-sm sub")
                 ui.button("从这一章开始练",
                           on_click=lambda: ui.navigate.to(
                               f'/practice?subject={weakest.get("学科码", "DS")}'
-                              f'&user={user}')).props("unelevated color=primary")
-            else:
-                # 全科都不弱：给错题复习
-                wrong = [qid for qid, r in a.items() if not r["is_correct"]]
-                ui.label(f"你有 {len(wrong)} 道错题待复习" if wrong
-                         else "目前没有明显薄弱章节").classes("t-lead font-bold")
-                ui.label("做错的题最能暴露问题。按年份重做一遍这些题。" if wrong
-                         else "可以去真题页按年份刷卷子，或者挑新的考点。") \
-                    .classes("t-nav sub")
-                ui.button("去真题页错题模式",
-                          on_click=lambda: ui.navigate.to(
-                              f"/exam?view=只错题&user={user}")) \
-                    .props("unelevated color=primary")
+                              f'&user={user}')).props("unelevated")
 
-        # ---------- 下面两栏
-        # 用户第三次指出"留白那么多"。实测（1540x1000）：
-        #   内容结束于 y=685，视口 1000 → 下方空 315px
-        #   内容区右边界 1434，视口 1540 → 横向空 106px（max-w-6xl 限制）
-        # 空白的正确解法不是加装饰，而是放进用户真的想知道的**数据**。
-        from collections import Counter
-        wrong_n = sum(1 for r in a.values() if not r["is_correct"])
-        last7 = [r for r in a.values() if r.get("answered_at", "") >=
-                 (datetime.date.today() - datetime.timedelta(days=7)).isoformat()]
+        if not a:
+            return
+
+        # ---------- 学习时间线：近 14 天，同时给"题数"和"当天正确率"
         ui.separator().style("border-color:var(--line)")
+        ui.label("近 14 天").classes("t-lead font-semibold")
+        ui.label("柱高＝当天做了几题；柱子下方是当天正确率。"
+                 "看的是节奏稳不稳、正确率有没有往上走。").classes("t-sm muted")
 
+        days = [today - datetime.timedelta(days=i) for i in range(13, -1, -1)]
+        cnt = {d.isoformat(): by_day.get(d.isoformat(), 0) for d in days}
+        right = Counter(str(r.get("answered_at", ""))[:10]
+                        for r in a.values() if r["is_correct"])
+        mx = max(list(cnt.values()) + [1])
+        with ui.row().classes("gap-1 items-end"):
+            for d in days:
+                n = cnt[d.isoformat()]
+                ok_n = right.get(d.isoformat(), 0)
+                h = 6 + int(n / mx * 34)
+                with ui.column().classes("gap-0 items-center"):
+                    el = ui.element("div").classes("rounded") \
+                        .style(f"width:20px;height:{h}px;"
+                               f"background:{'#2563EB' if n else '#E6EAF0'};"
+                               f"opacity:{0.35 + 0.65 * (n / mx) if n else 1};")
+                    el.tooltip(f"{d.strftime('%m-%d')}：{n} 题"
+                               + (f"，答对 {ok_n}" if n else ""))
+                    ui.label(d.strftime('%m-%d').replace('-', '/')) \
+                        .classes("t-xs muted").style("font-size:10px")
+                    ui.label(f"{round(ok_n / n * 100)}%" if n else "—") \
+                        .classes("t-xs").style(
+                            "font-size:10px;color:"
+                            + ("#1B5E36" if n and ok_n / n >= 0.6 else
+                               "#8C2C2C" if n else "#9AA5B1"))
+
+        total14 = sum(cnt.values())
+        active = sum(1 for v in cnt.values() if v)
+        today_n = cnt.get(today.isoformat(), 0)
+        msg = f"近 14 天共 {total14} 题"
+        if not today_n:
+            msg += "　·　今天还没练"
+        if active:
+            msg += f"　·　{active} 天有练习记录"
+        if total14 and active <= 2:
+            msg += "　·　都挤在一两天 —— 分散开记得更牢"
+        ui.label(msg).classes("t-sm muted")
+
+        # ---------- 分科记录 + 待复习
+        ui.separator().style("border-color:var(--line)")
         with ui.row().classes("w-full items-start gap-10 no-wrap"):
-            # 左栏：练习概览 + 题量分布（真数据，不是装饰）
-            with ui.column().classes("gap-2 flex-1 min-w-0"):
-                ui.label("我的练习").classes("t-sm muted")
-                with ui.row().classes("gap-10"):
-                    for val, name, color in [
-                            (len(a), "累计作答", "var(--ink)"),
-                            (len(a) - wrong_n, "答对", "#1B5E36"),
-                            (wrong_n, "待复习错题", "#8C2C2C"),
-                            (len(last7), "近 7 天", "var(--ink)")]:
-                        with ui.column().classes("gap-0"):
-                            ui.label(str(val)).classes("kpi") \
-                                .style(f"color:{color}"
-                                       + (";opacity:.35" if val == 0 else ""))
-                            ui.label(name).classes("t-xs muted")
-
-                # 近 14 天练习记录：复习节奏是学生真关心的事，也把这块留白填上
-                # （用户第三次指出"留白那么多"，实测内容底 685/视口 1000）
-                ui.label("近 14 天练习").classes("t-sm muted mt-1")
-                by_day = Counter(str(r.get("answered_at", ""))[:10]
-                                 for r in a.values())
-                days = [datetime.date.today() - datetime.timedelta(days=i)
-                        for i in range(13, -1, -1)]
-                mx = max([by_day.get(d.isoformat(), 0) for d in days] + [1])
-                with ui.row().classes("gap-1 items-end"):
-                    for d in days:
-                        n = by_day.get(d.isoformat(), 0)
-                        h = 6 + int(n / mx * 30)
-                        el = ui.element("div").classes("rounded") \
-                            .style(f"width:18px;height:{h}px;"
-                                   f"background:{'#2563EB' if n else '#E6EAF0'};"
-                                   f"opacity:{0.35 + 0.65 * (n / mx) if n else 1};")
-                        el.tooltip(f"{d.strftime('%m-%d')}：{n} 题")
-                # 只给一根柱子会让人以为图表坏了（demo 画像 32 题全在今天做的）。
-                # 补两条上下文：今天做了多少 + 如果全挤在一天就给一句建议。
-                total14 = sum(by_day.get(d.isoformat(), 0) for d in days)
-                today_n = by_day.get(datetime.date.today().isoformat(), 0)
-                active = sum(1 for d in days if by_day.get(d.isoformat(), 0))
-                msg = f"近 14 天共 {total14} 题　·　今天 {today_n} 题"
-                if total14 and active == 1:
-                    msg += "　·　都集中在一天 —— 分散到几天记得更牢"
-                elif not today_n:
-                    msg += "　·　今天还没练"
-                ui.label(msg).classes("t-xs muted")
-
-                ui.label("题库分布").classes("t-sm muted mt-2")
-                freq = data.freq()
-                rows = []
-                for code, name in data.CODE2NAME.items():
-                    leaves = [l for ch, _n in data.chapters()[code]
-                              for l in data.chapter_leaves().get(ch, [])]
-                    rows.append((name, sum(data.leaf_question_count().get(l, 0)
-                                           for l in leaves),
-                                 len(leaves)))
-                mx = max(r[1] for r in rows) or 1
-                for name, n, ln in rows:
-                    with ui.row().classes("items-center gap-2 no-wrap"):
-                        ui.label(name).classes("t-sm w-32 shrink-0")
-                        ui.element("div").classes("h-2 rounded") \
-                            .style(f"width:{int(n / mx * 200)}px;"
-                                   f"background:{SUBJECT_COLORS.get(name, '#2563EB')};"
-                                   f"opacity:.75")
-                        ui.label(f"{n} 题 · {ln} 考点").classes("t-xs muted")
-
-                ui.label("其他入口").classes("t-sm muted mt-2")
-                # 横排：原来竖排三行占掉 110px 高度，也是留白的一部分
-                with ui.row().classes("gap-6"):
-                    for href, title in [("/exam", "按年份刷真题"),
-                                        ("/notes", "我的薄弱点")]:
-                        with ui.link(target=f"{href}?user={user}") \
-                                .classes("no-underline"):
-                            ui.label(f"{title} →").classes("t-body") \
-                                .style("color:var(--accent)")
-
-            # 右栏：最近练习（显示更多，填满这一侧）
-            with ui.column().classes("gap-1 w-[26rem] shrink-0"):
-                ui.label("最近练习").classes("t-sm muted")
+            with ui.column().classes("gap-1 flex-1 min-w-0"):
+                ui.label("分科记录").classes("t-lead font-semibold")
+                ui.label("只列原始事实（做过几题、对了几题），不做百分比换算 —— "
+                         "每科题数少时百分比没有意义。").classes("t-sm muted")
                 qs = data.questions()
-                recent = sorted(a.items(), key=lambda kv: kv[1].get("answered_at", ""),
-                                reverse=True)[:10]
-                if not recent:
-                    ui.label("还没有练习记录").classes("t-sm muted")
-                for qid, r in recent:
+                per = {}
+                for qid, r in a.items():
                     q = qs.get(qid)
                     if not q:
                         continue
-                    with ui.row().classes("items-center gap-2 w-full no-wrap"):
-                        ui.icon("check_circle" if r["is_correct"] else "cancel") \
-                            .classes("shrink-0").style(
-                                "font-size:16px;"
-                                f'color:{"#1B5E36" if r["is_correct"] else "#8C2C2C"}')
-                        ui.label(f'{q["year"]} 年第 {q["题号"]} 题') \
-                            .classes("t-sm shrink-0") \
-                            .style("white-space:nowrap;min-width:7.5rem")
-                        ui.label(data.node_name(q["主考点"])[:16]) \
-                            .classes("t-sm muted flex-1 truncate")
+                    d = per.setdefault(q["学科"], [0, 0])
+                    d[0] += 1
+                    d[1] += 1 if r["is_correct"] else 0
+                for name in data.CODE2NAME.values():
+                    if name not in per:
+                        continue
+                    n, ok_n = per[name]
+                    with ui.row().classes("items-center gap-3 no-wrap"):
+                        ui.label(name).classes("t-sm w-32 shrink-0")
+                        ui.label(f"答对 {ok_n} / 做过 {n} 题") \
+                            .classes("t-sm font-semibold")
+
+                # 学习节奏：全部来自作答时间戳，不用"连续打卡"这种没数据的说法
+                ui.separator().style("border-color:var(--line)")
+                ui.label("学习节奏").classes("t-lead font-semibold")
+                _active = sum(1 for v in cnt.values() if v)
+                _per = total14 / 14 if total14 else 0
+                _best = max(cnt.items(), key=lambda kv: kv[1]) if total14 else None
+                rows2 = [
+                    ("近 14 天有练习的天数", f"{_active} / 14 天"),
+                    ("平均每天", f"{_per:.1f} 题"),
+                    ("做题最多的一天",
+                     f"{_best[0][5:].replace('-', '/')}（{_best[1]} 题）"
+                     if _best and _best[1] else "—"),
+                    ("近 7 天", f"{sum(wk)} 题"),
+                ]
+                for k, v in rows2:
+                    with ui.row().classes("items-center gap-3 no-wrap"):
+                        ui.label(k).classes("t-sm muted w-44 shrink-0")
+                        ui.label(v).classes("t-sm font-semibold")
+
+            with ui.column().classes("gap-1 w-[24rem] shrink-0"):
+                ui.label("待复习的错题").classes("t-lead font-semibold")
+                if wrong_ids:
+                    ui.label(f"{len(wrong_ids)} 道题做错了还没重做。"
+                             f"做错的题最能暴露问题。").classes("t-sm muted")
+                    # 按考点归组：比列 10 条题号更有用（知道是哪块不行）
+                    bad = Counter(data.node_name(qs[qid]["主考点"])
+                                  for qid in wrong_ids if qid in qs)
+                    for name, n in bad.most_common(6):
+                        with ui.row().classes("items-center gap-2 no-wrap"):
+                            ui.label(f"{n} 题") \
+                                .classes("t-sm font-semibold shrink-0") \
+                                .style("color:#8C2C2C;min-width:2.6rem")
+                            ui.label(name[:20]).classes("t-sm muted truncate")
+                    ui.button("去错题模式重做",
+                              on_click=lambda: ui.navigate.to(
+                                  f"/exam?view=只错题&user={user}")) \
+                        .props("flat dense")
+                else:
+                    ui.label("没有待复习的错题 —— 目前做过的题都对了。") \
+                        .classes("t-sm muted")
 
 
 # ================================================================ 真题页
@@ -735,25 +744,15 @@ def profile_page(user: str = "demo"):
         # 这种数字**看着精确、实际证明不了任何事**，而且答辩时经不起追问。
         # 所以这里只显示原始事实：答对几题 / 做过几题。排序仍然用内部掌握度
         # 计算（算法需要），但不把它摆给用户看。
-        ui.label("做题记录").classes("t-lead font-semibold")
-        ui.label("只列原始作答数，不做换算 —— 题数少时百分比没有意义。") \
-            .classes("t-sm muted")
-
-        if prof["学科掌握度"]:
-            with ui.row().classes("gap-8"):
-                # 按答对率排序（内部仍用掌握度，只是不显示）
-                for code, v in sorted(prof["学科掌握度"].items(),
-                                     key=lambda x: -x[1]["掌握度"]):
-                    with ui.column().classes("gap-0"):
-                        ui.label(v["学科"]).classes("t-sm muted")
-                        ui.label(f'{v["答对"]} / {v["题数"]}').classes("text-2xl font-bold") \
-                            .style("color:var(--accent)")
-                        ui.label("答对 / 做过").classes("t-xs muted")
+        # 【删掉了学科级"7 / 8"那组方块】它与首页的「分科记录」完全重复。
+        # 两页分工应当是：
+        #     首页「我的做题记录」= 按**时间**看记录（时间线、节奏、趋势）
+        #     我的画像           = 按**章节**看知识结构（哪章强、哪章弱）
+        # 学科级一行只是章节级的汇总，留在首页即可；这里直接从章节开始。
         if mk:
             ui.label(f"另有你自报的 {len(mk)} 个薄弱考点，已计入下方排序。") \
                 .classes("t-sm")
 
-        ui.separator()
         ui.label("各章作答记录").classes("t-lead font-semibold")
         ui.label("按学科分组。右侧是这一章你做过几题、对了几题；"
                  "未测章节表示还没做过题。").classes("t-sm muted")

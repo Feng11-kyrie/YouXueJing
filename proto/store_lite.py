@@ -48,7 +48,14 @@ def get_answers(user_id, source=None):
                                "answered_at": r["answered_at"]} for r in rows}
 
 
-def record_answer(user_id, question_id, chosen, is_correct, source="practice"):
+def record_answer(user_id, question_id, chosen, is_correct,
+                   source="practice", at=None):
+    """
+    at: 可选，指定作答时间（ISO 字符串或 datetime）。
+    默认取当前时间。**播种演示数据时必须能指定**：
+    否则 32 条作答的时间戳会完全相同（实测踩到），
+    首页的学习记录图只有一根柱、"今天 N 题"也是假象。
+    """
     """与 yj.store 同一条底线：没选答案就不写库。"""
     if chosen is None or str(chosen).strip() == "":
         return False
@@ -61,7 +68,8 @@ def record_answer(user_id, question_id, chosen, is_correct, source="practice"):
                        chosen=excluded.chosen, is_correct=excluded.is_correct,
                        source=excluded.source, answered_at=excluded.answered_at""",
                   (user_id, question_id, chosen, 1 if is_correct else 0, source,
-                   datetime.datetime.now().isoformat(timespec="seconds")))
+                   (at.isoformat(timespec="seconds") if hasattr(at, "isoformat")
+                    else at) or datetime.datetime.now().isoformat(timespec="seconds")))
     return True
 
 

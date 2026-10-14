@@ -46,15 +46,57 @@ from yj import store, graph, llm, data, snap    # noqa: E402
 SNAP_DIR = os.path.join(BASE, "data", "prewarm")
 
 
-def seed_user(user_id, profile_str):
-    """按给定画像生成一套作答记录(与诊断题单一致)"""
+def seed_user(user_id, profile_str, days=9, seed=7):
+    """
+    按给定画像生成一套作答记录（与诊断题单一致），并**把时间戳分散到最近几天**。
+
+    为什么要分散时间戳
+    ------------------
+    原来 32 条作答全部写在同一时刻（实测：时间戳精确到同一秒）。
+    后果是首页的"做题记录"完全是假的：
+      · 近 14 天柱状图只有一根柱
+      · 「今天 N 题」显示的是一次播种，不是学习行为
+      · 看不出复习节奏、也看不出正确率趋势
+    **一个显示不出一周趋势的记录面板，比没有更糟** —— 看一眼就知道数据是假的。
+    所以播种时按"每天做几题"分批写入日期，让它像真的学习记录。
+
+    days: 时间跨度（默认最近 9 天，含今天）
+    seed: 固定随机种子，保证每次播种结果一致（演示可复现）
+    """
+    import random as _random
+    import datetime as _dt
     from demo import simulate
+
     answers, _detail = simulate(profile_str)
     store.reset_user(user_id)
-    for qid, a in answers.items():
-        store.record_answer(user_id, qid, a["chosen"], a["is_correct"],
-                            source="diagnostic")
-    return len(answers)
+    items = list(answers.items())
+    rng = _random.Random(seed)
+
+    # 把题按天数分批：前期少、后期多，更像"越练越上手"
+    n = len(items)
+    weights = [1 + i for i in range(days)]          # 递增权重
+    total_w = sum(weights)
+    cuts, acc = [], 0
+    for w in weights[:-1]:
+        acc += max(1, round(n * w / total_w))
+        cuts.append(min(acc, n - 1))
+    batches, prev = [], 0
+    for c in cuts + [n]:
+        batches.append(items[prev:c])
+        prev = c
+
+    today = _dt.date.today()
+    for i, batch in enumerate(batches):
+        d = today - _dt.timedelta(days=days - 1 - i)
+        for j, (qid, a) in enumerate(batch):
+            # 每天从 19:30 起，每题间隔几分钟 —— 避免同一秒
+            t = _dt.datetime.combine(
+                d, _dt.time(hour=19 + (j % 3),
+                            minute=(j * 7 + rng.randint(0, 6)) % 60,
+                            second=rng.randint(0, 59)))
+            store.record_answer(user_id, qid, a["chosen"], a["is_correct"],
+                                source="diagnostic", at=t)
+    return n
 
 
 def main():
