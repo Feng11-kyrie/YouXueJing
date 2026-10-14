@@ -145,82 +145,96 @@ def question_card(q, year, done, user):
 
 def _comprehensive_block(q, year, user):
     """
-    综合应用题（41–47）的作答区。
+    综合应用题（41–47）的作答区：参考答案 + 自评给分。
 
-    【为什么没有"打字作答"的输入框】
-    用户一句话点破了我第一版的错误设计：
-        "用户如果作答大题他要怎么作答，肯定不能够在键盘上打字作答吧"
+    设计依据（用户明确要求）：
+        "显示一个解析选项，点了就把这道题的答案、以及每个步骤给多少分
+         显示出来供用户自评；再弄一个给分的输入框，自评完输入得多少分保存"
 
-    他说得对。408 综合题是「写出算法设计思想 + 用 C/C++ 描述算法」，
-    在输入框里敲伪代码既不现实、也偏离真实考试形态 —— **考场上就是手写**。
-    做一个"打字作答"的框，等于照搬一个错的交互。
-
-    所以这里不提供作答框，而是明确三步流程（贴合真实做题方式）：
-        ① 自己拿纸写（题目里就给了作答区示意，不抢注意力）
-        ② 自我评估：做对了 / 要再看一遍
-        ③ 需要时展开参考答案对照
-    自评按真实情况记录（source='selfcheck'），并且**本题不计分** ——
-    自评不等于判分，这一点界面上必须写清。
+    三点说明：
+      ① **不提供打字作答框** —— 上一版我做过输入框，被用户点破：
+         408 综合题是"写出算法设计思想 + 用 C/C++ 描述算法"，考场上就是手写，
+         在输入框里敲伪代码既不现实也偏离真实形态。所以只提示"在纸上作答"。
+      ② **步骤分值不做程序化解析** —— 它已经印在题干里（"(1) …（4 分）"），
+         界面直接显示题干即有；我只需要给出该题总分作为打分上限。
+         （题库 JSON 里那份被清洗掉了，但页面渲染的是含分值的原文。）
+      ③ **自评分与自动判分严格分开存**：source='selfscore'，
+         界面也绝不说成"判分结果" —— 这是用户自己给的判断。
     """
     from yj import data as _data
     sol = _data.solution(year, q["题号"]) if year else None
+    try:
+        total = int(q.get("分值") or 0)
+    except (TypeError, ValueError):
+        total = 0
 
-    ui.label("综合应用题 · 手写解答题（本题不做自动判分）") \
-        .classes("t-xs font-semibold").style("color:#B45309")
+    ui.label(f"综合应用题 · 手写解答题（本题 {total} 分，不做自动判分）") \
+        .classes("t-sm font-semibold").style("color:#B45309")
 
-    # ① 作答区示意：告诉用户"在纸上写"，而不是给一个错误的输入框
-    with ui.element("div").classes("w-full rounded-lg") \
-            .style("border:1px dashed #D7DEE8;background:#FBFCFE;"
-                   "padding:10px 14px"):
-        ui.label("在纸上作答") \
-            .classes("t-sm font-semibold").style("color:var(--sub)")
-        ui.label("这题是手写解答题：先自己在纸上写答案（建议分两段 —— "
-                 "① 算法设计思想 ② 用 C/C++ 描述算法）。写完后回来做自评，"
-                 "再对照参考答案。") \
-            .classes("t-xs muted").style("line-height:1.7")
+    # ---- 作答提示 + 「查看解析」按钮（用户要的那个入口）
+    show = {"v": False}
+    holder = ui.column().classes("w-full gap-2")
 
-    # ② 自评：放在参考答案**之前** —— 先判断自己，再看答案，避免"看完才觉得自己会"
-    prev = store.get_selfcheck(user).get(q["id"])
-    box = {"v": prev}
-
-    def paint():
-        v = box["v"]
-        b_ok.props(f'color={"positive" if v == store.SELF_OK else "grey"}')
-        b_rev.props(f'color={"warning" if v == store.SELF_REVIEW else "grey"}')
-        if v == store.SELF_OK:
-            state.set_text("已记录：做对了")
-            state.style("color:#1B5E36")
-        elif v == store.SELF_REVIEW:
-            state.set_text("已记录：要再看一遍")
-            state.style("color:#B45309")
-        else:
-            state.set_text("")
-
-    def set_verdict(v):
-        store.set_selfcheck(user, q["id"], v)
-        box["v"] = v
-        paint()
-
-    with ui.row().classes("items-center gap-2 no-wrap"):
-        ui.label("写完后自评：").classes("t-sm muted shrink-0")
-        b_ok = ui.button("做对了", on_click=lambda: set_verdict(store.SELF_OK)) \
-            .props("flat dense")
-        b_rev = ui.button("要再看一遍",
-                          on_click=lambda: set_verdict(store.SELF_REVIEW)) \
-            .props("flat dense")
-        state = ui.label("").classes("t-sm shrink-0")
-
-    # ③ 参考答案
-    if sol:
-        with ui.expansion("对照参考答案").classes("w-full"):
-            ui.label("以下解答抽取自答案册 PDF 的文字层（OCR），可能有错字或符号"
-                     "误识别（如「于」被识别成「千」、数字 1 与字母 l 混用）。"
-                     "请以教材为准，不要当成逐字准确的官方解析。") \
+    with ui.element("div").classes("w-full rounded-lg").style(
+            "border:1px dashed #D7DEE8;background:#FBFCFE;padding:10px 14px"):
+        ui.label("在纸上作答").classes("t-sm font-semibold") \
+            .style("color:var(--sub)")
+        ui.label("这题按步骤给分（各步骤分值见题干括号，如「（1）…（4 分）」）。"
+                 "先在纸上写完整答案，再点下面的按钮对照解析、给自己打分。") \
+            .classes("t-sm muted").style("line-height:1.7")
+        if not sol:
+            ui.label("注：这一年的答案册是纯扫描件，没有文字层，取不到参考答案 —— "
+                     "请对照教材自行核对后给分。") \
                 .classes("t-xs").style("color:#B45309")
-            ui.label(sol).classes("t-sm whitespace-pre-wrap") \
-                .style("line-height:1.9")
-    else:
-        ui.label("这一年的答案册是纯扫描件，没有文字层，取不到参考答案。"
-                 "建议对照教材自行核对。").classes("t-xs muted")
 
-    paint()
+    def render_detail():
+        holder.clear()
+        if not show["v"]:
+            return
+        with holder:
+            if sol:
+                with ui.card().classes("softcard w-full p-3 gap-1"):
+                    ui.label("参考答案（答案解析）") \
+                        .classes("t-sm font-semibold") \
+                        .style("color:var(--accent)")
+                    ui.label("抽取自答案册 PDF 的文字层（OCR），可能有错字或符号"
+                             "误识别（如「于」被识别成「千」、数字 1 与字母 l 混用）。"
+                             "请以教材为准，不要当成逐字准确的官方解析。") \
+                        .classes("t-xs").style("color:#B45309")
+                    ui.label(sol).classes("t-sm whitespace-pre-wrap") \
+                        .style("line-height:1.9")
+            ui.label(f"对照题干括号里的步骤分值逐项给分，把总分填到下面并保存。"
+                     f"本题满分 {total} 分。").classes("t-sm muted")
+
+    def toggle_detail():
+        show["v"] = not show["v"]
+        btn.set_text("收起解析" if show["v"] else "查看解析")
+        render_detail()
+
+    btn = ui.button("查看解析", on_click=toggle_detail).props("unelevated")
+
+    # ---- 自评给分：输入框 + 保存（用户要求的那个输入框）
+    prev = store.get_selfscore(user).get(q["id"])
+    with ui.row().classes("items-center gap-2 no-wrap"):
+        ui.label("自评得分：").classes("t-sm shrink-0")
+        inp = ui.input(value=(f"{prev:g}" if prev is not None else "")) \
+            .props(f'dense outlined type=number min=0 max={total} step=0.5') \
+            .classes("w-24")
+        ui.label(f"/ {total} 分").classes("t-sm muted shrink-0")
+        msg = ui.label("").classes("t-sm shrink-0")
+
+        def save():
+            ok, err = store.set_selfscore(user, q["id"], inp.value, total)
+            if ok:
+                msg.set_text(f"已保存：自评 {float(inp.value):g} / {total} 分")
+                msg.style("color:#1B5E36")
+            else:
+                msg.set_text(err)
+                msg.style("color:#8C2C2C")
+
+        ui.button("保存自评", on_click=save).props("unelevated")
+    if prev is not None:
+        msg.set_text(f"已保存：自评 {prev:g} / {total} 分")
+        msg.style("color:#1B5E36")
+
+    render_detail()

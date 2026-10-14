@@ -119,3 +119,41 @@ def set_selfcheck(user_id, question_id, verdict):
         raise ValueError(f"未知自评结果: {verdict}")
     return record_answer(user_id, question_id, verdict,
                          is_correct=(verdict == SELF_OK), source="selfcheck")
+
+
+# ---------------------------------------------------------------- 大题自评分
+# 综合应用题**不能自动判分**（41–47 是手写解答题），但"我这次能拿几分"
+# 是学生真正关心的 —— 所以让用户自己按步骤给分，并把分数存下来。
+#
+# 数据怎么存：chosen 字段编码为 "score:<得分>"，source='selfscore'。
+# 与自动判分（source='practice'）严格分开，界面上也不会说成"判分结果"。
+def set_selfscore(user_id, question_id, score, total):
+    """
+    记录大题自评分。score 为得分（允许 0.5 步进），total 为该题总分。
+
+    校验：分数必须落在 [0, total] 内。越界直接拒绝 —— 与其存一个
+    不可能的分数（比如 13 分题填了 99），不如让界面报错。
+    """
+    try:
+        sc = float(score)
+    except (TypeError, ValueError):
+        return False, "请输入数字"
+    if sc < 0 or sc > float(total):
+        return False, f"分数要在 0 – {total} 之间"
+    return record_answer(user_id, question_id, f"score:{sc:g}",
+                         is_correct=False, source="selfscore"), ""
+
+
+def get_selfscore(user_id):
+    """返回 {question_id: 自评得分(float)}"""
+    out = {}
+    with conn() as c:
+        rows = c.execute("SELECT question_id, chosen FROM answers "
+                         "WHERE user_id=? AND source='selfscore'",
+                         (user_id,)).fetchall()
+    for r in rows:
+        try:
+            out[r["question_id"]] = float(str(r["chosen"]).split(":", 1)[1])
+        except (IndexError, ValueError):
+            continue
+    return out
