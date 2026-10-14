@@ -211,7 +211,19 @@ def _comprehensive_block(q, year, user):
         btn.set_text("收起解析" if show["v"] else "查看解析")
         render_detail()
 
-    btn = ui.button("查看解析", on_click=toggle_detail).props("unelevated")
+    # 【UX 修正】没有解析的年份，按钮要**明确标出来**，不能做成可点却点开是空的。
+    # 用户就是这么踩到的：他在 2026 年卷（默认年份）点「查看解析」，
+    # 而 2026 的答案册是纯扫描件 —— 点了没有任何内容，看起来像功能坏了。
+    # 实测：2019/2021/2024/2025/2026 五年既没有答案册文字层，
+    # 试卷 PDF 里也没有解析（只有题目），本地确实无解析可用。
+    if sol:
+        btn = ui.button("查看解析", on_click=toggle_detail).props("unelevated")
+    else:
+        btn = ui.button("无解析（见下方说明）").props("unelevated disable")
+        ui.label("这一年的答案册是纯扫描图片、试卷里也只有题目，"
+                 "所以本地没有参考答案可显示 —— 不是按钮坏了。"
+                 "请对照教材自行核对后给分。") \
+            .classes("t-xs").style("color:#B45309")
 
     # ---- 自评给分：输入框 + 保存（用户要求的那个输入框）
     prev = store.get_selfscore(user).get(q["id"])
