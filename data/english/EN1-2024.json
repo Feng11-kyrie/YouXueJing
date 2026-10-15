@@ -1,0 +1,442 @@
+{
+ "tier": "EN1",
+ "年份": "2024",
+ "篇目": [
+  {
+   "部分": "CLOZE",
+   "材料": "Read the following text. Choose the best word(s) for each numbered blank and mark A, B,\nC or D on the ANSWER SHEET. (10 points)\nThere’s nothing more welcoming than a door opening for you. 1 the need to be\ntouched to open or close, automatic doors are essential in 2 disabled access to buildings\nand helping provide general 3 to commercial buildings.\nSelf-sliding doors began to emerge as a commercial product in 1960 after being\ninvented six years 4 by Americans Dee Horton and Lew Hewitt. They 5 as a\nnovelty feature, but as their use has grown, their 6 have extended within our\ntechnologically advanced world. Particularly 7 in busy locations or during times of\nemergency, the doors 8 crowd management by reducing the obstacles put in people’s\nway.\n9 making access both in and out of buildings easier for people, the difference in\nthe way many of these doors open helps reduce the total area 10 by them. Automatic\ndoors often open to the side, with the panels sliding across one another. Replacing swing\ndoors, these 11 smaller buildings to maximise the usable space inside without having\nto 12 the way for a large, sticking-out door. There are many different types of\nautomatic door, with each 13 specific signals to tell them when to open. 14 these\nmethods differ, the main 15 remain the same.\nEach automatic door system 16 the light, sound, weight or movement in their\nvicinity as a signal to open. Sensor types are chosen to 17 the different environments\nthey are needed in. 18 , a busy street might not 19 a motion-sensored door, as it\nwould constantly be opening for passers-by. A pressure-sensitive mat would be more 20\nto limit the surveyed area.",
+   "小题": [
+    {
+     "题号": 1,
+     "题干": "",
+     "选项": {
+      "A": "Through",
+      "B": "Despite",
+      "C": "Besides",
+      "D": "Without"
+     }
+    },
+    {
+     "题号": 2,
+     "题干": "",
+     "选项": {
+      "A": "revealing",
+      "B": "demanding",
+      "C": "improving",
+      "D": "tracing"
+     }
+    },
+    {
+     "题号": 3,
+     "题干": "",
+     "选项": {
+      "A": "experience",
+      "B": "convenience",
+      "C": "guidance",
+      "D": "reference"
+     }
+    },
+    {
+     "题号": 4,
+     "题干": "",
+     "选项": {
+      "A": "previously",
+      "B": "temporarily",
+      "C": "successively",
+      "D": "eventually"
+     }
+    },
+    {
+     "题号": 5,
+     "题干": "",
+     "选项": {
+      "A": "held on",
+      "B": "started out",
+      "C": "settled down",
+      "D": "went by"
+     }
+    },
+    {
+     "题号": 6,
+     "题干": "",
+     "选项": {
+      "A": "relations",
+      "B": "volumes",
+      "C": "benefits",
+      "D": "sources"
+     }
+    },
+    {
+     "题号": 7,
+     "题干": "",
+     "选项": {
+      "A": "useful",
+      "B": "simple",
+      "C": "flexible",
+      "D": "stable"
+     }
+    },
+    {
+     "题号": 8,
+     "题干": "",
+     "选项": {
+      "A": "call for",
+      "B": "yield to",
+      "C": "insist on",
+      "D": "act as"
+     }
+    },
+    {
+     "题号": 9,
+     "题干": "",
+     "选项": {
+      "A": "As well as",
+      "B": "In terms of",
+      "C": "Thanks to",
+      "D": "Rather than"
+     }
+    },
+    {
+     "题号": 10,
+     "题干": "",
+     "选项": {
+      "A": "connected",
+      "B": "shared",
+      "C": "represented",
+      "D": "occupied"
+     }
+    },
+    {
+     "题号": 11,
+     "题干": "",
+     "选项": {
+      "A": "allow",
+      "B": "expect",
+      "C": "require",
+      "D": "direct"
+     }
+    },
+    {
+     "题号": 12,
+     "题干": "",
+     "选项": {
+      "A": "adopt",
+      "B": "lead",
+      "C": "clear",
+      "D": "change"
+     }
+    },
+    {
+     "题号": 13,
+     "题干": "",
+     "选项": {
+      "A": "adapting to",
+      "B": "deriving from",
+      "C": "relying on",
+      "D": "pointing at"
+     }
+    },
+    {
+     "题号": 14,
+     "题干": "",
+     "选项": {
+      "A": "Once",
+      "B": "Since",
+      "C": "Unless",
+      "D": "Although"
+     }
+    },
+    {
+     "题号": 15,
+     "题干": "",
+     "选项": {
+      "A": "records",
+      "B": "positions",
+      "C": "principles",
+      "D": "reasons"
+     }
+    },
+    {
+     "题号": 16,
+     "题干": "",
+     "选项": {
+      "A": "controls",
+      "B": "analyses",
+      "C": "produces",
+      "D": "mixes"
+     }
+    },
+    {
+     "题号": 17,
+     "题干": "",
+     "选项": {
+      "A": "decorate",
+      "B": "compare",
+      "C": "protect",
+      "D": "complement"
+     }
+    },
+    {
+     "题号": 18,
+     "题干": "",
+     "选项": {
+      "A": "In conclusion",
+      "B": "By contrast",
+      "C": "For example",
+      "D": "Above all"
+     }
+    },
+    {
+     "题号": 19,
+     "题干": "",
+     "选项": {
+      "A": "identify",
+      "B": "suit",
+      "C": "secure",
+      "D": "include"
+     }
+    },
+    {
+     "题号": 20,
+     "题干": "",
+     "选项": {
+      "A": "appropriate",
+      "B": "obvious",
+      "C": "impressive",
+      "D": "delicate"
+     }
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "",
+   "小题": [
+    {
+     "题号": 21,
+     "题干": "The Romans buried the nails probably for the sake of ____",
+     "选项": {
+      "A": "saving them for future use.",
+      "B": "keeping them from rusting.",
+      "C": "letting them grow in value.",
+      "D": "hiding them from the locals."
+     }
+    },
+    {
+     "题号": 22,
+     "题干": "The example of early 17th-century Virginians is used to ____",
+     "选项": {
+      "A": "highlight the thriftiness of early American colonists.",
+      "B": "illustrate the high status of blacksmiths in that period.",
+      "C": "contrast the attitudes of different civilisations towards nails.",
+      "D": "show the preciousness of nail-making technology at that time."
+     }
+    },
+    {
+     "题号": 23,
+     "题干": "What played the major role in lowering the price of nails after the late 1700s?",
+     "选项": {
+      "A": "Increased productivity.",
+      "B": "Wider use of new energies.",
+      "C": "Fiercer market competition.",
+      "D": "Reduced cost of raw materials."
+     }
+    },
+    {
+     "题号": 24,
+     "题干": "It can be learned from Paragraph 5 that nails ____",
+     "选项": {
+      "A": "have undergone many technological improvements.",
+      "B": "have remained basically the same since Roman times.",
+      "C": "are less studied than other everyday products.",
+      "D": "are one of the world’s most significant inventions."
+     }
+    },
+    {
+     "题号": 25,
+     "题干": "Which of the following best summarises the last two paragraphs?",
+     "选项": {
+      "A": "Cheap technologies bring about revolutionary change.",
+      "B": "Technological innovation is integral to economic success.",
+      "C": "Technology defines people’s understanding of the world.",
+      "D": "Sophisticated technologies develop from small inventions."
+     }
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "",
+   "小题": [
+    {
+     "题号": 26,
+     "题干": "According to the first two paragraphs, alloparenting refers to the practice of ____",
+     "选项": {
+      "A": "sharing childcare among community members.",
+      "B": "assigning babies to specific adult caregivers.",
+      "C": "teaching parenting skills to older children.",
+      "D": "carrying infants around by their parents."
+     }
+    },
+    {
+     "题号": 27,
+     "题干": "The scheme in Germany is mentioned to illustrate ____",
+     "选项": {
+      "A": "an attempt to facilitate intergenerational communication.",
+      "B": "an approach to integrating alloparenting into western society.",
+      "C": "the conventional parenting style in western culture.",
+      "D": "the differences between western and African ways of living."
+     }
+    },
+    {
+     "题号": 28,
+     "题干": "According to Paragraph 4, the “intensive mothering narrative” ____",
+     "选项": {
+      "A": "alleviates parenting pressure.",
+      "B": "consolidates family relationships.",
+      "C": "results in the child-centered family.",
+      "D": "departs from the course of evolution."
+     }
+    },
+    {
+     "题号": 29,
+     "题干": "According to Paragraph 6, what can we learn about the nurseries in the UK?",
+     "选项": {
+      "A": "They tend to fall short of official requirements.",
+      "B": "They have difficulty finding enough caregivers.",
+      "C": "They ought to improve their carer-to-child ratio.",
+      "D": "They should try to prevent parental depression."
+     }
+    },
+    {
+     "题号": 30,
+     "题干": "Which of the following would be the best title for the text?",
+     "选项": {
+      "A": "Instructive Teaching: A Dilemma for Anxious Parents",
+      "B": "For a Happier Family, Learn from the Hunter-gatherers",
+      "C": "Mixed-age Playgroup, a Better Choice for Lonely Children",
+      "D": "Tracing the History of Parenting: from Africa to Europe"
+     }
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "",
+   "小题": [
+    {
+     "题号": 31,
+     "题干": "What can be learned about Rutkowski from the first two paragraphs?",
+     "选项": {
+      "A": "He is enthusiastic about using AI models.",
+      "B": "He is popular with users of an AI art generator.",
+      "C": "He attracts admiration from other illustrators.",
+      "D": "He specializes in classical painting digitalization."
+     }
+    },
+    {
+     "题号": 32,
+     "题干": "The problem with open-source AI art generators is that they ____",
+     "选项": {
+      "A": "lack flexibility in responding to prompts.",
+      "B": "produce artworks in unpredictable styles.",
+      "C": "make unauthorized use of online images.",
+      "D": "collect user information without consent."
+     }
+    },
+    {
+     "题号": 33,
+     "题干": "After searching online, Rutkowski found ____",
+     "选项": {
+      "A": "a unique way to reach audiences.",
+      "B": "a new method to identify AI images.",
+      "C": "AI-generated work bearing his name.",
+      "D": "heated disputes regarding his copyright."
+     }
+    },
+    {
+     "题号": 34,
+     "题干": "According to Ortiz, AI companies are advised to ____",
+     "选项": {
+      "A": "campaign for new policies or regulation.",
+      "B": "offer their services to public institutions.",
+      "C": "strengthen their relationships with AI users.",
+      "D": "adopt a different strategy for AI model training."
+     }
+    },
+    {
+     "题号": 35,
+     "题干": "What is the text mainly about?",
+     "选项": {
+      "A": "Artists’ responses to AI art generation.",
+      "B": "AI’s expanded role in artistic creation.",
+      "C": "Privacy issues in the application of AI.",
+      "D": "Opposing views on AI development."
+     }
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "",
+   "小题": [
+    {
+     "题号": 36,
+     "题干": "The Chesapeake Bay is described in Paragraph 1 as ____",
+     "选项": {
+      "A": "a valuable natural environment.",
+      "B": "a controversial conservation area.",
+      "C": "a place with commercial potential.",
+      "D": "a headache for nearby communities."
+     }
+    },
+    {
+     "题号": 37,
+     "题干": "The U.S. Supreme Court’s ruling in the Idaho case ____",
+     "选项": {
+      "A": "reinforces water pollution control.",
+      "B": "weakens the EPA’s regulatory power.",
+      "C": "will end conflicts among local residents.",
+      "D": "may face opposition from mining operators."
+     }
+    },
+    {
+     "题号": 38,
+     "题干": "How does the author feel about future of the Chesapeake Bay?",
+     "选项": {
+      "A": "Worried.",
+      "B": "Puzzled.",
+      "C": "Relieved.",
+      "D": "Encouraged."
+     }
+    },
+    {
+     "题号": 39,
+     "题干": "What can be inferred about the EPA’s involvement in the Chesapeake Bay Program?",
+     "选项": {
+      "A": "It has restored the balance among neighboring jurisdictions.",
+      "B": "It has triggered a radical reform in commercial fisheries.",
+      "C": "It has set a fine example of respecting state authorities.",
+      "D": "It has ensured the coordination of protection efforts."
+     }
+    },
+    {
+     "题号": 40,
+     "题干": "The author holds that the state lawmakers should ____",
+     "选项": {
+      "A": "be cautious about the influence of landowners.",
+      "B": "attach due importance to wetlands protections.",
+      "C": "recognize the need to expand wildlife refuges.",
+      "D": "improve the wellbeing of endangered species."
+     }
+    }
+   ]
+  },
+  {
+   "部分": "NEW",
+   "材料": "",
+   "小题": []
+  }
+ ],
+ "题目数": 40
+}
