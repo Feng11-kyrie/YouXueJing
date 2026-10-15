@@ -46,8 +46,11 @@ from scripts.parse_english import (norm_lines, split_parts_by_content,  # noqa: 
 
 SRC = os.environ.get("KYZHENTI", "/tmp/kyzhenti/公共课/英语真题")
 
-NEW_A = re.compile(r'^(\d{1,2})\.\s+([A-D])\.\s*(.*)$')
-OLD_A = re.compile(r'^(\d{1,2})\.\s*\[([A-D])\]\s*(.*)$')
+# 题号内/点号前都可能夹空格（实测 `3 . [A] careless`、`3 7. It can...`）
+# 行首可能有个孤立标点（实测 `. 21. Quinn...`）
+NUM = r'[.、,，]?\s*(\d(?:\s?\d)?)\s*[.、]\s*'
+NEW_A = re.compile(r'^' + NUM + r'([A-D])\.\s*(.*)$')
+OLD_A = re.compile(r'^' + NUM + r'\[([A-D])\]\s*(.*)$')
 BRACKET_ROW = re.compile(r'\[([A-D])\]\s*([^\[]*)')
 
 
@@ -58,9 +61,9 @@ def parse_cloze(lines, lo=1, hi=20):
     返回 (题目列表, 文章正文, 格式名)。文章用 A 栏起点之前的行拼成。
     """
     new = [(i, int(m.group(1)), m.group(3).strip()) for i, l in enumerate(lines)
-           for m in [NEW_A.match(l)] if m and lo <= int(m.group(1)) <= hi]
+           for m in [NEW_A.match(l)] if m and lo <= int(re.sub(r'\s+','',m.group(1))) <= hi]
     old = [(i, int(m.group(1)), m.group(3).strip()) for i, l in enumerate(lines)
-           for m in [OLD_A.match(l)] if m and lo <= int(m.group(1)) <= hi]
+           for m in [OLD_A.match(l)] if m and lo <= int(re.sub(r'\s+','',m.group(1))) <= hi]
     if new and not old:
         fmt, rows = "new", new
     elif old and not new:
@@ -108,6 +111,113 @@ def parse_cloze(lines, lo=1, hi=20):
     return qs, "\n".join(lines[:a0]), fmt
 
 
+
+# ---------------------------------------------------------------------------
+# 另外两种实测到的排版（与上面的"竖排A栏 + 后接B/C/D栏"并列）
+# ---------------------------------------------------------------------------
+# 形态②「四选项同行」：一整行里把 A–D 全排出来
+#     1. [A] that [B] when [C] why [D] where
+# 实测：英语一 2014/2016/2017/2018/2019、英语二 2012/2014/2016/2017/2019/2020
+# 形态③「B/C/D 同行但无 A 标记」：
+#     A 竖排 '1. [A] xxx'，B/C/D 在后续行 'B. resolve C. discuss D. ignore'
+# 实测：英语二 2018
+_TOK = re.compile(r'\[([A-D])\]|(?<![A-Za-z])([A-D])[.、)]')
+
+
+def _tokens(s):
+    return [m.group(1) or m.group(2) for m in _TOK.finditer(s)]
+
+
+def _strip_tokens(s):
+    return [t.strip() for t in _TOK.split(s) if t and t.strip()]
+
+
+def parse_cloze_rowwise(lines, lo=1, hi=20):
+    """形态②：一行里 A–D 齐全。"""
+    out = {}
+    for l in lines:
+        m = re.match(r'^' + NUM + r'(.+)$', l)
+        if not m:
+            continue
+        n = int(re.sub(r'\s+', '', m.group(1)))
+        if not (lo <= n <= hi):
+            continue
+        if _tokens(m.group(2))[:4] != ['A', 'B', 'C', 'D']:
+            continue
+        vals = _strip_tokens(m.group(2))
+        if len(vals) >= 4:
+            out[n] = {L: v for L, v in zip('ABCD', vals[:4])}
+    return out
+
+
+def parse_cloze_bcd_line(lines, lo=1, hi=20):
+    """形态③：A 竖排，B/C/D 同行（无 A 标记）。"""
+    arows = []
+    for i, l in enumerate(lines):
+        m = re.match(r'^' + NUM + r'([A-D])[.、)]?\s*(.+)$', l)
+        if m and m.group(2) == 'A' and lo <= int(re.sub(r'\s+', '', m.group(1))) <= hi:
+            arows.append((i, int(re.sub(r'\s+', '', m.group(1))),
+                          m.group(3).strip()))
+    if len(arows) < hi - lo + 1:
+        return {}
+    out = {n: {'A': t} for _, n, t in arows}
+    got = 0
+    for j in range(arows[0][0] + len(arows), len(lines)):
+        if got >= len(arows):
+            break
+        l = lines[j]
+        if not re.match(r'^\s*B[.、)]', l):
+            continue
+        if _tokens(l)[:3] == ['B', 'C', 'D']:
+            vals = _strip_tokens(l)
+            if len(vals) >= 3:
+                n = arows[got][1]
+                for L, v in zip('BCD', vals[:3]):
+                    out[n][L] = v
+                got += 1
+    return {n: v for n, v in out.items() if len(v) == 4}
+
+
+def parse_cloze_best(lines, lo=1, hi=20):
+    """
+    依次尝试四种实测排版，**取能凑齐最多题的那个**。
+
+    为什么不在解析前先"判定格式"：我试过按行特征分类，结果各形态的计数
+    互相混杂（同一年既像 A 又像 B），判定不可靠。**直接看哪种能产出
+    "20 题 × 4 选项"更实在** —— 产出是唯一的硬标准。
+
+    返回 (题目列表, 文章正文, 形态名, 完整题数)
+    """
+    cands = []
+    for name, fn in (("newcols", lambda: parse_cloze(lines, lo, hi)),
+                     ("rowwise", lambda: parse_cloze_rowwise(lines, lo, hi)),
+                     ("bcdline", lambda: parse_cloze_bcd_line(lines, lo, hi))):
+        try:
+            r = fn()
+        except Exception:                                   # noqa: BLE001
+            r = ({}, "", name) if name != "rowwise" else {}
+        if name == "newcols":
+            qs, body, fmt = r
+            d = {q["题号"]: q["选项"] for q in qs}
+        else:
+            d, body, fmt = r, "", name
+        full = sum(1 for v in d.values() if len(v) == 4)
+        cands.append((full, name, d, body))
+    full, name, d, body = max(cands, key=lambda x: x[0])
+    qs = [{"题号": n, "题干": "",
+           "选项": {L: (d.get(n) or {}).get(L, "") for L in "ABCD"}}
+          for n in sorted(d)]
+    if not body:
+        # 文章正文 = 第一个选项行之前
+        first = None
+        for i, l in enumerate(lines):
+            if re.match(r'^\s*1\s*[.、]', l):
+                first = i
+                break
+        body = "\n".join(lines[:first or 0])
+    return qs, body, name, full
+
+
 def read_body(seg, start_marker):
     """
     从某段里取出**文章正文**：跳过 Directions 说明，取到第一道题号之前。
@@ -123,6 +233,28 @@ def read_body(seg, start_marker):
             break
         out.append(l)
     return "\n".join(out)
+
+
+def _clean_text(s):
+    """
+    去掉**孤立代理字符**（surrogate）。
+
+    实测：PDF 文字层里会出现未配对的代理码位（如 U+D8xx），
+    json.dump 写盘时抛 `UnicodeEncodeError: surrogates not allowed`。
+    这类字符本来就是解码残留、不是真实内容，直接剔除。
+    """
+    if not isinstance(s, str):
+        return s
+    return s.encode("utf-8", "ignore").decode("utf-8", "ignore")
+
+
+def _clean_rec(obj):
+    """递归清洗整条记录里的字符串。"""
+    if isinstance(obj, dict):
+        return {k: _clean_rec(v) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [_clean_rec(v) for v in obj]
+    return _clean_text(obj)
 
 
 def parse_paper(lines, tier):
@@ -142,8 +274,7 @@ def parse_paper(lines, tier):
     # 按分节切会给切到别的段里 → B/C/D 全空（表现为"完形 0/20"）。
     # 我在独立测试里传的是整个文件、能找到，换成分节后就全 0 —— 就是这个原因。
     # 完形的题号 1–20 与其它部分（21+）不冲突，所以全文件扫是安全的。
-    cqs, cbody, fmt = parse_cloze(lines, 1, 20)
-    cz_ok = sum(1 for q in cqs if all(q["选项"].values()))
+    cqs, cbody, fmt, cz_ok = parse_cloze_best(lines, 1, 20)
     rep["完形"] = f"{cz_ok}/20（{fmt}）"
     if cz_ok == 20:
         rec["篇目"].append({"部分": "CLOZE", "材料": cbody, "小题": cqs})
@@ -212,6 +343,7 @@ def main():
             ok += 1
             print(f"  {tag}: ✅ {detail} → {rep['结论']}")
             if args.write and not args.scan:
+                rec = _clean_rec(rec)
                 rec["年份"] = str(y)
                 p = en.path_of(tier, y)
                 tmp = p + ".tmp"

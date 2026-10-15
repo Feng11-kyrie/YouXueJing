@@ -1,0 +1,337 @@
+{
+ "tier": "EN1",
+ "篇目": [
+  {
+   "部分": "CLOZE",
+   "材料": "Directions:\nSection I Use of English\nRead the following text. Choose the best word(s) for each numbered blank and mark\nA, B, C or Do n ANSWER SHEET 1. (10 points)\nIn 1924 America's National Research Council sent two engineers to supervise a\nseries of experiments at a telephone-parts factory called the Hawthorne Plant near\nChicago. It hoped they would learn how shop-floor lighting 1 workers'\nproductivity. Instead, the studies ended 2 giving their name to the \"Hawthorne\neffect,\" the extremely influential idea that the very 3 of being experimented\nupon changed subjects' behavior.\nThe idea arose because of the 4 behavior of the women in the plant.\nAccording to _5_ of the experiments, their hourly output rose when lighting\nwas increased, but also when it was dimmed. It did not _6_ what was done in the\nexperiment; 7 something was changed, productivity rose. A(n) 8 that\nthey were being experimented upon seemed to be 9 to alter workers'\nbehavior 10 itself.\nAfter several decades, the same data were 11 to econometric analysis. The\nHawthorne experiments had another surprise in store. 12 the descriptions on\nrecord, no systematic 13 was found that levels of productivity were related to\nchanges in lighting.\nIt turns out that the peculiar way of conducting the experiments may have led\nto 14 interpretations of what happened. 15 lighting was always changed\non a Sunday. When work started again on Monday, output 16 rose compared\nwith the previous Saturday and 17 to rise for the next couple of days. 18\na comparison with data for weeks when there was no experimentation showed that\noutput always went up on Mondays. Workers 19 to be diligent for the first few\ndays of the week in any case, before 20 a plateau and then slackening off. This\nsuggests that the alleged \"Hawthorne effect\" is hard to pin down .\n- 1 -",
+   "小题": [
+    {
+     "题号": 1,
+     "题干": "",
+     "选项": {
+      "A": "affected",
+      "B": "up",
+      "C": "with",
+      "D": "off"
+     }
+    },
+    {
+     "题号": 2,
+     "题干": "",
+     "选项": {
+      "A": "at",
+      "B": "sight",
+      "C": "act",
+      "D": "proof"
+     }
+    },
+    {
+     "题号": 3,
+     "题干": "",
+     "选项": {
+      "A": "truth",
+      "B": "perplexing",
+      "C": "mischievous",
+      "D": "ambiguous"
+     }
+    },
+    {
+     "题号": 4,
+     "题干": "",
+     "选项": {
+      "A": "controversial",
+      "B": "explanations",
+      "C": "accounts",
+      "D": "assessments"
+     }
+    },
+    {
+     "题号": 5,
+     "题干": "",
+     "选项": {
+      "A": "requirements",
+      "B": "matter",
+      "C": "indicate",
+      "D": "work"
+     }
+    },
+    {
+     "题号": 6,
+     "题干": "",
+     "选项": {
+      "A": "conclude",
+      "B": "for fear that",
+      "C": "in case that",
+      "D": "so long as"
+     }
+    },
+    {
+     "题号": 7,
+     "题干": "",
+     "选项": {
+      "A": "as far as",
+      "B": "expectation",
+      "C": "sentiment",
+      "D": "illusion"
+     }
+    },
+    {
+     "题号": 8,
+     "题干": "",
+     "选项": {
+      "A": "awareness",
+      "B": "excessive",
+      "C": "enough",
+      "D": "abundant"
+     }
+    },
+    {
+     "题号": 9,
+     "题干": "",
+     "选项": {
+      "A": "suitable",
+      "B": "for",
+      "C": "on",
+      "D": "by"
+     }
+    },
+    {
+     "题号": 10,
+     "题干": "",
+     "选项": {
+      "A": "about",
+      "B": "shown",
+      "C": "subjected",
+      "D": "conveyed"
+     }
+    },
+    {
+     "题号": 11,
+     "题干": "",
+     "选项": {
+      "A": "compared",
+      "B": "Consistent with",
+      "C": "Parallel with",
+      "D": "Peculiar to"
+     }
+    },
+    {
+     "题号": 12,
+     "题干": "",
+     "选项": {
+      "A": "Contrary to",
+      "B": "guidance",
+      "C": "implication",
+      "D": "source"
+     }
+    },
+    {
+     "题号": 13,
+     "题干": "",
+     "选项": {
+      "A": "evidence",
+      "B": "enlightening",
+      "C": "reliable",
+      "D": "misleading"
+     }
+    },
+    {
+     "题号": 14,
+     "题干": "",
+     "选项": {
+      "A": "disputable",
+      "B": "accidentally",
+      "C": "unpredictably",
+      "D": "suddenly"
+     }
+    },
+    {
+     "题号": 15,
+     "题干": "",
+     "选项": {
+      "A": "In contrast",
+      "B": "ceased",
+      "C": "started",
+      "D": "continued"
+     }
+    },
+    {
+     "题号": 16,
+     "题干": "",
+     "选项": {
+      "A": "duly",
+      "B": "Furthermore",
+      "C": "However",
+      "D": "Meanwhile"
+     }
+    },
+    {
+     "题号": 17,
+     "题干": "",
+     "选项": {
+      "A": "failed",
+      "B": "tended",
+      "C": "chose",
+      "D": "intended"
+     }
+    },
+    {
+     "题号": 18,
+     "题干": "",
+     "选项": {
+      "A": "Therefore",
+      "B": "climbing",
+      "C": "surpassing",
+      "D": "hitting"
+     }
+    },
+    {
+     "题号": 19,
+     "题干": "",
+     "选项": {
+      "A": "attempted",
+      "B": "",
+      "C": "",
+      "D": ""
+     }
+    },
+    {
+     "题号": 20,
+     "题干": "",
+     "选项": {
+      "A": "breaking",
+      "B": "",
+      "C": "",
+      "D": ""
+     }
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "Text 1\nOf all the changes that have taken place in English-language newspapers during\nthe past quarter-century, perhaps the most far-reaching has been the inexorable\ndecline in the scope and seriousness of their arts coverage.\nIt is difficult to the point of impossibility for the average reader under the age of\nforty to imagine a time when high-quality arts criticism could be found in most big­\ncity newspapers. Yet a considerable number of the most significant collections of\ncriticism published in the 20th century consisted in large part of newspaper reviews.\nTo read such books today is to marvel at the fact that their learned contents were once\ndeemed suitable for publication in general-circulation dailies.\nWe are even farther removed from the unfocused newspaper reviews published\nin England between the tum of the 20th century and the eve of World War II, at a time\nwhen newsprint was dirt-cheap and stylish arts criticism was considered an ornament\nto the publications in which it appeared. In those far-off days, it was taken for granted\nthat the critics of major papers would write in detail and at length about the events\nthey covered. Theirs was a serious business, and even those reviewers who wore their\nlearning lightly, like George Bernard Shaw and Ernest Newman, could be trusted to\nknow what they were about. These men believed in journalism as a calling, and were\nproud to be published in the daily press. \"So few authors have brains enough or\nliterary gift enough to keep their own end up in journalism, \"N ewman wrote, \"that I\nam tempted to define 'journalism' as 'a term of contempt applied by writers who are\nnot read to writers who are '.\"\nUnfortunately, these critics are virtually forgotten. Neville Cardus, who wrote for\nthe Manchester Guardian from 1917 until shortly before his death in 1975, is now\nknown solely as a writer of essays on the game of cricket. During his lifetime, though,\nhe was also one of England's foremost classical-music critics, and a stylist so widely\nadmired that his Autobiography (1947) became a best-seller. He was knighted in 1967,\nthe first music critic to be so honored. Yet only one of his books is now in print, and\nhis vast body of writings on music is unknown save to specialists.\nIs there any chance that Cardus's criticism will enjoy a revival? The prospect\nseems remote. J oumalistic tastes had changed long before his death, and postmodem\nreaders have little use for the richly upholstered Vicwardian prose in which he\nspecialized. Moreover, the amateur tradition in music criticism has been in headlong\nretreat.\n- 3 -",
+   "小题": [
+    {
+     "题号": 21,
+     "题干": "It is indicated in Paragraphs 1 and 2 that [A] arts criticism has disappeared from big-city newspapers. [B] English-language newspapers used to carry more arts reviews. [C] high-quality newspapers retain a large body of readers. [D] young readers doubt the suitability of criticism on dailies.",
+     "选项": {}
+    },
+    {
+     "题号": 22,
+     "题干": "Newspaper reviews in England before World War II were characterized by [A] free themes. [B] casual style. [C] elaborate layout. [D] radical viewpoints.",
+     "选项": {}
+    },
+    {
+     "题号": 23,
+     "题干": "Which of the following would Shaw and Newman most probably agree on? [A] It is writers' duty to fulfill journalistic goals. [B] It is contemptible for writers to be journalists. [C] Writers are likely to be tempted into journalism. [D] Not all writers are capable of journalistic writing.",
+     "选项": {}
+    },
+    {
+     "题号": 24,
+     "题干": "What can be learned about Cardus according to the last two paragraphs? [A] His music criticism may not appeal to readers today. [B] His reputation as a music critic has long been in dispute. [C] His style caters largely to modem specialists. [D] His writings fail to follow the amateur tradition.",
+     "选项": {}
+    },
+    {
+     "题号": 25,
+     "题干": "What would be the best title for the text? [A] Newspapers of the Good Old Days [B] The Lost Horizon in Newspapers [C] Mournful Decline of Journalism [D] Prominent Critics in Memory - 4 -",
+     "选项": {}
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "Text2\nOver the past decade, thousands of patents have been granted for what are called\nbusiness methods. Amazon.com received one for its \"one-click\" online payment\nsystem. Merrill Lynch got legal protection for an asset allocation strategy. One\ninventor patented a technique for lifting a box.\nNow t he n ation's top patent court appears completely ready t o scale back on\nbusiness-method patents, which have been controversial ever since t hey were first\nauthorized 10 years ago. In a move that has intellectual-property lawyers abuzz, the\nU.S. C ourt of Appeals for the Federal Circuit said it would use a particular case to\nconduct a broad review of business-method patents. In re Bilski, as the case is known,\nis \"a very big deal,\" says Dennis D. Crouch of the University of Missouri School of\nLaw. It \"has the potential to eliminate an entire class of patents.\"\nCurbs on business-method claims would be a dramatic about-face, because it\nwas the Federal Circuit itself that introduced such patents with its 1998 decision in\nthe s o-called State Street Bank case, approving a patent on a way of pooling\nmutual-fund assets. That ruling produced an explosion in business-method patent\nfilings, initially by emerging Internet companies trying to stake out exclusive rights to\nspecific types of online transactions. Later, more established companies raced to add\nsuch patents to their files, if only as a defensive move against rivals that might beat\nthem to the punch. In 2005, IBM noted in a court filing that it had been issued more\nthan 300 business-method patents, despite the fact that it questioned the legal basis for\ngranting them. Similarly, some Wall Street investment firms armed themselves with\npatents for financial products, even as they took positions in court cases opposing the\npractice.\nThe Bilski case involves a claimed patent on a method for hedging risk in the\nenergy market. The Federal Circuit issued an unusual order stating that t he case\nwould be heard by all 12 of the court's judges, rather than a typical panel of three, and\nthat one issue it wants to evaluate is whether it should \"reconsider\" its State Street\nBank ruling.\nThe Federal Circuit's action comes in the wake of a series of recent decisions by\nthe Supreme Court that has narrowed the scope of protections for patent holders. Last\nApril, for example, the justices signaled that too many patents were being upheld for\n\"inventions\" that are obvious. The judges on the Federal Circuit are \"reacting to the\nanti-patent trend at the Supreme Court,\" says Harold C. Wegner, a patent attorney and\nprofessor at George Washington University Law School.\n- 5 -",
+   "小题": [
+    {
+     "题号": 26,
+     "题干": "Business-method patents have recently aroused concern because of [A] their limited value to businesses. [B] their connection with asset allocation. [C] the possible restriction on their granting. [D] the controversy over their authorization.",
+     "选项": {}
+    },
+    {
+     "题号": 27,
+     "题干": "Which of the following is true of the Bilski case? [A] Its ruling complies with the court decisions. [B] It involves a very big business transaction. [C] It has been dismissed by the Federal Circuit. [D] It may change the legal practices in the U.S.",
+     "选项": {}
+    },
+    {
+     "题号": 28,
+     "题干": "The word \"about-face\" (Line 1, Para. 3) most probably means [A] loss of goodwill. [B] increase of hostility. [C] change of attitude. [D] enhancement of dignity.",
+     "选项": {}
+    },
+    {
+     "题号": 29,
+     "题干": "We learn from the last two paragraphs that business-method patents [A] are immune to legal challenges. [B] are often unnecessarily issued. [C] lower the esteem for patent holders. [D] increase the incidence of risks.",
+     "选项": {}
+    },
+    {
+     "题号": 30,
+     "题干": "Which of the following would be the subject of the text? [A] A looming threat to business-method patents. [B] Protection for business-method patent holders. [C] A legal case regarding business-method patents. [D] A prevailing trend against business-method patents . - 6 -",
+     "选项": {}
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "Text3\nIn his book The Tipping Point, Malcolm Gladwell argues that \"social epidemics\"\nare driven in large part by the actions of a tiny minority of special individuals, often\ncalled influentials, who are unusually informed, persuasive, or well connected. The\nidea is intuitively compelling, but it doesn't explain how ideas actually spread.\nThe supposed importance of influentials derives from a plausible-sounding but\nlargely untested theory called the \"two-step flow of communication\": Information\nflows from the media to the influentials and from them to everyone else. Marketers\nhave embraced the two-step flow because it suggests that if they can just find and\ninfluence the influentials, those select people will do most of the work for them. The\ntheory also seems to explain the sudden and unexpected popularity of certain looks,\nbrands, or neighborhoods. In many such cases, a cursory search for causes finds that\nsome small group of people was wearing, promoting, or developing whatever it is\nbefore anyone else paid attention. Anecdotal evidence of this kind fits nicely with the\nidea that only certain special people can drive trends.\nIn their recent work, however, some researchers have come up with the finding\nthat influentials have far less impact on social epidemics than is generally supposed.\nIn fact, they don't seem to be required at all.\nThe researchers' argument stems from a simple observation about social\ninfluence: With the exception of a few celebrities like Oprah Winfrey - whose outsize\npresence is primarily a function of media, not interpersonal, influence - even the most\ninfluential members of a population simply don't interact with that many others. Yet\nit is precisely these non-celebrity influentials who, according to the two-step-flow\ntheory, are supposed to drive social epidemics, by influencing their friends and\ncolleagues directly. For a social epidemic to occur, however, each person so affected\nmust then influence his or her own acquaintances, who must in turn influence theirs,\nand so on; and just how many others pay attention to each of these people has little to\ndo with the initial influential. If people in the network just two degrees removed from\nthe initial influential prove resistant, for example, the cascade of change won't\npropagate very far or affect many people.\nBuilding on this basic truth about interpersonal influence, the researchers studied\nthe dynamics of social influence by conducting thousands of computer simulations of\npopulations, manipulating a number of variables relating to people's ability to\ninfluence others and their tendency to be influenced. They found that the principal\nrequirement for what is called \"global cascades\" - the widespread propagation of\ninfluence through networks - is the presence not of a few influentials but, rather, of a\ncritical mass of easily influenced people.\n- 7 -",
+   "小题": [
+    {
+     "题号": 31,
+     "题干": "By citing the book The Tipping Point, the author intends to [A] analyze the consequences of social epidemics. [B] discuss influentials' function in spreading ideas. [C] exemplify people's intuitive response to social epidemics. [D] describe the essential characteristics of influentials.",
+     "选项": {}
+    },
+    {
+     "题号": 32,
+     "题干": "The author suggests that the \"two-step-flow theory\" [A] serves as a solution to marketing problems. [B] has helped explain certain prevalent trends. [C] has won support from influentials. [D] requires solid evidence for its validity.",
+     "选项": {}
+    },
+    {
+     "题号": 33,
+     "题干": "What the researchers have observed recently shows that [A] the power of influence goes with social interactions. [B] interpersonal links can be enhanced through the media. [C] influentials have more channels to reach the public. [D] most celebrities enjoy wide media attention.",
+     "选项": {}
+    },
+    {
+     "题号": 34,
+     "题干": "The underlined phrase \"these people\" in Paragraph 4 refers to the ones who [A] stay outside the network of social influence. [B] have little contact with the source of influence. [C] are influenced and then influence others. [D] are influenced by the initial influential.",
+     "选项": {}
+    },
+    {
+     "题号": 35,
+     "题干": "What is the essential element in the dynamics of social influence? [A] The eagerness to be accepted. [B] The impulse to influence others. [C] The readiness to be influenced. [D] The inclination to rely on others. - 8 -",
+     "选项": {}
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "Text4\nBankers have been blaming themselves for their troubles in public. Behind the\nscenes, they have been taking aim at someone else: the accounting standard-setters.\nTheir rules, moan the banks, have forced them to report enormous losses, and it's just\nnot fair. These rules say they must value some assets at the price a third party would pay,\nnot the price managers and regulators would like them to fetch.\nUnfortunately, banks' lobbying now seems to be working. The details may be\nunknowable, but the independence of standard-setters, essential to the proper\nfunctioning of capital markets, is being compromised. And, unless banks carry toxic\nassets at prices that attract buyers, reviving the banking system will be difficult.\nAfter a bruising encounter with Congress, America's Financial Accounting\nStandards Board (F ASB) rushed through rule changes. These gave banks more freedom\nto use models to value illiquid assets and more flexibility in recognizing losses on\nlong-term assets in their income statements. Bob Herz, the FASB's chairman, cried\nout against those who \"question our motives.\" Yet bank shares rose and the changes\nenhance what one lobbying group politely calls \"the use of judgment by management.\"\nEuropean ministers instantly demanded that the International Accounting\nStandards Board (IASB) do likewise. The IASB says it does not want to act without\noverall planning, but the pressure to fold when it completes its reconstruction of rules\nlater this year is strong. Charlie McCreevy, a European commissioner, warned the\nIASB that it did \"not live in a political vacuum\" but \"in the real world\" and that Europe\ncould yet develop different rules.\nIt was banks that were on the wrong planet, with accounts that vastly overvalued\nassets. Today they argue that market prices overstate losses, because they largely reflect\nthe temporary illiquidity of markets, not the likely extent of bad debts. The truth will\nnot be known for years. But banks' shares trade below their book value, suggesting that\ninvestors are skeptical. And dead markets partly reflect the paralysis of banks which\nwill not sell assets for fear of booking losses, yet are reluctant to buy all those supposed\nbargains.\nTo get the system working again, losses must be recognized and dealt with.\nAmerica's new plan to buy up toxic assets will not work unless banks mark assets to\nlevels which buyers find attractive. Successful markets require independent and even\ncombative standard-setters. The F ASB and IASB have been exactly that, cleaning up\nrules on stock options and pensions, for example, against hostility from special interests.\nBut by giving in to critics now they are inviting pressure to make more concessions .\n- 9 -",
+   "小题": [
+    {
+     "题号": 36,
+     "题干": "Bankers complained that they were forced to [A] follow unfavorable asset evaluation rules. [B] collect payments from third parties. [C] cooperate with the price managers. [D] reevaluate some of their assets.",
+     "选项": {}
+    },
+    {
+     "题号": 37,
+     "题干": "According to the author, the rule changes of the FASB may result in [A] the diminishing role of management. [B] the revival of the banking system. [C] the banks' long-term asset losses. [D] the weakening of its independence.",
+     "选项": {}
+    },
+    {
+     "题号": 38,
+     "题干": "According to Paragraph 4, McCreevy objects to the IASB's attempt to [A] keep away from political influences. [B] evade the pressure from their peers. [C] act on their own in rule-setting. [D] take gradual measures in reform.",
+     "选项": {}
+    },
+    {
+     "题号": 39,
+     "题干": "The author thinks the banks were \"on the wrong planet\" in that they [A] misinterpreted market price indicators. [B] exaggerated the real value of their assets. [C] neglected the likely existence of bad debts. [D] denied booking losses in their sale of assets.",
+     "选项": {}
+    },
+    {
+     "题号": 40,
+     "题干": "The author's attitude towards standard-setters is one of [A] satisfaction. [B] skepticism. [C] objectiveness. [D] sympathy. - 10 -",
+     "选项": {}
+    }
+   ]
+  }
+ ],
+ "题目数": 40,
+ "年份": "2010"
+}

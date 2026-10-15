@@ -1,0 +1,337 @@
+{
+ "tier": "EN1",
+ "篇目": [
+  {
+   "部分": "CLOZE",
+   "材料": "Directions:\nSection I Use of English\nRead the following text. Choose the best word(s) for each numbered blank and mark\nA, B, C or Do n the ANSWER SHEET. (lOpoints)\nPeople are, on the whole, poor at considering background information when\nmaking individual decisions. At first glance this might seem like a strength that\n_1_ the ability to make judgments which are unbiased by 2 factors. But Dr\nUri Simonsohn speculated that an inability to consider the big -�3�_ was leading\ndecision-makers to be biased by the daily samples of information they were working\nwith. 4 , he theorised that a judge 5 of appearing too soft 6 cnme\nmight be more likely to send someone to prison _7_ he had already sentenced five\nor six other defendants only to forced community service on that day.\nTo 8 this idea, he turned to the university-admissions process. In theory,\nthe _9_ of an applicant should not depend on the few others_lQ_ randomly for\ninterview during the same day, but Dr Simonsohn suspected the truth was 11\nHe studied the results of 9,323 MBA interviews 12 by 31 admissions\nofficers. The interviewers had 13 applicants on a scale of one to five. This\nscale 14 numerous factors into consideration. The scores were 15 used in\nconjunction with an applicant's score on the Graduate Management Admission Test, or\nGMAT, a standardised exam which is 16 out of 800 points, to make a decision\non whether to accept him or her.\nDr Simonsohn found if the score of the previous candidate in a daily series of\ninterviewees was 0.75 points or more higher than that of the one 17 that, then\nthe score for the next applicant would 18 by an average of 0.075 points. This\nmight sound small, but to 19 the effects of such a decrease a candidate would\nneed 30 more GMATpoints than would otherwise have been 20\n- 1 -",
+   "小题": [
+    {
+     "题号": 1,
+     "题干": "",
+     "选项": {
+      "A": "grants",
+      "B": "submits",
+      "C": "transmits",
+      "D": "delivers"
+     }
+    },
+    {
+     "题号": 2,
+     "题干": "",
+     "选项": {
+      "A": "minor",
+      "B": "external",
+      "C": "crucial",
+      "D": "objective"
+     }
+    },
+    {
+     "题号": 3,
+     "题干": "",
+     "选项": {
+      "A": "issue",
+      "B": "vision",
+      "C": "picture",
+      "D": "moment"
+     }
+    },
+    {
+     "题号": 4,
+     "题干": "",
+     "选项": {
+      "A": "Above all",
+      "B": "On average",
+      "C": "In principle",
+      "D": "For example"
+     }
+    },
+    {
+     "题号": 5,
+     "题干": "",
+     "选项": {
+      "A": "fond",
+      "B": "fearful",
+      "C": "capable",
+      "D": "thoughtless"
+     }
+    },
+    {
+     "题号": 6,
+     "题干": "",
+     "选项": {
+      "A": "in",
+      "B": "for",
+      "C": "to",
+      "D": "on"
+     }
+    },
+    {
+     "题号": 7,
+     "题干": "",
+     "选项": {
+      "A": "if",
+      "B": "until",
+      "C": "though",
+      "D": "unless"
+     }
+    },
+    {
+     "题号": 8,
+     "题干": "",
+     "选项": {
+      "A": "test",
+      "B": "emphasize",
+      "C": "share",
+      "D": "promote"
+     }
+    },
+    {
+     "题号": 9,
+     "题干": "",
+     "选项": {
+      "A": "decision",
+      "B": "quality",
+      "C": "status",
+      "D": "success"
+     }
+    },
+    {
+     "题号": 10,
+     "题干": "",
+     "选项": {
+      "A": "found",
+      "B": "studied",
+      "C": "chosen",
+      "D": "identified"
+     }
+    },
+    {
+     "题号": 11,
+     "题干": "",
+     "选项": {
+      "A": "otherwise",
+      "B": "defensible",
+      "C": "replaceable",
+      "D": "exceptional"
+     }
+    },
+    {
+     "题号": 12,
+     "题干": "",
+     "选项": {
+      "A": "inspired",
+      "B": "rated",
+      "C": "matched",
+      "D": "arranged"
+     }
+    },
+    {
+     "题号": 13,
+     "题干": "",
+     "选项": {
+      "A": "assigned",
+      "B": "got",
+      "C": "took",
+      "D": "gave"
+     }
+    },
+    {
+     "题号": 14,
+     "题干": "",
+     "选项": {
+      "A": "put",
+      "B": "then",
+      "C": "ever",
+      "D": "rather"
+     }
+    },
+    {
+     "题号": 15,
+     "题干": "",
+     "选项": {
+      "A": "instead",
+      "B": "passed",
+      "C": "marked",
+      "D": "introduced"
+     }
+    },
+    {
+     "题号": 16,
+     "题干": "",
+     "选项": {
+      "A": "selected",
+      "B": "after",
+      "C": "above",
+      "D": "before"
+     }
+    },
+    {
+     "题号": 17,
+     "题干": "",
+     "选项": {
+      "A": "below",
+      "B": "float",
+      "C": "fluctuate",
+      "D": "drop"
+     }
+    },
+    {
+     "题号": 18,
+     "题干": "",
+     "选项": {
+      "A": "jump",
+      "B": "undo",
+      "C": "maintain",
+      "D": "disregard"
+     }
+    },
+    {
+     "题号": 19,
+     "题干": "",
+     "选项": {
+      "A": "achieve",
+      "B": "",
+      "C": "",
+      "D": ""
+     }
+    },
+    {
+     "题号": 20,
+     "题干": "",
+     "选项": {
+      "A": "necessary",
+      "B": "",
+      "C": "",
+      "D": ""
+     }
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "Text 1\nIn the 2006 film version of The Devil Wears Prada, Miranda Priestly, played by\nMeryl Streep, scolds her unattractive assistant for imagining that high fashion doesn't\naffect her. Priestly explains how the deep blue color of the assistant's sweater\ndescended over the years from fashion shows to department stores and to the bargain\nbin in which the poor girl doubtless found her garment.\nThis top-down conception of the fashion business couldn't be more out of\ndate or at odds with the feverish world described in Overdressed, Elizabeth Cline's\nthree-year indictment of \"fast fashion\". In the last decade or so, advances in\ntechnology have allowed mass-market labels such as Zara, H&M, and Uniqlo to react\nto trends more quickly and anticipate demand more precisely. Quicker turnarounds\nmean less wasted inventory, more frequent releases, and more profit. These labels\nencourage style-conscious consumers to see clothes as disposable - meant to last only\na wash or two, although they don't advertise that - and to renew their wardrobe every\nfew weeks. By offering on-trend items at dirt-cheap prices, Cline argues, these brands\nhave hijacked fashion cycles, shaking an industry long accustomed to a seasonal pace.\nThe victims of this revolution, of course, are not limited to designers. For H&M\nto offer a $5.95 knit miniskirt in all its 2,300-plus stores around the world, it must rely\non low-wage overseas labor, order in volumes that strain natural resources, and use\nmassive amounts of harmful chemicals.\nOverdressed is the fashion world's answer to consumer-activist bestsellers like\nMichael Pollan's The Omnivore's Dilemma. \"Mass-produced clothing, like fast food,\nfills a hunger and need, yet is non-durable and wasteful,\" Cline argues. Americans,\nshe finds, buy roughly 20 billion garments a year - about 64 items per person - and\nno matter how much they give away, this excess leads to waste.\nTowards the end of Overdressed, Cline introduced her ideal, a Brooklyn woman\nnamed Sarah Kate Beaumont, who since 2008 has made all of her own clothes - and\nbeautifully. But as Cline is the first to note, it took Beaumont decades to perfect her\ncraft; her example can't be knocked off.\nThough several fast-fashion companies have made efforts to curb their impact on\nlabor and the environment - including H&M, with its green Conscious Collection\nline - Cline believes lasting change can only be effected by the customer. She exhibits\nthe idealism common to many advocates of sustainability, be it in food or in energy.\nVanity is a constant; people will only start shopping more sustainably when they can't\nafford not to.\n- 3 -",
+   "小题": [
+    {
+     "题号": 21,
+     "题干": "Priestly criticizes her assistant for her [A] insensitivity to fashion. [B] obsession with high fashion. [ C] poor bargaining skill. [D] lack of imagination.",
+     "选项": {}
+    },
+    {
+     "题号": 22,
+     "题干": "According to Cline, mass-market labels urge consumers to [A] combat unnecessary waste. [B] shop for their garments more frequently. [C] resist the influence of advertisements. [D] shut out the feverish fashion world.",
+     "选项": {}
+    },
+    {
+     "题号": 23,
+     "题干": "The word \"indictment\" (Line 3, Para.2) is closest in meaning to [A] tolerance. [B] indifference. [C] enthusiasm. [D] accusation.",
+     "选项": {}
+    },
+    {
+     "题号": 24,
+     "题干": "Which of the following can be inferred from the last paragraph? [A] Vanity has more often been found in idealists. [B] The fast-fashion industry ignores sustainability. [C] Pricing is vital to environment-friendly purchasing. [D] People are more interested in unaffordable garments.",
+     "选项": {}
+    },
+    {
+     "题号": 25,
+     "题干": "What is the subject of the text? [A] Satire on an extravagant lifestyle. [B] Challenge to a high-fashion myth. [C] Criticism of the fast-fashion industry. [D] Exposure of a mass-market secret. - 4 -",
+     "选项": {}
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "Text2\nAn old saying has it that half of all advertising budgets are wasted - the\ntrouble is, no one knows which half. In the internet age, at least in theory, this fraction\ncan be much reduced. By watching what people search for, click on and say online,\ncompanies can aim \"behavioural\" ads at those most likely to buy.\nIn the past couple of weeks a quarrel has illustrated the value to advertisers of\nsuch fine-grained information: Should advertisers assume that people are happy to be\ntracked and sent behavioural ads? Or should they have explicit permission?\nIn December 2010 America's Federal Trade Commission (FTC) proposed adding\na \"do not track\" (DNT) option to internet browsers, so that users could tell advertisers\nthat they did not want to be followed. Microsoft's Internet Explorer and Apple's\nSafari both offer DNT; Google's Chrome is due to do so this year. In February the\nFTC and the Digital Advertising Alliance (DAA) agreed that the industry would get\ncracking on responding to DNT requests.\nOn May 31 st Microsoft set off the row. It said that Internet Explorer 10, the\nversion due to appear with Windows 8, would have DNT as a default.\nAdvertisers are horrified. Human nature being what it is, most people stick with\ndefault settings. Few switch DNT on now, but if tracking is off it will stay off. Bob\nLiodice, the chief executive of the Association of National Advertisers, says\nconsumers will be worse off if the industry cannot collect information about their\npreferences. People will not get fewer ads, he says. \"They'll get less meaningful, less\ntargeted ads.\"\nIt is not yet clear how advertisers will respond. Getting a DNT signal does not\noblige anyone to stop tracking, although some companies have promised to do so.\nUnable to tell whether someone really objects to behavioural ads or whether they are\nsticking with Microsoft's default, some may ignore a DNT signal and press on\nanyway.\nAlso unclear is why Microsoft has gone it alone. After all, it has an ad business\ntoo, which it says will comply with DNT requests, though it is still working out how.\nIf it is trying to upset Google, which relies almost wholly on advertising, it has\nchosen an indirect method: there is no guarantee that DNT by default will become the\nnorm. DNT does not seem an obviously huge selling point for windows 8 - though\nthe firm has compared some of its other products favourably with Google's on that\ncount before. Brendon Lynch, Microsoft's chief privacy officer, blogged: \"We believe\nconsumers should have more control.\" Could it really be that simple?\n- 5 -",
+   "小题": [
+    {
+     "题号": 26,
+     "题干": "It is suggested in Paragraph 1 that \"behavioural\" ads help advertisers to [A] provide better online services. [B] ease competition among themselves. [C] avoid complaints from consumers. [D] lower their operational costs.",
+     "选项": {}
+    },
+    {
+     "题号": 27,
+     "题干": "\"the industry\" (Line 5, Para.3) refers to [A] internet browser developers. [B] digital information analysts. [C] e-commerce conductors. [D] online advertisers.",
+     "选项": {}
+    },
+    {
+     "题号": 28,
+     "题干": "Bob Liodice holds that setting DNT as a default [A] may cut the number of junk ads. [B] fails to affect the ad industry. [C] will not benefit consumers. [D] goes against human nature.",
+     "选项": {}
+    },
+    {
+     "题号": 29,
+     "题干": "Which of the following is true according to Paragraph 6? [A] Advertisers are willing to implement DNT. [B] DNT may not serve its intended purpose. [C] DNT is losing its popularity among consumers. [D] Advertisers are obliged to offer behavioural ads.",
+     "选项": {}
+    },
+    {
+     "题号": 30,
+     "题干": "The author's attitude towards what Brendon Lynch said in his blog is one of [A] indulgence. [B] understanding. [C] appreciation. [D] skepticism. - 6 -",
+     "选项": {}
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "Text3\nUp until a few decades ago, our visions of the future were largely - though by no\nmeans uniformly - glowingly positive. Science and technology would cure all the ills\nof humanity, leading to lives of fulfilment and opportunity for all.\nNow utopia has grown unfashionable, as we have gained a deeper appreciation\nof the range of threats facing us, from asteroid strike to epidemic flu and to climate\nchange. You might even be tempted to assume that humanity has little future to look\nforward to.\nBut such gloominess is misplaced. The fossil record shows that many species\nhave endured for millions of years - so why shouldn't we? Take a broader look at our\nspecies' place in the universe, and it becomes clear that we have an excellent chance\nof surviving for tens, if not hundreds, of thousands of years. Look up Homo sapiens\nin the \"Red List\" of threatened species of the International Union for the\nConservation of Nature (IUCN) and you will read: \"Listed as Least Concern as the\nspecies is very widely distributed, adaptable, currently increasing, and there are no\nmajor threats resulting in an overall population decline.\"\nSo what does our deep future hold? A growing number of researchers and\norganisations are now thinking seriously about that question. For example, the Long\nNow Foundation has as its flagship project a mechanical clock that is designed to still\nbe marking time thousands of years hence.\nPerhaps willfully, it may be easier to think about such lengthy timescales than\nabout the more immediate future. The potential evolution of today's technology, and\nits social consequences, is dazzlingly complicated, and it's perhaps best left to science\nfiction writers and futurologists to explore the many possibilities we can envisage.\nThat's one reason why we have launched Arc, a new publication dedicated to the near\nfuture.\nBut take a longer view and there is a surprising amount that we can say with\nconsiderable assurance. As so often, the past holds the key to the future: we have now\nidentified enough of the long-term patterns shaping the history of the planet, and our\nspecies, to make evidence-based forecasts about the situations in which our\ndescendants will find themselves.\nThis long perspective makes the pessimistic view of our prospects seem more\nlikely to be a passing fad. To be sure, the future is not all rosy. But we are now\nknowledgeable enough to reduce many of the risks that threatened the existence of\nearlier humans, and to improve the lot of those to come.\n- 7 -",
+   "小题": [
+    {
+     "题号": 31,
+     "题干": "Our vision of the future used to be inspired by [A] our desire for lives of fulfillment. [B] our faith in science and technology. [C] our awareness of potential risks. [D] our belief in equal opportunity.",
+     "选项": {}
+    },
+    {
+     "题号": 32,
+     "题干": "The IUCN's \"Red List\" suggests that human beings are [A] a sustained species. [B] the world's dominant power. [C] a threat to the environment. [D] a misplaced race.",
+     "选项": {}
+    },
+    {
+     "题号": 33,
+     "题干": "Which of the following is true according to Paragraph 5? [A] The interest in science fiction is on the rise. [B] Arc helps limit the scope of futurological studies. [C] Technology offers solutions to social problems. [D] Our immediate future is hard to conceive.",
+     "选项": {}
+    },
+    {
+     "题号": 34,
+     "题干": "To ensure the future of mankind, it is crucial to [A] adopt an optimistic view of the world. [B] draw on our experience from the past. [C] explore our planet's abundant resources. [D] curb our ambition to reshape history.",
+     "选项": {}
+    },
+    {
+     "题号": 35,
+     "题干": "Which of the following would be the best title for the text? [A] The Ever-bright Prospects of Mankind. [B] Science, Technology and Humanity. [C] Evolution of the Human Species. [D] Uncertainty about Our Future. - 8 -",
+     "选项": {}
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "Text4\nOn a five to three vote, the Supreme Court knocked out much of Arizona's\nimmigration law Monday - a modest policy victory for the Obama Administration.\nBut on the more important matter of the Constitution, the decision was an 8-0 defeat\nfor the Administration's effort to upset the balance of power between the federal\ngovernment and the states.\nIn Arizona v. United States, the majority overturned three of the four contested\nprovisions of Arizona's controversial plan to have state and local police enforce\nfederal immigration law. The Constitutional principles that Washington alone has the\npower to \"establish a uniform Rule of Naturalization\" and that federal laws precede\nstate laws are noncontroversial. Arizona had attempted to fashion state policies that\nran parallel to the existing federal ones.\nJustice Anthony Kennedy, joined by Chief Justice John Roberts and the Court's\nliberals, ruled that the state flew too close to the federal sun. On the overturned\nprovisions the majority held Congress had deliberately \"occupied the field\" and\nArizona had thus intruded on the federal's privileged powers.\nHowever, the Justices said that Arizona police would be allowed to verify the\nlegal status of people who come in contact with law enforcement. That's because\nCongress has always envisioned joint federal-state immigration enforcement and\nexplicitly encourages state officers to share information and cooperate with federal\ncolleagues.\nTwo of the three objecting Justices - Samuel Alito and Clarence Thomas -\nagreed with this Constitutional logic but disagreed about which Arizona rules\nconflicted with the federal statute. The only major objection came from Justice\nAntonin Scalia, who offered an even more robust defense of state privileges going\nback to the Alien and SeditionActs.\nThe 8-0 objection to President Obama turns on what Justice Samuel Alito\ndescribes in his objection as \"a shocking assertion of federal executive power\". The\nWhite House argued that Arizona's laws conflicted with its enforcement priorities,\neven if state laws complied with federal statutes to the letter. In effect, the White\nHouse claimed that it could invalidate any otherwise legitimate state law that it\ndisagrees with.\nSome powers do belong exclusively to the federal government, and control of\ncitizenship and the borders is among them. But if Congress wanted to prevent states\nfrom using their own resources to check immigration status, it could. It never did so.\nThe Administration was in essence asserting that because it didn't want to carry out\nCongress's immigration wishes, no state should be allowed to do so either. Every\nJustice rightly rejected this remarkable claim.\n- 9 -",
+   "小题": [
+    {
+     "题号": 36,
+     "题干": "Three provisions of Arizona's plan were overturned because they [A] disturbed the power balance between different states. [B] overstepped the authority of federal immigration law. [C] deprived the federal police of Constitutional powers. [D] contradicted both the federal and state policies.",
+     "选项": {}
+    },
+    {
+     "题号": 37,
+     "题干": "On which of the following did the Justices agree, according to Paragraph 4? [A] Congress's intervention in immigration enforcement. [B] Federal officers' duty to withhold immigrants'information. [C] States' legitimate role in immigration enforcement. [D] States' independence from federal immigration law.",
+     "选项": {}
+    },
+    {
+     "题号": 38,
+     "题干": "It can be inferred from Paragraph 5 that the Alien and SeditionActs [A] stood in favor of the states. [B] supported the federal statute. [C] undermined the states' interests. [D] violated the Constitution.",
+     "选项": {}
+    },
+    {
+     "题号": 39,
+     "题干": "The White House claims that its power of enforcement [A] is dependent on the states' support. [B] is established by federal statutes. [C] outweighs that held by the states. [D] rarely goes against state laws.",
+     "选项": {}
+    },
+    {
+     "题号": 40,
+     "题干": "What can be learned from the last paragraph? [A] Immigration issues are usually decided by Congress. [B] The Administration is dominant over immigration issues. [C] Justices wanted to strengthen its coordination with Congress. [D] Justices intended to check the power of the Administration. - 10 -",
+     "选项": {}
+    }
+   ]
+  }
+ ],
+ "题目数": 40,
+ "年份": "2013"
+}

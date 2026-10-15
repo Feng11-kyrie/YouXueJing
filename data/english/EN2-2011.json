@@ -1,0 +1,337 @@
+{
+ "tier": "EN2",
+ "篇目": [
+  {
+   "部分": "CLOZE",
+   "材料": "2011年全国硕士研究生入学统一考试英语（二）试题\nSection I Use of English\nDirections:\nRead the following text. Choose the best word(s) for each numbered blank and mark A,\nB, C or D on ANSWER SHEET 1. (10 points)\nThe Internet affords anonymity to its users, a blessing to privacy and freedom\nof speech. But that very anonymity is also behind the explosion of cyber-crime\nthat has 1 across the Web.\nCan privacy be preserved 2 bringing safety and security to a world that\nseems increasingly 3 ?\nLast month, Howard Schmidt, the nation's cyber-czar, offered the federal\ngovernment a 4 to make the Web a safer place - a \"voluntary trusted\nidentity\" s ystem that would be the high-tech 5 of a physical key, a\nfingerprint and a photo ID card, all rolled 6 one. The system might use a\nsmart identity card, or a digital credential 7 to a specific computer, and\nwould authenticate users at a range of online services.\nThe idea is to 8 a federation of private online identity systems. Users\ncould 9 which system to join, and only registered users whose identities have been\nauthenticated could navigate those systems. The approach contrasts with one that\nwould require an Internet driver's license 10 by the government.\nGoogle and Microsoft are among companies that already have these \"single sign­\non\" systems that make it possible for users to 11 just once but use many\ndifferent services.\n12 , the approach would create a \"walled garden\" in cyberspace, with\nsafe \"neighborhoods\" and bright \"streetlights\" to establish a sense of a 13\ncommunity.\nMr. Schmidt described it as a \"voluntary ecosystem\" in which \"individuals\nand orgamzat10ns can complete onlme transact10ns with 14 , trustmg the\nidentities of each other and the identities of the infrastructure 15 which the\ntransaction runs.\"\nStill, th e adm1mstratlon's plan has 16 pnvacy rights activists. Some\napplaud the approach; others are concerned. It seems clear that such a scheme is an\ninitiative push toward what would 17 be a compulsory Internet \"driver's\nlicense\" mentality.\nThe plan has also been greeted with 18 by some computer security\nexperts, who worry that the \"voluntary ecosystem\" envisioned by Mr. Schmidt\nwould still leave much of the Internet 19 . They argue that all Internet users\nshould be 20 to register and identify themselves, in the same way that\ndrivers must be licensed to drive on public roads.\n- 1 -",
+   "小题": [
+    {
+     "题号": 1,
+     "题干": "",
+     "选项": {
+      "A": "swept [B] skipped [C] walked [D] ridden",
+      "B": "",
+      "C": "",
+      "D": ""
+     }
+    },
+    {
+     "题号": 2,
+     "题干": "",
+     "选项": {
+      "A": "for [B] within [C] while [D] though",
+      "B": "",
+      "C": "",
+      "D": ""
+     }
+    },
+    {
+     "题号": 3,
+     "题干": "",
+     "选项": {
+      "A": "careless [B] lawless [C] pointless [D] helpless",
+      "B": "",
+      "C": "",
+      "D": ""
+     }
+    },
+    {
+     "题号": 4,
+     "题干": "",
+     "选项": {
+      "A": "reason [B] reminder [ C] compromise [D] proposal",
+      "B": "",
+      "C": "",
+      "D": ""
+     }
+    },
+    {
+     "题号": 5,
+     "题干": "",
+     "选项": {
+      "A": "information [B] interference [C] entertamment [D] equivalent",
+      "B": "",
+      "C": "",
+      "D": ""
+     }
+    },
+    {
+     "题号": 6,
+     "题干": "",
+     "选项": {
+      "A": "by [B] into [C] from [D] over",
+      "B": "",
+      "C": "",
+      "D": ""
+     }
+    },
+    {
+     "题号": 7,
+     "题干": "",
+     "选项": {
+      "A": "linked [B] directed [C] chained [D] compared",
+      "B": "",
+      "C": "",
+      "D": ""
+     }
+    },
+    {
+     "题号": 8,
+     "题干": "",
+     "选项": {
+      "A": "dismiss [B] discover [C] create [D] improve",
+      "B": "",
+      "C": "",
+      "D": ""
+     }
+    },
+    {
+     "题号": 9,
+     "题干": "",
+     "选项": {
+      "A": "recall [B] suggest [C] select [D] realize",
+      "B": "",
+      "C": "",
+      "D": ""
+     }
+    },
+    {
+     "题号": 10,
+     "题干": "",
+     "选项": {
+      "A": "released [B] issued [C] distributed [D] delivered",
+      "B": "",
+      "C": "",
+      "D": ""
+     }
+    },
+    {
+     "题号": 11,
+     "题干": "",
+     "选项": {
+      "A": "carry on [B] linger on [C] set in [D] log in",
+      "B": "",
+      "C": "",
+      "D": ""
+     }
+    },
+    {
+     "题号": 12,
+     "题干": "",
+     "选项": {
+      "A": "In vain [B] In effect [C] In return [D] In contrast",
+      "B": "",
+      "C": "",
+      "D": ""
+     }
+    },
+    {
+     "题号": 13,
+     "题干": "",
+     "选项": {
+      "A": "trusted [B] modernized [C] thriving [D] competing",
+      "B": "",
+      "C": "",
+      "D": ""
+     }
+    },
+    {
+     "题号": 14,
+     "题干": "",
+     "选项": {
+      "A": "caution [B] delight [C] confidence [D] patience",
+      "B": "",
+      "C": "",
+      "D": ""
+     }
+    },
+    {
+     "题号": 15,
+     "题干": "",
+     "选项": {
+      "A": "on [B] after [C] beyond [D] across",
+      "B": "",
+      "C": "",
+      "D": ""
+     }
+    },
+    {
+     "题号": 16,
+     "题干": "",
+     "选项": {
+      "A": "divided [B] disappointed [ C] protected [D] united",
+      "B": "",
+      "C": "",
+      "D": ""
+     }
+    },
+    {
+     "题号": 17,
+     "题干": "",
+     "选项": {
+      "A": "frequently [B] incidentally [C] occasionally [D] eventually",
+      "B": "",
+      "C": "",
+      "D": ""
+     }
+    },
+    {
+     "题号": 18,
+     "题干": "",
+     "选项": {
+      "A": "skepticism [B] tolerance [ C] indifference [D] enthusiasm",
+      "B": "",
+      "C": "",
+      "D": ""
+     }
+    },
+    {
+     "题号": 19,
+     "题干": "",
+     "选项": {
+      "A": "manageable [B] defendable [C] vulnerable [D] invisible",
+      "B": "",
+      "C": "",
+      "D": ""
+     }
+    },
+    {
+     "题号": 20,
+     "题干": "",
+     "选项": {
+      "A": "invited [B] appointed [C] allowed [D] forced",
+      "B": "",
+      "C": "",
+      "D": ""
+     }
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "Text 1\nRuth Simmons joined Goldman Sachs's board as an outside director in\nJanuary 2000; a year later she became president of Brown University. For the rest of\nthe decade she apparently managed both roles without attracting much criticism. But\nby the end of 2009 Ms. Simmons was under fire for having sat on Goldman's\ncompensation con皿ittee; how could she have let those enormous bonus payouts\npass unremarked? By February the next year Ms. Simmons had left the board. The\nposition was just taking up too much time, she said.\nOutside directors are supposed to serve as helpful, yet less biased, advisers on\na 伍m's board. Having made their wealth and their reputations elsewhere, they\npresumably have enough independence to disagree with the chief executive's\nproposals. If the sky, and the share price is falling, outside directors should be able\nto give advice based on having weathered their own crises.\nThe researchers from Ohio Universit y used a database that covered more\nthan 10,000 firms and more than 64,000 different directors between 1989 and\n2004. Then they simply checked which directors stayed from one proxy statement to\nthe next. The most likely reason for departing a board was age, so the\nresearchers concentrated on those \"surprise\" disappearances by directors under\nthe age of 70. They found that after a surprise departure, the probability that the\ncompany will subsequently have to restate earnings increases by nearly 20%. The\nlikelihood of being named in a federal class-action lawsuit also increases, and the\nstock is likely to perform worse. The effect tended to be larger for larger firms.\nAlthough a correlation between them leaving and subsequent bad performance at\nthe firm is suggestive, it does not mean that such directors are always jumping off a\nsinking ship. Often they \"trade up,\" leaving riskier, smaller 伍ms for larger and more\nstable firms.\nBut the researchers believe that outside directors have an easier time of\navoiding a blow to their reputations if they leave a firm before bad news breaks,\neven if a review of histor y shows they were on the board at the time any\nwrongdoing occurred. Firms who want to keep their outside directors through\ntough times may have to create incentives. Otherwise outside directors will\nfollow the example of Ms. Simmons, once again very popular on campus.\n- 3 -",
+   "小题": [
+    {
+     "题号": 21,
+     "题干": "According to Paragraph 1, Ms. Simmons was criticized for . [A] gaining excessive profits [B] failing to fulfill her duty [C] refusing to make compromises [D] leaving the board in tough times",
+     "选项": {}
+    },
+    {
+     "题号": 22,
+     "题干": "We learn from Paragraph 2 that outside directors are supposed to be . [A] generous investors [B] unbiased executives [C] share price forecasters [D] independent advisers",
+     "选项": {}
+    },
+    {
+     "题号": 23,
+     "题干": "According to the researchers from Ohio University, after an outside director's surprise departure, the firm is likely to . [A] become more stable [B] report increased earnings [C] do less well in the stock market [D] perform worse in lawsuits",
+     "选项": {}
+    },
+    {
+     "题号": 24,
+     "题干": "It can be inferred from the last paragraph that outside directors . [A] may stay for the attractive offers from the firm [B] have often had records of wrongdoings in the伍m [C] are accustomed to stress-free work in the firm [D] will decline incentives from the firm",
+     "选项": {}
+    },
+    {
+     "题号": 25,
+     "题干": "The author's attitude toward the role of outside directors is [A] perm1ss1ve [B] positive [C] scornful [D] critical - 4 -",
+     "选项": {}
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "Text2\nWhatever happened to the death of newspapers? A year ago the end seemed near.\nThe recession threatened to remove the advertising and readers that had not already\nfled to the internet. News a ers like the San Francisco Chronicle were chroniclin\ntheir own doom. America's Federal Trade Commission launched a round of talks\nabout how to save newspapers. Should they become charitable corporations? Should\nthe state subsidize them? It will hold another meeting soon. But the discussions now\nseem out of date.\nIn much of the world there is little sign of crisis. German and Brazilian\npapers have shrugged off the recession. Even American newspapers, which inhabit\nthe most troubled corner of the global industry, have not only survived but often\nreturned to profit. Not the 20% profit margins that were routine a few years ago, but\nprofit all the same.\nIt has not been much fun. Many papers stayed afloat by pushing journalists\noverboard. The American Society of News Editors reckons that 13,500 newsroom\njobs have gone since 2007. Readers are paying more for slimmer products. Some\npapers even had the nerve to refuse delivery to distant suburbs. Yet these desperate\nmeasures have proved the right ones and, sadly for many journalists, they can be\npushed further.\nNewspapers are becoming more balanced businesses, with a healthier mix of\nrevenues from readers and advertisers. American papers have long been highly\nunusual in their reliance on ads. Fully 87% of their revenues came from\nadvertising in 2008, according to the Organization for Economic Cooperation &\nDevelopment (OECD). In Japan the proportion is 35%. Not surprisingly, Japanese\nnewspapers are much more stable.\nThe whirlwind that swept through newsrooms harmed everybody, but much\nof the damage has been concentrated in areas where newspapers are least\ndistinctive. Car and film reviewers have gone. So have science and general\nbusiness reporters. Forei gn bureaus have been sava gely cut off. Newspapers are\nless complete as a result. But completeness is no longer a virtue in the newspaper\nbusiness.\n- 5 -",
+   "小题": [
+    {
+     "题号": 26,
+     "题干": "By saying \"Newspapers like…their own doom\" (Lines3-4, Para.1), the author indicates that newspapers [A] neglected the sign of crisis [B] failed to get state subsidies [C] were not charitable corporations [D] were in a desperate situation",
+     "选项": {}
+    },
+    {
+     "题号": 27,
+     "题干": "Some newspapers refused delivery to distant suburbs probably because . [A] readers threatened to pay less [B] newspapers wanted to reduce costs [C] journalists reported little about these areas [D] subscribers complained about slimmer products",
+     "选项": {}
+    },
+    {
+     "题号": 28,
+     "题干": "Compared with their American counterparts, Japanese newspapers are much more stable because they . [A] have more sources of revenue [B] have more balanced newsrooms [C] are less dependent on advertising [D] are less affected by readership",
+     "选项": {}
+    },
+    {
+     "题号": 29,
+     "题干": "What can be inferred from the last paragraph about the current newspaper business? [A] Distinctiveness is an essential feature of newspapers. [B] Completeness is to blame for the failure of newspaper. [C] Foreign bureaus play a crucial role in the newspaper business. [D] Readers have lost their interest in car and film reviews.",
+     "选项": {}
+    },
+    {
+     "题号": 30,
+     "题干": "The most appropriate title for this text would be . [A] American Newspapers: Struggling for Survival [B] American Newspapers: Gone with the Wind [C] American Newspapers: A ThrivingBusiness [D] American Newspapers: A Hopeless Story - 6 -",
+     "选项": {}
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "Text3\nWe tend to think of the decades immediately following World War II as a\ntime of prosperit y and growth, with soldiers returnin g home b y the millions,\ngoing off to college on the G. I. Bill and lining up at the marriage bureaus.\nBut when it came to their houses, it was a time of common sense and a belief\nthat less could truly be more. During the Depression and the war, Americans had\nlearned to live with less, and that restraint, in combination with the postwar\nconfidence in the future, made small, efficient housing positively stylish.\nEconomic condition was only a stimulus for the trend toward efficient living.\nThe phrase \"less is more\" was actuall y first popularized by a German, the\narchitect Ludwig Mies van der Rohe, who like other people associated with the\nBauhaus, a school of design, emigrated to the United States before World War II\nand took up posts at American architecture schools. These designers came to exert\nenormous influence on the course of American architecture, but none more so\nthan Mies.\nMies's signature phrase means that less decoration, properl y organized, has\nmore impact than a lot. Elegance, he believed, did not derive from abundance.\nLike other modern architects, he emplo yed metal, glass and laminated wood —\nmaterials that we take for granted today but that in the 1940s symbolized the\nfuture. Mies's sophisticated presentation masked the fact that the spaces he\ndesigned were small and efficient, rather than big and often empty.\nThe apartments in the elegant towers Mies built on Chica go's Lake Shore\nDrive, for example, were smaller — two-bedroom units under 1,000 square feet —\nthan those in their older neighbors alon g the city's Gold Coast. But they were\npopular because of their airy glass walls, the views they afforded and the elegance\nof the buildin gs' details and proportions, the architectural equivalent of the\nabstract art so popular at the time.\nThe trend toward \"less\" was not entirely foreign. In the 1930s Frank Lloyd\nWright started buildin g more modest and efficient houses — usually around 1,200\nsquare feet — than the spreadin g two-story ones he had designed in the 1890s and the\nearly 20th century.\nThe \"Case Study Houses\" commissioned from talented modern architects by\nCalifornia Arts & Architecture magazine between 1945 and 1962 were yet another\nhomegrown influence on the \"less is more\" trend. Aesthetic effect came from the\nlandscape, new materials and forthright detailing. In his Case Study House, Ralph\nRapson may have mispredicted just how the mechanical revolution would impact\neveryday life — few American families acquired helicopters, though most eventually\ngot clothes dryers — but his belief that self-sufficiency was both desirable and\ninevitable was widely shared.\n- 7 -",
+   "小题": [
+    {
+     "题号": 31,
+     "题干": "The postwar American housing style largely reflected the Americans' . [A] prosperity and growth [B] efficiency and practicality [C] restraint and confidence [D] pride and faithfulness",
+     "选项": {}
+    },
+    {
+     "题号": 32,
+     "题干": "Which of the following can be inferred from Paragraph 3 about the Bauhaus? [A] It was founded by Ludwig Mies van der Rohe. [B] Its designing concept was affected by World War II. [C] Most American architects used to be associated with it. [D] It had a great influence upon American architecture.",
+     "选项": {}
+    },
+    {
+     "题号": 33,
+     "题干": "Mies held that elegance of architectural design . [A] was related to large space [B] was identified with emptiness [C] was not reliant on abundant decorat10n [D] was not associated with efficiency",
+     "选项": {}
+    },
+    {
+     "题号": 34,
+     "题干": "What is true about the apartments Mies built on Chicago's Lake Shore Drive? [A] They ignored details and proportions. [B] They were built with materials popular at that time. [C] They were more spacious than neighboring buildings. [D] They shared some characteristics of abstract art.",
+     "选项": {}
+    },
+    {
+     "题号": 35,
+     "题干": "What can we learn about the design of the \"Case Study Houses\"? [A] Mechanical devices were widely used. [B] Natural scenes were taken into consideration. [C] Details were sacrificed for the overall effect. [D] Eco-friendly materials were employed. - 8 -",
+     "选项": {}
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "Text4\nWill the European Union make it? The question would have sounded strange\nnot long ago. Now even the project's greatest cheerleaders talk of a continent facing\na \"Bermuda triangle\" of debt, population decline and lower growth.\nAs well as those chronic problems, the EU faces an acute crisis in its\neconomic core, the 16 countries that use the single currency. Markets have lost\nfaith that the euro zone's economies, weaker or stronger, will one day converge\nthanks to the discipline of sharing a single currency, which denies uncompetitive\nmembers the quick fix of devaluation.\nYet the debate about how to save Europe's single currenc y from\ndisinte gration is stuck. It is stuck because the euro zone's dominant powers,\nFrance and German y, a gree on the need for greater harmonisation within the\neuro zone, but disa gree about what to harmonise.\nGerman y thinks the euro must be saved by stricter rules on borrowin g,\nspending and competitiveness, backed by quasi-automatic sanctions for governments\nthat do not obey. These might include threats to freeze EU funds for poorer regions\nand EU mega-projects, and even the suspension of a country's voting rights in EU\nministerial councils. It insists that economic co-ordination should involve all 27\nmembers of the EU club, among whom there is a small majority for free-market\nliberalism and economic rigour; in the inner core alone, Germany fears, a small\nmajority favour French interference.\nA \"southern\" camp headed by France wants something different: \"European\neconomic government\" within an inner core of euro-zone members. Translated,\nthat means politicians intervening in monetary policy and a s ystem of redistribution\nfrom richer to poorer members, via cheaper borrowing for governments through\ncommon Eurobonds or complete fiscal transfers. Finally, fi gures close to the Franch\ngovernment have murmured, euro-zone members should agree to some fiscal and\nsocial harmonisation: e.g., curbing competition in corporate-tax rates or labour costs.\nIt is too soon to write off the EU. It remains the world's largest trading block.\nAt its best, the European project is remarkably liberal: built around a single market\nof 27 rich and poor countries, its internal borders are far more open to goods, capital\nand labour than any comparable trading area. It is an ambitious attempt to blunt the\nsharpest edges of globalisation, and make capitalism benign.\n- 9 -",
+   "小题": [
+    {
+     "题号": 36,
+     "题干": "The EU is faced with so many problems that [A] it has more or less lost faith in markets [B] even its supporters begin to feel concerned [C] some of its member countries plan to abandon euro [D] it intends to deny the possibility of devaluation",
+     "选项": {}
+    },
+    {
+     "题号": 37,
+     "题干": "The debate over the EU's single currency is stuck because the dominant powers . [A] are competing for the leading position [B] are busy handling their own crises [C] fail to reach an agreement on harmonisation [D] disagree on the steps towards disintegration",
+     "选项": {}
+    },
+    {
+     "题号": 38,
+     "题干": "To solve the euro problem, Germany proposed that [A] EU funds for poor regions be increased [B] stricter regulations be imposed [C] only core members be involved in economic co-ordination [D] voting rights of the EU members be guaranteed",
+     "选项": {}
+    },
+    {
+     "题号": 39,
+     "题干": "The French proposal of handling the crisis implies that . [A] poor countries are more likely to get funds [B] strict monetary policy will be applied to poor countries [C] loans will be readily available to rich countries [D] rich countries will basically control Eurobonds",
+     "选项": {}
+    },
+    {
+     "题号": 40,
+     "题干": "Regarding the future of the EU, the author seems to feel . [A] pessimistic [B] desperate [C] conceited [D] hopeful - 10 -",
+     "选项": {}
+    }
+   ]
+  }
+ ],
+ "题目数": 40,
+ "年份": "2011"
+}

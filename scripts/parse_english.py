@@ -44,7 +44,14 @@ BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, BASE)
 from yj import english as en                                # noqa: E402
 
-QNUM_Q = re.compile(r'^(\d{1,2})\s*[.、]\s*(.*)$')          # 题干： 21. xxx
+# 题干： 21. xxx
+# 【题号里可能有空格】实测 2015 英语一的第 37 题印成 `3 7. It can be inferred...`
+# （OCR 在两位数中间插了空格）。原来的 `\d{1,2}` 匹配不到，导致那一年阅读
+# 只解析出 19/20 —— 而它在源里是完整的。
+# 所以允许数字之间有空格，但**要求至少一位数字、且以点号收尾**，避免误匹配正文。
+# 数字与点号间**也可能有空格**（实测 `3 . [A] careless`）
+# 行首可能有个**孤立的标点**（实测 `. 21. Quinn and her colleagues...`）
+QNUM_Q = re.compile(r'^[.、,，]?\s*(\d(?:\s?\d)?)\s*[.、]\s*(.*)$')
 OPT_Q = re.compile(r'^([A-D])\s*[.、]\s*(.*)$')             # 选项： A. xxx
 # 新题型用括号题号： (41) Hannah
 QNUM_PAREN = re.compile(r'^\((\d{1,2})\)\s*(.*)$')
@@ -195,8 +202,10 @@ def parse_choice_block(lines, lo, hi):
     cur = None
     for l in lines:
         m = QNUM_Q.match(l) or QNUM_PAREN.match(l)
-        if m and lo <= int(m.group(1)) <= hi:
-            n = int(m.group(1))
+        if m:
+            # 题号内可能有空格（如 "3 7."），先压掉再转 int
+            n = int(re.sub(r'\s+', '', m.group(1)))
+        if m and lo <= n <= hi:
             # 题干可能跨行：以"下一行不是选项"为界继续吸收
             cur = {"题号": n, "题干": m.group(2).strip(), "选项": {}}
             out[n] = cur
