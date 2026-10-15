@@ -33,7 +33,15 @@ OPT_LINE = re.compile(r'(?m)^\s*[A-D]\s*[.．、]')
 
 
 def fetch(url, out):
-    """下载（伪装 UA —— 有些高校站点拦默认 curl UA）"""
+    """
+    下载（伪装 UA —— 有些高校站点拦默认 curl UA）。
+
+    【必须先删旧文件】子 agent 复核时发现：curl 失败时**上一轮的残留文件**
+    会被当成"这次下载成功"，于是验证结果张冠李戴（它自测时被回显了上一次的
+    2015 文件）。所以下载前无条件删除目标路径。
+    """
+    if os.path.exists(out):
+        os.remove(out)
     try:
         subprocess.run(["curl", "-sL", "--max-time", "90", "-A",
                         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",
