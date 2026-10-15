@@ -100,7 +100,10 @@ def part_of(num, qtype):
             return "SZ", False         # 国内时政
         if n == 33:
             return "SZ", False         # 国际时政
-    elif qtype == "分析题":
+    elif qtype in ("分析题", "材料分析题"):
+        # 题型名实测有两种：2015 那份叫"分析题"，2023–2025 那几份叫"材料分析题"。
+        # 原来只判"分析题"，导致那三年的 34–38 题部分归属为 None
+        # （界面统计会直接 KeyError 崩掉 —— 实测踩到）。
         return {34: ("MY", False), 35: ("MZT", False), 36: ("SG", True),
                 37: ("SX", True), 38: ("SZ", False)}.get(n, (None, False))
     return None, False
@@ -147,7 +150,9 @@ def part_stats(year):
         return {}
     out = {}
     for it in rec["题目"]:
-        p = it["部分"]
+        # 容错：万一将来出现没归类的题型名，统计不该崩
+        # （实测踩到过：未归属的题会让界面 KeyError）
+        p = it.get("部分") or "未归类"
         d = out.setdefault(p, {"题数": 0, "单选": 0, "多选": 0, "分析": 0,
                                "分值": 0, "边界": 0})
         d["题数"] += 1
