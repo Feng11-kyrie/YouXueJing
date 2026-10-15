@@ -3,335 +3,436 @@
  "篇目": [
   {
    "部分": "CLOZE",
-   "材料": "2017年全国硕士研究生入学统一考试英语（二）试题\nDirections:\nSection I Use of English\nRead the following text. Choose the best word(s) for each numbered blank and mark\nA, B, C or D on the ANSWER SHEET. (lO points)\nPeople have speculated for centuries about a future without work. Today is no\ndifferent, with academics, wnters, and act1v1sts once agam 1 that technology\nis replacing human workers. Some imagine that the coming work-free world will be\ndefined by 2 : A few wealthy people will own all the capital, and the masses\nwill struggle in an impoverished wasteland.\nA different and not mutually exclusive 3 holds that the future will be a\nwasteland of a different sort, one 4 b y purposelessness: Without jobs to give\ntheir lives 5 , people will simply become lazy and depressed. 6 , today's\nunemployed don't seem to be having a great time. One Gallup poll found that 20\npercent of Americans who have been unemployed for at least a year report having\ndepression, double the rate for 7 Americans. Also, some research suggests\nthat the 8 for rising rates of mortalit y, mental-health problems, and addiction\n9 poorl y-educated, middle-aged people is a shortage of well-paid jobs. Perhaps\nthis is why many 10 the agonizing dullness of a jobless future.\nBut it doesn't 11 follow from findings like these that a world without\nwork would be filled with unease. Such visions are based on the 12 of being\nunemployed in a society built on the concept of employment. In the 13 of\nwork, a society designed with other ends in mind could 14 strikingly different\ncircumstances for the future of labor and leisure. Today, the 15 of work may\nbe a bit overblown. \"Many jobs are boring, degrading, unhealth y, and a waste of\nhuman potential,\" says John Danaher, a lecturer at the National University of\nIreland in Galway.\nThese days, because leisure time is relatively 16 for most workers,\npeople use their free time to counterbalance the intellectual and emotional 17\nof their jobs. \"When I come home from a hard day's work, I often feel 18 ,\"\nDanaher says, adding, \"In a world in which I don't have to work, I might feel rather\ndifferent\" — perhaps different enough to throw himself 19 a hob by or a\npassion project with the intensity usually reserved for 20 matters.\n- 1 -",
+   "材料": "懒笔记\n首页\n真题卷\n真题题型\n真题文章\n真题句子\n真题单词\n足迹\n目录\nP1·1–2\nP2·3–10\nP3·11–15\nP4·16–20",
    "小题": [
     {
      "题号": 1,
      "题干": "",
      "选项": {
-      "A": "boasting [B] denying [C] warning [D] ensuring",
-      "B": "",
-      "C": "",
-      "D": ""
+      "A": "boasting",
+      "B": "denying",
+      "C": "warning",
+      "D": "ensuring"
      }
     },
     {
      "题号": 2,
      "题干": "",
      "选项": {
-      "A": "inequality [B] instability [C] unreliability [D] uncertainty",
-      "B": "",
-      "C": "",
-      "D": ""
+      "A": "inequality",
+      "B": "instability",
+      "C": "unreliability",
+      "D": "uncertainty"
      }
     },
     {
      "题号": 3,
      "题干": "",
      "选项": {
-      "A": "policy [B] guideline [C] resolution [D] prediction",
-      "B": "",
-      "C": "",
-      "D": ""
+      "A": "policy",
+      "B": "guideline",
+      "C": "resolution",
+      "D": "prediction"
      }
     },
     {
      "题号": 4,
      "题干": "",
      "选项": {
-      "A": "characterized [B] divided [ C] balanced [D] measured",
-      "B": "",
-      "C": "",
-      "D": ""
+      "A": "characterized",
+      "B": "divided",
+      "C": "balanced",
+      "D": "measured"
      }
     },
     {
      "题号": 5,
      "题干": "",
      "选项": {
-      "A": "wisdom [B] meaning [C] glory [D] freedom",
-      "B": "",
-      "C": "",
-      "D": ""
+      "A": "wisdom",
+      "B": "meaning",
+      "C": "glory",
+      "D": "freedom"
      }
     },
     {
      "题号": 6,
      "题干": "",
      "选项": {
-      "A": "Instead [B] Indeed [C] Thus [D] Nevertheless",
-      "B": "",
-      "C": "",
-      "D": ""
+      "A": "Instead",
+      "B": "Indeed",
+      "C": "Thus",
+      "D": "Nevertheless"
      }
     },
     {
      "题号": 7,
      "题干": "",
      "选项": {
-      "A": "rich [B] urban [C] working [D] educated",
-      "B": "",
-      "C": "",
-      "D": ""
+      "A": "rich",
+      "B": "urban",
+      "C": "working",
+      "D": "educated"
      }
     },
     {
      "题号": 8,
      "题干": "",
      "选项": {
-      "A": "explanation [B] requirement [C] compensation [D] substitute",
-      "B": "",
-      "C": "",
-      "D": ""
+      "A": "explanation",
+      "B": "requirement",
+      "C": "compensation",
+      "D": "substitute"
      }
     },
     {
      "题号": 9,
      "题干": "",
      "选项": {
-      "A": "under [B] beyond [C] alongside [D] among",
-      "B": "",
-      "C": "",
-      "D": ""
+      "A": "under",
+      "B": "beyond",
+      "C": "alongside",
+      "D": "among"
      }
     },
     {
      "题号": 10,
      "题干": "",
      "选项": {
-      "A": "leave behind [B] make up [C] worry about [D] set aside",
-      "B": "",
-      "C": "",
-      "D": ""
+      "A": "leave behind",
+      "B": "make up",
+      "C": "worry about",
+      "D": "set aside"
      }
     },
     {
      "题号": 11,
      "题干": "",
      "选项": {
-      "A": "statistically [B] occasionally [C] necessarily [D] economically",
-      "B": "",
-      "C": "",
-      "D": ""
+      "A": "statistically",
+      "B": "occasionally",
+      "C": "necessarily",
+      "D": "economically"
      }
     },
     {
      "题号": 12,
      "题干": "",
      "选项": {
-      "A": "chances [B] downsides [C] benefits [D] principles",
-      "B": "",
-      "C": "",
-      "D": ""
+      "A": "chances",
+      "B": "downsides",
+      "C": "benefits",
+      "D": "principles"
      }
     },
     {
      "题号": 13,
      "题干": "",
      "选项": {
-      "A": "absence [B] height [C] face [D] course",
-      "B": "",
-      "C": "",
-      "D": ""
+      "A": "absence",
+      "B": "height",
+      "C": "face",
+      "D": "course"
      }
     },
     {
      "题号": 14,
      "题干": "",
      "选项": {
-      "A": "disturb [B] restore [C] exclude [D] yield",
-      "B": "",
-      "C": "",
-      "D": ""
+      "A": "disturb",
+      "B": "restore",
+      "C": "exclude",
+      "D": "yield"
      }
     },
     {
      "题号": 15,
      "题干": "",
      "选项": {
-      "A": "model [B] practice [C] virtue [D] hardship",
-      "B": "",
-      "C": "",
-      "D": ""
+      "A": "model",
+      "B": "practice",
+      "C": "virtue",
+      "D": "hardship"
      }
     },
     {
      "题号": 16,
      "题干": "",
      "选项": {
-      "A": "tricky [B] lengthy [C] mysterious [D] scarce",
-      "B": "",
-      "C": "",
-      "D": ""
+      "A": "tricky",
+      "B": "lengthy",
+      "C": "mysterious",
+      "D": "scarce"
      }
     },
     {
      "题号": 17,
      "题干": "",
      "选项": {
-      "A": "demands [B] standards [C] qualities [D] threats",
-      "B": "",
-      "C": "",
-      "D": ""
+      "A": "demands",
+      "B": "standards",
+      "C": "qualities",
+      "D": "threats"
      }
     },
     {
      "题号": 18,
      "题干": "",
      "选项": {
-      "A": "ignored [B] tired [ C] confused [D] starved",
-      "B": "",
-      "C": "",
-      "D": ""
+      "A": "ignored",
+      "B": "tired",
+      "C": "confused",
+      "D": "starved"
      }
     },
     {
      "题号": 19,
      "题干": "",
      "选项": {
-      "A": "off [B] against [C] behind [D] into",
-      "B": "",
-      "C": "",
-      "D": ""
+      "A": "off",
+      "B": "against",
+      "C": "behind",
+      "D": "into"
      }
     },
     {
      "题号": 20,
      "题干": "",
      "选项": {
-      "A": "technological [B] professional [C] educational [D] interpersonal",
-      "B": "",
-      "C": "",
-      "D": ""
+      "A": "technological",
+      "B": "professional",
+      "C": "educational",
+      "D": "interpersonal"
      }
     }
    ]
   },
   {
    "部分": "READ",
-   "材料": "Text 1\nEvery Saturday morning, at 9 am, more than 50,000 runners set off to run 5km\naround their local park. The Parkrun phenomenon began with a dozen friends and\nhas inspired 400 events in the UK and more abroad. Events are free, staffed b y\nthousands of volunteers. Runners range from four years old to grandparents; their\ntimes range from Andrew Baddeley's world record 13 minutes 48 seconds up to an\nhour.\nParkrun is succeeding where London's Olympic \"legacy\" is failing. Ten years\nago on Monday, it was announced that the Games of the 30th Olympiad would be in\nLondon. Planning documents pledged that the great legacy of the Games would be\nto lever a nation of sport lovers away from their couches. The population would be\nfitter, healthier and produce more winners. It has not happened. The number of\nadults doing weekly sport did rise, by nearly 2 million in the run-up to 2012 - but\nthe general population was growing faster. Worse, the numbers are now falling at an\naccelerating rate. The opposition claims primary school pupils doing at least two\nhours of sport a week have nearly halved. Obesity has risen among adults and\nchildren. Official retrospections continue as to why London 2012 failed to \"inspire a\ngeneration.\" The success of Parkrun offers answers.\nParkun is not a race but a time trial: Your only competitor is the clock. The\nethos welcomes anybody. There is as much joy over a puffed-out first-timer being\nclapped over the line as there is about top talent shining. The Olympic bidders, by\ncontrast, wanted to get more people doing sport and to produce more elite athletes.\nThe dual aim was mixed up: The stress on success over taking part was intimidating\nfor newcomers.\nIndeed, there is something a little absurd in the state getting involved in the\nplanning of such a fundamentally \"grassroots\" concept as community sports\nassociations. If there is a role for government, it should really be getting involved in\nproviding common goods — making sure there is space for playing fields and the\nmoney to pave tennis and netball courts, and encouraging the provision of all these\nactivities in schools. But successive governments have presided over selling green\nspaces, squeezing money from local authorities and declining attention on sport in\neducation. Instead of wordy, worthy strategies, future governments need to do more\nto provide the conditions for sport to thrive. Or at least not make them worse.\n- 3 -",
+   "材料": "",
    "小题": [
     {
      "题号": 21,
-     "题干": "According to Paragraph 1, Parkrun has . [A] gained great popularity [B] created many jobs [C] strengthened community ties [D] become an official festival",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "gained great popularity",
+      "B": "created many jobs",
+      "C": "strengthened community ties",
+      "D": "become an official festival"
+     }
     },
     {
      "题号": 22,
-     "题干": "The author believes that London's Olympic \"legacy\" has failed to . [A] boost population growth [B] promote sport participation [C] improve the city's image [D] increase sport hours in schools",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "boost population growth",
+      "B": "promote sport participation",
+      "C": "improve the city's image",
+      "D": "increase sport hours in schools"
+     }
     },
     {
      "题号": 23,
-     "题干": "Parkrun is different from Olympic games in that it . [A] aims at discovering talents [B] focuses on mass competition [C] does not emphasize elitism [D] does not attract first-timers",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "aims at discovering talents",
+      "B": "focuses on mass competition",
+      "C": "does not emphasize elitism",
+      "D": "does not attract first-timers"
+     }
     },
     {
      "题号": 24,
-     "题干": "With regard to mass sports, the author holds that governments should . [A] organize \"grassroots\" sports events [B] supervise local sports associations [C] increase funds for sports clubs [D] invest in public sports facilities",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "organize \"grassroots\" sports events",
+      "B": "supervise local sports associations",
+      "C": "increase funds for sports clubs",
+      "D": "invest in public sports facilities"
+     }
     },
     {
      "题号": 25,
-     "题干": "The author's attitude to what UK governments have done for sports is . [A] tolerant [B] critical [C] uncertam [D] sympathetic - 4 -",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "tolerant",
+      "B": "critical",
+      "C": "uncertain",
+      "D": "sympathetic"
+     }
     }
    ]
   },
   {
    "部分": "READ",
-   "材料": "Text2\nWith so much focus on children's use of screens, it's easy for parents to forget\nabout their own screen use. \"Tech is designed to really suck you in,\" says Jenny\nRadesky in her study of digital play, \"and digital products are there to promote\nmaximal engagement. It makes it hard to disengage, and leads to a lot of bleed-over\ninto the family routine.\"\nRadesky has studied the use of mobile phones and tablets at mealtimes by\ngiving mother-child pairs a food-testing exercise. She found that mothers who used\ndevices during the exercise started 20 per cent fewer verbal and 39 per cent fewer\nnonverbal interactions with their children. During a separate observation, she saw\nthat phones became a source of tension in the family. Parents would be looking at\ntheir emails while the children would be making excited bids for their attention.\nInfants are wired to look at parents' faces to try to understand their world, and\nif those faces are blank and unresponsive - as they often are when absorbed in a\ndevice — it can be extremely disconcerting for the children. Radesky cites the \"still\nface experiment\" devised by developmental psychologist Ed Tronick in the 1970s.\nIn it, a mother is asked to interact with her child in a normal way before putting on a\nblank expression and not giving them any visual social feedback: The child\nbecomes increasingly distressed as she tries to capture her mother's attention.\n\"Parents don't have to be exquisitely present at all times, but there needs to be a\nbalance and parents need to be responsive and sensitive to a child's verbal or\nnonverbal expressions of an emotional need,\" says Radesky.\nOn the other hand, Tronick himself is concerned that the worries about kids'\nuse of screens are born out of an \"oppressive ideology that demands that parents\nshould alwa ys be interacting\" with their children: \"It's based on a somewhat\nfantasised, very white, very upper-middle-class ideology that says if you're failing\nto expose your child to 30,000 words you are neglecting them.\" Tronick believes\nthat just because a child isn't learning from the screen doesn't mean there's no value\nto it — particularly if it gives parents time to have a shower, do housework or simply\nhave a break from their child. Parents, he says, can get a lot out of using their\ndevices to speak to a friend or get some work out of the way. This can make them\nfeel happier, which lets them be more available to their child the rest of the time.\n- 5 -",
+   "材料": "",
    "小题": [
     {
      "题号": 26,
-     "题干": "According to Jenny Radesky, digital products are designed to [A] simplify routine matters [B] absorb user attention [C] better interpersonal relations [D] increase work efficiency",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "simplify routine matters",
+      "B": "absorb user attention",
+      "C": "better interpersonal relations",
+      "D": "increase work efficiency"
+     }
     },
     {
      "题号": 27,
-     "题干": "Radesky's food-testing exercise shows that mothers'use of devices [A] takes away babies'appetite [B] distracts children's attention [C] slows down babies' verbal development [D] reduces mother-child communication",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "takes away babies' appetite",
+      "B": "distracts children's attention",
+      "C": "slows down babies' verbal development",
+      "D": "reduces mother-child communication"
+     }
     },
     {
      "题号": 28,
-     "题干": "Radesky cites the \"still face experiment\" to show that . [A] it is easy for children to get used to blank expressions [B] verbal expressions are unnecessary for emotional exchange [C] children are insensitive to changes in their parents'mood [D] parents need to respond to children's emotional needs",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "it is easy for children to get used to blank expressions",
+      "B": "verbal expressions are unnecessary for emotional exchange",
+      "C": "children are insensitive to changes in their parents' mood",
+      "D": "parents need to respond to children's emotional needs"
+     }
     },
     {
      "题号": 29,
-     "题干": "The oppressive ideology mentioned by Tronick requires parents to . [A] protect kids from exposure to wild fantasies [B] teach their kids at least 30,000 words a year [C] ensure constant interaction with their children [D] remain concerned about kids' use of screens",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "protect kids from exposure to wild fantasies",
+      "B": "teach their kids at least 30,000 words a year",
+      "C": "ensure constant interaction with their children",
+      "D": "remain concerned about kids' use of screens"
+     }
     },
     {
      "题号": 30,
-     "题干": "According to Tronick, kids' use of screens may . [A] give their parents some free time [B] make their parents more creative [C] help them with their homework [D] help them become more attentive - 6 -",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "give their parents some free time",
+      "B": "make their parents more creative",
+      "C": "help them with their homework",
+      "D": "help them become more attentive"
+     }
     }
    ]
   },
   {
    "部分": "READ",
-   "材料": "Text3\nToday, widespread social pressure to immediately g o to college in conjunction\nwith increasingly high expectations in a fast-moving world often causes students to\ncompletely overlook the possibility of taking a gap year. After all, if everyone you\nknow is going to college in the fall, it seems silly to stay back a year, doesn't it? And\nafter going to school for 12 years, it doesn't feel natural to spend a year doing\nsomething that isn't academic.\nBut while this may be true, it's not a good enough reason to condemn gap years.\nThere's always a constant fear of falling behind everyone else on the socially\nperpetuated \"race to the finish line,\" whether that be toward graduate school,\nmedical school or a lucrative career. But despite common misconceptions, a gap year\ndoes not hinder the success of academic pursuits - in fact, it probably enhances it.\nStudies from the United States and Australia show that students who take a gap\nyear are generall y better prepared for and perform better in colle ge than those\nwho do not. Rather than pullin g students back, a gap year pushes them ahead by\npreparin g them for independence, new responsibilities and environmental changes\n— all things that first- year students often stru ggle with the most. Gap year\nexperiences can lessen the blow when it comes to adjusting to college and being\nthrown into a brand new environment, making it easier to focus on academics and\nactivities rather than acclimation blunders.\nIf you're not convinced of the inherent value in taking a year off to explore\ninterests, then consider its financial impact on future academic choices. According to\nthe National Center for Education Statistics, nearly 80 percent of college students end\nup changing their majors at least once. This isn't surprising, considering the basic\nmandatory high school curriculum leaves students with a poor understanding of the\nvast academic possibilities that await them in college. Many students find themselves\nlisting one major on their college applications, but switching to another after taking\ncollege classes. It's not necessarily a bad thing, but depending on the school, it can be\ncostly to make up credits after switching too late in the game. At Boston College, for\nexample, you would have to complete an extra year were you to switch to the nursing\nschool from another department. Taking a gap year to figure things out initially can\nhelp prevent stress and save money later on.\n- 7 -",
+   "材料": "",
    "小题": [
     {
      "题号": 31,
-     "题干": "One of the reasons for high-school graduates not taking a gap year is that . [A] they think it academically misleading [B] they have a lot of fun to expect in college [C] it feels strange to do differently from others [D] it seems worthless to take off-campus courses",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "they think it academically misleading",
+      "B": "they have a lot of fun to expect in college",
+      "C": "it feels strange to do differently from others",
+      "D": "it seems worthless to take off-campus courses"
+     }
     },
     {
      "题号": 32,
-     "题干": "Studies from the US and Australia imply that taking a gap year helps . [A] keep students from being unrealistic [B] lower risks in choosing careers [C] ease freshmen's financial burdens [D] relieve freshmen of pressures",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "keep students from being unrealistic",
+      "B": "lower risks in choosing careers",
+      "C": "ease freshmen's financial burdens",
+      "D": "relieve freshmen of pressures"
+     }
     },
     {
      "题号": 33,
-     "题干": "The word \"acclimation\" (Para. 3) is closest in meaning to . [A] adaptation [B] application [C] motlvat10n [D] competition",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "adaptation",
+      "B": "application",
+      "C": "motivation",
+      "D": "competition"
+     }
     },
     {
      "题号": 34,
-     "题干": "A gap year may save money for students by helping them . [A] avoid academic failures [B] establish long-term goals [C] switch to another college [D] decide on the right major",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "avoid academic failures",
+      "B": "establish long-term goals",
+      "C": "switch to another college",
+      "D": "decide on the right major"
+     }
     },
     {
      "题号": 35,
-     "题干": "The most suitable title for this text would be [A] In Favor of the Gap Year [B] The ABCs of the Gap Year [C] The Gap Year Comes Back [D] The Gap Year: ADilemma - 8 -",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "In Favor of the Gap Year",
+      "B": "The ABCs of the Gap Year",
+      "C": "The Gap Year Comes Back",
+      "D": "The Gap Year: A Dilemma"
+     }
     }
    ]
   },
   {
    "部分": "READ",
-   "材料": "Text4\nThough often viewed as a problem for western states, the growing frequency of\nwildfires is a national concern because of its impact on federal tax dollars, says\nProfessor Max Moritz, a specialist in fire ecology and management.\nIn 2015, the US Forest Service for the first time spent more than half of its $5.5\nbillion annual budget fighting fires - nearly double the percentage it spent on such\nefforts 20 years ago. In effect, fewer federal funds today are going towards the\nagency's other work - such as forest conservation, watershed and cultural resources\nmanagement, and infrastructure upkeep — that affect the lives of all Americans.\nAnother nationwide concern is whether public funds from other agencies are\ngoing into construction in fire-prone districts. As Moritz puts it, how often are\nfederal dollars building homes that are likely to be lost to a wildfire?\n\"It's already a huge problem from a public expenditure perspective for the\nwhole country,\" he says. \"We need to take a magnifying g lass to that. Like, 'Wait a\nminute, is this OK?' Do we want instead to redirect those funds to concentrate on\nlower-hazard parts of the landscape?\"\nSuch a view would require a corresponding shift in the way US society today\nviews fire, researchers say.\nFor one thing, conversations about wildfires need to be more inclusive. Over\nthe past decade, the focus has been on climate change — how the warming of the\nEarth from gree呻ouse gases is leading to conditions that worsen fires.\nWhile climate is a key element, Moritz says, it shouldn't come at the expense\nof the rest of the equation.\n\"The human systems and the landscapes we live on are linked, and the\ninteractions go both ways,\" he says. Failing to recognize that, he notes, leads to \"an\noverly simplified view of what the solutions might be. Our perception of the\nproblem and of what the solution is becomes very limited.\"\nAt the same time, people continue to treat fire as an event that needs to be\nwholly controlled and unleashed only out of necessity, says Professor Balch at the\nUniversity of Colorado. But acknowledging fire's inevitable presence in human life\nis an attitude crucial to developing the laws, policies, and practices that make it as\nsafe as possible, she says.\n\"We've disconnected ourselves from living with fire,\" Balch says. \"It is really\nimportant to understand and try and tease out what is the human connection with\nfire today.\"\n- 9 -\n3 6. More frequent wildfires have become a national concern because in 2015 they .\n[A] exhausted unprecedented management efforts\n[B] consumed a record-high percentage of budget\n[C] severely damaged the ecology of western states\n[D] caused a huge rise of infrastructure expenditure",
+   "材料": "",
    "小题": [
     {
      "题号": 36,
-     "题干": "More frequent wildfires have become a national concern because in 2015 they . [A] exhausted unprecedented management efforts [B] consumed a record-high percentage of budget [C] severely damaged the ecology of western states [D] caused a huge rise of infrastructure expenditure",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "exhausted unprecedented management efforts",
+      "B": "consumed a record-high percentage of budget",
+      "C": "severely damaged the ecology of western states",
+      "D": "caused a huge rise of infrastructure expenditure"
+     }
     },
     {
      "题号": 37,
-     "题干": "Moritz calls for the use of \"a magnifying glass\" to . [A] raise more funds for fire-prone areas [B] avoid the redirection of federal money [C] find wildfire-free parts of the landscape [D] guarantee safer spending of public funds",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "raise more funds for fire-prone areas",
+      "B": "avoid the redirection of federal money",
+      "C": "find wildfire-free parts of the landscape",
+      "D": "guarantee safer spending of public funds"
+     }
     },
     {
      "题号": 38,
-     "题干": "While admitting that climate is a key element, Moritz notes that . [A] public debates have not settled yet [B] fire-fighting conditions are improving [C] other factors should not be overlooked [D] a shift in the view of fire has taken place",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "public debates have not settled yet",
+      "B": "fire-fighting conditions are improving",
+      "C": "other factors should not be overlooked",
+      "D": "a shift in the view of fire has taken place"
+     }
     },
     {
      "题号": 39,
-     "题干": "The overly simplified view Moritz mentions is a result of failing to . [A] discover the fundamental makeup of nature [B] explore the mechanism of the human systems [C] maximize the role of landscape in human life [D] understand the interrelat10ns of man and nature",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "discover the fundamental makeup of nature",
+      "B": "explore the mechanism of the human systems",
+      "C": "maximize the role of landscape in human life",
+      "D": "understand the interrelations of man and nature"
+     }
     },
     {
      "题号": 40,
-     "题干": "Professor Balch points out that fire is something man should . [A] do away with [B] come to terms with [C] pay a price for [D] keep away from - 10 -",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "do away with",
+      "B": "come to terms with",
+      "C": "pay a price for",
+      "D": "keep away from"
+     }
     }
    ]
   }
  ],
  "题目数": 40,
- "年份": "2017"
+ "年份": "2017",
+ "来源": "懒笔记 paper 页（结构化正文）"
 }

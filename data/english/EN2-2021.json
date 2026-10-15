@@ -1,0 +1,438 @@
+{
+ "tier": "EN2",
+ "篇目": [
+  {
+   "部分": "CLOZE",
+   "材料": "懒笔记\n首页\n真题卷\n真题题型\n真题文章\n真题句子\n真题单词\n足迹\n目录\nP1·1–2\nP2·3–5\nP3·6–11\nP4·12–14\nP5·15–17\nP6·18–20",
+   "小题": [
+    {
+     "题号": 1,
+     "题干": "",
+     "选项": {
+      "A": "therefore",
+      "B": "however",
+      "C": "again",
+      "D": "moreover"
+     }
+    },
+    {
+     "题号": 2,
+     "题干": "",
+     "选项": {
+      "A": "Emphasize",
+      "B": "Identify",
+      "C": "Assess",
+      "D": "Explain"
+     }
+    },
+    {
+     "题号": 3,
+     "题干": "",
+     "选项": {
+      "A": "nearly",
+      "B": "curiously",
+      "C": "eagerly",
+      "D": "quickly"
+     }
+    },
+    {
+     "题号": 4,
+     "题干": "",
+     "选项": {
+      "A": "claim",
+      "B": "prove",
+      "C": "check",
+      "D": "recall"
+     }
+    },
+    {
+     "题号": 5,
+     "题干": "",
+     "选项": {
+      "A": "threatened",
+      "B": "ignored",
+      "C": "mocked",
+      "D": "blamed"
+     }
+    },
+    {
+     "题号": 6,
+     "题干": "",
+     "选项": {
+      "A": "punctuality",
+      "B": "hospitality",
+      "C": "competition",
+      "D": "innovation"
+     }
+    },
+    {
+     "题号": 7,
+     "题干": "",
+     "选项": {
+      "A": "Yet",
+      "B": "So",
+      "C": "Besides",
+      "D": "Still"
+     }
+    },
+    {
+     "题号": 8,
+     "题干": "",
+     "选项": {
+      "A": "hired",
+      "B": "trained",
+      "C": "rewarded",
+      "D": "grouped"
+     }
+    },
+    {
+     "题号": 9,
+     "题干": "",
+     "选项": {
+      "A": "only",
+      "B": "rather",
+      "C": "once",
+      "D": "also"
+     }
+    },
+    {
+     "题号": 10,
+     "题干": "",
+     "选项": {
+      "A": "comfort",
+      "B": "revenue",
+      "C": "efficiency",
+      "D": "security"
+     }
+    },
+    {
+     "题号": 11,
+     "题干": "",
+     "选项": {
+      "A": "friendly",
+      "B": "quiet",
+      "C": "cautious",
+      "D": "diligent"
+     }
+    },
+    {
+     "题号": 12,
+     "题干": "",
+     "选项": {
+      "A": "purpose",
+      "B": "problem",
+      "C": "prejudice",
+      "D": "policy"
+     }
+    },
+    {
+     "题号": 13,
+     "题干": "",
+     "选项": {
+      "A": "reported",
+      "B": "revealed",
+      "C": "admitted",
+      "D": "noticed"
+     }
+    },
+    {
+     "题号": 14,
+     "题干": "",
+     "选项": {
+      "A": "break",
+      "B": "trip",
+      "C": "departure",
+      "D": "transfer"
+     }
+    },
+    {
+     "题号": 15,
+     "题干": "",
+     "选项": {
+      "A": "moral",
+      "B": "background",
+      "C": "style",
+      "D": "form"
+     }
+    },
+    {
+     "题号": 16,
+     "题干": "",
+     "选项": {
+      "A": "interpret",
+      "B": "criticize",
+      "C": "sacrifice",
+      "D": "tolerate"
+     }
+    },
+    {
+     "题号": 17,
+     "题干": "",
+     "选项": {
+      "A": "task",
+      "B": "secret",
+      "C": "product",
+      "D": "cost"
+     }
+    },
+    {
+     "题号": 18,
+     "题干": "",
+     "选项": {
+      "A": "leading to",
+      "B": "calling for",
+      "C": "relating to",
+      "D": "accounting for"
+     }
+    },
+    {
+     "题号": 19,
+     "题干": "",
+     "选项": {
+      "A": "specify",
+      "B": "predict",
+      "C": "restore",
+      "D": "create"
+     }
+    },
+    {
+     "题号": 20,
+     "题干": "",
+     "选项": {
+      "A": "modify",
+      "B": "review",
+      "C": "present",
+      "D": "achieve"
+     }
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "",
+   "小题": [
+    {
+     "题号": 21,
+     "题干": "",
+     "选项": {
+      "A": "an increase in full-time employment",
+      "B": "an urgent demand for new job skills",
+      "C": "a steady growth of job opportunities",
+      "D": "a controversy about the \"core skills\""
+     }
+    },
+    {
+     "题号": 22,
+     "题干": "",
+     "选项": {
+      "A": "an alternative to the fire-and-hire strategy",
+      "B": "an immediate need for government support",
+      "C": "the importance of staff appraisal standards",
+      "D": "the characteristics of reskilling programs"
+     }
+    },
+    {
+     "题号": 23,
+     "题干": "",
+     "选项": {
+      "A": "have driven up labour costs",
+      "B": "have proved to be inconsistent",
+      "C": "have met with fierce opposition",
+      "D": "have appeared to be insufficient"
+     }
+    },
+    {
+     "题号": 24,
+     "题干": "",
+     "选项": {
+      "A": "a call for policy adjustment",
+      "B": "a change in hiring practices",
+      "C": "a lack of medical workers",
+      "D": "a sign of economic recovery"
+     }
+    },
+    {
+     "题号": 25,
+     "题干": "",
+     "选项": {
+      "A": "create job vacancies for the unemployed",
+      "B": "prepare their laid-off workers for other jobs",
+      "C": "retrain their cabin staff for better services",
+      "D": "finance their staff's college education"
+     }
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "",
+   "小题": [
+    {
+     "题号": 26,
+     "题干": "",
+     "选项": {
+      "A": "be hindered by its population growth",
+      "B": "contribute to the nation's well-being",
+      "C": "become a priority of the government",
+      "D": "pose a challenge to its farming industry"
+     }
+    },
+    {
+     "题号": 27,
+     "题干": "",
+     "选项": {
+      "A": "farmland has been inefficiently utilized",
+      "B": "factory-style production needs reforming",
+      "C": "most land is used for meat and dairy production",
+      "D": "more green fields will be converted for farming"
+     }
+    },
+    {
+     "题号": 28,
+     "题干": "",
+     "选项": {
+      "A": "its farming technology",
+      "B": "its dietary tradition",
+      "C": "its natural conditions",
+      "D": "its commercial interests"
+     }
+    },
+    {
+     "题号": 29,
+     "题干": "",
+     "选项": {
+      "A": "rely largely on imports for fresh produce",
+      "B": "enjoy a steady rise in fruit consumption",
+      "C": "are seeking effective ways to cut calorie intake",
+      "D": "are trying to grow new varieties of grains"
+     }
+    },
+    {
+     "题号": 30,
+     "题干": "",
+     "选项": {
+      "A": "defensive",
+      "B": "doubtful",
+      "C": "tolerant",
+      "D": "optimistic"
+     }
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "",
+   "小题": [
+    {
+     "题号": 31,
+     "题干": "",
+     "选项": {
+      "A": "Their engineers were retained.",
+      "B": "Their market values declined.",
+      "C": "Their tech features improved.",
+      "D": "Their products were re-priced."
+     }
+    },
+    {
+     "题号": 32,
+     "题干": "",
+     "选项": {
+      "A": "exaggerate their product quality",
+      "B": "eliminate their potential competitors",
+      "C": "treat new tech talent unfairly",
+      "D": "ignore public opinions"
+     }
+    },
+    {
+     "题号": 33,
+     "题干": "",
+     "选项": {
+      "A": "weaken big tech companies",
+      "B": "worsen market competition",
+      "C": "harm the national economy",
+      "D": "discourage start-up investors"
+     }
+    },
+    {
+     "题号": 34,
+     "题干": "",
+     "选项": {
+      "A": "limit Big Tech's expansion",
+      "B": "encourage research collaboration",
+      "C": "examine small acquisitions",
+      "D": "supervise start-ups' operation"
+     }
+    },
+    {
+     "题号": 35,
+     "题干": "",
+     "选项": {
+      "A": "brought little financial pressure",
+      "B": "raised few management challenges",
+      "C": "set an example for future deals",
+      "D": "generated considerable profits"
+     }
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "",
+   "小题": [
+    {
+     "题号": 36,
+     "题干": "",
+     "选项": {
+      "A": "the power of people's memory",
+      "B": "the reliability of first impressions",
+      "C": "Instructor-student interaction",
+      "D": "people's ability to influence others"
+     }
+    },
+    {
+     "题号": 37,
+     "题干": "",
+     "选项": {
+      "A": "focused on specific details",
+      "B": "gave the rating in limited time",
+      "C": "watched shorter video clips",
+      "D": "discussed with one another"
+     }
+    },
+    {
+     "题号": 38,
+     "题干": "",
+     "选项": {
+      "A": "reflection can be distracting",
+      "B": "memory may be selective",
+      "C": "social skills must be cultivated",
+      "D": "deception is difficult to detect"
+     }
+    },
+    {
+     "题号": 39,
+     "题干": "",
+     "选项": {
+      "A": "collect enough data",
+      "B": "list your preferences",
+      "C": "seek expert advice",
+      "D": "follow your feelings"
+     }
+    },
+    {
+     "题号": 40,
+     "题干": "",
+     "选项": {
+      "A": "Generating new products takes time.",
+      "B": "Intuition may affect reflective tasks.",
+      "C": "Vocabulary comprehension needs creativity.",
+      "D": "Objective thinking may boost intuitiveness."
+     }
+    }
+   ]
+  }
+ ],
+ "题目数": 40,
+ "年份": "2021",
+ "来源": "懒笔记 paper 页（结构化正文）"
+}

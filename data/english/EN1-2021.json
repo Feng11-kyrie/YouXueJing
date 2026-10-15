@@ -1,0 +1,438 @@
+{
+ "tier": "EN1",
+ "篇目": [
+  {
+   "部分": "CLOZE",
+   "材料": "懒笔记\n首页\n真题卷\n真题题型\n真题文章\n真题句子\n真题单词\n足迹\n目录\nP1·1–3\nP2·4–6\nP3·7–11\nP4·12–15\nP5·16–20",
+   "小题": [
+    {
+     "题号": 1,
+     "题干": "",
+     "选项": {
+      "A": "pauses",
+      "B": "returns",
+      "C": "peaks",
+      "D": "fades"
+     }
+    },
+    {
+     "题号": 2,
+     "题干": "",
+     "选项": {
+      "A": "alternatively",
+      "B": "formally",
+      "C": "accidentally",
+      "D": "generally"
+     }
+    },
+    {
+     "题号": 3,
+     "题干": "",
+     "选项": {
+      "A": "while",
+      "B": "since",
+      "C": "once",
+      "D": "until"
+     }
+    },
+    {
+     "题号": 4,
+     "题干": "",
+     "选项": {
+      "A": "detection",
+      "B": "accumulation",
+      "C": "consumption",
+      "D": "separation"
+     }
+    },
+    {
+     "题号": 5,
+     "题干": "",
+     "选项": {
+      "A": "possibility",
+      "B": "decision",
+      "C": "goal",
+      "D": "requirement"
+     }
+    },
+    {
+     "题号": 6,
+     "题干": "",
+     "选项": {
+      "A": "delay",
+      "B": "ensure",
+      "C": "seek",
+      "D": "utilize"
+     }
+    },
+    {
+     "题号": 7,
+     "题干": "",
+     "选项": {
+      "A": "modified",
+      "B": "supported",
+      "C": "included",
+      "D": "predicted"
+     }
+    },
+    {
+     "题号": 8,
+     "题干": "",
+     "选项": {
+      "A": "devoted",
+      "B": "compared",
+      "C": "converted",
+      "D": "applied"
+     }
+    },
+    {
+     "题号": 9,
+     "题干": "",
+     "选项": {
+      "A": "with",
+      "B": "above",
+      "C": "by",
+      "D": "against"
+     }
+    },
+    {
+     "题号": 10,
+     "题干": "",
+     "选项": {
+      "A": "lived",
+      "B": "managed",
+      "C": "scored",
+      "D": "played"
+     }
+    },
+    {
+     "题号": 11,
+     "题干": "",
+     "选项": {
+      "A": "ran out",
+      "B": "set off",
+      "C": "drew in",
+      "D": "went by"
+     }
+    },
+    {
+     "题号": 12,
+     "题干": "",
+     "选项": {
+      "A": "superior",
+      "B": "attributable",
+      "C": "parallel",
+      "D": "resistant"
+     }
+    },
+    {
+     "题号": 13,
+     "题干": "",
+     "选项": {
+      "A": "restored",
+      "B": "isolated",
+      "C": "involved",
+      "D": "controlled"
+     }
+    },
+    {
+     "题号": 14,
+     "题干": "",
+     "选项": {
+      "A": "alter",
+      "B": "spread",
+      "C": "remove",
+      "D": "explain"
+     }
+    },
+    {
+     "题号": 15,
+     "题干": "",
+     "选项": {
+      "A": "compensations",
+      "B": "symptoms",
+      "C": "demands",
+      "D": "treatments"
+     }
+    },
+    {
+     "题号": 16,
+     "题干": "",
+     "选项": {
+      "A": "Likewise",
+      "B": "Meanwhile",
+      "C": "Therefore",
+      "D": "Instead"
+     }
+    },
+    {
+     "题号": 17,
+     "题干": "",
+     "选项": {
+      "A": "change",
+      "B": "watch",
+      "C": "count",
+      "D": "take"
+     }
+    },
+    {
+     "题号": 18,
+     "题干": "",
+     "选项": {
+      "A": "well-being",
+      "B": "process",
+      "C": "formation",
+      "D": "coordination"
+     }
+    },
+    {
+     "题号": 19,
+     "题干": "",
+     "选项": {
+      "A": "level",
+      "B": "love",
+      "C": "knowledge",
+      "D": "space"
+     }
+    },
+    {
+     "题号": 20,
+     "题干": "",
+     "选项": {
+      "A": "design",
+      "B": "routine",
+      "C": "diet",
+      "D": "prescription"
+     }
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "",
+   "小题": [
+    {
+     "题号": 21,
+     "题干": "",
+     "选项": {
+      "A": "has kept pace with inflation.",
+      "B": "is a big surprise to commuters.",
+      "C": "remains an unreasonable measure.",
+      "D": "will ease train operators' burden."
+     }
+    },
+    {
+     "题号": 22,
+     "题干": "",
+     "选项": {
+      "A": "car drivers.",
+      "B": "rail travelers.",
+      "C": "local investors.",
+      "D": "ordinary taxpayers."
+     }
+    },
+    {
+     "题号": 23,
+     "题干": "",
+     "选项": {
+      "A": "are offering compensation to commuters.",
+      "B": "are trying to repair relations with the unions.",
+      "C": "have failed to provide an adequate service.",
+      "D": "have suffered huge losses owing to the strikes."
+     }
+    },
+    {
+     "题号": 24,
+     "题干": "",
+     "选项": {
+      "A": "the loss of investment.",
+      "B": "the collapse of operations.",
+      "C": "a reduction of revenue.",
+      "D": "a change of ownership."
+     }
+    },
+    {
+     "题号": 25,
+     "题干": "",
+     "选项": {
+      "A": "Who Are to Blame for the Strikes?",
+      "B": "Constant Complaining Doesn't Work",
+      "C": "Can Nationalisation Bring Hope?",
+      "D": "Ever-rising Fares Aren't Sustainable"
+     }
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "",
+   "小题": [
+    {
+     "题号": 26,
+     "题干": "",
+     "选项": {
+      "A": "facilitate healthcare reform.",
+      "B": "help poor families get better off.",
+      "C": "improve local education systems.",
+      "D": "lower deforestation rates."
+     }
+    },
+    {
+     "题号": 27,
+     "题干": "",
+     "选项": {
+      "A": "cattle raising has been a major means of livelihood for the poor.",
+      "B": "CCT programs have helped preserve traditional lifestyles.",
+      "C": "antipoverty efforts require the participation of local farmers.",
+      "D": "economic growth tends to cause environmental degradation."
+     }
+    },
+    {
+     "题号": 28,
+     "题干": "",
+     "选项": {
+      "A": "its acceptance level of CCTs.",
+      "B": "its annual rate of poverty alleviation.",
+      "C": "the relation of CCTs to its forest loss.",
+      "D": "the role of its forests in climate change."
+     }
+    },
+    {
+     "题号": 29,
+     "题干": "",
+     "选项": {
+      "A": "it will benefit other Asian countries.",
+      "B": "it will reduce regional inequality.",
+      "C": "it can protect the environment.",
+      "D": "it can benefit grain production."
+     }
+    },
+    {
+     "题号": 30,
+     "题干": "",
+     "选项": {
+      "A": "The effects of a program.",
+      "B": "The debates over a program.",
+      "C": "The process of a study.",
+      "D": "The transferability of a study."
+     }
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "",
+   "小题": [
+    {
+     "题号": 31,
+     "题干": "",
+     "选项": {
+      "A": "changed people's impression of the Victorians.",
+      "B": "highlighted social media's role in Victorian studies.",
+      "C": "re-evaluated the Victorian's notion of public image.",
+      "D": "illustrated the development of Victorian photography."
+     }
+    },
+    {
+     "题号": 32,
+     "题干": "",
+     "选项": {
+      "A": "They are in popular use among historians.",
+      "B": "They are rare among photographs of that age.",
+      "C": "They mirror 19th-century social conventions.",
+      "D": "They show effects of different exposure times."
+     }
+    },
+    {
+     "题号": 33,
+     "题干": "",
+     "选项": {
+      "A": "Their inherent social sensitiveness.",
+      "B": "Their tension before the camera.",
+      "C": "Their distrust of new inventions.",
+      "D": "Their unhealthy dental condition."
+     }
+    },
+    {
+     "题号": 34,
+     "题干": "",
+     "选项": {
+      "A": "a deep-root belief.",
+      "B": "a misguided attitude.",
+      "C": "a controversial view.",
+      "D": "a thought-provoking idea."
+     }
+    },
+    {
+     "题号": 35,
+     "题干": "",
+     "选项": {
+      "A": "Why did most Victorians look stern in photographs?",
+      "B": "Why did the Victorians start to view photographs?",
+      "C": "What made photography develop in the Victorian period?",
+      "D": "How did smiling in photographs become a post-Victorian norm?"
+     }
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "",
+   "小题": [
+    {
+     "题号": 36,
+     "题干": "",
+     "选项": {
+      "A": "bring web-based firms under control.",
+      "B": "slow down the traffic on their network.",
+      "C": "show partiality in treating clients.",
+      "D": "intensify competition with their rivals."
+     }
+    },
+    {
+     "题号": 37,
+     "题干": "",
+     "选项": {
+      "A": "sticks to an out-of-date order.",
+      "B": "takes an anti-regulatory stance.",
+      "C": "has issued a special resolution.",
+      "D": "has allowed the states to intervene."
+     }
+    },
+    {
+     "题号": 38,
+     "题干": "",
+     "选项": {
+      "A": "It protects against unfair competition.",
+      "B": "It engages in anti-competitive practices.",
+      "C": "It is under the FCC's investigation.",
+      "D": "It is in pursuit of quality service."
+     }
+    },
+    {
+     "题号": 39,
+     "题干": "",
+     "选项": {
+      "A": "focus on trivialities.",
+      "B": "conveys an ambiguous message.",
+      "C": "is at odds with its earlier rulings.",
+      "D": "is out of touch with reality."
+     }
+    },
+    {
+     "题号": 40,
+     "题干": "",
+     "选项": {
+      "A": "Congress needs to take action to ensure net neutrality.",
+      "B": "The FCC should be put under strict supervision.",
+      "C": "Rules need to be set to diversify online services.",
+      "D": "Broadband providers' rights should be protected."
+     }
+    }
+   ]
+  }
+ ],
+ "题目数": 40,
+ "年份": "2021",
+ "来源": "懒笔记 paper 页（结构化正文）"
+}

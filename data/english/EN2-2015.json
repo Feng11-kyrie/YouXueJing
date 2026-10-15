@@ -3,7 +3,7 @@
  "篇目": [
   {
    "部分": "CLOZE",
-   "材料": "2015年全国硕士研究生入学统一考试英语（二）试题\nSection I Use of English\nDirections:\nRead the following text. Choose the best word(s) for each numbered blank and mark\nA, B, C or D on the ANSWER SHEET. (10 points)\nIn our contemporary culture, the prospect of communicating with — or even\nlooking at — a stranger is virtually unbearable. Everyone around us seems to agree\nby the way they cling to their phones, even without a 1 on a subway.\nIt's a sad reality — our desire to avoid interacting with other human beings —\nbecause there's 2 to be gained from talking to the stranger standing by you. But\nyou wouldn't know it, 3 into your phone. This universal protection sends the\n4 : \"Please don't approach me.\"\nWhat is it that makes us feel we need to hide 5 our screens?\nOne answer is fear, according to Jon Wortmann, an executive mental coach. We\nfear rejection, or that our innocent social advances will be 6 as \"weird.\" We fear\nwe'll be_]_. We fear we'll be disruptive.\nStrangers are inherently 8 to us, so we are more likely to feel 9\nwhen communicating with them compared with our friends and acquaintances. To\navoid this uneasiness, we 10 to our phones. \"Phones become our security\nblanket,\" Wortmann says. \"They are our happy glasses that protect us from what we\nperceive is going to be more 11 .\"\nBut once we rip off the band-aid, tuck our smartphones in our pockets and look\nup, it doesn't 12 so bad. In one 2011 experiment, behavioral scientists Nicholas\nEpley and Juliana Schroeder asked commuters to do the unthinkable: Start a 13 .\nThey had Chicago train commuters talk to their fellow 14 . \"When D r. Epley and\nMs. Schroeder asked other people in the same train station to 15 how they\nwould feel after talking to a stranger, the commuters thought their 16 would be\nmore pleasant if they sat on their own,\" The New York Times summarizes. Though the\nparticipants didn't expect a positive experience, after they 17 with the\nexperiment, \"not a single person reported having been embarrassed.\"\n18 , these commutes were reportedly more enjoyable compared with those\nwithout communication, which makes absolute sense, 19 human beings thrive off\nof social connections. It's that 20 : Talking to strangers can make you feel\nconnected.\n- 1 -",
+   "材料": "懒笔记\n首页\n真题卷\n真题题型\n真题文章\n真题句子\n真题单词\n足迹\n目录\nP1·1\nP2·2–4\nP3·5\nP4·6–7\nP5·8–11\nP6·12–17\nP7·18–20",
    "小题": [
     {
      "题号": 1,
@@ -100,7 +100,7 @@
      "题干": "",
      "选项": {
       "A": "attend",
-      "B": "tum",
+      "B": "turn",
       "C": "take",
       "D": "point"
      }
@@ -179,7 +179,7 @@
      "题号": 18,
      "题干": "",
      "选项": {
-      "A": "In tum",
+      "A": "In turn",
       "B": "In fact",
       "C": "In particular",
       "D": "In consequence"
@@ -209,129 +209,230 @@
   },
   {
    "部分": "READ",
-   "材料": "Text 1\nA new study suggests that contrary to most surveys, people are actually more\nstressed at home than at work. Researchers measured people's cortisol, which is a\nstress marker, while they were at work and while they were at home and found it\nhigher at what is supposed to be a place of refuge.\n\"Fu门her contradicting conventional wisdom, we found that women as well as\nmen have lower levels of stress at work than at home,\" writes one of the researchers,\nSarah Damaske. In fact women even say they feel better at work, she notes. \"It is men,\nnot women, who report being happier at home than at work.\" Another surprise is that\nthe findings hold true for both those with children and without, but more so for\nnonparents. This is why people who work outside the home have better health.\nWhat the study doesn't measure is whether people are still doing work when\nthey're at home, whether it is household work or work brought home from the office.\nFor many men, the end of the workday is a time to kick back. For women who stay\nhome, they never get to leave the office. And for women who work outside the home,\nthey often are playing catch-up-with-household tasks. With the blurring of roles, and\nthe fact that the home front lags well behind the workplace in making adjustments for\nworking women, it's not surprising that women are more stressed at home.\nBut it's not just a gender thing. At work, people pretty much know what they're\nsupposed to be doing: working, making money, doing the tasks they have to do in\norder to draw an income. The bargain is very pure: Employee puts in hours of\nphysical or mental labor and employee draws out life-sustaining moola.\nOn the home front, however, people have no such clarity. Rare is the household\nin which the division of labor is so clinically and methodically laid out. There are a\nlot of tasks to be done, there are inadequate rewards for most of them. Your home\ncolleagues — your family — have no clear rewards for their labor; they need to be\ntalked into it, or if they're teenagers, threatened with complete removal of all\nelectronic devices. Plus, they're your family. You cannot fire your family. You never\nreally get to go home from home.\nSo it's not surprising that people are more stressed at home. Not only are the\ntasks apparently infinite, the co-workers are much harder to motivate .\n- 3 -",
+   "材料": "",
    "小题": [
     {
      "题号": 21,
-     "题干": "According to Paragraph 1, most previous surveys found that home . [A] offered greater relaxation than the workplace [B] was an ideal place for stress measurement [C] generated more stress than the workplace [D] was an unrealistic place for relaxation",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "offered greater relaxation than the workplace",
+      "B": "was an ideal place for stress measurement",
+      "C": "generated more stress than the workplace",
+      "D": "was an unrealistic place for relaxation"
+     }
     },
     {
      "题号": 22,
-     "题干": "According to Damaske, who are likely to be the happiest at home? [A] Working mothers. [B] Childless husbands. [C] Working fathers. [D] Childless wives.",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "Working mothers.",
+      "B": "Childless husbands.",
+      "C": "Working fathers.",
+      "D": "Childless wives."
+     }
     },
     {
      "题号": 23,
-     "题干": "The blurring of working women's roles refers to the fact that . [A] their home is also a place for kicking back [B] they are both bread winners and housewives [C] there is often much housework left behind [D] it is difficult for them to leave their office",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "their home is also a place for kicking back",
+      "B": "they are both bread winners and housewives",
+      "C": "there is often much housework left behind",
+      "D": "it is difficult for them to leave their office"
+     }
     },
     {
      "题号": 24,
-     "题干": "The word \"moola\" (Line 4, Para. 4) most probably means . [A] skills [B] energy [C] earnings [D] nutrition",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "skills",
+      "B": "energy",
+      "C": "earnings",
+      "D": "nutrition"
+     }
     },
     {
      "题号": 25,
-     "题干": "The home front differs from the workplace in that . [A] family labor is often adequately rewarded [B] home is hardly a cozier working environment [C] household tasks are generally more motivating [D] division of labor at home is seldom clear-cut - 4 -",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "family labor is often adequately rewarded",
+      "B": "home is hardly a cozier working environment",
+      "C": "household tasks are generally more motivating",
+      "D": "division of labor at home is seldom clear-cut"
+     }
     }
    ]
   },
   {
    "部分": "READ",
-   "材料": "Text2\nFor years, studies have found that first-generation college students - those who\ndo not have a parent with a college degree — lag other students on a range of\neducation achievement factors. Their grades are lower and their dropout rates are\nhigher. But since such students are most likely to advance economically if they\nsucceed in higher education, colleges and universities have pushed for decades to\nrecruit more of them. This has created \"a paradox\" in that recruiting first-generation\nstudents, but then watching many of them fail, means that higher education has\n\"continued to reproduce and widen, rather than close\" an achievement gap based on\nsocial class, according to the depressing beginning of a paper forthcoming in the\njournal Psychological Science.\nBut the article is actually quite optimistic, as it outlines a potential solution to\nthis problem, suggesting that an approach (which involves a one-hour, next-to-no-cost\nprogram) can close 63 percent of the achievement gap (measured by such factors as\ngrades) between first-generation and other students.\nThe authors of the paper are from different universities, and their findings are\nbased on a study involving 147 students (who completed the project) at an unnamed\nprivate university. First generation was defined as not having a parent with a four­\nyear college degree. Most of the first-generation students (59.1 percent) were\nrecipients of Pell Grants, a federal grant for undergraduates with financial need, while\nthis was true only for 8.6 percent of the students with at least one parent with a\nfour-year degree.\nTheir thesis — that a relatively modest intervention could have a big impact —\nwas based on the view that first-generation students may be most lacking not in\npotential but in practical knowledge about how to deal with the issues that face most\ncollege students. They cite past research by several authors to show that this is the\ngap that must be narrowed to close the achievement gap.\nMany first-generation students \"struggle to navigate the middle-class culture of\nhigher education, learn the 'rules of the game,' and take advantage of college\nresources,\" they write. And this becomes more of a problem when colleges don't talk\nabout the class advantages and disadvantages of different groups of students.\n\"Because US colleges and universities seldom acknowledge how social class can\naffect students' educational experiences, many first-generation students lack insight\nabout why they are struggling and do not understand how students 'like them' can\nimprove.\n- 5 -",
+   "材料": "",
    "小题": [
     {
      "题号": 26,
-     "题干": "R .. ecru1tmg more first-generation students has . [A] reduced their dropout rates [B] narrowed the achievement gap [C] missed its original purpose [D] depressed college students",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "reduced their dropout rates",
+      "B": "narrowed the achievement gap",
+      "C": "missed its original purpose",
+      "D": "depressed college students"
+     }
     },
     {
      "题号": 27,
-     "题干": "The authors of the research article are optimistic because . [A] their findings appeal to students [B] the recruiting rate has increased [C] the problem is solvable [D] their approach is costless",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "their findings appeal to students",
+      "B": "the recruiting rate has increased",
+      "C": "the problem is solvable",
+      "D": "their approach is costless"
+     }
     },
     {
      "题号": 28,
-     "题干": "Th e study suggests that most first-generat10n students . [A] are from single-parent families [B] study at private universities [C] are in need of financial support [D] have failed their college",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "are from single-parent families",
+      "B": "study at private universities",
+      "C": "are in need of financial support",
+      "D": "have failed their college"
+     }
     },
     {
      "题号": 29,
-     "题干": "The authors of the paper believe that first-generation students . [A] may lack opportunities to apply for research projects [B] are inexperienced in handling their issues at college [C] can have a potential influence on other students [D] are actually indifferent to the achievement gap",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "may lack opportunities to apply for research projects",
+      "B": "are inexperienced in handling their issues at college",
+      "C": "can have a potential influence on other students",
+      "D": "are actually indifferent to the achievement gap"
+     }
     },
     {
      "题号": 30,
-     "题干": "We may infer from the last paragraph that . [A] universities often reject the culture of the middle-class [B] students are usually to blame for their lack ofresources [C] social class greatly helps enrich educational experiences [D] colleges are partly responsible for the problem in question - 6 -",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "universities often reject the culture of the middle-class",
+      "B": "students are usually to blame for their lack of resources",
+      "C": "social class greatly helps enrich educational experiences",
+      "D": "colleges are partly responsible for the problem in question"
+     }
     }
    ]
   },
   {
    "部分": "READ",
-   "材料": "Text3\nEven in traditional offices, \"the lingua franca of corporate America has gotten\nmuch more emotional and much more right-brained than it was 20 years ago,\" said\nHarvard Business School professor Nancy Koehn. She started spinning off examples.\n\"If you and I parachuted back to Fortune 500 companies in 1990, we would see much\nless frequent use of terms like journey, mission, passion. There were goals, there were\nstrategies, there were objectives, but we didn't talk about energy; we didn't talk about\npassion.\nKoehn pointed out that this new era of corporate vocabulary is very \"team\" -\noriented - and not by coincidence. \"Let's not for get sports - in male-dominated\ncorporate America, it's still a big deal. It's not explicitly conscious; it's the idea that\nI'm a coach, and you're my team, and we're in this together. There are lots and lots of\nCEOs in very different companies, but most think of themselves as coaches and this is\ntheir team and they want to win. \"\nThese terms are also intended to infuse work with meaning — and, as Rakesh\nKhurana, another professor, points out, increase allegiance to the 伍m. \"You have the\nimportation of terminology that historically used to be associated with non-profit\norganizations and religious organizations: terms like vision, values, passion, and\npurpose,\" said Khurana.\nThis new focus on personal fulfillment can help keep employees motivated amid\nincreasingly loud debates over work-life balance. The \"mommy wars\" of the 1990s\nare still going on today, prompting arguments about why women still can't have it all\nand books like Sheryl Sandberg's Lean In, whose title has become a buz研ord in its\nown right. Terms like unplug, offline, lifi. 动ack, bandwidth, and capacity are all about\nsetting boundaries between the office and the home. But if your work is your\n\"passion,\" you'll be more likely to devote yourself to it, even if that means going\nhome for dinner and then working long after the kids are in bed.\nBut this seems to be the irony of office speak: Everyone makes fun of it, but\nmanagers love it, companies depend on it, and regular people willingly absorb it. As a\nlinguist once said, \"You can get people to think it's nonsense at the same time that\nyou buy into it.\" In a workplace that's fundamentally indifferent to your life and its\nmeaning, office speak can help you figure out how you relate to your work — and\nhow your work defines who you are.\n- 7 -",
+   "材料": "",
    "小题": [
     {
      "题号": 31,
-     "题干": "According to Nancy Koehn, office language has become . [A] less strategic [B] less energetic [C] more objective [D] more emotional",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "less strategic",
+      "B": "less energetic",
+      "C": "more objective",
+      "D": "more emotional"
+     }
     },
     {
      "题号": 32,
-     "题干": "\"T earn\" -onented corporate vocabulary is closely related to . [A] sports culture [B] gender difference [C] historical incidents [D] athletic executives",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "sports culture",
+      "B": "gender difference",
+      "C": "historical incidents",
+      "D": "athletic executives"
+     }
     },
     {
      "题号": 33,
-     "题干": "Khurana believes that the importation of terminology aims to . [A] revive historical tern飞 [B] promote company image [C] foster corporate cooperation [D] strengthen employee loyalty",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "revive historical terms",
+      "B": "promote company image",
+      "C": "foster corporate cooperation",
+      "D": "strengthen employee loyalty"
+     }
     },
     {
      "题号": 34,
-     "题干": "It can be inferred that Lean In . [A] voices for working women [B] appeals to passionate workaholics [C] triggers debates among mommies [D] praises motivated employees",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "voices for working women",
+      "B": "appeals to passionate workaholics",
+      "C": "triggers debates among mommies",
+      "D": "praises motivated employees"
+     }
     },
     {
      "题号": 35,
-     "题干": "Which of the following statements is true about office speak? [A] Linguists believe it to be nonsense. [B] Regular people mock it but accept it. [C] Companies find it to be fundamental. [D] Managers admire it but avoid it. - 8 -",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "Linguists believe it to be nonsense.",
+      "B": "Regular people mock it but accept it.",
+      "C": "Companies find it to be fundamental.",
+      "D": "Managers admire it but avoid it."
+     }
     }
    ]
   },
   {
    "部分": "READ",
-   "材料": "Text4\nMany people talked of the 288,000 new jobs the Labor Department reported for\nJune, along with the drop in the unemployment rate to 6.1 percent, as good news. And\nthey were right. For now it appears the economy is creating jobs at a decent pace. We\nstill have a long way to go to get back to full employment, but at least we are now\nfinally moving forward at a faster pace.\nHowever, there is another important part of the jobs picture that was largely\noverlooked. There was a big jump in the number of people who report voluntarily\nworking part-time. This figure is now 830,000 (4 .4 percent) above its year ago level.\nBefore explaining the connection to the Obamacare, it is worth making an\nimportant distinction. Many people who work part-time jobs actually want full-time\njobs. They take part-time work because this is all they can get. An increase in\ninvoluntary part-time work is evidence of weakness in the labor market and it means\nthat many people will be having a very hard time making ends meet.\nThere was an increase in involuntary part-time in June, but the general direction\nhas been down. Involuntary part-time employment is still far higher than before the\nrecession, but it is down by 640,000 (7.9 percent) from its year ago level.\nWe know the difference between voluntary and involuntary part-time\nemployment because people tell us. The survey used by the Labor Departinent asks\npeople if they worked less than 35 hours in the reference week. If the answer is \"yes,\"\nthey are classified as working part-time. The survey then asks whether they worked\nless than 35 hours in that week because they wanted to work less than full time or\nbecause they had no choice. They are only classified as voluntary part-time workers if\nthey tell the survey taker they chose to work less than 35 hours a week.\nThe issue of voluntary part-time relates to Obamacare because one of the main\npurposes was to allow people to get insurance outside of employment. For many\npeople, especially those with serious health conditions or family members with\nserious health conditions, before Obamacare the only way to get insurance was\nthrough a job that provided health insurance.\nHowever, Obamacare has allowed more than 12 million people to either get\ninsurance through Medicaid or the exchanges. These are people who may previously\nhave felt the need to get a full-time job that provided insurance in order to cover\nthemselves and their families. With Obamacare there is no longer a link between\nemployment and insurance.\n- 9 -",
+   "材料": "",
    "小题": [
     {
      "题号": 36,
-     "题干": "Which part of the jobs picture was neglected? [A] The prospect of a thriving job market. [B] The increase of voluntary part-time jobs. [C] The possibility of full employment. [D] The acceleration of job creation.",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "The prospect of a thriving job market.",
+      "B": "The increase of voluntary part-time jobs.",
+      "C": "The possibility of full employment.",
+      "D": "The acceleration of job creation."
+     }
     },
     {
      "题号": 37,
-     "题干": "Many people work part-time because they . [A] prefer part-time jobs to full-time jobs [B] feel that is enough to make ends meet [C] cannot get their hands on full-time jobs [D] haven' t seen the weakness of the market",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "prefer part-time jobs to full-time jobs",
+      "B": "feel that is enough to make ends meet",
+      "C": "cannot get their hands on full-time jobs",
+      "D": "haven't seen the weakness of the market"
+     }
     },
     {
      "题号": 38,
-     "题干": "Involuntary part-time employment in the US . [A] shows a general tendency of decline [B] is harder to acquire than one year ago [C] satisfies the real need of the jobless [D] is lower than before the recession",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "shows a general tendency of decline",
+      "B": "is harder to acquire than one year ago",
+      "C": "satisfies the real need of the jobless",
+      "D": "is lower than before the recession"
+     }
     },
     {
      "题号": 39,
-     "题干": "It can be learned that with Obamacare, . [A] it is no longer easy for part-timers to get insurance [B] full-time employment is still essential for insurance [C] it is still challenging to get insurance for family members [D] employment is no longer a precondition to get insurance",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "it is no longer easy for part-timers to get insurance",
+      "B": "full-time employment is still essential for insurance",
+      "C": "it is still challenging to get insurance for family members",
+      "D": "employment is no longer a precondition to get insurance"
+     }
     },
     {
      "题号": 40,
-     "题干": "The text mainly discusses . [A] employment in the US [B] part-timer classification [C] insurance through Medicaid [D] Obamacare's trouble - 10 -",
-     "选项": {}
+     "题干": "",
+     "选项": {
+      "A": "employment in the US",
+      "B": "part-timer classification",
+      "C": "insurance through Medicaid",
+      "D": "Obamacare's trouble"
+     }
     }
    ]
   }
  ],
  "题目数": 40,
- "年份": "2015"
+ "年份": "2015",
+ "来源": "懒笔记 paper 页（结构化正文）"
 }

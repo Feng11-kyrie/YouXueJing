@@ -1,0 +1,438 @@
+{
+ "tier": "EN1",
+ "篇目": [
+  {
+   "部分": "CLOZE",
+   "材料": "懒笔记\n首页\n真题卷\n真题题型\n真题文章\n真题句子\n真题单词\n足迹\n目录\nP1·1–4\nP2·5–6\nP3·7–10\nP4·11–14\nP5·15–17\nP6·18–20",
+   "小题": [
+    {
+     "题号": 1,
+     "题干": "",
+     "选项": {
+      "A": "coined",
+      "B": "discovered",
+      "C": "collected",
+      "D": "issued"
+     }
+    },
+    {
+     "题号": 2,
+     "题干": "",
+     "选项": {
+      "A": "attributed",
+      "B": "directed",
+      "C": "compared",
+      "D": "confined"
+     }
+    },
+    {
+     "题号": 3,
+     "题干": "",
+     "选项": {
+      "A": "Unless",
+      "B": "When",
+      "C": "Once",
+      "D": "Though"
+     }
+    },
+    {
+     "题号": 4,
+     "题干": "",
+     "选项": {
+      "A": "coped with",
+      "B": "consisted of",
+      "C": "hinted at",
+      "D": "extended to"
+     }
+    },
+    {
+     "题号": 5,
+     "题干": "",
+     "选项": {
+      "A": "suffers",
+      "B": "benefits",
+      "C": "develops",
+      "D": "differs"
+     }
+    },
+    {
+     "题号": 6,
+     "题干": "",
+     "选项": {
+      "A": "acceptance",
+      "B": "evidence",
+      "C": "cultivation",
+      "D": "creation"
+     }
+    },
+    {
+     "题号": 7,
+     "题干": "",
+     "选项": {
+      "A": "doubted",
+      "B": "denied",
+      "C": "argued",
+      "D": "requested"
+     }
+    },
+    {
+     "题号": 8,
+     "题干": "",
+     "选项": {
+      "A": "adapting",
+      "B": "forming",
+      "C": "repairing",
+      "D": "testing"
+     }
+    },
+    {
+     "题号": 9,
+     "题干": "",
+     "选项": {
+      "A": "analogous",
+      "B": "essential",
+      "C": "suitable",
+      "D": "sensitive"
+     }
+    },
+    {
+     "题号": 10,
+     "题干": "",
+     "选项": {
+      "A": "just",
+      "B": "ever",
+      "C": "still",
+      "D": "even"
+     }
+    },
+    {
+     "题号": 11,
+     "题干": "",
+     "选项": {
+      "A": "restriction",
+      "B": "experiment",
+      "C": "perspective",
+      "D": "demand"
+     }
+    },
+    {
+     "题号": 12,
+     "题干": "",
+     "选项": {
+      "A": "attaching",
+      "B": "reducing",
+      "C": "returning",
+      "D": "exposing"
+     }
+    },
+    {
+     "题号": 13,
+     "题干": "",
+     "选项": {
+      "A": "However",
+      "B": "Moreover",
+      "C": "Therefore",
+      "D": "Otherwise"
+     }
+    },
+    {
+     "题号": 14,
+     "题干": "",
+     "选项": {
+      "A": "temporarily",
+      "B": "literally",
+      "C": "superficially",
+      "D": "imaginarily"
+     }
+    },
+    {
+     "题号": 15,
+     "题干": "",
+     "选项": {
+      "A": "list",
+      "B": "level",
+      "C": "label",
+      "D": "load"
+     }
+    },
+    {
+     "题号": 16,
+     "题干": "",
+     "选项": {
+      "A": "recalled",
+      "B": "agreed",
+      "C": "questioned",
+      "D": "added"
+     }
+    },
+    {
+     "题号": 17,
+     "题干": "",
+     "选项": {
+      "A": "chances",
+      "B": "risks",
+      "C": "excuses",
+      "D": "assumptions"
+     }
+    },
+    {
+     "题号": 18,
+     "题干": "",
+     "选项": {
+      "A": "danger",
+      "B": "failure",
+      "C": "warning",
+      "D": "control"
+     }
+    },
+    {
+     "题号": 19,
+     "题干": "",
+     "选项": {
+      "A": "represents",
+      "B": "includes",
+      "C": "reveals",
+      "D": "recognizes"
+     }
+    },
+    {
+     "题号": 20,
+     "题干": "",
+     "选项": {
+      "A": "humble",
+      "B": "poor",
+      "C": "practical",
+      "D": "easy"
+     }
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "",
+   "小题": [
+    {
+     "题号": 21,
+     "题干": "",
+     "选项": {
+      "A": "maintaining their plastic items.",
+      "B": "obtaining durable plastic artifacts.",
+      "C": "handling outdated plastic exhibits.",
+      "D": "classifying their plastic collections."
+     }
+    },
+    {
+     "题号": 22,
+     "题干": "",
+     "选项": {
+      "A": "immune to decay.",
+      "B": "improperly shaped.",
+      "C": "inherently flawed.",
+      "D": "complex in structure."
+     }
+    },
+    {
+     "题号": 23,
+     "题干": "",
+     "选项": {
+      "A": "keep them from hurting visitors.",
+      "B": "duplicate them for future display.",
+      "C": "have their ingredients analyzed.",
+      "D": "prevent them from further damage."
+     }
+    },
+    {
+     "题号": 24,
+     "题干": "",
+     "选项": {
+      "A": "costly.",
+      "B": "unworthy.",
+      "C": "unpopular.",
+      "D": "challenging."
+     }
+    },
+    {
+     "题号": 25,
+     "题干": "",
+     "选项": {
+      "A": "will inspire future scientific research.",
+      "B": "has profound historical significance.",
+      "C": "will help us separate the material ages.",
+      "D": "has an impact on today's cultural life."
+     }
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "",
+   "小题": [
+    {
+     "题号": 26,
+     "题干": "",
+     "选项": {
+      "A": "be careful in choosing a college.",
+      "B": "be diligent at each educational stage.",
+      "C": "reassess the necessity of college education.",
+      "D": "postpone their undergraduate application."
+     }
+    },
+    {
+     "题号": 27,
+     "题干": "",
+     "选项": {
+      "A": "Millennial's opinion about work.",
+      "B": "the shrinking value of a degree.",
+      "C": "public discontent with education.",
+      "D": "the desired route of social mobility."
+     }
+    },
+    {
+     "题号": 28,
+     "题干": "",
+     "选项": {
+      "A": "Generation Z are seeking to earn a decent degree.",
+      "B": "school leavers are willing to be skilled workers.",
+      "C": "employers are taking a realistic attitude to degree.",
+      "D": "parents are changing their minds about education."
+     }
+    },
+    {
+     "题号": 29,
+     "题干": "",
+     "选项": {
+      "A": "make an early decision on their career.",
+      "B": "attend on-the-job training programs.",
+      "C": "team up with high-paid postgraduates.",
+      "D": "further their studies in a specific field."
+     }
+    },
+    {
+     "题号": 30,
+     "题干": "",
+     "选项": {
+      "A": "Lifelong learning will define them.",
+      "B": "They will make qualified educators.",
+      "C": "Degrees will no longer appeal to them.",
+      "D": "They will have a limited choice of jobs."
+     }
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "",
+   "小题": [
+    {
+     "题号": 31,
+     "题干": "",
+     "选项": {
+      "A": "caught the attention of critics.",
+      "B": "received favorable responses.",
+      "C": "promoted academic publishing.",
+      "D": "sparked heated public disputes."
+     }
+    },
+    {
+     "题号": 32,
+     "题干": "",
+     "选项": {
+      "A": "art can offer audiences easy access to science.",
+      "B": "science can help with the expression of emotions.",
+      "C": "public participation in science has a promising future.",
+      "D": "art is effective in facilitating scientific innovations."
+     }
+    },
+    {
+     "题号": 33,
+     "题干": "",
+     "选项": {
+      "A": "their role may be underestimated.",
+      "B": "their reputation may be impaired.",
+      "C": "their creativity may be inhibited.",
+      "D": "their work may be misguided."
+     }
+    },
+    {
+     "题号": 34,
+     "题干": "",
+     "选项": {
+      "A": "It was headed alternately by artists and scientists.",
+      "B": "It exemplified valuable art-science alliances.",
+      "C": "Its projects aimed at advancing visual studies.",
+      "D": "Its founders sought to raise the status of artists."
+     }
+    },
+    {
+     "题号": 35,
+     "题干": "",
+     "选项": {
+      "A": "are likely to go beyond public expectations.",
+      "B": "will intensify interdisciplinary competition.",
+      "C": "should do more than communicating science.",
+      "D": "are becoming more popular than before."
+     }
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "",
+   "小题": [
+    {
+     "题号": 36,
+     "题干": "",
+     "选项": {
+      "A": "punish dubious corporate practices.",
+      "B": "improve traditional hiring procedures.",
+      "C": "exempt employers from certain duties.",
+      "D": "protect the rights of ordinary workers."
+     }
+    },
+    {
+     "题号": 37,
+     "题干": "",
+     "选项": {
+      "A": "hinder business development.",
+      "B": "undermine managers' authority.",
+      "C": "affect the public image of the firms.",
+      "D": "worsen labor-management relations."
+     }
+    },
+    {
+     "题号": 38,
+     "题干": "",
+     "选项": {
+      "A": "Imposing reasonable wage restraints.",
+      "B": "Enforcing employment protection laws.",
+      "C": "Limiting the powers of business owners.",
+      "D": "Dismissing poorly performing managers."
+     }
+    },
+    {
+     "题号": 39,
+     "题干": "",
+     "选项": {
+      "A": "Highly paid managers lose their jobs.",
+      "B": "Employees suffer from salary cuts.",
+      "C": "Society sees a rise in overall well-being.",
+      "D": "Employers need to hire new staff."
+     }
+    },
+    {
+     "题号": 40,
+     "题干": "",
+     "选项": {
+      "A": "has secured managers' earnings.",
+      "B": "has produced undesired results.",
+      "C": "is beneficial to business owners.",
+      "D": "is difficult to put into practice"
+     }
+    }
+   ]
+  }
+ ],
+ "题目数": 40,
+ "年份": "2022",
+ "来源": "懒笔记 paper 页（结构化正文）"
+}
