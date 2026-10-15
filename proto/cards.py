@@ -18,6 +18,15 @@ from nicegui import ui
 from yj import data
 from proto import store_lite as store
 
+# 考研政治五个部分的配色（与 408 的四门学科并列）
+ZZ_PART_COLORS = {
+    "MY": "#B91C1C",      # 马原
+    "MZT": "#C2410C",     # 毛中特
+    "SG": "#B45309",      # 史纲
+    "SX": "#0D9488",      # 思修法基
+    "SZ": "#7C3AED",      # 时政与当代
+}
+
 SUBJECT_COLORS = {
     "数据结构": "#2563EB",
     "计算机组成原理": "#7C3AED",
@@ -26,9 +35,14 @@ SUBJECT_COLORS = {
 }
 
 
-def question_card(q, year, done, user):
+def question_card(q, year, done, user, exam="408"):
     """
     渲染一道题：整行可点的选项 + 即时判分。
+
+    exam="408" | "ZZ"（考研政治）—— 两者的字段不同：
+        408：学科 / 主考点（考纲叶子 id）
+        政治：部分（马原/毛中特/史纲/思修法基/时政与当代）/ 主考点（暂无）
+    另外政治有**多选题**（408 只有单选 + 综合题），所以可判分的题型有两种。
 
     关键行为（与 Streamlit 版对齐，但这里天然做对了）：
       · **默认谁都没选** —— 不需要"请选择"占位项，也没有"第一项被自动选中"的问题
@@ -36,19 +50,36 @@ def question_card(q, year, done, user):
       · 已作答过则回显上次选择，并把正确项标绿、错选项标红
       · 没选就提交 → 提示，且不写库（数据层也会再拦一层）
     """
-    is_choice = q["题型"] == "单项选择题"
+    # 可判分的两种情形：
+    #   408  ：单项选择题（多项选择不存在；综合题走 _comprehensive_block）
+    #   政治 ：单项选择题 + 多项选择题（两个都可机判，且答案已投票验证）
+    is_choice = q["题型"] in ("单项选择题", "多项选择题")
+    # 【多选题要能选多个】408 只有单选，所以原实现的 chosen 是单个字母。
+    # 政治有多选（答案形如 "ABC"），必须用集合累积、再拼成有序字符串存储 ——
+    # 否则点第二个选项会把第一个覆盖掉（那样多选根本做不了）。
+    multi = q["题型"] == "多项选择题"
     prev = done.get(q["id"])
-    chosen = {"v": prev["chosen"] if prev else None}
+    if multi:
+        chosen = {"v": set(str(prev["chosen"])) if prev and prev["chosen"] else set()}
+    else:
+        chosen = {"v": prev["chosen"] if prev else None}
     locked = {"v": bool(prev)}
 
+    # 标签与配色按科目取不同字段（408 用学科，政治用部分）
+    if exam == "ZZ":
+        tag_txt = q.get("部分名") or ""
+        tag_clr = ZZ_PART_COLORS.get(q.get("部分"), "#2563EB")
+    else:
+        tag_txt = data.node_name(q["主考点"])
+        tag_clr = "#0D9488"
     with ui.card().classes("qcard w-full p-3 gap-1 shadow-none") \
-            .style(f'--sc:{SUBJECT_COLORS.get(q["学科"], "#2563EB")}'):
+            .style(f'--sc:{SUBJECT_COLORS.get(q.get("学科", ""), tag_clr)}'):
         with ui.row().classes("items-center gap-2"):
             ui.label(f'第 {q["题号"]} 题').classes("font-semibold")
             ui.label(f'{q["题型"]} · {q.get("分值") or "?"} 分') \
                 .classes("text-xs text-gray-500")
-            ui.label(data.node_name(q["主考点"])).classes("text-xs") \
-                .style("color:#0D9488")
+            if tag_txt:
+                ui.label(tag_txt).classes("text-xs").style(f"color:{tag_clr}")
             if year:
                 ui.label(f'{year} 年').classes("text-xs text-gray-400")
         ui.label(q["题干"]).classes("text-[15px] leading-6 whitespace-pre-wrap")
@@ -67,20 +98,37 @@ def question_card(q, year, done, user):
         rows = {}
 
         def paint():
+            ans = str(q.get("答案") or "")
             for k, row in rows.items():
                 row.classes(remove="sel right wrong")
                 if locked["v"]:
-                    if k == q["答案"]:
+                    # 已提交：正确项标绿；选错的部分标红
+                    if multi:
+                        if k in ans:
+                            row.classes(add="right")
+                        elif k in chosen["v"]:
+                            row.classes(add="wrong")
+                    elif k == ans:
                         row.classes(add="right")
                     elif k == chosen["v"]:
                         row.classes(add="wrong")
+                elif multi:
+                    if k in chosen["v"]:
+                        row.classes(add="sel")
                 elif k == chosen["v"]:
                     row.classes(add="sel")
 
         def pick(k):
             if locked["v"]:
                 return
-            chosen["v"] = k
+            if multi:
+                # 再点一次取消选择 —— 多选必须能反悔，否则点错了没法改
+                if k in chosen["v"]:
+                    chosen["v"].discard(k)
+                else:
+                    chosen["v"].add(k)
+            else:
+                chosen["v"] = k
             paint()
             submit.set_enabled(True)
             hint.set_text("")
@@ -116,7 +164,10 @@ def question_card(q, year, done, user):
 
             def show_explanation():
                 exp_box.clear()
-                sol = data.solution(year, q["题号"]) if year else None
+                # 政治目前没有解析（只有经过验证的答案），如实不显示解析；
+                # 408 从 data/solutions 取（答案册抽取 / AI 生成，带来源标注）
+                sol = (data.solution(year, q["题号"])
+                       if (year and exam != "ZZ") else None)
                 if not sol:
                     return
                 with exp_box:
@@ -126,12 +177,18 @@ def question_card(q, year, done, user):
                         .style("line-height:1.9")
 
             def do_submit():
-                if not chosen["v"]:
-                    hint.set_text("还没选选项 —— 请先点一个答案再提交。")
+                # 多选要有"至少选两个"的提示：政治多选规则是"多选或少选均不得分"，
+                # 只选一个必然错，直接提示比让他提交后再错更友好
+                val = ("".join(sorted(chosen["v"])) if multi else chosen["v"])
+                if not val:
+                    hint.set_text("还没选选项 —— 请先点选项再提交。")
                     return
-                ok = chosen["v"] == q["答案"]
+                if multi and len(val) < 2:
+                    hint.set_text("这是多选题，至少选两个（多选或少选均不得分）。")
+                    return
+                ok = val == str(q.get("答案") or "")
                 # 数据层也会拦空值；这里再判一次是为了给用户提示
-                store.record_answer(user, q["id"], chosen["v"], ok,
+                store.record_answer(user, q["id"], val, ok,
                                     source="practice")
                 locked["v"] = True
                 paint()
@@ -140,7 +197,7 @@ def question_card(q, year, done, user):
                     result.set_text(f'答对了 ✓　正确答案 {q["答案"]}')
                     result.style("color:#1B5E36")
                 else:
-                    result.set_text(f'答错了 ✗　你选 {chosen["v"]}，'
+                    result.set_text(f'答错了 ✗　你选 {val}，'
                                     f'正确答案 {q["答案"]}')
                     result.style("color:#8C2C2C")
                 show_explanation()

@@ -33,13 +33,15 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from nicegui import ui                            # noqa: E402
 from yj import data, diagnose, profile as profile_mod, path as path_mod  # noqa: E402
-from yj import llm, graph                          # noqa: E402
+from yj import llm, graph, zhengzhi as zz           # noqa: E402
 from proto import store_lite as store              # noqa: E402
-from proto.cards import question_card, SUBJECT_COLORS   # noqa: E402
+from proto.cards import (question_card, SUBJECT_COLORS,   # noqa: E402
+                         ZZ_PART_COLORS)
 
 PER = 10
 NAV = [("/", "首页", "home"),
        ("/exam", "408 历年真题", "description"),
+       ("/zz", "政治历年真题", "gavel"),
        ("/practice", "挑考点练习", "school"),
        ("/diagnose", "快速诊断", "monitor_heart"),
        ("/profile", "我的画像", "insights"),
@@ -550,6 +552,144 @@ def exam(year: str = None, page: int = 1, view: str = "全部", user: str = "dem
                     ui.label(subj).classes("t-body font-semibold mt-1") \
                         .style(f'color:{SUBJECT_COLORS.get(subj, "#2563EB")}')
                 question_card(q, p["年份"], done, user)
+
+
+# ================================================================ 考研政治真题
+@ui.page("/zz")
+def zz_index(user: str = "demo"):
+    """
+    政治真题入口：按年份进入。
+
+    为什么先只做"年份 → 做题"这一层
+    -------------------------------
+    政治的内容积累是渐进的（目前 5 年 190 道，目标 11+ 年）。先把"能看、能练"
+    这条路打通，比先建一套考纲图谱更实用 —— 题库本身对学生就有价值，
+    而图谱/诊断/讲义都可以在数据齐了之后再加，不必一次做满。
+    """
+    store.ensure_user(user)
+    with shell("/zz", user):
+        _title("考研政治 · 历年真题")
+        ys = zz.years()
+        if not ys:
+            ui.label("政治真题还没有入库。").classes("t-body sub")
+            return
+        rec = zz.paper(ys[-1])
+        n_obj = sum(1 for i in rec["题目"]
+                    if i["题型"] in ("单项选择题", "多项选择题"))
+        ui.label(f"已入库 {len(ys)} 个年份（{'、'.join(ys)}），共 "
+                 f"{sum(len(zz.paper(y)['题目']) for y in ys)} 道题。"
+                 f"每份试卷 16 道单选 + 17 道多选（可机判）+ 5 道分析题。") \
+            .classes("t-body sub")
+        ui.label("答案已用多轮独立求解投票校验 —— 政治真题的公开版本错误率不低"
+                 "（实测某年多选约 30% 有误），所以没有直接采用题源答案。") \
+            .classes("t-sm").style("color:#B45309")
+
+        with ui.row().classes("w-full gap-4 items-stretch mt-2"):
+            for y in reversed(ys):
+                r = zz.paper(y)
+                st = zz.part_stats(y)
+                done_n = sum(1 for i in r["题目"]
+                             if f"ZZ-{y}-{i['题号']}" in store.get_answers(user))
+                with ui.card().classes("softcard flex-1 p-4 gap-1"):
+                    ui.label(f"{y} 年").classes("t-lead font-bold")
+                    parts = " · ".join(
+                        f'{zz.PART_SHORT.get(k, k)} {v["分值"]}'
+                        for k, v in sorted(st.items(), key=lambda x: -x[1]["分值"]))
+                    ui.label(parts).classes("t-sm sub")
+                    ui.label(f"38 道（客观题 33 道可判分）· 已作答 {done_n} 道") \
+                        .classes("t-xs muted")
+                    ui.button(f"做 {y} 年真题",
+                              on_click=lambda yy=y: ui.navigate.to(
+                                  f"/zz/exam?year={yy}&user={user}")) \
+                        .props("unelevated")
+
+
+@ui.page("/zz/exam")
+def zz_exam(year: str = None, user: str = "demo", only: str = None):
+    """政治某年真题：按五个部分分组铺开"""
+    store.ensure_user(user)
+    ys = zz.years()
+    if not ys:
+        with shell("/zz", user):
+            _title("考研政治 · 历年真题")
+            ui.label("政治真题还没有入库。").classes("t-body sub")
+        return
+    year = year if year in ys else ys[-1]
+    rec = zz.paper(year)
+    done = store.get_answers(user)
+
+    with shell("/zz", user):
+        ui.label(f"{year} 年考研政治真题").classes("text-2xl font-bold")
+        st = zz.part_stats(year)
+        parts = " · ".join(f'{zz.PART_SHORT.get(k, k)} {v["分值"]} 分'
+                           for k, v in sorted(st.items(), key=lambda x: -x[1]["分值"]))
+        ui.label(parts).classes("t-sm sub")
+
+        # 年份切换 + 筛选（与 408 真题页保持同一套交互）
+        with ui.row().classes("items-center gap-3 flex-wrap"):
+            ui.select({y: f"{y} 年" for y in reversed(ys)}, value=year,
+                      label="年份",
+                      on_change=lambda e: ui.navigate.to(
+                          f"/zz/exam?year={e.value}&user={user}")) \
+                .props("dense outlined").classes("w-28")
+            view = ui.toggle({"全部": "全部", "未做": "未做", "只错题": "只错题"},
+                             value=only or "全部") \
+                .props("dense unelevated")
+            view.on("update:model-value", lambda e: ui.navigate.to(
+                f"/zz/exam?year={year}&user={user}&only={e.args}"))
+
+        obj = [i for i in rec["题目"]
+               if i["题型"] in ("单项选择题", "多项选择题")]
+        ana = [i for i in rec["题目"] if i["题型"] not in
+               ("单项选择题", "多项选择题")]
+        shown = []
+        for it in obj:
+            it = dict(it)
+            it["id"] = f"ZZ-{year}-{it['题号']}"
+            r = done.get(it["id"])
+            if view.value == "未做" and r:
+                continue
+            if view.value == "只错题" and (not r or r["is_correct"]):
+                continue
+            shown.append(it)
+
+        n_ans = sum(1 for i in obj if f"ZZ-{year}-{i['题号']}" in done)
+        n_ok = sum(1 for i in obj
+                   if (done.get(f"ZZ-{year}-{i['题号']}") or {}).get("is_correct"))
+        ui.label(f"客观题 {len(obj)} 道 · 已作答 {n_ans} 道"
+                 + (f" · 答对 {n_ok} 道" if n_ans else "")
+                 + f"　（当前显示 {len(shown)} 道）") \
+            .classes("t-sm muted")
+
+        if not shown:
+            ui.label("这个筛选下没有题目。").classes("t-sm muted")
+        # 按五个部分分组（正是官方命题规则的题号划分）
+        for code in ("MY", "MZT", "SG", "SX", "SZ"):
+            group = [i for i in shown if i.get("部分") == code]
+            if not group:
+                continue
+            with ui.expansion(f'{zz.PART_SHORT.get(code, code)}'
+                              f'（{len(group)} 道）', value=True).classes("w-full"):
+                ui.label(zz.PARTS.get(code, "")).classes("t-xs muted")
+                for it in group:
+                    question_card(it, year, done, user, exam="ZZ")
+
+        if ana:
+            ui.separator().style("border-color:var(--line)")
+            ui.label("分析题（主观题，50 分）").classes("t-lead font-semibold")
+            ui.label("政治分析题是手写论述题，没有唯一答案，因此不做自动判分 —— "
+                     "这里只展示题干，供你对照教材自己组织答案。") \
+                .classes("t-sm").style("color:#B45309")
+            for it in ana:
+                with ui.card().classes("softcard w-full p-3 gap-1"):
+                    with ui.row().classes("items-center gap-2"):
+                        ui.label(f'第 {it["题号"]} 题').classes("font-semibold")
+                        ui.label(f'{it["题型"]} · {it["分值"]} 分') \
+                            .classes("text-xs text-gray-500")
+                        if it.get("部分名"):
+                            ui.label(it["部分名"]).classes("text-xs") \
+                                .style(f'color:{ZZ_PART_COLORS.get(it.get("部分"), "#2563EB")}')
+                    ui.label(it["题干"]).classes("text-[15px] leading-6 whitespace-pre-wrap")
 
 
 # ================================================================ 挑考点练习
