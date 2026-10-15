@@ -469,6 +469,103 @@ def home(user: str = "demo"):
 
 
 # ================================================================ 真题页
+def _exam_tabs(active_id, page, user, extra=""):
+    """
+    科目切换条（真题页与练习页共用）。
+
+    用户要求："分块部分应该在挑考点练习那里，那里也设置一个 408 入口一个政治入口"。
+
+    所以这一条在**两个页面**都要有，且行为一致：
+        page="exam"     → 跳到真题路由（由科目注册表的「真题路由」决定）
+        page="practice" → 跳到同一页的不同 exam 参数
+    以后加数学/英语时，只要在 EXAMS 里把科目设为可用，两处自动出现。
+    """
+    with ui.row().classes("items-center gap-2 flex-wrap"):
+        for e in data.exam_list():
+            if not e.get("可用"):
+                # 规划中的科目：显示但不可点，并注明 —— 不假装有
+                ui.button(f'{e["简称"]}（规划中）').props("flat dense disable")
+                continue
+            on = (e["id"] == active_id)
+            if page == "practice":
+                target = f'/practice?exam={e["id"]}&user={user}'
+            else:
+                target = f'{e.get("真题路由") or "/exam"}?user={user}'
+            ui.button(e["简称"],
+                      on_click=lambda _=None, t=target: ui.navigate.to(t)) \
+                .props("unelevated" if on else "flat dense")
+
+
+def _practice_zhengzhi(part, go, user, goto):
+    """
+    政治练习：**按官方五个部分**出题。
+
+    这是"分块"的正确位置 —— 用户要求真题页按题号平铺、
+    把分块放到练习页（"分块部分应该在挑考点练习那里"）。
+
+    题库来自 yj.zhengzhi.part_pool()，只收**有答案且有解析**的题：
+    练习必须能判分、能看解析，否则练了也不知道对错。
+    """
+    summary = zz.part_summary()
+
+    if not part:
+        ui.label("按部分练 —— 只练一个部分，而不是刷整卷。"
+                 "题量来自 2010–2026 全部 17 年真题。").classes("t-body")
+        # 【等宽排布】实测用 flex:1 时，5 张卡片换行后最后一张会独占整行
+        # （3+1 的难看布局）。这里固定每张的基准宽度并禁止拉伸，
+        # 让它自然排成 3+2 —— 换行后宽度仍一致。
+        with ui.row().classes("w-full gap-3 items-stretch flex-wrap"):
+            for code in ("MY", "MZT", "SG", "SX", "SZ"):
+                v = summary.get(code) or {}
+                with ui.card().classes("bookcard p-4 gap-1 shadow-none") \
+                        .style("flex:0 0 18.5rem;max-width:18.5rem"):
+                    with ui.row().classes("items-center gap-2"):
+                        ui.label(v.get("简称", code)).classes("t-lead font-bold")
+                        ui.label(f'官方 {v.get("分值", 0)} 分') \
+                            .classes("t-xs muted")
+                    ui.label(v.get("名称", "")).classes("t-sm sub")
+                    ui.label(f'可练 {v.get("可练", 0)} 道'
+                             f'（单选 {v.get("单选", 0)} · 多选 {v.get("多选", 0)}）') \
+                        .classes("t-sm font-semibold")
+                    ui.label(f'覆盖 {v.get("年份数", 0)} 个年份').classes("t-xs muted")
+                    ui.button("进入练习",
+                              on_click=lambda _=None, c=code:
+                              goto(part=c, go=0)).props("unelevated") \
+                        .classes("w-full mt-1")
+        return
+
+    pool = zz.part_pool(part=part)
+    nm = zz.PART_SHORT.get(part, part)
+    with ui.row().classes("items-center gap-2"):
+        ui.label(f"{nm} · 练习").classes("t-lead font-bold")
+        ui.button("← 换一部分", on_click=lambda: goto(part=None, go=0)) \
+            .props("flat dense")
+    ui.label(zz.PARTS.get(part, "")).classes("t-sm sub")
+
+    done = store.get_answers(user)
+    n_done = sum(1 for q in pool if q["id"] in done)
+    ui.label(f"题库 {len(pool)} 道（17 年真题汇总）· 已作答 {n_done} 道"
+             f'　·　官方分值 {zz.PART_SCORE.get(part, 0)} 分').classes("t-sm muted")
+
+    if not go:
+        ui.button(f"▶ 开始练习（共 {len(pool)} 道）",
+                  on_click=lambda: goto(go=1)).props("unelevated")
+        ui.label("排序：未做过的优先 → 多选在前 → 年份新优先。"
+                 "每道题提交后都会给出答案与解析。").classes("t-sm muted")
+        return
+
+    # 排序：没做过的优先 → 多选优先（多选更难、更值得练）→ 年份新优先。
+    # 【不截断】用户明确要求过"题库里有几道就几道"。
+    pool.sort(key=lambda q: (q["id"] in done,
+                             q["题型"] != "多项选择题",
+                             -int(q["year"])))
+    ui.separator()
+    ui.label(f"练习：共 {len(pool)} 道").classes("t-lead font-bold")
+    ui.label("已做过的题会显示你的作答与解析。").classes("t-sm muted")
+    for q in pool:
+        question_card(q, q["year"], done, user, exam="ZZ")
+
+
 def _subject_tabs(active_id, user):
     """
     真题页顶部的**科目切换条**。
@@ -748,16 +845,14 @@ def exam_zhengzhi(year: str = None, user: str = "demo", only: str = None):
 
         if not shown:
             ui.label("这个筛选下没有题目。").classes("t-sm muted")
-        # 按五个部分分组（正是官方命题规则的题号划分）
-        for code in ("MY", "MZT", "SG", "SX", "SZ"):
-            group = [i for i in shown if i.get("部分") == code]
-            if not group:
-                continue
-            with ui.expansion(f'{zz.PART_SHORT.get(code, code)}'
-                              f'（{len(group)} 道）', value=True).classes("w-full"):
-                ui.label(zz.PARTS.get(code, "")).classes("t-xs muted")
-                for it in group:
-                    question_card(it, year, done, user, exam="ZZ")
+        # 【按题号顺序平铺，不按部分分块】
+        # 用户要求："政治真题部分你要按照题目顺序来啊，在这部分内容不要分块，
+        # 分块部分应该在挑考点练习那里。"
+        # 理由也站得住：真题是按题号**连续作答**的，拆成五个可折叠块之后
+        # 得反复展开/收起，也看不出题号顺序。每题仍带部分标签（马原/毛中特/…），
+        # 信息没有丢失；要"按部分针对性练"去挑考点练习页。
+        for it in shown:
+            question_card(it, year, done, user, exam="ZZ")
 
         if ana:
             ui.separator().style("border-color:var(--line)")
@@ -779,19 +874,64 @@ def exam_zhengzhi(year: str = None, user: str = "demo", only: str = None):
 
 # ================================================================ 挑考点练习
 @ui.page("/practice")
-def practice(subject: str = None, chapter: str = None,
-             go: int = 0, user: str = "demo"):
+def practice(exam: str = None, subject: str = None, chapter: str = None,
+             part: str = None, go: int = 0, user: str = "demo"):
+    """
+    挑考点练习 —— **两个入口：408 / 政治**。
+
+    用户要求："分块部分应该在挑考点练习那里，那里也设置一个408入口一个政治入口"。
+
+    两个科目的"块"层级不同，各按自己的结构呈现：
+        408  ：4 门课（数据结构 / 组成原理 / 操作系统 / 计算机网络）
+               → 章 → 节 → 考点（有依赖图，可勾选薄弱点）
+        政治 ：5 个部分（马原 / 毛中特 / 史纲 / 思修法基 / 时政）
+               政治**没有 408 那样的考点依赖图**，所以这里只做到"部分"这一层 ——
+               界面上不假装有更细的考点选择（那会是编的）。
+    """
     store.ensure_user(user)
     marks = store.get_marks(user)
 
     def goto(**kw):
-        s = {"subject": subject, "chapter": chapter, "go": go, "user": user}
+        s = {"exam": exam, "subject": subject, "chapter": chapter,
+             "part": part, "go": go, "user": user}
         s.update(kw)
         s = {k: v for k, v in s.items() if v not in (None, "", 0)}
         ui.navigate.to("/practice?" + "&".join(f"{k}={v}" for k, v in s.items()))
 
     with shell("/practice", user):
         _title("挑考点练习")
+        _exam_tabs(exam, "practice", user)
+
+        # ---------------- 第 0 层：先选科目 ----------------
+        if not exam:
+            ui.label("先选一科，再挑要练的部分或考点。两科的「块」不一样："
+                     "408 有 266 个考点可勾选，政治按官方五个部分划分。") \
+                .classes("t-body")
+            with ui.row().classes("w-full gap-4 items-stretch"):
+                for e in data.exam_list():
+                    if not e.get("可用"):
+                        continue
+                    with ui.card().classes("bookcard flex-1 p-4 gap-1 shadow-none"):
+                        ui.label(e["简称"]).classes("t-lead font-bold")
+                        ui.label(e["名称"]).classes("t-sm sub")
+                        ui.label(e.get("题量说明", "")).classes("t-sm sub")
+                        if e["id"] == "408":
+                            ui.label("4 门课 → 章 → 节 → 266 个考点可勾选") \
+                                .classes("t-xs muted")
+                        else:
+                            ui.label("5 个部分（马原/毛中特/史纲/思修法基/时政）") \
+                                .classes("t-xs muted")
+                        ui.button(f'进入{e["简称"]}练习',
+                                  on_click=lambda _=None, x=e["id"]:
+                                  goto(exam=x)).props("unelevated") \
+                            .classes("w-full mt-1")
+            return
+
+        # ---------------- 政治分支 ----------------
+        if exam == "ZZ":
+            _practice_zhengzhi(part, go, user, goto)
+            return
+
         _steps(1 if not subject else 2)
         if not subject:
             ui.label("先选一门课，再从这门课里挑出你自己觉得薄弱的知识点，"

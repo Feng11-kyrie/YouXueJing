@@ -201,3 +201,57 @@ def part_stats(year):
         if it["边界题"]:
             d["边界"] += 1
     return out
+
+
+def part_pool(year=None, part=None, only_answerable=True):
+    """
+    按**部分**取客观题，供「挑考点练习」使用。
+
+    用户要求把"分块"从真题页挪到练习页：
+        "政治真题部分你要按照题目顺序来啊，在这部分内容不要分块，
+         分块部分应该在挑考点练习那里"
+
+    所以真题页按题号平铺（连续作答的体验），而"按部分针对性练"
+    放在练习页 —— 这里就是它的题库来源。
+
+    year=None 表示**跨所有年份**取（练习要的是题量，不是某一年的整卷）。
+    only_answerable=True 只取有答案且有解析的题 —— 练习必须能判分、
+    能看解析，否则练了也不知道对错。
+    """
+    out = []
+    for y in years():
+        if year and str(y) != str(year):
+            continue
+        for it in paper(y)["题目"]:
+            if it["题型"] not in ("单项选择题", "多项选择题"):
+                continue
+            if part and it.get("部分") != part:
+                continue
+            if only_answerable and (not it.get("答案")
+                                    or not explanation(y, it["题号"])):
+                continue
+            out.append({**it, "year": y, "id": f"ZZ-{y}-{it['题号']}"})
+    return out
+
+
+def part_summary():
+    """
+    各部分的总览（跨所有年份）：题量、可练题数、已覆盖年份数。
+    供练习页的卡片显示真实规模 —— 不能写死"若干题"。
+    """
+    out = {}
+    for code in PARTS:
+        pool = part_pool(part=code)
+        ys = sorted({q["year"] for q in pool})
+        n_single = sum(1 for q in pool if q["题型"] == "单项选择题")
+        n_multi = sum(1 for q in pool if q["题型"] == "多项选择题")
+        out[code] = {
+            "名称": PARTS.get(code, code),
+            "简称": PART_SHORT.get(code, code),
+            "分值": PART_SCORE.get(code, 0),
+            "可练": len(pool),
+            "单选": n_single,
+            "多选": n_multi,
+            "年份数": len(ys),
+        }
+    return out
