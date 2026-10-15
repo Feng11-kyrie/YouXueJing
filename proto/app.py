@@ -11,7 +11,9 @@
 
 六页（各自是真实 URL，可分享/刷新不丢）：
     /                       首页
-    /exam?year=2025&page=2  408 历年真题
+    /exam                   考研历年真题（科目选择）
+    /exam/408?year=2025&page=2   408 历年真题
+    /exam/zhengzhi?year=2023     政治历年真题
     /practice?subject=DS&chapter=DS-03   挑考点练习
     /diagnose               快速诊断（32 题）
     /profile                我的画像
@@ -40,8 +42,7 @@ from proto.cards import (question_card, SUBJECT_COLORS,   # noqa: E402
 
 PER = 10
 NAV = [("/", "首页", "home"),
-       ("/exam", "408 历年真题", "description"),
-       ("/zz", "政治历年真题", "gavel"),
+       ("/exam", "考研历年真题", "description"),
        ("/practice", "挑考点练习", "school"),
        ("/diagnose", "快速诊断", "monitor_heart"),
        ("/profile", "我的画像", "insights"),
@@ -302,7 +303,7 @@ def home(user: str = "demo"):
                             .classes("t-xs muted")
                         ui.button("进入 408",
                                   on_click=lambda: ui.navigate.to(
-                                      f"/exam?user={user}")).props("unelevated")
+                                      f"/exam/408?user={user}")).props("unelevated")
                     else:
                         from yj import zhengzhi as _zz
                         _ys = _zz.years()
@@ -460,7 +461,7 @@ def home(user: str = "demo"):
                             ui.label(name[:20]).classes("t-sm muted truncate")
                     ui.button("去错题模式重做",
                               on_click=lambda: ui.navigate.to(
-                                  f"/exam?view=只错题&user={user}")) \
+                                  f"/exam/408?view=只错题&user={user}")) \
                         .props("flat dense")
                 else:
                     ui.label("没有待复习的错题 —— 目前做过的题都对了。") \
@@ -468,8 +469,84 @@ def home(user: str = "demo"):
 
 
 # ================================================================ 真题页
+def _subject_tabs(active_id, user):
+    """
+    真题页顶部的**科目切换条**。
+
+    用户要求："408 历年真题 换成 考研历年真题，并且提供 408 真题和政治真题选项。
+    以后我还要加入考研数学和考研英语"。
+
+    所以这一条是"以科目为维度"的导航 —— 以后加数学/英语时，
+    **只需要在 yj/data.py 的 EXAMS 里把新科目设为可用、填上真题路由**，
+    这里和首页会自动出现，不用再改界面代码。
+    """
+    with ui.row().classes("items-center gap-2 flex-wrap"):
+        ui.label("考研历年真题").classes("text-2xl font-bold mr-3")
+        for e in data.exam_list():
+            if e.get("可用") and e.get("真题路由"):
+                on = (e["id"] == active_id)
+                ui.button(e["简称"],
+                          on_click=lambda _=None, r=e["真题路由"]: ui.navigate.to(
+                              f"{r}?user={user}")) \
+                    .props("unelevated" if on else "flat dense") \
+                    .classes("" if on else "ml-0")
+            else:
+                # 规划中的科目：显示但**不可点**，并注明"规划中" ——
+                # 不假装有，也不隐藏（用户明确说要加数学和英语，展示路线图是诚实的）
+                ui.button(f'{e["简称"]}（规划中）').props("flat dense disable")
+
+
 @ui.page("/exam")
-def exam(year: str = None, page: int = 1, view: str = "全部", user: str = "demo"):
+def exam_hub(user: str = "demo"):
+    """
+    真题总入口：**先选科目**。
+
+    原来导航里是"408 历年真题"，加政治后变成两项并列 —— 那样每加一科
+    导航就长一条。改成"考研历年真题"一个入口 + 科目卡片，
+    以后加数学/英语只是多一张卡。
+    """
+    store.ensure_user(user)
+    with shell("/exam", user):
+        ui.label("考研历年真题").classes("text-2xl font-bold")
+        ui.label("按科目进入。每科都是独立的考纲与真题库，作答记录也按科目分开。") \
+            .classes("t-body sub")
+
+        ready = [e for e in data.exam_list() if e.get("可用")]
+        planned = [e for e in data.exam_list() if not e.get("可用")]
+
+        with ui.row().classes("w-full gap-4 items-stretch mt-2"):
+            for e in ready:
+                with ui.card().classes("softcard flex-1 p-4 gap-1"):
+                    with ui.row().classes("items-center gap-2"):
+                        ui.label(e["简称"]).classes("t-lead font-bold")
+                        ui.label(e["科目类型"]).classes("t-xs muted")
+                    ui.label(e["名称"]).classes("t-body font-semibold")
+                    ui.label(e["说明"]).classes("t-sm sub")
+                    ui.label(e.get("题量说明", "")).classes("t-xs muted")
+                    ui.label(f'考生规模 {e["考生规模"]}').classes("t-xs muted")
+                    ui.button(f'进入{e["简称"]}真题',
+                              on_click=lambda _=None, r=e["真题路由"]:
+                              ui.navigate.to(f"{r}?user={user}")) \
+                        .props("unelevated")
+
+        if planned:
+            ui.label("规划中").classes("t-lead font-semibold mt-4")
+            ui.label("这两科还没入库 —— 列在这里是为了让你知道路线图，"
+                     "不是已经能用。").classes("t-sm").style("color:#B45309")
+            with ui.row().classes("w-full gap-4 items-stretch"):
+                for e in planned:
+                    with ui.card().classes("softcard flex-1 p-4 gap-1") \
+                            .style("opacity:.65"):
+                        with ui.row().classes("items-center gap-2"):
+                            ui.label(e["简称"]).classes("t-lead font-bold")
+                            ui.label("规划中").classes("t-xs") \
+                                .style("color:#B45309")
+                        ui.label(e["名称"]).classes("t-body font-semibold")
+                        ui.label(e["说明"]).classes("t-sm sub")
+
+
+@ui.page("/exam/408")
+def exam_408(year: str = None, page: int = 1, view: str = "全部", user: str = "demo"):
     papers = data.paper_index()
     years = [p["年份"] for p in papers]
     year = str(year) if str(year) in years else years[0]
@@ -490,9 +567,10 @@ def exam(year: str = None, page: int = 1, view: str = "全部", user: str = "dem
         s = {"year": year, "page": cur, "view": view, "user": user}
         s.update(kw)
         s = {k: v for k, v in s.items() if v not in (None, "", 0)}
-        ui.navigate.to("/exam?" + "&".join(f"{k}={v}" for k, v in s.items()))
+        ui.navigate.to("/exam/408?" + "&".join(f"{k}={v}" for k, v in s.items()))
 
     with shell("/exam", user):
+        _subject_tabs("408", user)
         _title("408 历年真题")
         with ui.row().classes("items-center gap-3 w-full"):
             ui.select(years, value=year,
@@ -556,6 +634,12 @@ def exam(year: str = None, page: int = 1, view: str = "全部", user: str = "dem
 
 # ================================================================ 考研政治真题
 @ui.page("/zz")
+def zz_legacy(user: str = "demo"):
+    """旧路由 /zz → 跳到新的 /exam/zhengzhi（避免已存的链接失效）"""
+    ui.navigate.to(f"/exam/zhengzhi?user={user}")
+
+
+@ui.page("/exam/zhengzhi/index")
 def zz_index(user: str = "demo"):
     """
     政治真题入口：按年份进入。
@@ -600,12 +684,12 @@ def zz_index(user: str = "demo"):
                         .classes("t-xs muted")
                     ui.button(f"做 {y} 年真题",
                               on_click=lambda yy=y: ui.navigate.to(
-                                  f"/zz/exam?year={yy}&user={user}")) \
+                                  f"/exam/zhengzhi?year={yy}&user={user}")) \
                         .props("unelevated")
 
 
-@ui.page("/zz/exam")
-def zz_exam(year: str = None, user: str = "demo", only: str = None):
+@ui.page("/exam/zhengzhi")
+def exam_zhengzhi(year: str = None, user: str = "demo", only: str = None):
     """政治某年真题：按五个部分分组铺开"""
     store.ensure_user(user)
     ys = zz.years()
@@ -618,7 +702,8 @@ def zz_exam(year: str = None, user: str = "demo", only: str = None):
     rec = zz.paper(year)
     done = store.get_answers(user)
 
-    with shell("/zz", user):
+    with shell("/exam", user):
+        _subject_tabs("ZZ", user)
         ui.label(f"{year} 年考研政治真题").classes("text-2xl font-bold")
         st = zz.part_stats(year)
         parts = " · ".join(f'{zz.PART_SHORT.get(k, k)} {v["分值"]} 分'
@@ -630,13 +715,13 @@ def zz_exam(year: str = None, user: str = "demo", only: str = None):
             ui.select({y: f"{y} 年" for y in reversed(ys)}, value=year,
                       label="年份",
                       on_change=lambda e: ui.navigate.to(
-                          f"/zz/exam?year={e.value}&user={user}")) \
+                          f"/exam/zhengzhi?year={e.value}&user={user}")) \
                 .props("dense outlined").classes("w-28")
             view = ui.toggle({"全部": "全部", "未做": "未做", "只错题": "只错题"},
                              value=only or "全部") \
                 .props("dense unelevated")
             view.on("update:model-value", lambda e: ui.navigate.to(
-                f"/zz/exam?year={year}&user={user}&only={e.args}"))
+                f"/exam/zhengzhi?year={year}&user={user}&only={e.args}"))
 
         obj = [i for i in rec["题目"]
                if i["题型"] in ("单项选择题", "多项选择题")]
