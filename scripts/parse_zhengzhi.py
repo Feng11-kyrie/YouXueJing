@@ -55,10 +55,42 @@ QNUM = re.compile(r'(?m)^\s*(\d{1,2})\s*[.．、]\s*')
 # 而换行紧跟着"（"，正则就从"（"开始匹配而失败（这个坑我踩过）。
 QNUM_LOOSE = re.compile(r'(?m)(?:^|(?<=[)）分\u3000\s]))\s*(3[4-8])\s*[.．、]?\s*'
                         r'(?=[^\d\s])')
-# 答案标记：允许括号内换行、冒号全半角、可无括号
-# 冒号后**允许换行** —— 实测第 27 题是 "（答案：\nBCD）"，原来的正则漏掉了它，
-# 表现为"33 道题只解析出 32 道"。
-ANS = re.compile(r'[（(]\s*答\s*案\s*[:：]\s*([A-D]{1,4})\s*[)）]', re.S)
+# 答案标记 —— 实测有**两种排版**，必须都支持：
+#   ① 括号格式，且答案在**题干中间**（2015 那份）：
+#         "…水稻来。”这表明（答案：B） "
+#   ② 裸写格式，答案自成一行（2016 那份 eol 文字版）：
+#         "D.在事物的发展过程中要时时注意事物的自我否定\n答案：B\n【解析】…"
+#
+# 原来的正则只支持 ①，导致 2016 的 31 个答案全部读不到
+# （表现为"2016 缺 2 道答案"——其实更多，只是那两道题源里另有括号格式的答案）。
+# 另外**字母可能是全角**（"答案：ＢＣＤ"），也要归一化。
+#
+# 注意锚定方式：① 不能锚行首（答案在句中）；② 必须锚行首（否则会匹配到
+# 【解析】里的"答案"字样）。所以用两条交替分支，各自带合适的锚定。
+# 冒号后的空白/换行都要容忍 —— 实测有 "（答案：\nBCD）" 这种跨行写法。
+ANS = re.compile(
+    r'(?:[（(]\s*答\s*案\s*[:：]?\s*([A-Da-dＡ-Ｄａ-ｄ]{1,4})\s*[)）]'
+    r'|(?m:^)\s*答\s*案\s*[:：]\s*([A-Da-dＡ-Ｄａ-ｄ]{1,4})(?=\s|$))')
+
+
+def ans_letter(m):
+    """
+    从 ANS 的匹配里取答案字母，并**归一化全角 → 半角、统一大写**。
+
+    为什么需要：实测题源里既有半角 "B" 也有全角 "Ｂ"（2016 那份是
+    "答案：ＢＣＤ"）。不归一化的话，答案字符串会和选项键 "BCD" 对不上，
+    判分时就找不到选项（审计会报"答案越界"）。
+    """
+    s = m.group(1) or m.group(2) or ""
+    out = []
+    for c in s:
+        o = ord(c)
+        if 0xFF21 <= o <= 0xFF3A:          # 全角 Ａ-Ｚ
+            c = chr(o - 0xFF21 + ord("A"))
+        elif 0xFF41 <= o <= 0xFF5A:        # 全角 ａ-ｚ
+            c = chr(o - 0xFF41 + ord("a"))
+        out.append(c.upper())
+    return "".join(out)
 # 选项：允许全角/半角点号
 # 选项符号实测有四种：".", "．", "、", 以及**全角逗号 "，"**
 # （最后一种是子 agent 在 2016 年那份 docx 里发现的，原来的正则匹配不到）
@@ -80,6 +112,19 @@ OPT = re.compile(r'(?m)^\s*([A-D])\s*[.．、,，]?\s*(.+?)'
 
 # 字母序列切分：找出 A、B、C、D 四个标记（要求按顺序连续出现）
 OPT_SEQ = re.compile(r'(?<![A-Za-z0-9])([A-D])\s*[.．、,，]?\s*(?=[^\s])')
+
+def _norm_letters(s):
+    """全角字母 → 半角大写"""
+    out = []
+    for c in s:
+        o = ord(c)
+        if 0xFF21 <= o <= 0xFF3A:
+            c = chr(o - 0xFF21 + ord("A"))
+        elif 0xFF41 <= o <= 0xFF5A:
+            c = chr(o - 0xFF41 + ord("a"))
+        out.append(c.upper())
+    return "".join(out)
+
 
 def split_options(block):
     """
@@ -276,7 +321,26 @@ def parse(pdf_path, year=None):
             opts_found, opt_start = split_options(chunk)
             first_opt = bool(opts_found)
             head = chunk[:opt_start] if opt_start is not None else chunk
-            am = ANS.search(head)          # 答案只在题干部分里找
+            # 答案可能出现在**两个位置**（实测两种题源各占一种）：
+            #   ① 题干里（2015 那份）：  "…这表明（答案：B）"
+            #   ② **选项之后**（2016 那份 eol 文字版）：
+            #         "…D.在事物的发展过程中要时时注意事物的自我否定\n答案：B\n【解析】…"
+            # 原来只在 head（题干部分）里找，2016 的答案全在选项之后 → 一个都读不到。
+            # 所以先在 head 里找，找不到再在整个 chunk 里找。
+            # am_in_head 决定"题干切到哪里"：答案在题干里才需要从 am 处切断，
+            # 否则 head 本身就是完整题干（答案在后面，不该影响题干）。
+            am = ANS.search(head)
+            am_in_head = am is not None
+            if not am:
+                am = ANS.search(chunk)
+            # 【不做"从解析正文推答案"】
+            # 我试过两版启发式（从解析结论里取字母 / 用选项原文反查），
+            # **两版都在本来没有答案的年份制造误报**：
+            # 2010/2011/2012/2014/2019/2020 凭空多出 1–4 个答案。
+            # 那是编造 —— 比"没有答案"更糟（用户红线：不能编造数据）。
+            # 所以彻底放弃这条路：答案要么来自题源的明确标记，要么来自投票，
+            # 要么进 scripts/zz_manual_answers.py 人工核对过的表。
+            # （2016 第 22 题的答案藏在解析结论里，已放进人工表。）
 
             if not am:
                 # 【不丢题】原来这里直接 continue，会丢掉"答案标记格式异常"的题。
@@ -297,13 +361,13 @@ def parse(pdf_path, year=None):
                                   "题干": stem_only, "选项": opts_only,
                                   "答案": None, "待投票": True})
                 continue
-            stem = clean(head[:am.start()])
+            stem = clean(head[:am.start()] if am_in_head else head)
             opts = {k: clean(v) for k, v in opts_found.items()}
             if len(opts) < 4:
                 continue     # 选项不全的丢弃：判分依赖选项，缺一个就会算错
             items.append({"题号": str(num), "题型": name, "分值": n,
                           "题干": stem, "选项": opts,
-                          "答案": am.group(1)})
+                          "答案": ans_letter(am)})
     # 【为什么不做"同题号合并"】我试过：把重复出现的同一题号合并、保留选项更全的
     # 那份。结果**把好数据也弄坏了** —— 2015 那份的 16 道单选被合并成 6 道，
     # 2024 也少了一道。原因是这些文件的重复不是"两道完整相同的题"，而是
