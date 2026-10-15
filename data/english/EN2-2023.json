@@ -1,0 +1,437 @@
+{
+ "tier": "EN2",
+ "篇目": [
+  {
+   "部分": "CLOZE",
+   "材料": "2023 年全国硕士研究生招生考试英语（二）\nSection I Use of English\nDirections:\nRead the following text. Choose the best word(s) for each numbered blank and mark A, B, C\nor D on the ANSWER SHEET. (10 points)\nHere’s a common scenario that any number of entrepreneurs face today: you’re the CEO\nof a small business, and though you’re making a nice 1 , you need to find a way to take it\nto the next level. What you need to do is 2 growth by establishing a growth team. A\ngrowth team is made up of members from different departments within your company, and it\nharnesses the power of collaboration to focus 3 on finding ways to grow.\nLet’s look at a real-world 4 . Prior to forming a growth team, the software company\nBitTorrent had 50 employees working in the 5 departments of engineering, marketing\nand product development. This brought them good results until 2012, when their growth\nplateaued. The 6 was that too many customers were using the basic, free version of their\nproduct. And 7 improvements to the premium, paid version, few people were making the\nupgrade.\nThings changed, 8 , when an innovative project-marketing manager came aboard,\n9 a growth team and sparked the kind of 10 perspective they needed. By looking at\nengineering issues from a marketing point of view, it became clear that the 11 of\nupgrades wasn’t due to a quality issue. Most customers were simply unaware of the premium\nversion and what it offered.\nArmed with this 12 , the marketing and engineering teams joined forces to raise\nawareness by prominently 13 the premium version to users of the free version. 14 ,\nupgrades skyrocketed, and revenue increased by 92 percent.\nBut in order for your growth team to succeed, it needs to have a strong leader. It needs\nsomeone who can 15 the interdisciplinary team and keep them on course for\nimprovement. This leader will 16 the target area, set clear goals and establish a time\nframe for the 17 of these goals.\nThe growth leader is also 18 for keeping the team focused on moving forward and\nsteering them clear of distractions. 19 attractive, new ideas can be distracting, the team\nleader must recognize when these ideas don’t 20 the current goal and need to be put on\nthe back burner.",
+   "小题": [
+    {
+     "题号": 1,
+     "题干": "",
+     "选项": {
+      "A": "purchase",
+      "B": "profit",
+      "C": "connection",
+      "D": "bet"
+     }
+    },
+    {
+     "题号": 2,
+     "题干": "",
+     "选项": {
+      "A": "define",
+      "B": "predict",
+      "C": "prioritize",
+      "D": "appreciate"
+     }
+    },
+    {
+     "题号": 3,
+     "题干": "",
+     "选项": {
+      "A": "exclusively",
+      "B": "temporarily",
+      "C": "potentially",
+      "D": "initially"
+     }
+    },
+    {
+     "题号": 4,
+     "题干": "",
+     "选项": {
+      "A": "experiment",
+      "B": "proposal",
+      "C": "debate",
+      "D": "example"
+     }
+    },
+    {
+     "题号": 5,
+     "题干": "",
+     "选项": {
+      "A": "identical",
+      "B": "marginal",
+      "C": "provisional",
+      "D": "traditional"
+     }
+    },
+    {
+     "题号": 6,
+     "题干": "",
+     "选项": {
+      "A": "rumor",
+      "B": "secret",
+      "C": "myth",
+      "D": "problem"
+     }
+    },
+    {
+     "题号": 7,
+     "题干": "",
+     "选项": {
+      "A": "despite",
+      "B": "unlike",
+      "C": "through",
+      "D": "besides"
+     }
+    },
+    {
+     "题号": 8,
+     "题干": "",
+     "选项": {
+      "A": "moreover",
+      "B": "however",
+      "C": "therefore",
+      "D": "again"
+     }
+    },
+    {
+     "题号": 9,
+     "题干": "",
+     "选项": {
+      "A": "inspected",
+      "B": "created",
+      "C": "expanded",
+      "D": "reformed"
+     }
+    },
+    {
+     "题号": 10,
+     "题干": "",
+     "选项": {
+      "A": "cultural",
+      "B": "objective",
+      "C": "fresh",
+      "D": "personal"
+     }
+    },
+    {
+     "题号": 11,
+     "题干": "",
+     "选项": {
+      "A": "end",
+      "B": "burden",
+      "C": "lack",
+      "D": "decrease"
+     }
+    },
+    {
+     "题号": 12,
+     "题干": "",
+     "选项": {
+      "A": "policy",
+      "B": "suggestion",
+      "C": "purpose",
+      "D": "insight"
+     }
+    },
+    {
+     "题号": 13,
+     "题干": "",
+     "选项": {
+      "A": "contributing",
+      "B": "allocating",
+      "C": "promoting",
+      "D": "transferring"
+     }
+    },
+    {
+     "题号": 14,
+     "题干": "",
+     "选项": {
+      "A": "As a result",
+      "B": "At any rate",
+      "C": "By the way",
+      "D": "In a sense"
+     }
+    },
+    {
+     "题号": 15,
+     "题干": "",
+     "选项": {
+      "A": "unite",
+      "B": "finance",
+      "C": "follow",
+      "D": "choose"
+     }
+    },
+    {
+     "题号": 16,
+     "题干": "",
+     "选项": {
+      "A": "share",
+      "B": "identify",
+      "C": "divide",
+      "D": "broaden"
+     }
+    },
+    {
+     "题号": 17,
+     "题干": "",
+     "选项": {
+      "A": "announcement",
+      "B": "assessment",
+      "C": "adjustment",
+      "D": "accomplishment"
+     }
+    },
+    {
+     "题号": 18,
+     "题干": "",
+     "选项": {
+      "A": "famous",
+      "B": "responsible",
+      "C": "available",
+      "D": "respectable"
+     }
+    },
+    {
+     "题号": 19,
+     "题干": "",
+     "选项": {
+      "A": "Before",
+      "B": "Once",
+      "C": "While",
+      "D": "Unless"
+     }
+    },
+    {
+     "题号": 20,
+     "题干": "",
+     "选项": {
+      "A": "serve",
+      "B": "limit",
+      "C": "summarize",
+      "D": "alter"
+     }
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "Text 1\nIn the quest for the perfect lawn, homeowners across the country are taking a shortcut —\nand it is the environment that is paying the price. About eight million square metres of plastic\ngrass is sold each year but opposition has now spread to the highest gardening circles. The\nChelsea Flower Show has banned fake grass from this year’s event, declaring it to be not part\nof its ethos. The Royal Horticultural Society (RHS), which runs the annual show in west\nLondon, says it has introduced the ban because of the damage plastic grass does to the\nenvironment and biodiversity.\nEd Horne, of the RHS, said: “We launched our sustainability strategy last year and fake\ngrass is just not in line with our ethos and views on plastic. We recommend using real grass\nbecause of its environmental benefits, which include supporting wildlife, alleviating flooding\nand cooling the environment.”\nThe RHS’s decision comes as campaigners try to raise awareness of the problems fake\ngrass causes. A Twitter account, which claims to “cut through the greenwash” of artificial\ngrass, already has more than 20,000 followers. It is trying to encourage people to sign two\npetitions, one calling for a ban on the sale of plastic grass and another calling for an\n“ecological damage” tax on such lawns. They have gathered 7,276 and 11,282 signatures.\nHowever, supporters of fake grass point out that there is also an environmental impact\nwith natural lawns, which need mowing and therefore usually consume electricity or petrol.\nThe industry also points out that real grass requires considerable amounts of water, weed\nkiller or other treatments and that people who lay fake grass tend to use their garden more.\nThe industry also claims that people who lay fake grass spend an average of £500 on trees or\nshrubs for their garden, which provides habitat for insects.\nIn response to another petition last year about banning fake lawns, which gathered\n30,000 signatures, the government responded that it has “no plans to ban the use of artificial\ngrass.”\nIt added: “We prefer to help people and organizations make the right choice rather than\nlegislating on such matters. However, the use of artificial grass must comply with the legal\nand policy safeguards in place to protect biodiversity and ensure sustainable drainage, while\nmeasures such as the strengthened biodiversity duty should serve to encourage public\nauthorities to consider sustainable alternatives.”",
+   "小题": [
+    {
+     "题号": 21,
+     "题干": "The RHS thinks that plastic grass ____",
+     "选项": {
+      "A": "is harmful to the environment.",
+      "B": "is a hot topic in gardening circles.",
+      "C": "is overpraised in the annual show.",
+      "D": "is ruining the view of west London."
+     }
+    },
+    {
+     "题号": 22,
+     "题干": "The petitions mentioned in Paragraph 3 reveal the campaigners’ ____",
+     "选项": {
+      "A": "disappointment with the RHS.",
+      "B": "resistance to fake grass use.",
+      "C": "anger over the proposed tax.",
+      "D": "concern about real grass supply."
+     }
+    },
+    {
+     "题号": 23,
+     "题干": "In Paragraph 4, supporters of fake grass point out ____",
+     "选项": {
+      "A": "the necessity to lower the costs of fake grass.",
+      "B": "the disadvantages of growing real grass.",
+      "C": "the way to take care of artificial lawns.",
+      "D": "the challenges of insect habitat protection."
+     }
+    },
+    {
+     "题号": 24,
+     "题干": "What would the government do with regard to artificial grass?",
+     "选项": {
+      "A": "Urge legislation to restrict its use.",
+      "B": "Take measures to guarantee its quality.",
+      "C": "Remind its users to obey existing rules.",
+      "D": "Replace it with sustainable alternatives."
+     }
+    },
+    {
+     "题号": 25,
+     "题干": "It can be learned from the text that fake grass ____",
+     "选项": {
+      "A": "is being improved continuously.",
+      "B": "has seen a market share decline.",
+      "C": "is becoming increasingly affordable.",
+      "D": "has been a controversial product."
+     }
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "Text 2\nIt’s easy to dismiss as absurd the federal government’s ideas for plugging the chronic\nfunding gap of our national parks. Can anyone really think it’s a good idea to allow Amazon\ndeliveries to your tent in Yosemite or food trucks to line up under the redwood trees at\nSequoia National Park?\nBut the government is right about one thing: U.S. national parks are in crisis.\nCollectively, they have a maintenance backlog of more than $12 billion. Roads, trails,\nrestrooms, visitor centers and other infrastructure are crumbling.\nBut privatizing and commercializing the campgrounds would not be a cure-all.\nCampgrounds are a tiny portion of the overall infrastructure backlog, and businesses in the\nparks hand over, on average, only about 5% of their revenues to the National Park Service.\nMoreover, increased privatization would certainly undercut one of the major reasons\nwhy 300 million visitors come to the parks each year: to enjoy nature and get a break from the\ncommercial drumbeat that overwhelms daily life.\nThe real problem is that the parks have been chronically starved of funding. We\nconducted a comprehensive survey examining how U.S. residents view their national parks,\nand we found that Americans place a very high value on them — whether or not they actually\nvisit them. The peer-reviewed economic survey of 700 U.S. taxpayers, conducted by mail and\ninternet, also found that people would be willing to pay a significant amount of money to\nmake sure the parks and their programs are kept intact. Some 81% of respondents said they\nwould be willing to pay additional taxes for the next 10 years to avoid any cuts to the national\nparks.\nThe national parks provide great value to U.S. residents both as places to escape and as\nsymbols of nature. On top of this, they produce value from their extensive educational\nprograms, their positive impact on the climate through carbon sequestration, their contribution\nto our cultural and artistic life, and of course through tourism. The parks also help keep\nAmerica’s past alive, working with thousands of local jurisdictions around the country to\nprotect historical sites — including Ellis Island and Gettysburg — and to bring the stories of\nthese places to life.\nThe parks do all this on a shoestring. Congress allocates only $3 billion a year to the\nnational park system — an amount that has been flat since 2001 (in inflation-adjusted dollars)\nwith the exception of a onetime boost in 2009 as part of the Obama stimulus package.\nMeanwhile, the number of annual visitors has increased by more than 50% since 1980, and\nnow stands at 330 million visitors per year.",
+   "小题": [
+    {
+     "题号": 26,
+     "题干": "What problem are U.S. national parks faced with?",
+     "选项": {
+      "A": "Decline of business profits.",
+      "B": "Inadequate commercialization.",
+      "C": "Lack of transportation services.",
+      "D": "Poorly maintained infrastructure."
+     }
+    },
+    {
+     "题号": 27,
+     "题干": "Increased privatization of the campgrounds may ____",
+     "选项": {
+      "A": "spoil visitor experience.",
+      "B": "help preserve nature.",
+      "C": "bring operational pressure.",
+      "D": "boost visits to parks."
+     }
+    },
+    {
+     "题号": 28,
+     "题干": "According to Paragraph 5, most respondents in the survey would ____",
+     "选项": {
+      "A": "go to the national parks on a regular basis.",
+      "B": "advocate a bigger budget for the national parks.",
+      "C": "agree to pay extra for the national parks.",
+      "D": "support the national parks’ recent reforms."
+     }
+    },
+    {
+     "题号": 29,
+     "题干": "The national parks are valuable in that they ____",
+     "选项": {
+      "A": "lead the way in tourism.",
+      "B": "have historical significance.",
+      "C": "sponsor research on climate.",
+      "D": "provide an income for the locals."
+     }
+    },
+    {
+     "题号": 30,
+     "题干": "It can be concluded from the text that the national park system ____",
+     "选项": {
+      "A": "is able to cope with staff shortages.",
+      "B": "is able to meet visitors’ demands.",
+      "C": "is in need of a new pricing policy.",
+      "D": "is in need of funding increase."
+     }
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "Text 3\nThe Internet may be changing merely what we remember, not our capacity to do so,\nsuggests Columbia University psychology professor Betsy Sparrow. In 2011, Sparrow led a\nstudy in which participants were asked to record 40 factoids in a computer (“an ostrich’s eye\nis bigger than its brain,” for example). Half of the participants were told the information\nwould be erased, while the other half were told it would be saved. Guess what? The latter\ngroup made no effort to recall the information when quizzed on it later, because they knew\nthey could find it on their computers. In the same study, a group was asked to remember both\nthe information and the folders it was stored in. They didn’t remember the information, but\nthey remembered how to find the folders. In other words, human memory is not deteriorating\nbut “adapting to new communications technology,” Sparrow says.\nIn a very practical way, the Internet is becoming an external hard drive for our memories,\na process known as “cognitive offloading.” Traditionally, this role was fulfilled by data banks,\nlibraries, and other humans. Your father may never remember birthdays because your mother\ndoes, for instance. Some worry that this is having a destructive effect on society, but Sparrow\nsees an upside. Perhaps, she suggests, the trend will change our approach to learning from a\nfocus on individual facts and memorization to an emphasis on more conceptual thinking —\nsomething that is not available on the Internet. “I personally have never seen all that much\nintellectual value in memorizing things,” Sparrow says, adding that we haven’t lost our ability\nto do it.\nStill other experts say it’s too soon to understand how the Internet affects our brains.\nThere is no experimental evidence showing that it interferes with our ability to focus, for\ninstance, wrote psychologists Christopher Chabris and Daniel J. Simons. And surfing the web\nexercised the brain more than reading did among computer-savvy older adults in a 2008 study\ninvolving 24 participants at the Semel Institute for Neuroscience and Human Behavior at the\nUniversity of California, Los Angeles.\n“There may be costs associated with our increased reliance on the Internet, but I’d have\nto imagine that overall the benefits are going to outweigh those costs,” observes psychology\nprofessor Benjamin Storm. “It seems pretty clear that memory is changing, but is it changing\nfor the better? At this point, we don’t know.”",
+   "小题": [
+    {
+     "题号": 31,
+     "题干": "Sparrow’s study shows that with the Internet, the human brain will ____",
+     "选项": {
+      "A": "analyze information in detail.",
+      "B": "collect information efficiently.",
+      "C": "switch its focus of memory.",
+      "D": "extend its memory duration."
+     }
+    },
+    {
+     "题号": 32,
+     "题干": "The process of “cognitive offloading” ____",
+     "选项": {
+      "A": "helps us identify false information.",
+      "B": "keeps our memory from failing.",
+      "C": "enables us to classify trivial facts.",
+      "D": "lessens our memory burdens."
+     }
+    },
+    {
+     "题号": 33,
+     "题干": "Which of the following would Sparrow support about the Internet?",
+     "选项": {
+      "A": "It may reform our learning approach.",
+      "B": "It may impact our society negatively.",
+      "C": "It may enhance our adaptability to technology.",
+      "D": "It may interfere with our conceptual thinking."
+     }
+    },
+    {
+     "题号": 34,
+     "题干": "It is indicated in Paragraph 3 that how the Internet affects our brains ____",
+     "选项": {
+      "A": "requires further academic research.",
+      "B": "is most studied in older adults.",
+      "C": "is reflected in our reading speed.",
+      "D": "depends on our web-surfing habits."
+     }
+    },
+    {
+     "题号": 35,
+     "题干": "Neither Sparrow nor Storm would agree that ____",
+     "选项": {
+      "A": "our reliance on the Internet will be costly.",
+      "B": "the Internet is weakening our memory.",
+      "C": "memory exercise is a must for our brains.",
+      "D": "our ability to focus declines with age."
+     }
+    }
+   ]
+  },
+  {
+   "部分": "READ",
+   "材料": "Text 4\nTeenagers are paradoxical. That’s a mild and detached way of saying something that\nparents often express with considerably stronger language. But the paradox is scientific as\nwell as personal. In adolescence, helpless and dependent children who have relied on grown-\nups for just about everything become independent people who can take care of themselves\nand help each other. At the same time, once cheerful and compliant children become\nrebellious teenage risk-takers.\nA new study published in the journal Child Development, by Eveline Crone of the\nUniversity of Leiden and colleagues, suggests that the positive and negative sides of teenagers\ngo hand in hand. The study is part of a new wave of thinking about adolescence. For a long\ntime, scientists and policy makers concentrated on the idea that teenagers were a problem that\nneeded to be solved. The new work emphasizes that adolescence is a time of opportunity as\nwell as risk.\nThe researchers studied “prosocial” and rebellious traits in more than 200 children and\nyoung adults, ranging from 11 to 28 years old. The participants filled out questionnaires about\nhow often they did things that were altruistic and positive, like sacrificing their own interests\nto help a friend, or rebellious and negative, like getting drunk or staying out late.\nOther studies have shown that rebellious behavior increases as you become a teenager\nand then fades away as you grow older. But the new study shows that, interestingly, the same\npattern holds for prosocial behavior. Teenagers were more likely than younger children or\nadults to report that they did things like unselfishly help a friend.\nMost significantly, there was a positive correlation between prosociality and\nrebelliousness. The teenagers who were more rebellious were also more likely to help others.\nThe good and bad sides of adolescence seem to develop together.\nIs there some common factor that underlies these apparently contradictory developments?\nOne idea is that teenage behavior is related to what researchers call “reward sensitivity.”\nDecision-making always involves balancing rewards and risks, benefits and costs. “Reward\nsensitivity” measures how much reward it takes to outweigh risk.\nTeenagers are particularly sensitive to social rewards — winning the game, impressing a\nnew friend, getting that boy to notice you. Reward sensitivity, like prosocial behavior and\nrisk-taking, seems to go up in adolescence and then down again as we age. Somehow, when\nyou hit 30, the chance that something exciting and new will happen at that party just doesn’t\nseem to outweigh the effort of getting up off the couch.",
+   "小题": [
+    {
+     "题号": 36,
+     "题干": "According to Paragraph 1, children growing into adolescence tend to ____",
+     "选项": {
+      "A": "develop opposite personality traits.",
+      "B": "see the world in an unreasonable way.",
+      "C": "have fond memories of their past.",
+      "D": "show affection for their parents."
+     }
+    },
+    {
+     "题号": 37,
+     "题干": "It can be learned from Paragraph 2 that Crone’s study ____",
+     "选项": {
+      "A": "explores teenagers’ social responsibilities.",
+      "B": "examines teenagers’ emotional problems.",
+      "C": "provides a new insight into adolescence.",
+      "D": "highlights negative adolescent behavior."
+     }
+    },
+    {
+     "题号": 38,
+     "题干": "What does Crone’s study find about prosocial behavior?",
+     "选项": {
+      "A": "It results from the wish to cooperate.",
+      "B": "It is cultivated through education.",
+      "C": "It is subject to family influence.",
+      "D": "It tends to peak in adolescence."
+     }
+    },
+    {
+     "题号": 39,
+     "题干": "It can be learned from the last two paragraphs that teenagers ____",
+     "选项": {
+      "A": "overstress their influence on others.",
+      "B": "care a lot about social recognition.",
+      "C": "become anxious about their future.",
+      "D": "endeavor to live a joyful life."
+     }
+    },
+    {
+     "题号": 40,
+     "题干": "What is the text mainly about?",
+     "选项": {
+      "A": "Why teenagers are self-contradictory.",
+      "B": "Why teenagers are risk-sensitive.",
+      "C": "How teenagers develop prosociality.",
+      "D": "How teenagers become independent."
+     }
+    }
+   ]
+  }
+ ],
+ "题目数": 40,
+ "年份": "2023"
+}
