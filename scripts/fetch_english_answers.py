@@ -91,6 +91,25 @@ def parse_numbered_answers(t, lo, hi):
     return out
 
 
+def parse_partb_answers(t, lo=41, hi=45):
+    """
+    新题型 Part B 的答案。
+
+    实测形态：页面上按题号顺序排出 5 段，每段是
+        41.
+        (41)____
+        【答案】
+        [ E ]
+        （题型判定…）
+    答案标记 `【答案】\n[ X ]` **不带题号**，所以按出现顺序对应 41–45。
+    数量必须恰好等于 5 才采纳（与完形同一策略：宁可不要，不要错配）。
+    """
+    got = re.findall(r'【答案】\s*\n?\s*\[\s*([A-Ga-g])\s*\]', t)
+    if len(got) != hi - lo + 1:
+        return {}
+    return {lo + i: _letter(a) for i, a in enumerate(got)}
+
+
 def parse_reference(t):
     """
     翻译：没有"答案"，只有**参考译文**。抽出来存 `参考译文` 字段，
@@ -138,6 +157,8 @@ def fetch(tier, year, verbose=True, write=False):
                 continue
             if sec == "section1":
                 got = parse_cloze_answers(t, lo, hi)
+            elif sec == "section2-part-b":
+                got = parse_partb_answers(t, lo, hi)
             elif sec == "section2-part-c":
                 ref = parse_reference(t)
                 if ref:

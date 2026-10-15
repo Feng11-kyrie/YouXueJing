@@ -432,6 +432,78 @@
    ]
   },
   {
+   "部分": "NEW",
+   "材料": "Read the following text and answer the questions by choosing the most suitable subheading from the list A-G for each of the numbered paragraphs (41-45). There are two extra subheadings which you do not need to use. Mark your answers on the ANSWER SHEET. (10 points) The hugely popular blog the Skint Foodie chronicles how Tony balances his love of good food with living on benefits. After bills, Tony has £60 a week to spend, £40 of which goes on food, but 10 years ago he was earning £130,000 a year working in corporate communications and eating at London's best restaurants at least twice a week. Then his marriage failed, his career burned out and his drinking became serious. \"The community mental health team saved my life. And I felt like that again, to a certain degree, when people responded to the blog so well. It gave me the validation and confidence that I'd lost. But it's still a day-by-day thing.\" Now he's living in a council flat and fielding offers from literary agents. He's feeling positive, but he'll carry on blogging – not about eating as cheaply as you can – \"there are so many people in a much worse state, with barely any money to spend on food\" – but eating well on a budget. Here's his advice for economical foodies. (41)占位符这是等待完型填空的句子位置 Impulsive spending isn't an option, so plan your week's menu in advance, making shopping lists for your ingredients in their exact quantities. I have an Excel template for a week of breakfast, lunch and dinner. Stop laughing: it's not just cost effective but helps you balance your diet. It's also a good idea to shop daily instead of weekly, because, being human, you'll sometimes change your mind about what you fancy. (42)占位符这是等待完型填空的句子位置 This is where supermarkets and their anonymity come in handy. With them, there's not the same embarrassment as when buying one carrot in a little greengrocer. And if you plan properly, you'll know that you only need, say, 350g of shin of beef and six rashers of bacon, not whatever weight is pre-packed in the supermarket chiller. (43)占位符这是等待完型填空的句子位置 You may proudly claim to only have frozen peas in the freezer – that's not good enough. Mine is filled with leftovers, bread, stock, meat and fish. Planning ahead should eliminate wastage, but if you have surplus vegetables you'll do a vegetable soup, and all fruits threatening to \"go off\" will be cooked or juiced. (44)占位符这是等待完型填空的句子位置 Everyone says this, but it really is a top tip for frugal eaters. Shop at butchers, delis and fish-sellers regularly, even for small things, and be super friendly. Soon you'll feel comfortable asking if they've any knuckles of ham for soups and stews, or beef bones, chicken carcasses and fish heads for stock which, more often than not, they'll let you have for free. (45)占位符这是等待完型填空的句子位置 You won't be eating out a lot, but save your pennies and once every few months treat yourself to a set lunch at a good restaurant – £1.75 a week for three months gives you £21 – more than enough for a three-course lunch at Michelin-starred Arbutus. It's £16.95 there – or £12.99 for a large pizza from Domino's: I know which I'd rather eat.",
+   "Directions": "Directions:",
+   "小题": [
+    {
+     "题号": 41,
+     "题干": "第 41 题（从 A–G 中选一句）",
+     "选项": {
+      "A": "Live like a peasant",
+      "B": "Balance your diet",
+      "C": "Shopkeepers are your friends",
+      "D": "Remember to treat yourself",
+      "E": "Stick to what you need",
+      "F": "Planning is everything",
+      "G": "Waste not, want not"
+     }
+    },
+    {
+     "题号": 42,
+     "题干": "第 42 题（从 A–G 中选一句）",
+     "选项": {
+      "A": "Live like a peasant",
+      "B": "Balance your diet",
+      "C": "Shopkeepers are your friends",
+      "D": "Remember to treat yourself",
+      "E": "Stick to what you need",
+      "F": "Planning is everything",
+      "G": "Waste not, want not"
+     }
+    },
+    {
+     "题号": 43,
+     "题干": "第 43 题（从 A–G 中选一句）",
+     "选项": {
+      "A": "Live like a peasant",
+      "B": "Balance your diet",
+      "C": "Shopkeepers are your friends",
+      "D": "Remember to treat yourself",
+      "E": "Stick to what you need",
+      "F": "Planning is everything",
+      "G": "Waste not, want not"
+     }
+    },
+    {
+     "题号": 44,
+     "题干": "第 44 题（从 A–G 中选一句）",
+     "选项": {
+      "A": "Live like a peasant",
+      "B": "Balance your diet",
+      "C": "Shopkeepers are your friends",
+      "D": "Remember to treat yourself",
+      "E": "Stick to what you need",
+      "F": "Planning is everything",
+      "G": "Waste not, want not"
+     }
+    },
+    {
+     "题号": 45,
+     "题干": "第 45 题（从 A–G 中选一句）",
+     "选项": {
+      "A": "Live like a peasant",
+      "B": "Balance your diet",
+      "C": "Shopkeepers are your friends",
+      "D": "Remember to treat yourself",
+      "E": "Stick to what you need",
+      "F": "Planning is everything",
+      "G": "Waste not, want not"
+     }
+    }
+   ]
+  },
+  {
    "部分": "TRANS",
    "材料": "I can pick a date from the past 53 years and know instantly where I was, what happened in the news and even the day of the week. I've been able to do this since I was four. I never feel overwhelmed with the amount of information my brain absorbs. My mind seems to be able to cope and the information is stored away neatly. When I think of a sad memory, I do what everybody does - try to put it to one side. I don't think it's harder for me just because my memory is clearer. Powerful memory doesn't make my emotions any more acute or vivid. I can recall the day my grandfather died and the sadness I felt when we went to the hospital the day before. I also remember that the musical play Hair opened on Broadway on the same day — they both just pop into my mind in the same way. - 13 -",
    "小题": [
@@ -458,7 +530,7 @@
    ]
   }
  ],
- "题目数": 42,
+ "题目数": 47,
  "年份": "2013",
  "来源": "懒笔记 paper 页（结构化正文）"
 }

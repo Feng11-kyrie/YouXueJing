@@ -106,6 +106,53 @@ def parse_choice_questions(t, lo, hi):
     return out
 
 
+def _partb_from_lines(lines, t):
+    """
+    取新题型 Part B（41–45）。
+
+    **它有两种题型**（实测）：
+      · 句中填空：文中挖掉 5 句，从 A–G 里选句填回（2015 英语一）
+      · 人名匹配：5 条评论各配一句概括，从 A–G 里选（2024 英语一）
+    两种的**结构一样**：题号 41–45 + 一个 A–G 的句子库。
+    所以按同一套抽取：句子库 + 题号列表，界面用同一个渲染器。
+
+    句子库形态：`[ A ]` / 选项文本 / `[ B ]` / …
+    """
+    import re as _re
+    i = next((k for k, l in enumerate(lines) if _re.fullmatch(r'Part\s*B', l)), None)
+    if i is None:
+        return None
+    end = next((k for k in range(i + 1, len(lines))
+                if _re.fullmatch(r'Part\s*C', lines[k])), len(lines))
+    seg = lines[i:end]
+    # 句子库
+    bank = {}
+    j = 0
+    while j + 1 < len(seg):
+        m = _re.fullmatch(r'\[\s*([A-G])\s*\]', seg[j])
+        if m:
+            bank[m.group(1)] = seg[j + 1].strip()
+            j += 2
+        else:
+            j += 1
+    if len(bank) < 5:
+        return None
+    # 材料 = Directions 到句子库之前
+    body = []
+    for l in seg:
+        if _re.fullmatch(r'\[\s*[A-G]\s*\]', l):
+            break
+        if _re.match(r'^(Part\s*B|Directions)', l):
+            continue
+        body.append(l)
+    mat = " ".join(body).strip()
+    # Directions 里的说明（题型提示，有价值）
+    dirs = next((l for l in seg if l.startswith("Directions")), "")
+    qs = [{"题号": n, "题干": f'第 {n} 题（从 A–G 中选一句）',
+           "选项": bank} for n in range(41, 46)]
+    return {"部分": "NEW", "材料": mat, "Directions": dirs, "小题": qs}
+
+
 def _subjective_from_pdf(tier, year):
     """
     从 PDF 取**主观题**（翻译 / 写作）。
@@ -337,6 +384,14 @@ def parse_paper(t, tier, year=None):
             "材料": _article_for(lines, f"Text {k // 5 + 1}", first),
             "小题": [{"题号": n, "题干": _stem_for(lines, n),
                       "选项": rd[n]} for n in chunk]})
+    # 新题型 Part B（41–45）：从站点页取（句子库 A–G 很规整）
+    try:
+        pb = _partb_from_lines([l.strip() for l in t.split("\n")], t)
+    except Exception:                                       # noqa: BLE001
+        pb = None
+    if pb:
+        rec["篇目"].append(pb)
+
     # 主观题（翻译/写作）：从 PDF 取篇章与要求
     subs_list = _subjective_from_pdf(tier, year)
     for it in subs_list:

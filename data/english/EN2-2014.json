@@ -432,6 +432,78 @@
    ]
   },
   {
+   "部分": "NEW",
+   "材料": "Read the following text and match each of the numbered items in the left column to its corresponding information in the right column. There are two extra choices in the right column. Mark your answers on the ANSWER SHEET. (10 points) Emerging in the late Sixties and reaching a peak in the Seventies, Land Art was one of a range of new forms, including Body Art, Performance Art, Action Art and Installation Art, which pushed art beyond the traditional confines of the studio and gallery. Rather than portraying landscape, land artists used the physical substance of the land itself as their medium. The British land art, typified by Richard Long's piece, was not only more domestically scaled, but a lot quirkier than its American counterpart. Indeed, while you might assume that an exhibition of Land Art would consist only of records of works rather than the works themselves, Long's photograph of his work is the work. Since his \"action\" is in the past, the photograph is its sole embodiment. That might seem rather an obscure point, but it sets the tone for an exhibition that contains a lot of black-and-white photographs and relatively few natural objects. Long is Britain's best-known Land Artist and his Stone Circle, a perfect ring of purplish rocks from Portishead beach laid out on the gallery floor, represents the elegant, rarefied side of the form. The Boyle Family, on the other hand, stand for its dirty, urban aspect. Comprising artists Mark Boyle and Joan Hills and their children, they recreated random sections of the British landscape on gallery walls. Their Olaf Street Study, a square of brick-strewn waste ground, is one of the few works here to embrace the commonplaceness that characterises most of our experience of the landscape most of the time. Parks feature, particularly in the earlier works, such as John Hilliard's very funny Across the Park, in which a long-haired stroller is variously smiled at by a pretty girl and unwittingly assaulted in a sequence of images that turn out to be different parts of the same photograph. Generally however British land artists preferred to get away from towns, gravitating towards landscapes that are traditionally considered beautiful such as the Lake District or the Wiltshire Downs. While it probably wasn't apparent at the time, much of this work is permeated by a spirit of romantic escapism that the likes of Wordsworth would have readily understood. Derek Jarman's yellow-tinted film Towards Avebury, a collection of long, mostly still shots of the Wiltshire landscape, evokes a tradition of English landscape painting stretching from Samuel Palmer to Paul Nash. In the case of Hamish Fulton, you can't help feeling that the Scottish artist has simply found a way of making his love of walking pay. A typical work, such as Seven Days, consists of a single beautiful black-and-white photograph taken on an epic walk, with the mileage and number of days taken listed beneath. British Land Art as shown in this well selected, but relatively modestly scaled exhibition wasn't about imposing on the landscape, more a kind of landscape-orientated light conceptual art created passing through. It had its origins in the great outdoors, but the results were as gallery-bound as the paintings of Turner and Constable.",
+   "Directions": "Directions:",
+   "小题": [
+    {
+     "题号": 41,
+     "题干": "第 41 题（从 A–G 中选一句）",
+     "选项": {
+      "A": "originates from a long walk that the artist took.",
+      "B": "illustrates a kind of landscape-orientated light conceptual art.",
+      "C": "reminds people of the English landscape painting tradition.",
+      "D": "represents the elegance of the British land art.",
+      "E": "depicts the ordinary side of the British land art.",
+      "F": "embodies a romantic escape into the Scottish outdoors.",
+      "G": "contains images from different parts of the same photograph."
+     }
+    },
+    {
+     "题号": 42,
+     "题干": "第 42 题（从 A–G 中选一句）",
+     "选项": {
+      "A": "originates from a long walk that the artist took.",
+      "B": "illustrates a kind of landscape-orientated light conceptual art.",
+      "C": "reminds people of the English landscape painting tradition.",
+      "D": "represents the elegance of the British land art.",
+      "E": "depicts the ordinary side of the British land art.",
+      "F": "embodies a romantic escape into the Scottish outdoors.",
+      "G": "contains images from different parts of the same photograph."
+     }
+    },
+    {
+     "题号": 43,
+     "题干": "第 43 题（从 A–G 中选一句）",
+     "选项": {
+      "A": "originates from a long walk that the artist took.",
+      "B": "illustrates a kind of landscape-orientated light conceptual art.",
+      "C": "reminds people of the English landscape painting tradition.",
+      "D": "represents the elegance of the British land art.",
+      "E": "depicts the ordinary side of the British land art.",
+      "F": "embodies a romantic escape into the Scottish outdoors.",
+      "G": "contains images from different parts of the same photograph."
+     }
+    },
+    {
+     "题号": 44,
+     "题干": "第 44 题（从 A–G 中选一句）",
+     "选项": {
+      "A": "originates from a long walk that the artist took.",
+      "B": "illustrates a kind of landscape-orientated light conceptual art.",
+      "C": "reminds people of the English landscape painting tradition.",
+      "D": "represents the elegance of the British land art.",
+      "E": "depicts the ordinary side of the British land art.",
+      "F": "embodies a romantic escape into the Scottish outdoors.",
+      "G": "contains images from different parts of the same photograph."
+     }
+    },
+    {
+     "题号": 45,
+     "题干": "第 45 题（从 A–G 中选一句）",
+     "选项": {
+      "A": "originates from a long walk that the artist took.",
+      "B": "illustrates a kind of landscape-orientated light conceptual art.",
+      "C": "reminds people of the English landscape painting tradition.",
+      "D": "represents the elegance of the British land art.",
+      "E": "depicts the ordinary side of the British land art.",
+      "F": "embodies a romantic escape into the Scottish outdoors.",
+      "G": "contains images from different parts of the same photograph."
+     }
+    }
+   ]
+  },
+  {
    "部分": "TRANS",
    "材料": "Most people would define optimism as being endlessly happy, with a glass that's perpetually half full. But that's exactly the kind of false cheerfulness that positive psychologists wouldn't recommend. \"Healthy optimism means being in touch with reality,\" says Tal Ben-Shahar, a Harvard professor. According to Ben­ Shahar, realistic optimists are those who make the best of things that happen, but not those who believe everything happens for the best. Ben-Shahar uses three optimistic exercises. When he feels down — say, after giving a bad lecture — he grants himself permission to be human. He reminds himself that not every lecture can be a Nobel winner; some will be less effective than others. Next is reconstruction. He analyzes the weak lecture, learning lessons for the future about what works and what doesn't. Finally, there is perspective, which involves acknowledging that in the grand scheme of life, one lecture really doesn't matter. - 13 -",
    "小题": [
@@ -458,7 +530,7 @@
    ]
   }
  ],
- "题目数": 42,
+ "题目数": 47,
  "年份": "2014",
  "来源": "懒笔记 paper 页（结构化正文）"
 }
