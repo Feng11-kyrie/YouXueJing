@@ -53,6 +53,9 @@ QNUM = re.compile(r'(?m)^\s*(\d{1,2})\s*[.．、]\s*')
 # 数字，2013/2014 会多识别出题号导致误切（38 道掉到 34 道）。
 # 另注意：别把 \n 放进字符类 —— `(?:\n|[)）分])` 里 \n 会匹配真实换行，
 # 而换行紧跟着"（"，正则就从"（"开始匹配而失败（这个坑我踩过）。
+# 补漏用：行首的数字，后面**不是数字也不是点号**（排除小数 "4.9" 与
+# 章节标题里的 "33题" 这类），供"顺序上第一个缺号"的补漏使用。
+GAPNUM = re.compile(r'(?m)^\s*(\d{1,2})\s*(?![.\d])')
 QNUM_LOOSE = re.compile(r'(?m)(?:^|(?<=[)）分\u3000\s]))\s*(3[4-8])\s*[.．、]?\s*'
                         r'(?=[^\d\s])')
 # 答案标记 —— 实测有**两种排版**，必须都支持：
@@ -271,35 +274,49 @@ def parse(pdf_path, year=None):
              "分析题": 10}[name]
         # 分析题用宽松正则（题号可能粘在上一题末尾），单选/多选必须用行首正则
         # —— 正文里数字密度高，放宽会给单选/多选切错边界。
-        base = list(QNUM.finditer(body)) if is_choice else []
-        nums = base
+        base = []
         if is_choice:
-            # 【已知的个别问题，不在核心正则上修】
-            # 实测 2024 多选正文里 "…投资增长11.4%。" 的 "4." 会被 QNUM 当成题号，
-            # 于是第 23 题的 chunk 在那里被切断、选项丢失；2017 第 30 题同理。
-            # 我试过两种修法（正则里加 `(?!\d)`、在匹配结果上过滤小数），
-            # **两次都把 12 个年份弄坏**（38 道掉到 27–31 道）。
-            # 权衡：608/608 的**结构完整**比修好这 2 道题的选项重要得多 ——
-            # 破坏 16 个年份的整体正确性去救 2 道题是亏的。
-            # 留待将来用一个"只在缺失处局部重扫"的方案，而不是改全局正则。
-            # 【补漏：题号后没有 `.．、` 分隔符】实测 2017 第 30 题源里写成
+            # ---- 单选/多选的题号识别：两个约束合起来才可靠 ----
+            #
+            # 【约束一：严格递增】题号必须严格大于上一个。
+            # 为什么必须：实测 2024 多选正文里有
+            #     "…社会物流总额同比增长\n4.9%，物流需求…"
+            # 这一行**恰好以 "4." 开头**（换行后是新段落），于是被 QNUM 当成
+            # 第 4 题 —— 而第 4 题早已出现过。后果是第 23 题的 chunk 在 4.9 那里
+            # 被切断、**选项全丢**。严格递增把这种"重复号"干净地排除掉
+            # （题号不可能倒退），且实测 17 个年份全部 16/17 不被误伤。
+            #
+            # 【约束二：只在缺号处补漏】实测 2017 第 30 题写成
             #     `30“天下之事，不难于立法…`
-            # 数字后直接是中文引号，QNUM 匹配不到 → 整道多选被丢。
-            # 这里**只对"缺的题号"补**，且要求该数字独占行首、后面不是数字 ——
-            # 比无条件放宽安全得多（我试过无条件放宽：正文里的数字被当题号，
-            # 2010–2021 从 38 道掉到 34 道）。
+            # 数字后**直接是中文引号**，QNUM（要求 `.．、`）匹配不到，整题被丢。
+            # 补漏只对"顺序上第一个缺号"生效，并从第一个真题号之后开始扫 ——
+            # 否则章节标题 "17～33题" 里的 17 会被当成题号、打乱顺序
+            # （这个坑我踩过：补漏因此完全失效）。
+            #
+            # **不能放宽 QNUM 本身**：试过两版，都让 12 个年份从 38 道掉到
+            # 27–31 道（正文里的数字被当题号，题干边界被切错）。
             lo_c, hi_c = RANGE.get(name, (1, 38))
-            have = {int(m.group(1)) for m in nums}
-            for want in range(lo_c, hi_c + 1):
-                if want in have:
-                    continue
-                for m in re.finditer(r'(?m)^\s*' + str(want) + r'(?![\d.．、,，])',
-                                     body):
-                    mm = re.match(r'\s*(\d{1,2})', body[m.start():])
-                    if mm:
-                        nums.append(mm)
+            keep, last = [], lo_c - 1
+            for m in sorted(QNUM.finditer(body), key=lambda z: z.start()):
+                v = int(m.group(1))
+                if lo_c <= v <= hi_c and v > last:
+                    keep.append(m)
+                    last = v
+            if keep:
+                have = {int(m.group(1)) for m in keep}
+                want = next((v for v in range(lo_c, hi_c + 1)
+                             if v not in have), None)
+                for m in GAPNUM.finditer(body, keep[0].start()):
+                    if want is None:
                         break
-            nums.sort(key=lambda z: z.start())
+                    v = int(m.group(1))
+                    if v == want:
+                        keep.append(m)
+                        have.add(v)
+                        want = next((x for x in range(v + 1, hi_c + 1)
+                                     if x not in have), None)
+            base = sorted(keep, key=lambda z: z.start())
+        nums = base
         if not is_choice:
             lo_a, hi_a = RANGE.get(name, (34, 38))
             seen_num, last = set(), lo_a - 1
