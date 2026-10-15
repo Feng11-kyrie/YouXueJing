@@ -538,6 +538,87 @@ def _exam_tabs(active_id, page, user, extra=""):
                 .props("unelevated" if on else "flat dense")
 
 
+def _practice_english(tier, part, go, user, goto):
+    """
+    英语练习：**按题型**练（英语的"块"是题型，不是章节）。
+
+    为什么按题型而不是按年：英语的提分点是**题型熟练度** ——
+    完形靠词汇与逻辑衔接、阅读靠定位与同义替换、新题型靠衔接词。
+    按年份刷整卷适合模考，按题型刷适合专项突破。
+
+    题库来自 yj.english.questions()，**只收有答案的题** ——
+    练习必须能判分，否则练了也不知道对错。
+    """
+    tiers = en.tier_list()
+    tier = tier if tier in [t["id"] for t in tiers] else "EN1"
+    tn = en.TIERS[tier]["简称"]
+    done = store.get_answers(user)
+
+    def tier_bar():
+        with ui.row().classes("items-center gap-2 flex-wrap"):
+            for t in tiers:
+                on = t["id"] == tier
+                ui.button(t["简称"], on_click=lambda _=None, x=t["id"]:
+                          goto(subject=x, part=None, go=0)) \
+                    .props("unelevated" if on else "flat dense")
+
+    # 题型 → 题号区间
+    KINDS = [("CLOZE", "完形填空", (1, 20), "词汇与逻辑衔接"),
+             ("READ", "阅读理解", (21, 40), "定位与同义替换"),
+             ("NEW", "新题型", (41, 45), "段际衔接与匹配")]
+    if part:
+        kind = next((k for k in KINDS if k[0] == part), KINDS[0])
+        pool = [q for q in en.questions(tier).values()
+                if kind[2][0] <= int(q["题号"]) <= kind[2][1]
+                and (en.explanation(tier, q["year"], q["题号"]) or {}).get("答案")]
+        with ui.row().classes("items-center gap-2"):
+            ui.label(f'{tn} · {kind[1]}').classes("t-lead font-bold")
+            ui.button("← 换题型", on_click=lambda: goto(part=None, go=0)) \
+                .props("flat dense")
+        tier_bar()
+        n_done = sum(1 for q in pool if q["id"] in done)
+        ui.label(f'题库 {len(pool)} 道（2010–2026 汇总）· 已作答 {n_done} 道') \
+            .classes("t-sm muted")
+        ui.button(f"▶ 开始练习（共 {len(pool)} 道）",
+                  on_click=lambda: goto(go=1)).props("unelevated")
+        if not go:
+            return
+        pool.sort(key=lambda q: (q["id"] in done, -int(q["year"])))
+        ui.separator()
+        ui.label(f"练习：共 {len(pool)} 道").classes("t-lead font-bold")
+        for q in pool[:60]:                  # 一次最多铺 60 道，避免页面过长
+            _en_single(q, tier, done, user)
+        if len(pool) > 60:
+            ui.label(f'（只显示前 60 道，共 {len(pool)} 道）').classes("t-xs muted")
+        return
+
+    tier_bar()
+    ui.label("按题型练 —— 英语的提分点是题型熟练度，"
+             "不是按年份刷整卷。").classes("t-body")
+    all_q = list(en.questions(tier).values())
+    with ui.row().classes("w-full gap-3 items-stretch flex-wrap"):
+        for code, name, (lo, hi), desc in KINDS:
+            pool = [q for q in all_q if lo <= int(q["题号"]) <= hi
+                    and (en.explanation(tier, q["year"], q["题号"]) or {}
+                         ).get("答案")]
+            with ui.card().classes("bookcard p-4 gap-1 shadow-none") \
+                    .style("flex:0 0 18.5rem;max-width:18.5rem"):
+                with ui.row().classes("items-center gap-2"):
+                    ui.label(name).classes("t-lead font-bold")
+                    ui.label(f'{lo}–{hi} 题').classes("t-xs muted")
+                ui.label(desc).classes("t-sm sub")
+                ui.label(f'可练 {len(pool)} 道').classes("t-sm font-semibold")
+                ui.button("进入练习", on_click=lambda _=None, c=code:
+                          goto(part=c, go=0)).props("unelevated") \
+                    .classes("w-full mt-1")
+
+
+def _en_single(q, tier, done, user):
+    """英语练习里的一道题（复用 passage_card 的小题渲染）。"""
+    from proto.cards_en import _sub_question
+    _sub_question(q, q["year"], tier, done, user)
+
+
 def _practice_zhengzhi(part, go, user, goto):
     """
     政治练习：**按官方五个部分**出题。
@@ -1085,6 +1166,9 @@ def practice(exam: str = None, subject: str = None, chapter: str = None,
         # ---------------- 政治分支 ----------------
         if exam == "ZZ":
             _practice_zhengzhi(part, go, user, goto)
+            return
+        if exam == "ENG":
+            _practice_english(subject, part, go, user, goto)
             return
 
         _steps(1 if not subject else 2)
