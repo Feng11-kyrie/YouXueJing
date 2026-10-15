@@ -29,7 +29,7 @@ sys.path.insert(0, BASE)
 DEST = os.path.join(BASE, ".cache", "zhengzhi")
 
 
-def fetch_pages(first_url, max_pages=8, wait_ms=1800):
+def fetch_pages(first_url, max_pages=16, wait_ms=1500):
     """抓第 1 页 + 后续 _1.._N 页，返回拼接后的正文"""
     from playwright.sync_api import sync_playwright
     base, ext = os.path.splitext(first_url)
@@ -59,7 +59,15 @@ def fetch_pages(first_url, max_pages=8, wait_ms=1800):
             print(f"    {u.split('/')[-1]}: {len(txt)} 字"
                   + (f"，含 {has} 个题型标题" if has else "（无题型标题）"))
             parts.append(txt)
-            # 连续两页都没有题型标题 → 认为已到末尾
+            # 早停要**保守**：连续 6 页无题型标题才停。
+            # 原来阈值是 3，结果 2014 在第 _7/_8/_9 页（题干延续、无题型标题）
+            # 就停了，而**第 38 题在 _10 页** —— 表现为"分析题缺 1 道"，
+            # 被我误判成题源没有。这类文章的页面内容模式很不规则，不能激进早停。
+            if len(parts) >= 7 and all(
+                    sum(1 for k in ("单项选择题", "多项选择题", "分析题") if k in p) == 0
+                    for p in parts[-6:]):
+                print("    （连续 6 页无题型标题，停止翻页）")
+                break
         b.close()
     return "\n".join(parts)
 
@@ -68,7 +76,10 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--year", required=True)
     ap.add_argument("--url", required=True, help="第 1 页 URL")
-    ap.add_argument("--max-pages", type=int, default=8)
+    ap.add_argument("--max-pages", type=int, default=16,
+                    help="文章分页上限。实测每篇 8-13 页 —— 原来默认 8 "
+                         "会把分析题截掉（2014 的 36-38 题在 _8/_9/_10 页），"
+                         "表现为「分析题缺 3 道」，一度被我误判成题源没有")
     ap.add_argument("--write", action="store_true")
     args = ap.parse_args()
 
