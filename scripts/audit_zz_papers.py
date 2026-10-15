@@ -79,7 +79,9 @@ def audit(year):
         seen_num.add((t, n))
 
         stem = (it.get("题干") or "").strip()
-        if len(stem) < 15:
+        # 阈值放到 8 字：实测 2012 第 14 题的题干「社会主义道德建设的核心」
+        # 只有 11 字，是**真题本来就短**，不是截断。阈值定太高会误报。
+        if len(stem) < 8:
             issues.append(f"题干过短：第 {n} 题只有 {len(stem)} 字 —— 疑似截断")
         elif not stem.endswith(TAIL_HINTS) and len(stem) < 40:
             issues.append(f"题干存疑：第 {n} 题末尾为「{stem[-12:]}」—— 疑似截断")
