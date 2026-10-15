@@ -44,9 +44,59 @@ ANS = re.compile(r'[（(]\s*答\s*案\s*[:：]\s*([A-D]{1,4})\s*[)）]', re.S)
 # 选项：允许全角/半角点号
 # 选项符号实测有四种：".", "．", "、", 以及**全角逗号 "，"**
 # （最后一种是子 agent 在 2016 年那份 docx 里发现的，原来的正则匹配不到）
-OPT = re.compile(r'(?m)^\s*([A-D])\s*[.．、,，]\s*(.+?)'
-                 r'(?=\n\s*[A-D]\s*[.．、,，]|\Z)', re.S)
+# 选项匹配 —— **先按行首切，不够再按字母序列切**（两段式，踩坑后的做法）
+#
+# 实测排版极其不统一，同一份文件里都可能混着来：
+#   ① 每行一个选项、带分隔符：   A．实践是认识的基础
+#   ② 全挤在一行、带分隔符：     A. 《德意志意识形态》B.《神圣家族》C.《哲学的贫困》
+#   ③ 每行一个选项、**没有分隔符**：A《共产党宣言》 / B.家庭、私有制和国家的起源
+#   ④ 混着来（2020 那份）：      A《共产党宣言》
+#                                B.家庭、私有制和国家的起源C.《反杜林论》
+#
+# 教训：不要试图用"一个大正则"覆盖全部 —— 我先试过放宽成"不要求行首"，
+# 结果正文里孤立的 A 被当成选项起点，2010–2014 直接解析出 0 道。
+# 所以：**先严格（行首锚定），不够 4 个再按字母序列切**（字母 A→B→C→D
+# 连续出现本身就是最强的分隔信号，正文里不会四个字母连着出现）。
+OPT = re.compile(r'(?m)^\s*([A-D])\s*[.．、,，]?\s*(.+?)'
+                 r'(?=\n\s*[A-D]\s*[.．、,，]?\s|\Z)', re.S)
 
+# 字母序列切分：找出 A、B、C、D 四个标记（要求按顺序连续出现）
+OPT_SEQ = re.compile(r'(?<![A-Za-z0-9])([A-D])\s*[.．、,，]?\s*(?=[^\s])')
+
+def split_options(block):
+    """
+    从一段文本里取出选项。返回 (选项dict, 选项起始偏移)。
+
+    两段式：
+      1) 行首模式 —— 每行一个选项（PDF/docx/多数网页）
+      2) 字母序列模式 —— 按 A→B→C→D 连续标记切（选项挤在一行、或没有分隔符时）
+    返回偏移是为了让调用方知道题干到哪里结束。
+    """
+    m = list(OPT.finditer(block))
+    opts = {}
+    for x in m:
+        opts.setdefault(x.group(1), x.group(2))
+    if len(opts) >= 4:
+        return opts, m[0].start()
+
+    # 兜底：找形如 A…B…C…D… 的连续字母标记
+    marks = []
+    expect = "ABCD"
+    ei = 0
+    for x in OPT_SEQ.finditer(block):
+        if x.group(1) == expect[ei]:
+            marks.append(x)
+            ei += 1
+            if ei == 4:
+                break
+    if ei == 4:
+        o2 = {}
+        for i, x in enumerate(marks):
+            end = marks[i + 1].start() if i + 1 < len(marks) else len(block)
+            o2[x.group(1)] = block[x.end():end]
+        return o2, marks[0].start()
+
+    return (opts, m[0].start()) if opts else ({}, None)
 
 def clean(s: str) -> str:
     """合并题干里的多余换行与空格（PDF 抽出的中文常被硬换行切碎）"""
@@ -165,8 +215,9 @@ def parse(pdf_path, year=None):
             # 原因：实测两种题源 —— 2015 那份答案内嵌在题干括号里，
             # 2023 那份**完全没有答案**（答案要另找或靠投票）。
             # 原来用"答案标记"当切分点，遇到无答案的题源会把选项吞进题干。
-            first_opt = OPT.search(chunk)
-            head = chunk[:first_opt.start()] if first_opt else chunk
+            opts_found, opt_start = split_options(chunk)
+            first_opt = bool(opts_found)
+            head = chunk[:opt_start] if opt_start is not None else chunk
             am = ANS.search(head)          # 答案只在题干部分里找
 
             if not am:
@@ -178,19 +229,14 @@ def parse(pdf_path, year=None):
                 om2 = None
                 if om2:
                     stem_only = clean(stem_only[:om2.start()])
-                opts_only = {}
-                if first_opt:
-                    for om in OPT.finditer(chunk[first_opt.start():]):
-                        opts_only[om.group(1)] = clean(om.group(2))
+                opts_only = {k: clean(v) for k, v in opts_found.items()}
                 if len(stem_only) > 15:
                     items.append({"题号": str(num), "题型": name, "分值": n,
                                   "题干": stem_only, "选项": opts_only,
                                   "答案": None, "待投票": True})
                 continue
             stem = clean(head[:am.start()])
-            opts = {}
-            for om in OPT.finditer(chunk[first_opt.start():]):
-                opts[om.group(1)] = clean(om.group(2))
+            opts = {k: clean(v) for k, v in opts_found.items()}
             if len(opts) < 4:
                 continue     # 选项不全的丢弃：判分依赖选项，缺一个就会算错
             items.append({"题号": str(num), "题型": name, "分值": n,
