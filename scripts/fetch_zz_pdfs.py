@@ -77,7 +77,16 @@ def validate(path):
     with open(path, "rb") as f:
         head = f.read(4)
 
-    if head == b"%PDF":
+    # 【docx 要认出来】有些年份的真题是 docx（如 2016 那份、某校 2021 那份），
+    # 原来只认 PDF 和 HTML，docx 会被判"既不是 PDF 也不是 HTML"而拒掉。
+    # docx 是 zip 容器，文件头是 PK\x03\x04。
+    if head[:2] == b"PK":
+        if path.endswith(".pdf"):
+            new_path = path[:-4] + ".docx"
+            os.replace(path, new_path)
+            path = new_path
+        src, note = path, "DOCX"
+    elif head == b"%PDF":
         src, note = path, "PDF"
     else:
         # 后缀跟着内容走：HTML 页面改名（解析器的 read_text 按后缀分派）
@@ -124,6 +133,14 @@ def validate(path):
             None)
 
 
+# 已验证有效的来源模式（补年份时优先照这些找）：
+#   *.edu.cn/__local/<a>/<b>/<c>/<hash>_<hash>_<size>.pdf   —— 博达 CMS 的 __local 路径
+#   *.edu.cn/file/upload/<日期>/<数字>.docx                 —— 某校教学平台的 upload 路径
+#   *.edu.cn/attachment/sites/item/<日期>/<hash>.pdf        —— 某校的 attachment 路径
+#   *.edu.cn 马院/教务处的文章页（HTML 正文里放整套试题）
+# 无效：新东方/中公（导流页）、研招网（分页）、kaoyan.com 的 2010–2014（扫描件）
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--url", action="append", default=[])
@@ -147,12 +164,16 @@ def main():
         good, why, year = validate(tmp)
         # validate() 可能把临时文件改名（HTML 内容不能带 .pdf 后缀），
         # 所以要按"实际存在的那个"来决定落盘后缀
-        real = tmp if os.path.exists(tmp) else tmp[:-4] + ".html"
+        real = next((c for c in (tmp, tmp[:-4] + ".html", tmp[:-4] + ".docx")
+                     if os.path.exists(c)), tmp)
         print(f"[{i}/{len(urls)}] {'✅' if good else '❌'} {why}")
         print(f"         {u[:100]}")
         if good:
             ok_n += 1
-            ext = ".pdf" if real.endswith(".pdf") else ".html"
+            # 后缀必须取自**实际文件**，不能按内容类型猜 ——
+            # 实测 2021 那份是 docx，却被存成了 .html（validate 内部改过名），
+            # 落盘后缀错会让解析器走错分支（read_text 按后缀分派）
+            ext = os.path.splitext(real)[1] or ".pdf"
             dst = os.path.join(DEST, f"{year or 'unknown'}{ext}")
             if os.path.exists(dst):
                 print(f"         ⚠️ {os.path.basename(dst)} 已存在，跳过覆盖")
