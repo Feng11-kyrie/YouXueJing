@@ -469,6 +469,45 @@ def home(user: str = "demo"):
 
 
 # ================================================================ 真题页
+def _answer_sheet(shown, done, cur, pages_n, goto):
+    """
+    **答题卡**（真题页共用：408 与政治）。
+
+    用户问过"为什么政治部分没有像 408 那样的答题卡" —— 原来只有 408 有，
+    政治页漏了。抽成共享函数，两页行为一致，也避免以后各自改一套。
+
+    形态说明（这是之前按用户要求改过的）：
+      · 从左侧竖栏改成**题目区上方的一条横卡** —— 用户要求"答题卡放第一题上面"，
+        改完题目区宽 +240px，且 47 个格子横排只占 2 行
+      · 格子颜色：绿=答对、红=答错、白=未做、加深边框=当前页
+      · 点格子跳到对应页
+    """
+    with ui.card().classes("softcard w-full p-2 gap-1"):
+        with ui.row().classes("items-center gap-3 w-full no-wrap"):
+            ui.label("答题卡").classes("t-sm font-semibold muted shrink-0")
+            with ui.element("div").classes("flex flex-wrap gap-1 flex-1"):
+                for i, q in enumerate(shown):
+                    st_ = done.get(q["id"])
+                    cls = "cell"
+                    if st_:
+                        cls += " ok" if st_["is_correct"] else " bad"
+                    if i // PER + 1 == cur:
+                        cls += " cur"
+                    cell = ui.element("div").classes(cls)
+                    cell.on("click", lambda _=None, n=i // PER + 1: goto(page=n))
+                    with cell:
+                        ui.label(str(q["题号"])).classes("t-xs")
+            ui.label("绿=对 · 红=错 · 白=未做").classes("t-xs muted shrink-0")
+            ui.button(icon="chevron_left",
+                      on_click=lambda: goto(page=max(1, cur - 1))) \
+                .props("flat dense").set_enabled(cur > 1)
+            ui.label(f"{cur} / {pages_n}").classes("t-sm shrink-0") \
+                .style("white-space:nowrap")
+            ui.button(icon="chevron_right",
+                      on_click=lambda: goto(page=min(pages_n, cur + 1))) \
+                .props("flat dense").set_enabled(cur < pages_n)
+
+
 def _exam_tabs(active_id, page, user, extra=""):
     """
     科目切换条（真题页与练习页共用）。
@@ -681,37 +720,13 @@ def exam_408(year: str = None, page: int = 1, view: str = "全部", user: str = 
             info = (f'{p["题数"]} 题 · {p["总分"]} 分 · 可判分 {p["有答案数"]}'
                     + (f'　|　已作答 {len(answered)}/{p["单选数"]} · 答对 {n_ok} · '
                        f'正确率 {n_ok / len(answered):.0%}' if answered else ""))
+            # 【把"筛选后剩几道"说清楚】政治页一直有这一项，408 原来没有 ——
+            # 切到"未做/只错题"后看不出筛掉多少，容易让人以为筛选出错了。
+            if view != "全部":
+                info += f'　|　筛选「{view}」下 {len(shown)} 道'
             ui.label(info).classes("t-sm muted")
 
-        # ---- 答题卡：从左侧竖栏改成**题目区上方的一条横卡**
-        # 用户要求"答题卡放第一题上面"。改完有两个实际收益：
-        #   ① 题目区宽 +240px（原来左侧那列占 220px + 间距 20px）
-        #   ② 综合题页面本来就没有判分状态可显示，那列纯属浪费
-        # 横向排布下 47 个格子只占 2 行左右，比竖栏省纵向空间。
-        with ui.card().classes("softcard w-full p-2 gap-1"):
-            with ui.row().classes("items-center gap-3 w-full no-wrap"):
-                ui.label("答题卡").classes("t-sm font-semibold muted shrink-0")
-                with ui.element("div").classes("flex flex-wrap gap-1 flex-1"):
-                    for i, q in enumerate(shown):
-                        st_ = done.get(q["id"])
-                        cls = "cell"
-                        if st_:
-                            cls += " ok" if st_["is_correct"] else " bad"
-                        if i // PER + 1 == cur:
-                            cls += " cur"
-                        cell = ui.element("div").classes(cls)
-                        cell.on("click", lambda _=None, n=i // PER + 1: goto(page=n))
-                        with cell:
-                            ui.label(q["题号"]).classes("t-xs")
-                ui.label("绿=对 · 红=错 · 白=未做").classes("t-xs muted shrink-0")
-                ui.button(icon="chevron_left",
-                          on_click=lambda: goto(page=max(1, cur - 1))) \
-                    .props("flat dense").set_enabled(cur > 1)
-                ui.label(f"{cur} / {pages_n}").classes("t-sm shrink-0") \
-                    .style("white-space:nowrap")
-                ui.button(icon="chevron_right",
-                          on_click=lambda: goto(page=min(pages_n, cur + 1))) \
-                    .props("flat dense").set_enabled(cur < pages_n)
+        _answer_sheet(shown, done, cur, pages_n, goto)
 
         with ui.column().classes("w-full gap-2 min-w-0"):
             if not shown:
@@ -786,18 +801,35 @@ def zz_index(user: str = "demo"):
 
 
 @ui.page("/exam/zhengzhi")
-def exam_zhengzhi(year: str = None, user: str = "demo", only: str = None):
-    """政治某年真题：按五个部分分组铺开"""
+def exam_zhengzhi(year: str = None, page: int = 1, user: str = "demo",
+                  view: str = "全部"):
+    """
+    政治某年真题：**按题号顺序平铺**（不按部分分块）。
+
+    分块（按部分练）在挑考点练习页 —— 用户要求
+    "真题部分要按照题目顺序……分块部分应该在挑考点练习那里"。
+    """
     store.ensure_user(user)
     ys = zz.years()
     if not ys:
-        with shell("/zz", user):
+        with shell("/exam", user):
             _title("考研政治 · 历年真题")
             ui.label("政治真题还没有入库。").classes("t-body sub")
         return
     year = year if year in ys else ys[-1]
     rec = zz.paper(year)
     done = store.get_answers(user)
+
+    # 【筛选用函数参数，不用控件的 .value】原来这里读 ui.toggle 的 .value 做判断，
+    # 而切换实际靠 URL 跳转（on update:model-value → navigate.to），
+    # 于是"未做/只错题"点进去筛的是**上一帧的值** —— 表现为点"未做"后
+    # 显示的结果不对。408 真题页一直是用参数 view 判断的，这里与它对齐。
+    def goto(**kw):
+        s = {"year": year, "page": cur, "view": view, "user": user}
+        s.update(kw)
+        s = {k: v for k, v in s.items() if v not in (None, "", 0)}
+        ui.navigate.to("/exam/zhengzhi?" + "&".join(f"{k}={v}"
+                                                    for k, v in s.items()))
 
     with shell("/exam", user):
         _subject_tabs("ZZ", user)
@@ -811,14 +843,11 @@ def exam_zhengzhi(year: str = None, user: str = "demo", only: str = None):
         with ui.row().classes("items-center gap-3 flex-wrap"):
             ui.select({y: f"{y} 年" for y in reversed(ys)}, value=year,
                       label="年份",
-                      on_change=lambda e: ui.navigate.to(
-                          f"/exam/zhengzhi?year={e.value}&user={user}")) \
+                      on_change=lambda e: goto(year=str(e.value))) \
                 .props("dense outlined").classes("w-28")
-            view = ui.toggle({"全部": "全部", "未做": "未做", "只错题": "只错题"},
-                             value=only or "全部") \
+            ui.toggle(["全部", "未做", "只错题"], value=view,
+                      on_change=lambda e: goto(view=e.value)) \
                 .props("dense unelevated")
-            view.on("update:model-value", lambda e: ui.navigate.to(
-                f"/exam/zhengzhi?year={year}&user={user}&only={e.args}"))
 
         obj = [i for i in rec["题目"]
                if i["题型"] in ("单项选择题", "多项选择题")]
@@ -829,11 +858,15 @@ def exam_zhengzhi(year: str = None, user: str = "demo", only: str = None):
             it = dict(it)
             it["id"] = f"ZZ-{year}-{it['题号']}"
             r = done.get(it["id"])
-            if view.value == "未做" and r:
+            if view == "未做" and r:
                 continue
-            if view.value == "只错题" and (not r or r["is_correct"]):
+            if view == "只错题" and (not r or r["is_correct"]):
                 continue
             shown.append(it)
+
+        # 分页：33 道客观题按 PER=10 分页，与 408 同一套节奏
+        pages_n = max(1, (len(shown) + PER - 1) // PER)
+        cur = max(1, min(int(page or 1), pages_n))
 
         n_ans = sum(1 for i in obj if f"ZZ-{year}-{i['题号']}" in done)
         n_ok = sum(1 for i in obj
@@ -843,15 +876,21 @@ def exam_zhengzhi(year: str = None, user: str = "demo", only: str = None):
                  + f"　（当前显示 {len(shown)} 道）") \
             .classes("t-sm muted")
 
+        _answer_sheet(shown, done, cur, pages_n, goto)
+
         if not shown:
-            ui.label("这个筛选下没有题目。").classes("t-sm muted")
+            ui.label(f"筛选「{view}」下没有题目。").classes("t-sm muted")
+            return
         # 【按题号顺序平铺，不按部分分块】
         # 用户要求："政治真题部分你要按照题目顺序来啊，在这部分内容不要分块，
         # 分块部分应该在挑考点练习那里。"
         # 理由也站得住：真题是按题号**连续作答**的，拆成五个可折叠块之后
         # 得反复展开/收起，也看不出题号顺序。每题仍带部分标签（马原/毛中特/…），
         # 信息没有丢失；要"按部分针对性练"去挑考点练习页。
-        for it in shown:
+        items = shown[(cur - 1) * PER: cur * PER]
+        ui.label(f'第 {items[0]["题号"]}–{items[-1]["题号"]} 题'
+                 f'（共 {len(shown)} 道）').classes("t-lead font-semibold")
+        for it in items:
             question_card(it, year, done, user, exam="ZZ")
 
         if ana:
