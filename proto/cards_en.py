@@ -158,7 +158,8 @@ def _sub_question(q, year, tier, done, user):
             show_explanation()
 
 
-def passage_card(passage, year, tier, done, user, compact_material=True):
+def passage_card(passage, year, tier, done, user, compact_material=True,
+                 material_only=False):
     """
     渲染一个**篇目**：材料区 + 小题区。
 
@@ -166,6 +167,10 @@ def passage_card(passage, year, tier, done, user, compact_material=True):
       · READ / NEW ：材料是文章，直接展示（可折叠以省空间）
       · CLOZE      ：文章里嵌着 20 个空 —— 见 cloze_card（单独实现，因为它
                      要把空渲染成可点的位置）
+
+    material_only=True 时**只渲染材料、不渲染小题** —— 两栏布局要用：
+    左栏放文章、右栏放题目（用户要求"左侧放文章右侧放问题"，
+    理由是"一个文章直接占了一页，看问题还要回来继续阅读，上下翻页很麻烦"）。
     """
     code = passage.get("部分")
     name = passage.get("部分名") or code
@@ -183,6 +188,8 @@ def passage_card(passage, year, tier, done, user, compact_material=True):
                         .style("font-family:Georgia,'Times New Roman',serif")
             else:
                 ui.label(mat).classes("text-[15px] leading-7 whitespace-pre-wrap")
+    if material_only:
+        return
     for q in subs:
         _sub_question(q, year, tier, done, user)
 
@@ -480,3 +487,53 @@ def subjective_block(q, year, tier, done, user):
         ui.label("说明：AI 评阅用于自查，不是官方得分 —— "
                  "考研翻译/写作是人工分档给分，同一篇不同阅卷人也可能差一档。") \
             .classes("t-xs muted")
+
+
+def questions_only(passage, year, tier, done, user):
+    """只渲染小题（两栏布局的右栏用）。"""
+    for q in passage.get("小题") or []:
+        _sub_question(q, year, tier, done, user)
+
+
+def two_col(passage, year, tier, done, user, left=None):
+    """
+    **两栏布局**：左文章 / 右题目。
+
+    用户要求（原话）："英语我看了一下不太符合人做题的习惯，因为一个文章或者
+    完形文章直接占了一页，我去看问题还要回到文章继续阅读那就要一直上下翻页
+    很麻烦。我觉得可以分成两侧吧，左侧放文章右侧放问题这样观看以及做题的感觉
+    要好很多。"
+
+    所以：
+      · 左栏放材料（阅读文章 / 新题型的句子库 + 材料）
+      · 右栏放小题（各自独立提交、判分、显示解析）
+      · 左栏 sticky —— 右栏往下滚时文章留在视野内，不用来回翻
+
+    CLOZE 不走这里：它的题目就是文章里的空，两边必须在一起（见 cloze_card）。
+    """
+    mat = (passage.get("材料") or "").strip()
+    subs = passage.get("小题") or []
+    name = passage.get("部分名") or passage.get("部分") or ""
+
+    with ui.element("div").classes("w-full").style(
+            "display:grid;grid-template-columns:minmax(0,45fr) minmax(0,55fr);"
+            "gap:16px;align-items:start"):
+        # 左栏：材料（sticky，跟随滚动）
+        with ui.card().classes("softcard p-3 gap-2 shadow-none") \
+                .style("position:sticky;top:12px;"
+                       "max-height:calc(100vh - 90px);overflow:auto"):
+            with ui.row().classes("items-center gap-2"):
+                ui.label(name).classes("t-lead font-bold")
+                ui.label(f'{len(subs)} 题').classes("t-xs muted")
+                ui.label("左文章 · 右题目").classes("t-xs muted ml-auto")
+            if mat:
+                ui.label(mat).classes(
+                    "text-[15px] leading-7 whitespace-pre-wrap") \
+                    .style("font-family:Georgia,'Times New Roman',serif")
+            else:
+                ui.label("（这一篇没有材料）").classes("t-sm muted")
+
+        # 右栏：小题
+        with ui.column().classes("w-full gap-2 min-w-0"):
+            for q in subs:
+                _sub_question(q, year, tier, done, user)

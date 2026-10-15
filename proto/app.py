@@ -38,7 +38,7 @@ from yj import data, diagnose, profile as profile_mod, path as path_mod  # noqa:
 from yj import llm, graph, zhengzhi as zz           # noqa: E402
 from yj import english as en                          # noqa: E402
 from proto.cards_en import (passage_card, cloze_card,   # noqa: E402
-                            subjective_block)
+                            subjective_block, two_col)
 from proto import store_lite as store              # noqa: E402
 from proto.cards import (question_card, SUBJECT_COLORS,   # noqa: E402
                          ZZ_PART_COLORS)
@@ -1105,7 +1105,8 @@ def exam_english(tier: str = "EN1", year: str = None, view: str = "全部",
                 for q in ps.get("小题", []):
                     subjective_block(q, year, tier, done, user)
             else:
-                passage_card(ps, year, tier, done, user)
+                # 阅读与新题型：**左文章 / 右题目**两栏（用户要求）
+                two_col(ps, year, tier, done, user)
 
 
 # ================================================================ 挑考点练习
