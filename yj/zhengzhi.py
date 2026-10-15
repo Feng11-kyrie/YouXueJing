@@ -32,6 +32,7 @@
 """
 import json
 import os
+import re
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ZZ_DIR = os.path.join(BASE, "data", "zhengzhi")
@@ -110,11 +111,17 @@ def part_of(num, qtype):
 
 
 def years():
-    """已有数据的年份（升序）"""
+    """
+    已有数据的年份（升序）。
+
+    **必须用正则严格匹配 `<4位数字>.json`** —— 不能只做后缀过滤：
+    这个目录里还有 `<年份>-解析.json`、`<年份>-待确认.json` 等派生文件，
+    用 `f[:4]` 会把同一年算两次（实测 2016 出现过重复，导致题量统计虚高）。
+    """
     if not os.path.isdir(ZZ_DIR):
         return []
     return sorted(f[:4] for f in os.listdir(ZZ_DIR)
-                  if f.endswith(".json") and not f.endswith("-待确认.json"))
+                  if re.fullmatch(r'\d{4}\.json', f))
 
 
 def paper(year):
@@ -130,6 +137,34 @@ def paper(year):
         it["部分名"] = PART_SHORT.get(code, "")
         it["边界题"] = edge
     return rec
+
+
+def explanation(year, num):
+    """
+    取某年某题的解析；没有则返回 None。
+
+    结构：{"文本": ..., "来源": "题源抽取" | "AI 生成（未经官方核验）",
+           "时政存疑": True?}
+
+    **来源必须如实透出到界面** —— 用户红线：AI 生成的内容要标注，
+    不能让人以为是官方解析。时政题还要额外提示"对时政细节可能有误"
+    （2026 卷考的"十五五"规划建议在模型训练截止之后）。
+
+    存放在 <年份>-解析.json，**与题目文件分开** ——
+    题目文件会被 parse_zhengzhi.py --write 整个重写，解析混进去就会丢
+    （我为此丢过两次答案）。
+    """
+    p = os.path.join(ZZ_DIR, f"{year}-解析.json")
+    if not os.path.exists(p):
+        return None
+    try:
+        rec = json.load(open(p, encoding="utf-8"))
+    except Exception:                                       # noqa: BLE001
+        return None
+    e = (rec.get("解答") or {}).get(str(num))
+    if not e or not e.get("文本"):
+        return None
+    return e
 
 
 def questions():

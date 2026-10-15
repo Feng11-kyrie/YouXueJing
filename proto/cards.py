@@ -16,6 +16,7 @@ NiceGUI 里组件就是普通 Python 对象，直接传参就行。
 from nicegui import ui
 
 from yj import data
+from yj import zhengzhi as zz_data
 from proto import store_lite as store
 
 # 考研政治五个部分的配色（与 408 的四门学科并列）
@@ -164,10 +165,28 @@ def question_card(q, year, done, user, exam="408"):
 
             def show_explanation():
                 exp_box.clear()
-                # 政治目前没有解析（只有经过验证的答案），如实不显示解析；
-                # 408 从 data/solutions 取（答案册抽取 / AI 生成，带来源标注）
-                sol = (data.solution(year, q["题号"])
-                       if (year and exam != "ZZ") else None)
+                # 解析有两个来源，**都要如实标注**（用户红线：AI 生成的内容
+                # 不能让人误以为是官方解析）：
+                #   · 408    → data/solutions（答案册 OCR 抽取 / AI 生成）
+                #   · 政治   → data/zhengzhi/<年>-解析.json
+                #              （题源自带的【解析】优先，其余 AI 生成）
+                if exam == "ZZ":
+                    e = zz_data.explanation(year, q["题号"]) if year else None
+                    if not e:
+                        return
+                    with exp_box:
+                        ui.label(f'解析（{e["来源"]}）：') \
+                            .classes("t-xs").style("color:#B45309")
+                        ui.label(e["文本"]).classes("t-sm whitespace-pre-wrap") \
+                            .style("line-height:1.9")
+                        if e.get("时政存疑"):
+                            # 时政题的解析由 AI 写，而它未必见过当年的会议/文件 ——
+                            # 必须提示"别当权威"，而不是让用户以为逐字准确
+                            ui.label("这条是时政题：解析里涉及的具体会议/文件/数字"
+                                     "可能有误，请以教材与官方原文为准。") \
+                                .classes("t-xs mt-1").style("color:#8C2C2C")
+                    return
+                sol = data.solution(year, q["题号"]) if year else None
                 if not sol:
                     return
                 with exp_box:

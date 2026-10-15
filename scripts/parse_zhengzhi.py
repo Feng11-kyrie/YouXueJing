@@ -126,6 +126,25 @@ def _norm_letters(s):
     return "".join(out)
 
 
+def clean_option(s):
+    """
+    清掉选项尾巴上粘的答案/解析。
+
+    **实测 100 处**（2014/2016/2021 各 33 个 D 选项、2015 一个）：
+    题源里答案和最后一个选项**排在同一行**，没有换行分隔：
+        "D.在事物的发展过程中要时时注意事物的自我否定答案：B【解析】本题考查的是…"
+    结果整个答案和解析都被吞进 D 选项的文本里 —— 用户在选项里直接看到答案。
+
+    判据：出现 `答案：` / `【答案】` / `【解析】` 就从那里截断。
+    这类标记在**正常选项正文里不会出现**，所以截断是安全的
+    （已用"道德为法律提供价值基础"等正常选项验证过不被误切）。
+    """
+    m = re.search(r'【\s*答案\s*】|[（(]?\s*答\s*案\s*[:：]|【\s*解析\s*】', str(s))
+    if m:
+        s = str(s)[:m.start()]
+    return s.strip().rstrip('。．.')
+
+
 def split_options(block):
     """
     从一段文本里取出选项。返回 (选项dict, 选项起始偏移)。
@@ -351,7 +370,7 @@ def parse(pdf_path, year=None):
                 om2 = None
                 if om2:
                     stem_only = clean(stem_only[:om2.start()])
-                opts_only = {k: clean(v) for k, v in opts_found.items()}
+                opts_only = {k: clean_option(clean(v)) for k, v in opts_found.items()}
                 # 【阈值必须是 8 不是 15】实测 2012 第 14 题的题干
                 # 「社会主义道德建设的核心」只有 11 字 —— 真题本来就短，
                 # 用 15 会把它丢掉（表现为"2012 单选只有 15 道"）。
@@ -362,7 +381,7 @@ def parse(pdf_path, year=None):
                                   "答案": None, "待投票": True})
                 continue
             stem = clean(head[:am.start()] if am_in_head else head)
-            opts = {k: clean(v) for k, v in opts_found.items()}
+            opts = {k: clean_option(clean(v)) for k, v in opts_found.items()}
             if len(opts) < 4:
                 continue     # 选项不全的丢弃：判分依赖选项，缺一个就会算错
             items.append({"题号": str(num), "题型": name, "分值": n,
