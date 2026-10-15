@@ -27,6 +27,7 @@
 from nicegui import ui
 
 from yj import english as en
+from yj import ai_grade as aig
 from proto import store_lite as store
 
 CORRECT = "#1B5E36"
@@ -234,14 +235,17 @@ def _split_cloze(text, lo=1, hi=20):
 
 def cloze_card(passage, year, tier, done, user):
     """
-    完形篇目：文章里的空可点，**选项在文章下方内联显示**。
+    完形填空：**左文章（空可点）/ 右题目（每 5 空一组翻页）**。
 
-    为什么不用弹层：我第一版用 ui.dialog 做选项弹层，实测出现
-    "后端已 `set_text`、前端不更新"的现象（闭包捕获的元素与页面上查询到的
-    不是同一个），排查成本高。改成内联后：**选中的空与选项区在同一层渲染**，
-    更新路径短、行为可预测。
+    用户要求（原话）：
+      "完形能不能也按照这样，但完形的问题有点多，可以按照点第几题右侧出来
+       上下五道题。"
+    即：与阅读一样两栏；但完形有 20 空，右侧不能一次铺 20 道，
+    所以**按 5 道一组翻页**（1–5 / 6–10 / 11–15 / 16–20）。
 
-    交互：点文章里的数字 → 下方出现该空的 4 个选项 → 点选项**立即提交并判分**。
+    左栏：文章，空渲染成可点位置（点一下把右侧切到该空所在的那组）
+    右栏：当前组的 5 空，各带 4 个选项；选完立即判分、显示对错与解析；
+          已作答的空在左栏显示字母（一眼看出做过哪些）
     """
     subs = {str(q["题号"]): q for q in (passage.get("小题") or [])}
     for _q in subs.values():
@@ -249,19 +253,21 @@ def cloze_card(passage, year, tier, done, user):
     mat = (passage.get("材料") or "").strip()
     parts, nums = _split_cloze(mat)
 
-    # 每个空的状态：已选字母（已作答的从库里回显）
     picked = {}
     for n in nums:
         q = subs.get(str(n))
         prev = done.get(q["id"]) if q else None
         picked[n] = (prev or {}).get("chosen") or ""
 
-    active = {"n": None}
-    card = ui.card().classes("softcard w-full p-3 gap-2 shadow-none")
-    with card:
+    PER = 5                      # 右侧每组几道（用户指定的量）
+    page = {"i": 0}
+    slots = {}
+
+    with ui.card().classes("softcard w-full p-3 gap-2 shadow-none"):
         with ui.row().classes("items-center gap-2"):
             ui.label("完形填空").classes("t-lead font-bold")
-            ui.label(f'{len(subs)} 空 · 点文章里的数字作答').classes("t-xs muted")
+            ui.label(f'{len(subs)} 空').classes("t-xs muted")
+            ui.label("点左侧空作答 · 右侧每 5 空一组").classes("t-xs muted ml-auto")
 
         if parts is None:
             ui.label("（这篇文章的空位置没能自动识别，下面按题号列出）") \
@@ -271,57 +277,49 @@ def cloze_card(passage, year, tier, done, user):
                 _sub_question(subs[n], year, tier, done, user)
             return
 
-        slots = {}
-        opts_area = ui.column().classes("w-full gap-1 mt-2")
+        # 【right 必须在 grid 内部创建】我原来在 grid 外先建了它（为了给
+        # render_page 引用），结果它不属于 grid —— **grid 只有 1 个子元素**，
+        # 右栏被挤到 grid 外面去，截图里只剩题目占满全宽、左栏消失。
+        # 用 holder 在 grid 内占位，再把真正的列放进去。
+        with ui.element("div").classes("w-full").style(
+                "display:grid;grid-template-columns:minmax(0,48fr) minmax(0,52fr);"
+                "gap:16px;align-items:start"):
+            # ---- 左栏：文章（sticky + 独立滚动）----
+            with ui.card().classes("softcard p-3 gap-2 shadow-none") \
+                    .style("position:sticky;top:12px;"
+                           "max-height:calc(100vh - 90px);overflow:auto"):
+                with ui.row().classes("items-center gap-2"):
+                    ui.label("文章").classes("t-lead font-bold")
+                    ui.label("点数字答题").classes("t-xs muted")
+                with ui.element("div").classes("w-full leading-7").style(
+                        "font-family:Georgia,'Times New Roman',serif;"
+                        "font-size:15px"):
+                    for i, seg in enumerate(parts):
+                        if seg.strip():
+                            ui.label(seg).classes("inline whitespace-pre-wrap")
+                        if i < len(nums):
+                            n = nums[i]
+                            el = ui.label(str(n)).classes(
+                                "blankslot inline-block min-w-[2.6rem] "
+                                "text-center mx-1 px-1 rounded cursor-pointer "
+                                "font-semibold")
+                            el.props(f'data-blank={n}')
+                            slots[n] = el
+                            el.on("click", lambda _=None, n=n: jump(n))
 
-        def render_opts():
-            opts_area.clear()
-            n = active["n"]
-            if n is None:
-                ui.label("↑ 点文章里的数字，这里会出现该空的选项。") \
-                    .classes("t-xs muted")
-                return
-            q = subs.get(str(n))
-            if q is None:
-                ui.label(f"第 {n} 空没有对应题目。").classes("t-xs muted")
-                return
-            ans = q.get("_ans") or ""
-            cur = picked.get(n) or ""
-            with ui.row().classes("items-center gap-2"):
-                ui.label(f'第 {n} 空').classes("font-semibold")
-                if ans and cur:
-                    ok = (cur == ans)
-                    ui.label(("答对了 ✓" if ok else f'答错了 ✗ 你选 {cur}')
-                             + f'　正确答案 {ans}').classes("text-sm") \
-                        .style(f'color:{"#1B5E36" if ok else "#8C2C2C"}')
-                elif not ans:
-                    ui.label("暂无答案（来源缺失）").classes("text-xs") \
-                        .style("color:#B45309")
+            # ---- 右栏：必须在 grid 内创建（见上）----
+            right = ui.column().classes("w-full gap-2 min-w-0")
 
-            with ui.column().classes("w-full gap-1"):
-                for L, T in sorted((q.get("选项") or {}).items()):
-                    row = ui.row().classes(
-                        "opt w-full items-center gap-2 rounded-lg px-3 py-1 "
-                        "cursor-pointer")
-                    if cur == L:
-                        row.style("background:#EAF2FB")
-                    if ans and cur:
-                        if L == ans:
-                            row.style("background:#E8F5E9")
-                        elif cur == L and L != ans:
-                            row.style("background:#FDECEA")
-                    with row:
-                        ui.label(L).classes("w-5 font-semibold text-gray-600")
-                        ui.label(T).classes("text-[15px] flex-1")
-                    if not (ans and cur):          # 已作答的不再改
-                        row.on("click", lambda _=None, L=L, n=n: commit(n, L))
-            if ans and cur:
-                e = en.explanation(tier, year, q["题号"])
-                if e and e.get("解析"):
-                    ui.label("解析（懒笔记）：").classes("t-xs mt-1") \
-                        .style("color:#B45309")
-                    ui.label(e["解析"]).classes("t-sm whitespace-pre-wrap") \
-                        .style("line-height:1.9")
+        # ---------- 内部函数 ----------
+        def paint_slots():
+            for k, el in slots.items():
+                v = picked.get(k) or ""
+                el.set_text(v or str(k))
+                if v:
+                    el.style("background:#EAF2FB;color:#17418F;"
+                             "border-bottom:2px solid #93B4E0")
+                else:
+                    el.style("color:#5B7FBF;border-bottom:2px solid #93B4E0")
 
         def commit(n, L):
             q = subs.get(str(n))
@@ -335,61 +333,88 @@ def cloze_card(passage, year, tier, done, user):
             store.record_answer(user, q["id"], L, ok, source="exam")
             picked[n] = L
             paint_slots()
-            render_opts()
+            render_page()
             ui.notify("答对了 ✓" if ok else f'答错了 ✗ 正确答案 {ans}',
                       color=("positive" if ok else "negative"))
 
-        def paint_slots():
-            for k, el in slots.items():
-                v = picked.get(k) or ""
-                el.set_text(v or str(k))
-                if v:
-                    el.style("background:#EAF2FB;color:#17418F;"
-                             "border-bottom:2px solid #93B4E0")
-                else:
-                    el.style("color:#5B7FBF;border-bottom:2px solid #93B4E0")
-
-        def activate(n):
-            active["n"] = n
+        def jump(n):
+            """点左侧的空 → 右侧切到它那一组，并高亮该空。"""
+            page["i"] = (n - 1) // PER
             paint_slots()
-            # 高亮当前空
             for k, el in slots.items():
                 if k == n and not picked.get(k):
                     el.style("background:#FFF7E6;color:#B45309;"
                              "border-bottom:2px solid #F0B429")
-            render_opts()
+            render_page()
 
-        with ui.element("div").classes("w-full leading-7") \
-                .style("font-family:Georgia,'Times New Roman',serif;"
-                       "font-size:15px"):
-            for i, seg in enumerate(parts):
-                if seg.strip():
-                    ui.label(seg).classes("inline whitespace-pre-wrap")
-                if i < len(nums):
-                    n = nums[i]
-                    el = ui.label(str(n)).classes(
-                        "blankslot inline-block min-w-[2.6rem] text-center "
-                        "mx-1 px-1 rounded cursor-pointer font-semibold")
-                    el.props(f'data-blank={n}')
-                    slots[n] = el
-                    el.on("click", lambda _=None, n=n: activate(n))
+        def render_page():
+            """渲染右侧**当前组**的 5 道题。"""
+            right.clear()
+            n_pages = max(1, (len(nums) + PER - 1) // PER)
+            page["i"] = max(0, min(page["i"], n_pages - 1))
+            i0 = page["i"] * PER
+            group = nums[i0:i0 + PER]
+            with right:
+                with ui.row().classes("items-center gap-2 flex-wrap"):
+                    for k in range(n_pages):
+                        lo = nums[k * PER]
+                        hi = nums[min(len(nums) - 1, k * PER + PER - 1)]
+                        on = (k == page["i"])
+                        ui.button(f'{lo}–{hi}',
+                                  on_click=lambda _=None, k=k:
+                                  (page.update(i=k), render_page())) \
+                            .props("unelevated" if on else "flat dense")
+                    ui.label(f'{len(nums)} 空 · 每 {PER} 空一组') \
+                        .classes("t-xs muted ml-auto")
+
+                for n in group:
+                    q = subs.get(str(n))
+                    if q is None:
+                        continue
+                    cur = picked.get(n) or ""
+                    ans = q.get("_ans") or ""
+                    with ui.card().classes("softcard w-full p-2 gap-1 shadow-none"):
+                        with ui.row().classes("items-center gap-2"):
+                            ui.label(f'第 {n} 空').classes("font-semibold")
+                            if ans and cur:
+                                ok = (cur == ans)
+                                ui.label(("答对了 ✓" if ok
+                                          else f'答错了 ✗ 你选 {cur}')
+                                         + f'　正确答案 {ans}') \
+                                    .classes("text-sm") \
+                                    .style(f'color:{"#1B5E36" if ok else "#8C2C2C"}')
+                            elif not ans:
+                                ui.label("暂无答案（来源缺失）").classes("text-xs") \
+                                    .style("color:#B45309")
+                        for L, T in sorted((q.get("选项") or {}).items()):
+                            row = ui.row().classes(
+                                "opt w-full items-center gap-2 rounded-lg "
+                                "px-2 py-0 cursor-pointer")
+                            if cur == L:
+                                row.style("background:#EAF2FB")
+                            if ans and cur:
+                                if L == ans:
+                                    row.style("background:#E8F5E9")
+                                elif cur == L:
+                                    row.style("background:#FDECEA")
+                            with row:
+                                ui.label(L).classes(
+                                    "w-5 font-semibold text-gray-600")
+                                ui.label(T).classes("text-[15px] flex-1")
+                            if not (ans and cur):
+                                row.on("click", lambda _=None, L=L, n=n:
+                                       commit(n, L))
+                        if ans and cur:
+                            e = en.explanation(tier, year, q["题号"])
+                            if e and e.get("解析"):
+                                ui.label(e["解析"][:300]).classes(
+                                    "t-xs whitespace-pre-wrap mt-1") \
+                                    .style("color:#6B7280;line-height:1.7")
 
         paint_slots()
-        render_opts()
-        ui.label("提示：点空 → 下面选答案（选完立即判分）。已作答的空会显示字母。") \
-            .classes("t-xs muted")
-
-
-# ---------------------------------------------------------------------------
-# 主观题：翻译 / 写作 —— 接 AI 评阅
-# ---------------------------------------------------------------------------
-# 用户问"翻译和写作可以ai评分吗" → 实测可以，但**分清层次**：
-#   ✅ 可靠：指出具体语言错误（客观、可核验）
-#   ⚠️ 中等：给档次（与人工阅卷同档的概率较高）
-#   ❌ 不可靠：精确分数（考研是人工分档给分）
-# 所以界面**只给档次 + 问题清单**，并明确标注"AI 评阅（参考，非官方得分）"，
-# 同时把**官方评分标准**一并露出 —— 光给分数是暗箱。
-from yj import ai_grade as aig
+        render_page()
+        ui.label("提示：点左侧文章里的数字跳到该空；右侧每 5 空一组，"
+                 "可点上方按钮换组。").classes("t-xs muted")
 
 
 def subjective_block(q, year, tier, done, user):
