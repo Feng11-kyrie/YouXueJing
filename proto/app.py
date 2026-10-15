@@ -171,13 +171,15 @@ def shell(active: str, user: str):
           with ui.column().classes("p-3 pt-4 gap-1 sticky top-0 w-full"):
               # 品牌区：加大 logo 与标题，原来 18px 的标题配 17px 导航没有主次
               with ui.row().classes("items-center gap-3 mb-4 px-1"):
-                  ui.label("408").classes("w-10 h-10 rounded-xl text-white font-bold "
-                                         "flex items-center justify-center shrink-0") \
+                  ui.label("鲸").classes("w-10 h-10 rounded-xl text-white font-bold "
+                                        "flex items-center justify-center shrink-0") \
                       .style("background:linear-gradient(135deg,#2563EB,#0D9488);"
                              "font-size:14px")
                   with ui.column().classes("gap-0"):
                       ui.label("优学鲸").classes("t-brand font-bold leading-tight")
-                      ui.label("408 考研").classes("t-xs sub")
+                      # 品牌副标题：从"408 考研"改为"考研智能备考"
+                      # （用户决定做考研平台：408 + 政治，而不是只做 408）
+                      ui.label("考研智能备考").classes("t-xs sub")
 
               ui.label("学习功能").classes(
                   "t-xs muted font-semibold tracking-wide mx-1 mb-0.5")
@@ -275,6 +277,42 @@ def home(user: str = "demo"):
         wrong_ids = [qid for qid, r in a.items() if not r["is_correct"]]
         prof = profile_mod.build(a, mk)
         weakest = prof["薄弱章节"][0] if prof["薄弱章节"] else None
+
+        # ---------- 选科目（用户要求："用户进去可以选择科目"）
+        # 设计取舍：**不做问卷**。考研学生一进来若被问"你考哪几科"，
+        # 选了英语/数学却发现没有内容，第一印象就坏了；问卷还多一步操作。
+        # 改成直接把**已有的科目**摆出来，点哪个进哪个 —— 卡片本身就是说明。
+        ui.label("选择科目").classes("text-2xl font-bold")
+        ui.label("每科都是独立的考纲图谱与真题库；进度、作答记录按科目分开。") \
+            .classes("t-body sub")
+        with ui.row().classes("w-full gap-4 items-stretch"):
+            for e in data.exam_list():
+                with ui.card().classes("softcard flex-1 p-4 gap-1"):
+                    with ui.row().classes("items-center gap-2"):
+                        ui.label(e["简称"]).classes("t-lead font-bold")
+                        ui.label(e["科目类型"]).classes("t-xs muted")
+                    ui.label(e["名称"]).classes("t-body font-semibold")
+                    ui.label(e["说明"]).classes("t-sm sub")
+                    # 如实说明覆盖情况 —— 不写"敬请期待"这种空话，
+                    # 也不假装内容已经齐全
+                    if e["id"] == "408":
+                        ui.label("18 年真题 846 道 · 266 个考点 · 依赖关系图") \
+                            .classes("t-xs muted")
+                        ui.button("进入 408",
+                                  on_click=lambda: ui.navigate.to(
+                                      f"/exam?user={user}")).props("unelevated")
+                    else:
+                        from yj import zhengzhi as _zz
+                        _ys = _zz.years()
+                        ui.label(f"已入库 {len(_ys)} 年真题"
+                                 f"（{('、'.join(_ys)) if _ys else '整理中'}）"
+                                 f"· 其余年份整理中") \
+                            .classes("t-xs muted")
+                        ui.label("政治暂无独立页面 —— 内容层正在补齐（考纲图谱 + 历年真题）") \
+                            .classes("t-xs").style("color:#B45309")
+                    ui.label(f"考生规模 {e['考生规模']}").classes("t-xs muted")
+
+        ui.separator().style("border-color:var(--line)")
 
         # ---------- 首屏：一句话说清"你最近练了多少"
         ui.label("我的做题记录").classes("text-2xl font-bold")
@@ -1118,7 +1156,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--port", type=int, default=8890)
     args = ap.parse_args()
-    ui.run(port=args.port, title="优学鲸", reload=False, favicon="🐳", show=False)
+    ui.run(port=args.port, title="优学鲸 · 考研智能备考",
+           reload=False, favicon="🐳", show=False)
 
 
 if __name__ in {"__main__", "__mp_main__"}:
