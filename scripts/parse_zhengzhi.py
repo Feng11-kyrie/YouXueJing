@@ -68,7 +68,23 @@ def read_text(path):
         docx ：另一种常见形式（2016 年那份是黄淮学院数学系网站上的 docx），
                而且 **docx 的排版往往比 PDF 干净**（没有硬换行把中文切碎）
     """
-    if path.lower().endswith(".docx"):
+    low = path.lower()
+    if low.endswith((".txt", ".html", ".htm")):
+        # 【纯文本 / HTML】有些年份的真题只在网页正文里（高校的 article 页、
+        # eol.cn 的页面）。fetch_zz_pdfs.py 会把 HTML 剥成 .txt 再交过来，
+        # 这里必须能读 —— 原来只认 .docx，其余一律当 PDF，
+        # 结果 .txt 被 PdfReader 打开报 "Stream has ended unexpectedly"（实测踩到）。
+        raw = open(path, encoding="utf-8", errors="ignore").read()
+        if low.endswith((".html", ".htm")):
+            raw = re.sub(r"<(script|style)[^>]*>.*?</\1>", " ", raw,
+                         flags=re.S | re.I)
+            raw = re.sub(r"<[^>]+>", "\n", raw)
+            raw = (raw.replace("&nbsp;", " ").replace("&amp;", "&")
+                      .replace("&lt;", "<").replace("&gt;", ">"))
+            raw = re.sub(r"[ \t\u3000]+", " ", raw)
+            raw = re.sub(r"\n{2,}", "\n", raw)
+        return raw
+    if low.endswith(".docx"):
         import zipfile
         with zipfile.ZipFile(path) as z:
             xml = z.read("word/document.xml").decode("utf-8", "ignore")

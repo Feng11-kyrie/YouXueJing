@@ -36,6 +36,9 @@ def fetch(url, out):
     """
     下载（伪装 UA —— 有些高校站点拦默认 curl UA）。
 
+    注意：这里统一存成 .pdf，但**内容可能是 HTML**；
+    后缀会在 validate() 里按文件头修正。
+
     【必须先删旧文件】子 agent 复核时发现：curl 失败时**上一轮的残留文件**
     会被当成"这次下载成功"，于是验证结果张冠李戴（它自测时被回显了上一次的
     2015 文件）。所以下载前无条件删除目标路径。
@@ -52,31 +55,54 @@ def fetch(url, out):
 
 
 def validate(path):
-    """返回 (是否可用, 说明, 年份)"""
-    if not os.path.exists(path) or os.path.getsize(path) < 20000:
-        return False, f"文件太小（{os.path.getsize(path) if os.path.exists(path) else 0} 字节）", None
-    with open(path, "rb") as f:
-        if f.read(4) != b"%PDF":
-            return False, "不是 PDF（可能是 HTML 页面）", None
-    try:
-        from pypdf import PdfReader
-        r = PdfReader(path)
-        txt = "\n".join((p.extract_text() or "") for p in r.pages)
-    except Exception as e:                              # noqa: BLE001
-        return False, f"PDF 解析失败 {type(e).__name__}", None
+    """
+    验证一个下载回来的文件是否可用。
 
-    # 【关键判据：用解析器本身验证】不能只看"有多少选项行" ——
-    # 实测清华社那份知识讲义有 830 行选项样式，但**一道题都抽不出来**
-    # （选项散在知识点讲解里，没有题号锚点）。所以真正的判据是：
-    # 解析后能不能得到 16 单选 + 17 多选 + 5 分析 的标准结构。
+    【关键判据：用解析器本身跑一遍】不能只看"有多少选项行" ——
+    实测清华社那份知识讲义有 830 行选项样式，但**一道题都抽不出来**
+    （选项散在知识点讲解里，没有题号锚点）。所以要真的解析，
+    看能否得到 16 单选 + 17 多选 + 5 分析 的标准结构。
+
+    支持两种格式：
+        PDF  —— 高校官网/教学平台挂的真题
+        HTML —— 有些年份只在网页正文里（如某校的 article 页、eol.cn 的某年页）；
+                剥标签时把块级标签换成换行，保住段落边界，否则选项会粘成一行
+    """
+    if not os.path.exists(path):
+        return False, "文件不存在", None
+    size = os.path.getsize(path)
+    if size < 20000:
+        return False, f"文件太小（{size} 字节）", None
+
+    with open(path, "rb") as f:
+        head = f.read(4)
+
+    if head == b"%PDF":
+        src, note = path, "PDF"
+    else:
+        # 后缀跟着内容走：HTML 页面改名（解析器的 read_text 按后缀分派）
+        if path.endswith(".pdf"):
+            new_path = path[:-4] + ".html"
+            os.replace(path, new_path)
+            path = new_path
+
+        raw = open(path, encoding="utf-8", errors="ignore").read()
+        low = raw[:2000].lower()
+        if "<html" not in low and "<!doctype" not in low:
+            return False, "既不是 PDF 也不是 HTML", None
+        # 不再自己剥标签 —— parse_zhengzhi.read_text() 现在原生支持 html，
+        # 两处各写一份剥标签逻辑迟早分叉
+        src = path
+        note = "HTML"
+
     sys.path.insert(0, BASE)
-    from scripts.parse_zhengzhi import parse
+    from scripts.parse_zhengzhi import parse, read_text
     try:
-        items = parse(path, None)
+        items = parse(src, None)
     except SystemExit:
         return False, "解析器找不到题型标题（不是真题排版）", None
     except Exception as e:                              # noqa: BLE001
-        return False, f"解析失败 {type(e).__name__}", None
+        return False, f"解析失败 {type(e).__name__}: {str(e)[:40]}", None
 
     cnt = {}
     for it in items:
@@ -84,17 +110,18 @@ def validate(path):
     s_ = cnt.get("单项选择题", 0)
     m_ = cnt.get("多项选择题", 0)
     a_ = cnt.get("材料分析题", cnt.get("分析题", 0))
+
     year = None
-    ym = re.search(r'(20\d{2})\s*年', txt[:1200])
+    ym = re.search(r'(20\d{2})\s*年', read_text(src)[:1200])
     if ym:
         year = ym.group(1)
 
-    # 官方结构：16 单选 / 17 多选 / 5 分析。允许分析题少（有些题源只放客观题）
+    # 官方结构：16 单选 / 17 多选 / 5 分析（允许分析题少：有些题源只放客观题）
     if s_ >= 14 and m_ >= 15 and a_ >= 3:
-        return True, f"单选 {s_} / 多选 {m_} / 分析 {a_}（{len(r.pages)} 页）", year
+        return True, f"[{note}] 单选 {s_} / 多选 {m_} / 分析 {a_}", year
     return (False,
-            f"解析出的题量不符（单选 {s_} / 多选 {m_} / 分析 {a_}）"
-            f"—— 不是真题题库", None)
+            f"[{note}] 解析出的题量不符（单选 {s_} / 多选 {m_} / 分析 {a_}）",
+            None)
 
 
 def main():
@@ -118,15 +145,19 @@ def main():
         tmp = os.path.join("/tmp", f"zzcand{i}.pdf")
         size = fetch(u, tmp)
         good, why, year = validate(tmp)
+        # validate() 可能把临时文件改名（HTML 内容不能带 .pdf 后缀），
+        # 所以要按"实际存在的那个"来决定落盘后缀
+        real = tmp if os.path.exists(tmp) else tmp[:-4] + ".html"
         print(f"[{i}/{len(urls)}] {'✅' if good else '❌'} {why}")
         print(f"         {u[:100]}")
         if good:
             ok_n += 1
-            dst = os.path.join(DEST, f"{year or 'unknown'}.pdf")
+            ext = ".pdf" if real.endswith(".pdf") else ".html"
+            dst = os.path.join(DEST, f"{year or 'unknown'}{ext}")
             if os.path.exists(dst):
                 print(f"         ⚠️ {os.path.basename(dst)} 已存在，跳过覆盖")
             else:
-                os.replace(tmp, dst)
+                os.replace(real, dst)
                 print(f"         → 已存为 {os.path.relpath(dst, BASE)}"
                       f"（用 parse_zhengzhi.py 解析）")
     print(f"\n可用 {ok_n} / {len(urls)}")
