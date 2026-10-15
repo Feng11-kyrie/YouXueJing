@@ -106,32 +106,123 @@ def parse_choice_questions(t, lo, hi):
     return out
 
 
-def parse_paper(t, tier):
+def _stem_for(lines, num):
+    """
+    取某题的**题干**：题号独立成行，下一行就是题干
+    （实测 `21.` / `The Romans buried the nails probably for the sake of______.`）。
+    """
+    for i, l in enumerate(lines):
+        if re.fullmatch(rf'{num}\s*[.、]?', l):
+            for j in range(i + 1, min(i + 3, len(lines))):
+                nx = lines[j]
+                if nx and not re.fullmatch(r'\[\s*[A-D]\s*\]', nx):
+                    return nx
+            return ""
+    return ""
+
+
+def _article_for(lines, marker, first_q):
+    """
+    取某篇阅读的**文章**：`Text N` 标题之后、该篇第一道题之前。
+
+    **已知局限**：站点页的行同 PDF 一样是**按排版断行**的，右端被截断
+    （实测 `they left behind a ` 后面缺内容）。所以文章能读、但不完整。
+    要拿完整文章需要从 PDF 重新拼行 —— 那是另一件事，这里先如实保留。
+    """
+    start = None
+    for i, l in enumerate(lines):
+        if l.strip() == marker:
+            start = i + 1
+            break
+    if start is None:
+        return ""
+    end = len(lines)
+    for j in range(start, len(lines)):
+        if re.fullmatch(rf'{first_q}\s*[.、]?', lines[j]):
+            end = j
+            break
+    return " ".join(x for x in lines[start:end] if x)
+
+
+def _cloze_body_from_pdf(tier, year):
+    """
+    从 GitHub 那份 PDF 里取完形文章（含空的位置）。
+
+    为什么要跨来源：站点页的正文里，**空的位置只剩数字**且与选项表隔得很远，
+    按"第一个题号之前"切会拿到导航条；PDF 那份文章完整、空以数字标出。
+    两者互补：**题目与选项用站点的（干净），文章用 PDF 的（有空位置）**。
+
+    取法：找到 `Section I` 之后、第一个选项行之前的内容，去掉 Directions。
+    """
+    import glob
+    sub = "英语一" if tier == "EN1" else "英语二"
+    srcdir = os.environ.get("KYZHENTI", "/tmp/kyzhenti/公共课/英语真题")
+    cands = [c for c in glob.glob(f'{srcdir}/{sub}/*{year}*真题.pdf')
+             if '带书签' not in c and '无解析' not in c]
+    if not cands:
+        return ""
+    from scripts.parse_english import norm_lines
+    try:
+        lines = norm_lines(cands[0])
+    except Exception:                                       # noqa: BLE001
+        return ""
+    # 起始：Section I 那行；结束：第一个完形选项行（"1. [A]" / "1. A." / "1. [A] x [B]..."）
+    start = None
+    for i, l in enumerate(lines):
+        if re.match(r'^Section\s*I\s', l):
+            start = i + 1
+            break
+    if start is None:
+        return ""
+    body = []
+    for l in lines[start:]:
+        # 去掉 Directions 说明（它不是文章）。
+        # 注意 Directions 是**多行**的，续行形如
+        #   `C or D on the ANSWER SHEET. (10 points)`，所以还要按关键词过滤。
+        if re.match(r'^(Directions|Read\s+the\s+following\s+text)\b', l):
+            continue
+        if re.search(r'ANSWER\s*SHEET|directions?\s*[:：]|points\)\s*$', l):
+            continue
+        # 选项区起点
+        if re.match(r'^\s*1\s*[.、]\s*\[?[A-D]', l):
+            break
+        if re.match(r'^\s*Text\s*1\b', l):
+            break
+        body.append(l)
+    return "\n".join(body).strip()
+
+
+def parse_paper(t, tier, year=None):
     """整套卷 → rec（与 yj.english 的模型一致）。"""
     cz = parse_choice_questions(t, 1, 20)
     rd = parse_choice_questions(t, 21, 40)
     if len(cz) != 20 or len(rd) != 20:
         return None, f"完形 {len(cz)}/20 阅读 {len(rd)}/20"
     rec = {"tier": tier, "篇目": []}
-    # 完形：一篇文章 + 20 空（材料取自页面里第一个题号之前）
-    body = []
-    for l in t.split("\n"):
-        s = l.strip()
-        if re.fullmatch(r'1\s*[.、]?', s):
-            break
-        body.append(s)
+    # 完形：一篇文章 + 20 空。
+    # 【文章从 PDF 取，不从本页取】实测本页的正文里**空的位置只剩数字**、
+    # 且与题号表分开得很远（第 52–55 行是正文，第 56 行起才是选项表），
+    # 直接按"第一个题号行之前"切会拿到导航文字（`懒笔记 首页 真题卷 目录…`）。
+    # 而 GitHub 那份 PDF 的完形文章是完整的（空以数字标出），正好互补。
+    body = _cloze_body_from_pdf(tier, year)
     rec["篇目"].append({
-        "部分": "CLOZE", "材料": "\n".join(body).strip(),
+        "部分": "CLOZE", "材料": body,
         "小题": [{"题号": n, "题干": "", "选项": cz[n]} for n in sorted(cz)]})
-    # 阅读：页面上是 21–40 连排，按每 5 题分 4 篇
+    # 阅读：页面上是 21–40 连排，按每 5 题分 4 篇。
+    # **文章从本页取**：页面上 `Text N` 标题之后、该篇第一道题之前就是文章
+    # （实测 2024 英语一：Text 1 在第 242 行、第 21 题在第 250 行）。
+    lines = [l.strip() for l in t.split("\n")]
     order = sorted(rd)
     for k in range(0, 20, 5):
         chunk = order[k:k + 5]
         if len(chunk) < 5:
             break
+        first = chunk[0]
         rec["篇目"].append({
-            "部分": "READ", "材料": "",
-            "小题": [{"题号": n, "题干": "", "选项": rd[n]} for n in chunk]})
+            "部分": "READ",
+            "材料": _article_for(lines, f"Text {k // 5 + 1}", first),
+            "小题": [{"题号": n, "题干": _stem_for(lines, n),
+                      "选项": rd[n]} for n in chunk]})
     rec["题目数"] = sum(len(p["小题"]) for p in rec["篇目"])
     return rec, f"完整 {rec['题目数']} 题"
 
@@ -171,7 +262,7 @@ def main():
                     bad += 1
                     time.sleep(1.0)
                     continue
-                rec, msg = parse_paper(t, tier)
+                rec, msg = parse_paper(t, tier, year=y)
                 tag = f"{en.TIERS[tier]['简称']} {y}"
                 if rec is None:
                     bad += 1

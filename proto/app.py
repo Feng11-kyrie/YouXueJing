@@ -36,6 +36,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from nicegui import ui                            # noqa: E402
 from yj import data, diagnose, profile as profile_mod, path as path_mod  # noqa: E402
 from yj import llm, graph, zhengzhi as zz           # noqa: E402
+from yj import english as en                          # noqa: E402
+from proto.cards_en import passage_card, cloze_card    # noqa: E402
 from proto import store_lite as store              # noqa: E402
 from proto.cards import (question_card, SUBJECT_COLORS,   # noqa: E402
                          ZZ_PART_COLORS)
@@ -909,6 +911,109 @@ def exam_zhengzhi(year: str = None, page: int = 1, user: str = "demo",
                             ui.label(it["部分名"]).classes("text-xs") \
                                 .style(f'color:{ZZ_PART_COLORS.get(it.get("部分"), "#2563EB")}')
                     ui.label(it["题干"]).classes("text-[15px] leading-6 whitespace-pre-wrap")
+
+
+# ================================================================ 考研英语真题
+def _tier_tabs(active_tier, year, view, user):
+    """
+    **卷种切换条**（英语一 / 英语二）。
+
+    用户指出："英语和数学和政治不同的，他是分英几的" —— 对。
+    政治/408 是一科一卷，英语一科两卷种，所以真题页顶部要有这一条。
+    以后数学（数一/二/三）复用同一个组件。
+    """
+    with ui.row().classes("items-center gap-2 flex-wrap"):
+        ui.label("考研英语").classes("text-2xl font-bold mr-3")
+        for t in en.tier_list():
+            on = (t["id"] == active_tier)
+            ui.button(t["简称"],
+                      on_click=lambda _=None, x=t["id"]: ui.navigate.to(
+                          f"/exam/english?tier={x}&user={user}")) \
+                .props("unelevated" if on else "flat dense")
+        n_years = len(en.years(active_tier))
+        tl = next((x for x in en.tier_list() if x["id"] == active_tier), {})
+        ui.label(f'{tl.get("适用", "")}　·　已入库 {n_years} 年'
+                 f'（{tl.get("首年", "")}–{tl.get("末年", "")}）') \
+            .classes("t-sm muted ml-2")
+
+
+@ui.page("/exam/english")
+def exam_english(tier: str = "EN1", year: str = None, view: str = "全部",
+                 page: int = 1, user: str = "demo"):
+    """
+    英语某年真题：**按篇目渲染**（完形 / 阅读 / 新题型 ...）。
+
+    与政治页的关键差别：英语是**复合题** —— 一篇文章挂多道小题，
+    所以不能一题一卡地平铺（那样文章会重复 5 次）。
+    """
+    store.ensure_user(user)
+    tiers = [t["id"] for t in en.tier_list()]
+    tier = tier if tier in tiers else "EN1"
+    ys = en.years(tier)
+    if not ys:
+        with shell("/exam", user):
+            _tier_tabs(tier, None, view, user)
+            ui.label("英语真题还没有入库。").classes("t-body sub")
+        return
+    year = str(year) if str(year) in ys else ys[-1]
+    rec = en.paper(tier, year)
+    done = store.get_answers(user)
+    tn = en.TIERS[tier]["简称"]
+
+    def goto(**kw):
+        s = {"tier": tier, "year": year, "view": view, "user": user}
+        s.update(kw)
+        s = {k: v for k, v in s.items() if v not in (None, "", 0)}
+        ui.navigate.to("/exam/english?" + "&".join(f"{k}={v}"
+                                                   for k, v in s.items()))
+
+    with shell("/exam", user):
+        _tier_tabs(tier, year, view, user)
+        ui.label(f"{year} 年{tn}真题").classes("text-2xl font-bold mt-1")
+
+        st = en.part_stats(tier, year)
+        parts = " · ".join(
+            f'{en.PARTS[c]["简称"]} {v["小题数"]} 题'
+            for c, v in st.items() if c in en.PARTS)
+        ui.label(parts).classes("t-sm sub")
+
+        with ui.row().classes("items-center gap-3 flex-wrap"):
+            ui.select({y: f"{y} 年" for y in reversed(ys)}, value=year,
+                      label="年份", on_change=lambda e: goto(year=str(e.value))) \
+                .props("dense outlined").classes("w-28")
+            ui.toggle(["全部", "未做", "只错题"], value=view,
+                      on_change=lambda e: goto(view=e.value)) \
+                .props("dense unelevated")
+
+        # 逐篇目收集小题，按 view 过滤
+        def keep(q):
+            r = done.get(q["id"])
+            if view == "未做":
+                return not r
+            if view == "只错题":
+                return bool(r) and not r["is_correct"]
+            return True
+
+        shown = []
+        for ps in rec.get("篇目", []):
+            subs = [q for q in ps.get("小题", []) if keep(q)]
+            if subs:
+                shown.append({**ps, "小题": subs})
+        n_obj = sum(len(ps.get("小题", [])) for ps in rec.get("篇目", []))
+        n_done = sum(1 for ps in rec.get("篇目", []) for q in ps.get("小题", [])
+                     if q["id"] in done)
+        ui.label(f"客观题 {n_obj} 题 · 已作答 {n_done} 道"
+                 + (f'　（当前显示 {sum(len(p["小题"]) for p in shown)} 题）'
+                    if view != "全部" else "")).classes("t-sm muted")
+
+        if not shown:
+            ui.label(f"筛选「{view}」下没有题目。").classes("t-sm muted")
+            return
+        for ps in shown:
+            if ps.get("部分") == "CLOZE":
+                cloze_card(ps, year, tier, done, user)
+            else:
+                passage_card(ps, year, tier, done, user)
 
 
 # ================================================================ 挑考点练习

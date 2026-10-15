@@ -3,7 +3,7 @@
  "篇目": [
   {
    "部分": "CLOZE",
-   "材料": "懒笔记\n首页\n真题卷\n真题题型\n真题文章\n真题句子\n真题单词\n足迹\n目录\nP1·1\nP2·2–3\nP3·4–6\nP4·7–12\nP5·13–16\nP6·17–20",
+   "材料": "mark A, B, C or D on the ANSWER SHEET. (lO points)\nHappy people work differently. They're more productive, more creative, and\nwilling to take greater risks. And new research suggests that happiness might\ninfluence 1 firms work, too.\nCompanies located in places with happier people invest more, according to a\nrecent research paper. 2 , 伍ms in happy places spend more on R&D\n(research and development). That's because happiness is linked to the kind of\nlonger-term thinking 3 for making investments for the future.\nThe researchers wanted to know if the 4 and inclination for risk-taking that\ncome with happiness would 5 the way companies invested. So they compared\nU.S. cities' average happiness 6 by Gallup polling with the investment\nactivity of publicly traded firms in those areas.\n7 enough, fim函 investment and R&D intensity were correlated with the\nhappiness of the area in which they were 8 . But is it really happiness that's\nlinked to investment, or could something else about happier cities 9 why\n伍ms there spend more on R&D? To find out, the researchers controlled for\nvarious 10 that might make 伍ms more likely to invest — like size, industry,\nand sales — and for indicators that a place was 11 to live in, like growth in\nwages or population. The link between happiness and investment generally 12\neven after accounting for these things.\nThe correlation between happiness and investment was particularly strong for\nyounger firms, which the authors 13 to \"less codified decision making process\"\nand the possible presence of ''younger and less 14 managers who are more likely\nto be influenced by sentiment.\" The relationship was 15 stronger in places\nwhere happiness was spread more 16 . Firms seem to invest more in places\nwhere most people are relatively happy, rather than in places with happiness inequality.\n17 this doesn't prove that happiness causes firms to invest more or to\ntake a longer-term view, the authors believe it at least 18 at that possibility.\nIt's not hard to imagine that local culture and sentiment would help 19 how\nexecutives think about the future. \"It surely seems plausible that happy people\nwould be more forward-thinking and creative and 20 R&D more than the\naverage,\" said one researcher.\n- 1 -",
    "小题": [
     {
      "题号": 1,
@@ -209,11 +209,11 @@
   },
   {
    "部分": "READ",
-   "材料": "",
+   "材料": "It's true that high-school coding classes aren't essential for learning computer science in college. Students without experience can catch up after a few introductory courses, said Tom Cortina, the assistant dean at Carnegie Mellon's School of Computer Science. However, Cortina said, early exposure is beneficial. When younger kids learn computer science, they learn that it's not just a confusing, endless string of letters and numbers – but a tool to build apps, or create artwork, or test hypotheses. It's not as hard for them to transform their thought processes as it is for older students. Breaking down problems into bite-sized chunks and using code to solve them becomes normal. Giving more children this training could increase the number of people interested in the field and help fill the jobs gap, Cortina said. Students also benefit from learning something about coding before they get to college, where introductory computer-science classes are packed to the brim, which can drive the less-experienced or less-determined students away. The Flatiron School, where people pay to learn programming, started as one of the many coding bootcamps that have become popular for adults looking for a career change. The high-schoolers get the same curriculum, but \"we try to gear lessons toward things they're interested in,\" said Victoria Friedman, an instructor. For instance, one of the apps the students are developing suggests movies based on your mood. The students in the Flatiron class probably won't drop out of high school and build the next Facebook. Programming languages have a quick turnover, so the \"Ruby on Rails\" language they learned may not even be relevant by the time they enter the job market. But the skills they learn – how to think logically through a problem and organize the results – apply to any coding language, said Deborah Seehorn, an education consultant for the state of North Carolina. Indeed, the Flatiron students might not go into IT at all. But creating a future army of coders is not the sole purpose of the classes. These kids are going to be surrounded by computers – in their pockets, in their offices, in their homes – for the rest of their lives. The younger they learn how computers think, how to coax the machine into producing what they want – the earlier they learn that they have the power to do that – the better.",
    "小题": [
     {
      "题号": 21,
-     "题干": "",
+     "题干": "Cortina holds that early exposure to computer science makes it easier to____.",
      "选项": {
       "A": "complete future job training",
       "B": "remodel the way of thinking",
@@ -223,7 +223,7 @@
     },
     {
      "题号": 22,
-     "题干": "",
+     "题干": "In delivering lessons for high-schoolers, Flatiron has considered their____.",
      "选项": {
       "A": "experience",
       "B": "interest",
@@ -233,7 +233,7 @@
     },
     {
      "题号": 23,
-     "题干": "",
+     "题干": "Deborah Seehorn believes that the skills learned at Flatiron will____.",
      "选项": {
       "A": "help students learn other computer languages",
       "B": "have to be upgraded when new technologies come",
@@ -243,7 +243,7 @@
     },
     {
      "题号": 24,
-     "题干": "",
+     "题干": "According to the last paragraph, Flatiron students are expected to____.",
      "选项": {
       "A": "bring forth innovative computer technologies",
       "B": "stay longer in the information technology industry",
@@ -253,7 +253,7 @@
     },
     {
      "题号": 25,
-     "题干": "",
+     "题干": "The word \"coax\" (Line 4, Para. 6) is closest in meaning to____.",
      "选项": {
       "A": "persuade",
       "B": "frighten",
@@ -265,11 +265,11 @@
   },
   {
    "部分": "READ",
-   "材料": "",
+   "材料": "Biologists estimate that as many as 2 million lesser prairie chickens – a kind of bird living on stretching grasslands – once lent red to the often grey landscape of the midwestern and southwestern United States. But just some 22,000 birds remain today, occupying about 16% of the species' historic range. The crash was a major reason the U.S. Fish and Wildlife Service (USFWS) decided to formally list the bird as threatened. \"The lesser prairie chicken is in a desperate situation,\" said USFWS Director Daniel Ashe. Some environmentalists, however, were disappointed. They had pushed the agency to designate the bird as \"endangered,\" a status that gives federal officials greater regulatory power to crack down on threats. But Ashe and others argued that the \"threatened\" tag gave the federal government flexibility to try out new, potentially less confrontational conservation approaches. In particular, they called for forging closer collaborations with western state governments, which are often uneasy with federal action, and with the private landowners who control an estimated 95% of the prairie chicken's habitat. Under the plan, for example, the agency said it would not prosecute landowners or businesses that unintentionally kill, harm, or disturb the bird, as long as they had signed a range-wide management plan to restore prairie chicken habitat. Negotiated by USFWS and the states, the plan requires individuals and businesses that damage habitat as part of their operations to pay into a fund to replace every acre destroyed with 2 new acres of suitable habitat. The fund will also be used to compensate landowners who set aside habitat. USFWS also set an interim goal of restoring prairie chicken populations to an annual average of 67,000 birds over the next 10 years. And it gives the Western Association of Fish and Wildlife Agencies (WAFWA), a coalition of state agencies, the job of monitoring progress. Overall, the idea is to let \"states remain in the driver's seat for managing the species,\" Ashe said. Not everyone buys the win-win rhetoric. Some Congress members are trying to block the plan, and at least a dozen industry groups, four states, and three environmental groups are challenging it in federal court. Not surprisingly, industry groups and states generally argue it goes too far; environmentalists say it doesn't go far enough. \"The federal government is giving responsibility for managing the bird to the same industries that are pushing it to extinction,\" says biologist Jay Lininger.",
    "小题": [
     {
      "题号": 26,
-     "题干": "",
+     "题干": "The major reason for listing the lesser prairie chicken as threatened is____.",
      "选项": {
       "A": "its drastically decreased population",
       "B": "the underestimate of the grassland acreage",
@@ -279,7 +279,7 @@
     },
     {
      "题号": 27,
-     "题干": "",
+     "题干": "The \"threatened\" tag disappointed some environmentalists in that it____.",
      "选项": {
       "A": "was a give-in to governmental pressure",
       "B": "would involve fewer agencies in action",
@@ -289,7 +289,7 @@
     },
     {
      "题号": 28,
-     "题干": "",
+     "题干": "It can be learned from Paragraph 3 that unintentional harm-doers will not be prosecuted if they____.",
      "选项": {
       "A": "agree to pay a sum for compensation",
       "B": "volunteer to set up an equally big habitat",
@@ -299,7 +299,7 @@
     },
     {
      "题号": 29,
-     "题干": "",
+     "题干": "According to Ashe, the leading role in managing the species is____.",
      "选项": {
       "A": "the federal government",
       "B": "the wildlife agencies",
@@ -309,7 +309,7 @@
     },
     {
      "题号": 30,
-     "题干": "",
+     "题干": "Jay Lininger would most likely support____.",
      "选项": {
       "A": "industry groups",
       "B": "the win-win rhetoric",
@@ -321,11 +321,11 @@
   },
   {
    "部分": "READ",
-   "材料": "",
+   "材料": "That everyone's too busy these days is a cliché. But one specific complaint is made especially mournfully: There's never any time to read. What makes the problem thornier is that the usual time-management techniques don't seem sufficient. The web's full of articles offering tips on making time to read: \"Give up TV\" or \"Carry a book with you at all times.\" But in my experience, using such methods to free up the odd 30 minutes doesn't work. Sit down to read and the flywheel of work-related thoughts keeps spinning – or else you're so exhausted that a challenging book's the last thing you need. The modern mind, Tim Parks, a novelist and critic, writes, \"is overwhelmingly inclined toward communication… It is not simply that one is interrupted; it is that one is actually inclined to interruption.\" Deep reading requires not just time, but a special kind of time which can't be obtained merely by becoming more efficient. In fact, \"becoming more efficient\" is part of the problem. Thinking of time as a resource to be maximised means you approach it instrumentally, judging any given moment as well spent only in so far as it advances progress toward some goal. Immersive reading, by contrast, depends on being willing to risk inefficiency, goallessness, even time-wasting. Try to slot it in as a to-do list item and you'll manage only goal-focused reading – useful, sometimes, but not the most fulfilling kind. \"The future comes at us like empty bottles along an unstoppable and nearly infinite conveyor belt,\" writes Gary Eberle in his book Sacred Time, and \"we feel a pressure to fill these different-sized bottles (days, hours, minutes) as they pass, for if they get by without being filled, we will have wasted them.\" No mind-set could be worse for losing yourself in a book. So what does work? Perhaps surprisingly, scheduling regular times for reading. You'd think this might fuel the efficiency mind-set, but in fact, Eberle notes, such ritualistic behaviour helps us \"step outside time's flow\" into \"soul time.\" You could limit distractions by reading only physical books, or on single-purpose e-readers. \"Carry a book with you at all times\" can actually work, too – providing you dip in often enough, so that reading becomes the default state from which you temporarily surface to take care of business, before dropping back down. On a really good day, it no longer feels as if you're \"making time to read,\" but just reading, and making time for everything else.",
    "小题": [
     {
      "题号": 31,
-     "题干": "",
+     "题干": "The usual time-management techniques don't work because____.",
      "选项": {
       "A": "what they can offer does not ease the modern mind",
       "B": "what challenging books demand is repetitive reading",
@@ -335,7 +335,7 @@
     },
     {
      "题号": 32,
-     "题干": "",
+     "题干": "The \"empty bottles\" metaphor illustrates that people feel a pressure to____.",
      "选项": {
       "A": "update their to-do lists",
       "B": "make passing time fulfilling",
@@ -345,7 +345,7 @@
     },
     {
      "题号": 33,
-     "题干": "",
+     "题干": "Eberle would agree that scheduling regular times for reading helps____.",
      "选项": {
       "A": "encourage the efficiency mind-set",
       "B": "develop online reading habits",
@@ -355,7 +355,7 @@
     },
     {
      "题号": 34,
-     "题干": "",
+     "题干": "\"Carry a book with you at all times\" can work if____.",
      "选项": {
       "A": "reading becomes your primary business of the day",
       "B": "all the daily business has been promptly dealt with",
@@ -365,7 +365,7 @@
     },
     {
      "题号": 35,
-     "题干": "",
+     "题干": "The best title for this text could be____.",
      "选项": {
       "A": "How to Enjoy Easy Reading",
       "B": "How to Find Time to Read",
@@ -377,11 +377,11 @@
   },
   {
    "部分": "READ",
-   "材料": "",
+   "材料": "Against a backdrop of drastic changes in economy and population structure, younger Americans are drawing a new 21st-century road map to success, the latest poll has found. Across generational lines, Americans continue to prize many of the same traditional milestones of a successful life, including getting married, having children, owning a home, and retiring in their sixties. But while young and old mostly agree on what constitutes the finish line of a fulfilling life, they offer strikingly different paths for reaching it. Young people who are still getting started in life were more likely than older adults to prioritize personal fulfillment in their work, to believe they will advance their careers most by regularly changing jobs, to favor communities with more public services and a faster pace of life, to agree that couples should be financially secure before getting married or having children, and to maintain that children are best served by two parents working outside the home, the survey found. From career to community and family, these contrasts suggest that in the aftermath of the searing Great Recession, those just starting out in life are defining priorities and expectations that will increasingly spread through virtually all aspects of American life, from consumer preferences to housing patterns to politics. Young and old converge on one key point: Overwhelming majorities of both groups said they believe it is harder for young people today to get started in life than it was for earlier generations. While younger people are somewhat more optimistic than their elders about the prospects for those starting out today, big majorities in both groups believe those \"just getting started in life\" face a tougher climb than earlier generations in reaching such signpost achievements as securing a good-paying job, starting a family, managing debt, and finding affordable housing. Pete Schneider considers the climb tougher today. Schneider, a 27-year-old auto technician from the Chicago suburbs, says he struggled to find a job after graduating from college. Even now that he is working steadily, he said, \"I can't afford to pay my monthly mortgage payments on my own, so I have to rent rooms out to people to make that happen.\" Looking back, he is struck that his parents could provide a comfortable life for their children even though neither had completed college when he was young. \"I still grew up in an upper middle-class home with parents who didn't have college degrees,\" Schneider said. \"I don't think people are capable of that anymore.\"",
    "小题": [
     {
      "题号": 36,
-     "题干": "",
+     "题干": "One cross-generation mark of a successful life is____.",
      "选项": {
       "A": "trying out different lifestyles",
       "B": "having a family with children",
@@ -391,7 +391,7 @@
     },
     {
      "题号": 37,
-     "题干": "",
+     "题干": "It can be learned from Paragraph 3 that young people tend to____.",
      "选项": {
       "A": "favor a slower life pace",
       "B": "hold an occupation longer",
@@ -401,7 +401,7 @@
     },
     {
      "题号": 38,
-     "题干": "",
+     "题干": "The priorities and expectations defined by the young will____.",
      "选项": {
       "A": "become increasingly clear",
       "B": "focus on materialistic issues",
@@ -411,7 +411,7 @@
     },
     {
      "题号": 39,
-     "题干": "",
+     "题干": "Both young and old agree that____.",
      "选项": {
       "A": "good-paying jobs are less available",
       "B": "the old made more life achievements",
@@ -421,7 +421,7 @@
     },
     {
      "题号": 40,
-     "题干": "",
+     "题干": "Which of the following is true about Schneider?",
      "选项": {
       "A": "He found a dream job after graduating from college.",
       "B": "His parents believe working steadily is a must for success.",
