@@ -3,7 +3,7 @@
  "篇目": [
   {
    "部分": "CLOZE",
-   "材料": "or D on the ANSWER SHEET. (10 points)\nThere are many understandable reasons why you might find it difficult to ask for help\nwhen you need it. Psychologists have been interested in this 1 for decades, not least\nbecause people’s widespread 2 to ask for help has led to some high-profile failures.\nAsking for help takes 3 . It involves communicating a need on your part — there’s\nsomething you can’t do. 4 , you’re broadcasting your own weakness, which can be 5 .\nYou might have 6 about losing control of whatever it is you are asking for help\nwith. 7 someone starts to help, perhaps they will take over, or get a credit for your early\nefforts. Yet another 8 that you might be worried about is being a nuisance or 9 the\nperson you go to for help.\nIf you struggle with low self-esteem, you might find it especially difficult to 10 for\nhelp because you have the added worry of the other person 11 your request. You might\nsee such refusals as implying something 12 about the status of your relationship\nwith them. To 13 these difficulties, try to remind yourself that everyone needs help\nsometimes. Nobody knows everything and can do everything all by themselves. And while you\nmight 14 coming across as incompetent, there’s actually research that shows that advice-\nseekers are 15 as more competent, not less.\nPerhaps most encouraging of all is a paper from 2022 by researchers at Stanford\nUniversity, in California, that involved a mix of contrived help-seeking interactions and asking\npeople to 16 times they’d sought help in the past. The findings showed that help-seekers\ngenerally underestimate how 17 other people will be to help and how good it will make\nthe help-giver feel (for most people, having the chance to help someone is highly 18 ).\nSo bear all this in mind the next time you need to ask for help. 19 , take care over\nwho you ask and when you ask them. And if someone can’t help right now, avoid taking it\npersonally. They might just be too 20 , or they might not feel confident about their ability\nto help.",
+   "材料": "There are many understandable reasons why you might find it difficult to ask for help\nwhen you need it. Psychologists have been interested in this 1 for decades, not least\nbecause people’s widespread 2 to ask for help has led to some high-profile failures.\nAsking for help takes 3 . It involves communicating a need on your part — there’s\nsomething you can’t do. 4 , you’re broadcasting your own weakness, which can be 5 .\nYou might have 6 about losing control of whatever it is you are asking for help\nwith. 7 someone starts to help, perhaps they will take over, or get a credit for your early\nefforts. Yet another 8 that you might be worried about is being a nuisance or 9 the\nperson you go to for help.\nIf you struggle with low self-esteem, you might find it especially difficult to 10 for\nhelp because you have the added worry of the other person 11 your request. You might\nsee such refusals as implying something 12 about the status of your relationship\nwith them. To 13 these difficulties, try to remind yourself that everyone needs help\nsometimes. Nobody knows everything and can do everything all by themselves. And while you\nmight 14 coming across as incompetent, there’s actually research that shows that advice-\nseekers are 15 as more competent, not less.\nPerhaps most encouraging of all is a paper from 2022 by researchers at Stanford\nUniversity, in California, that involved a mix of contrived help-seeking interactions and asking\npeople to 16 times they’d sought help in the past. The findings showed that help-seekers\ngenerally underestimate how 17 other people will be to help and how good it will make\nthe help-giver feel (for most people, having the chance to help someone is highly 18 ).\nSo bear all this in mind the next time you need to ask for help. 19 , take care over\nwho you ask and when you ask them. And if someone can’t help right now, avoid taking it\npersonally. They might just be too 20 , or they might not feel confident about their ability\nto help.",
    "小题": [
     {
      "题号": 1,
@@ -430,9 +430,35 @@
      }
     }
    ]
+  },
+  {
+   "部分": "TRANS",
+   "材料": "You know the moment — the conversation slows, then there’s a pause. It’s awkward, and so awkward that some people will panic and say anything. Do we all find such silences so stressful? Researchers analysed the frequency and impact of gaps greater than 2 seconds during conversations, including an overview of previous studies which indicate that the fear of awkward silences can be so extreme that people avoid talking to strangers, even though doing so is likely to be an enjoyable experience. During conversations with short gaps, people feel more connected to their conversation partners. But such feelings of connection markedly dip when entering a long gap. Long gaps between strangers are likely to be followed by a change in topic. But the opposite seems to be true for conversations between friends. Long gaps there saw increased connection. Between friends, longer gaps seem to provide natural moments for reflection and expression.",
+   "小题": [
+    {
+     "题号": 46,
+     "题干": "翻译下面这段文字",
+     "材料": "You know the moment — the conversation slows, then there’s a pause. It’s awkward, and so awkward that some people will panic and say anything. Do we all find such silences so stressful? Researchers analysed the frequency and impact of gaps greater than 2 seconds during conversations, including an overview of previous studies which indicate that the fear of awkward silences can be so extreme that people avoid talking to strangers, even though doing so is likely to be an enjoyable experience. During conversations with short gaps, people feel more connected to their conversation partners. But such feelings of connection markedly dip when entering a long gap. Long gaps between strangers are likely to be followed by a change in topic. But the opposite seems to be true for conversations between friends. Long gaps there saw increased connection. Between friends, longer gaps seem to provide natural moments for reflection and expression.",
+     "题型": "翻译",
+     "分值": 15
+    }
+   ]
+  },
+  {
+   "部分": "WRITE",
+   "材料": "Write an essay based on the chart below. In your essay, you should 1) describe and interpret the chart, and 2) give your comments. Write your answer in about 150 words on the ANSWER SHEET. (15 points) 90.80% 68.30% 34.70% 31.80% 18.40% 看电视 散步 养花 阅读 下棋 某社区老年人主要日常休闲活动调查",
+   "小题": [
+    {
+     "题号": 48,
+     "题干": "写作要求",
+     "材料": "Write an essay based on the chart below. In your essay, you should 1) describe and interpret the chart, and 2) give your comments. Write your answer in about 150 words on the ANSWER SHEET. (15 points) 90.80% 68.30% 34.70% 31.80% 18.40% 看电视 散步 养花 阅读 下棋 某社区老年人主要日常休闲活动调查",
+     "题型": "写作",
+     "分值": 10
+    }
+   ]
   }
  ],
- "题目数": 40,
+ "题目数": 42,
  "年份": "2025",
  "来源": "懒笔记 paper 页（结构化正文）"
 }

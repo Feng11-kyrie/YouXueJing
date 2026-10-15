@@ -3,7 +3,7 @@
  "篇目": [
   {
    "部分": "CLOZE",
-   "材料": "or D on the ANSWER SHEET. (10 points)\nHere’s a common scenario that any number of entrepreneurs face today: you’re the CEO\nof a small business, and though you’re making a nice 1 , you need to find a way to take it\nto the next level. What you need to do is 2 growth by establishing a growth team. A\ngrowth team is made up of members from different departments within your company, and it\nharnesses the power of collaboration to focus 3 on finding ways to grow.\nLet’s look at a real-world 4 . Prior to forming a growth team, the software company\nBitTorrent had 50 employees working in the 5 departments of engineering, marketing\nand product development. This brought them good results until 2012, when their growth\nplateaued. The 6 was that too many customers were using the basic, free version of their\nproduct. And 7 improvements to the premium, paid version, few people were making the\nupgrade.\nThings changed, 8 , when an innovative project-marketing manager came aboard,\n9 a growth team and sparked the kind of 10 perspective they needed. By looking at\nengineering issues from a marketing point of view, it became clear that the 11 of\nupgrades wasn’t due to a quality issue. Most customers were simply unaware of the premium\nversion and what it offered.\nArmed with this 12 , the marketing and engineering teams joined forces to raise\nawareness by prominently 13 the premium version to users of the free version. 14 ,\nupgrades skyrocketed, and revenue increased by 92 percent.\nBut in order for your growth team to succeed, it needs to have a strong leader. It needs\nsomeone who can 15 the interdisciplinary team and keep them on course for\nimprovement. This leader will 16 the target area, set clear goals and establish a time\nframe for the 17 of these goals.\nThe growth leader is also 18 for keeping the team focused on moving forward and\nsteering them clear of distractions. 19 attractive, new ideas can be distracting, the team\nleader must recognize when these ideas don’t 20 the current goal and need to be put on\nthe back burner.",
+   "材料": "Here’s a common scenario that any number of entrepreneurs face today: you’re the CEO\nof a small business, and though you’re making a nice 1 , you need to find a way to take it\nto the next level. What you need to do is 2 growth by establishing a growth team. A\ngrowth team is made up of members from different departments within your company, and it\nharnesses the power of collaboration to focus 3 on finding ways to grow.\nLet’s look at a real-world 4 . Prior to forming a growth team, the software company\nBitTorrent had 50 employees working in the 5 departments of engineering, marketing\nand product development. This brought them good results until 2012, when their growth\nplateaued. The 6 was that too many customers were using the basic, free version of their\nproduct. And 7 improvements to the premium, paid version, few people were making the\nupgrade.\nThings changed, 8 , when an innovative project-marketing manager came aboard,\n9 a growth team and sparked the kind of 10 perspective they needed. By looking at\nengineering issues from a marketing point of view, it became clear that the 11 of\nupgrades wasn’t due to a quality issue. Most customers were simply unaware of the premium\nversion and what it offered.\nArmed with this 12 , the marketing and engineering teams joined forces to raise\nawareness by prominently 13 the premium version to users of the free version. 14 ,\nupgrades skyrocketed, and revenue increased by 92 percent.\nBut in order for your growth team to succeed, it needs to have a strong leader. It needs\nsomeone who can 15 the interdisciplinary team and keep them on course for\nimprovement. This leader will 16 the target area, set clear goals and establish a time\nframe for the 17 of these goals.\nThe growth leader is also 18 for keeping the team focused on moving forward and\nsteering them clear of distractions. 19 attractive, new ideas can be distracting, the team\nleader must recognize when these ideas don’t 20 the current goal and need to be put on\nthe back burner.",
    "小题": [
     {
      "题号": 1,
@@ -430,9 +430,22 @@
      }
     }
    ]
+  },
+  {
+   "部分": "TRANS",
+   "材料": "In the late 18th century, William Wordsworth became famous for his poems about nature. And he was one of the founders of a movement called Romanticism, which celebrated the wonders of the natural world. Poetry is powerful. Its energy and rhythm can capture a reader, transport them to another world and make them see things differently. Through carefully selected words and phrases, poems can be dramatic, funny, beautiful, moving and inspiring. No one knows for sure when poetry began but it has been around for thousands of years, even before people could write. It was a way to tell stories and pass down history. It is closely related to song and even when written it is usually created to be performed out loud. Poems really come to life when they are recited. This can also help with understanding them too, because the rhythm and sounds of the words become clearer.",
+   "小题": [
+    {
+     "题号": 46,
+     "题干": "翻译下面这段文字",
+     "材料": "In the late 18th century, William Wordsworth became famous for his poems about nature. And he was one of the founders of a movement called Romanticism, which celebrated the wonders of the natural world. Poetry is powerful. Its energy and rhythm can capture a reader, transport them to another world and make them see things differently. Through carefully selected words and phrases, poems can be dramatic, funny, beautiful, moving and inspiring. No one knows for sure when poetry began but it has been around for thousands of years, even before people could write. It was a way to tell stories and pass down history. It is closely related to song and even when written it is usually created to be performed out loud. Poems really come to life when they are recited. This can also help with understanding them too, because the rhythm and sounds of the words become clearer.",
+     "题型": "翻译",
+     "分值": 15
+    }
+   ]
   }
  ],
- "题目数": 40,
+ "题目数": 41,
  "年份": "2023",
  "来源": "懒笔记 paper 页（结构化正文）"
 }

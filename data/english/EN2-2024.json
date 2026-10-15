@@ -3,7 +3,7 @@
  "篇目": [
   {
    "部分": "CLOZE",
-   "材料": "or D on the ANSWER SHEET. (10 points)\nYour social life is defined as “the activities you do with other people, for pleasure,\nwhen you are not working.” It’s important to have a social life, but what’s right for one\nperson won’t be right for another. Some of us feel energised by spending lots of time with\nothers, 1 some of us may feel drained, even if it’s doing something we enjoy.\nThis is why finding a 2 in your social life is key. Spending too much time on your\nown, not 3 others, can make you feel lonely and 4 . Loneliness is known to impact\non your mental health and 5 a low mood. Anyone can feel lonely at any time. This might\nbe especially true if, 6 , you are working from home and you are 7 on the usual\nsocial conversations that happen in an office. Other life changes can 8 periods of\nloneliness too, such as retirement, changing jobs or becoming a parent.\nIt’s important to recognise these feelings of loneliness. There are ways to 9 a social\nlife, but it can feel overwhelming 10 . It’s a great idea to start by thinking about hobbies\nyou enjoy. You can then find groups and activities related to those where you will be able to\nmeet 11 people. There are groups aimed at new parents, at those who want to 12 a\nnew sport for the first time, or networking events for those in the same profession to meet up\nand 13 ideas.\nOn the other hand, it’s 14 possible to have too much of a social life. If you feel like\nyou’re always doing something and there is never any 15 in your calendar for downtime,\nyou could suffer social burnout or social 16 . We all have our own social limit and it’s\nimportant to recognise when you’re feeling like it’s all too much. Low mood, low energy,\nirritability and trouble sleeping could all be 17 of poor social health. Make sure\nyou 18 some time in your diary when you’re 19 for socialising and use this time to\nrelax, 20 and recover.",
+   "材料": "Your social life is defined as “the activities you do with other people, for pleasure,\nwhen you are not working.” It’s important to have a social life, but what’s right for one\nperson won’t be right for another. Some of us feel energised by spending lots of time with\nothers, 1 some of us may feel drained, even if it’s doing something we enjoy.\nThis is why finding a 2 in your social life is key. Spending too much time on your\nown, not 3 others, can make you feel lonely and 4 . Loneliness is known to impact\non your mental health and 5 a low mood. Anyone can feel lonely at any time. This might\nbe especially true if, 6 , you are working from home and you are 7 on the usual\nsocial conversations that happen in an office. Other life changes can 8 periods of\nloneliness too, such as retirement, changing jobs or becoming a parent.\nIt’s important to recognise these feelings of loneliness. There are ways to 9 a social\nlife, but it can feel overwhelming 10 . It’s a great idea to start by thinking about hobbies\nyou enjoy. You can then find groups and activities related to those where you will be able to\nmeet 11 people. There are groups aimed at new parents, at those who want to 12 a\nnew sport for the first time, or networking events for those in the same profession to meet up\nand 13 ideas.\nOn the other hand, it’s 14 possible to have too much of a social life. If you feel like\nyou’re always doing something and there is never any 15 in your calendar for downtime,\nyou could suffer social burnout or social 16 . We all have our own social limit and it’s\nimportant to recognise when you’re feeling like it’s all too much. Low mood, low energy,\nirritability and trouble sleeping could all be 17 of poor social health. Make sure\nyou 18 some time in your diary when you’re 19 for socialising and use this time to\nrelax, 20 and recover.",
    "小题": [
     {
      "题号": 1,
@@ -430,9 +430,35 @@
      }
     }
    ]
+  },
+  {
+   "部分": "TRANS",
+   "材料": "With the smell of coffee and fresh bread floating in the air, stalls bursting with colourful vegetables and tempting cheeses, and the buzz of friendly chats, farmers’ markets are a feast for the senses. They also provide an opportunity to talk to the people responsible for growing or raising your food, support your local economy and pick up fresh seasonal produce — all at the same time. Farmers’ markets are usually weekly or monthly events, most often with outdoor stalls, which allow farmers or producers to sell their food directly to customers. The size or regularity of markets can vary from season to season, depending on the area’s agricultural calendar, and you’re likely to find different produce on sale at different times of the year. By cutting out the middleman, the farmers secure more profit for their produce. Shoppers also benefit from seeing exactly where — and to who — their money is going.",
+   "小题": [
+    {
+     "题号": 46,
+     "题干": "翻译下面这段文字",
+     "材料": "With the smell of coffee and fresh bread floating in the air, stalls bursting with colourful vegetables and tempting cheeses, and the buzz of friendly chats, farmers’ markets are a feast for the senses. They also provide an opportunity to talk to the people responsible for growing or raising your food, support your local economy and pick up fresh seasonal produce — all at the same time. Farmers’ markets are usually weekly or monthly events, most often with outdoor stalls, which allow farmers or producers to sell their food directly to customers. The size or regularity of markets can vary from season to season, depending on the area’s agricultural calendar, and you’re likely to find different produce on sale at different times of the year. By cutting out the middleman, the farmers secure more profit for their produce. Shoppers also benefit from seeing exactly where — and to who — their money is going.",
+     "题型": "翻译",
+     "分值": 15
+    }
+   ]
+  },
+  {
+   "部分": "WRITE",
+   "材料": "Write an essay based on the chart below. In your writing, you should 1) describe and interpret the chart, and 2) give your comments. Write your answer in about 150 words on the ANSWER SHEET. (15 points) 某高校劳动实践课学生主要收获调查 54.40% 32.60% 91.30% 84.80% 0% 20% 40% 60% 80% 100% 感觉到心情舒畅 提升了合作能力 学习了相关知识 提升了动手能力",
+   "小题": [
+    {
+     "题号": 48,
+     "题干": "写作要求",
+     "材料": "Write an essay based on the chart below. In your writing, you should 1) describe and interpret the chart, and 2) give your comments. Write your answer in about 150 words on the ANSWER SHEET. (15 points) 某高校劳动实践课学生主要收获调查 54.40% 32.60% 91.30% 84.80% 0% 20% 40% 60% 80% 100% 感觉到心情舒畅 提升了合作能力 学习了相关知识 提升了动手能力",
+     "题型": "写作",
+     "分值": 10
+    }
+   ]
   }
  ],
- "题目数": 40,
+ "题目数": 42,
  "年份": "2024",
  "来源": "懒笔记 paper 页（结构化正文）"
 }

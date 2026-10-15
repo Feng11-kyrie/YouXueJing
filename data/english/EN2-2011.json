@@ -3,7 +3,7 @@
  "篇目": [
   {
    "部分": "CLOZE",
-   "材料": "B, C or D on ANSWER SHEET 1. (10 points)\nThe Internet affords anonymity to its users, a blessing to privacy and freedom\nof speech. But that very anonymity is also behind the explosion of cyber-crime\nthat has 1 across the Web.\nCan privacy be preserved 2 bringing safety and security to a world that\nseems increasingly 3 ?\nLast month, Howard Schmidt, the nation's cyber-czar, offered the federal\ngovernment a 4 to make the Web a safer place - a \"voluntary trusted\nidentity\" s ystem that would be the high-tech 5 of a physical key, a\nfingerprint and a photo ID card, all rolled 6 one. The system might use a\nsmart identity card, or a digital credential 7 to a specific computer, and\nwould authenticate users at a range of online services.\nThe idea is to 8 a federation of private online identity systems. Users\ncould 9 which system to join, and only registered users whose identities have been\nauthenticated could navigate those systems. The approach contrasts with one that\nwould require an Internet driver's license 10 by the government.\nGoogle and Microsoft are among companies that already have these \"single sign­\non\" systems that make it possible for users to 11 just once but use many\ndifferent services.\n12 , the approach would create a \"walled garden\" in cyberspace, with\nsafe \"neighborhoods\" and bright \"streetlights\" to establish a sense of a 13\ncommunity.\nMr. Schmidt described it as a \"voluntary ecosystem\" in which \"individuals\nand orgamzat10ns can complete onlme transact10ns with 14 , trustmg the\nidentities of each other and the identities of the infrastructure 15 which the\ntransaction runs.\"\nStill, th e adm1mstratlon's plan has 16 pnvacy rights activists. Some\napplaud the approach; others are concerned. It seems clear that such a scheme is an\ninitiative push toward what would 17 be a compulsory Internet \"driver's\nlicense\" mentality.\nThe plan has also been greeted with 18 by some computer security\nexperts, who worry that the \"voluntary ecosystem\" envisioned by Mr. Schmidt\nwould still leave much of the Internet 19 . They argue that all Internet users\nshould be 20 to register and identify themselves, in the same way that\ndrivers must be licensed to drive on public roads.\n- 1 -",
+   "材料": "The Internet affords anonymity to its users, a blessing to privacy and freedom\nof speech. But that very anonymity is also behind the explosion of cyber-crime\nthat has 1 across the Web.\nCan privacy be preserved 2 bringing safety and security to a world that\nseems increasingly 3 ?\nLast month, Howard Schmidt, the nation's cyber-czar, offered the federal\ngovernment a 4 to make the Web a safer place - a \"voluntary trusted\nidentity\" s ystem that would be the high-tech 5 of a physical key, a\nfingerprint and a photo ID card, all rolled 6 one. The system might use a\nsmart identity card, or a digital credential 7 to a specific computer, and\nwould authenticate users at a range of online services.\nThe idea is to 8 a federation of private online identity systems. Users\ncould 9 which system to join, and only registered users whose identities have been\nauthenticated could navigate those systems. The approach contrasts with one that\nwould require an Internet driver's license 10 by the government.\nGoogle and Microsoft are among companies that already have these \"single sign­\non\" systems that make it possible for users to 11 just once but use many\ndifferent services.\n12 , the approach would create a \"walled garden\" in cyberspace, with\nsafe \"neighborhoods\" and bright \"streetlights\" to establish a sense of a 13\ncommunity.\nMr. Schmidt described it as a \"voluntary ecosystem\" in which \"individuals\nand orgamzat10ns can complete onlme transact10ns with 14 , trustmg the\nidentities of each other and the identities of the infrastructure 15 which the\ntransaction runs.\"\nStill, th e adm1mstratlon's plan has 16 pnvacy rights activists. Some\napplaud the approach; others are concerned. It seems clear that such a scheme is an\ninitiative push toward what would 17 be a compulsory Internet \"driver's\nlicense\" mentality.\nThe plan has also been greeted with 18 by some computer security\nexperts, who worry that the \"voluntary ecosystem\" envisioned by Mr. Schmidt\nwould still leave much of the Internet 19 . They argue that all Internet users\nshould be 20 to register and identify themselves, in the same way that\ndrivers must be licensed to drive on public roads.\n- 1 -",
    "小题": [
     {
      "题号": 1,
@@ -430,9 +430,22 @@
      }
     }
    ]
+  },
+  {
+   "部分": "WRITE",
+   "材料": "Write an essay based on the following chart. In your writing, you should 1) interpret the chart and 2) give your comments. You should write at least 150 words. Write your essay on ANSWER SHEET 2. (15 points) 40% 35% 30% 25% 20% 15% 10% 5% 0% 2008年 口国产品牌 2009年 • 日系品牌 口美系品牌 2008、 2009年国内轿车市场部分品牌市场份额示意图 - 14 -",
+   "小题": [
+    {
+     "题号": 48,
+     "题干": "写作要求",
+     "材料": "Write an essay based on the following chart. In your writing, you should 1) interpret the chart and 2) give your comments. You should write at least 150 words. Write your essay on ANSWER SHEET 2. (15 points) 40% 35% 30% 25% 20% 15% 10% 5% 0% 2008年 口国产品牌 2009年 • 日系品牌 口美系品牌 2008、 2009年国内轿车市场部分品牌市场份额示意图 - 14 -",
+     "题型": "写作",
+     "分值": 10
+    }
+   ]
   }
  ],
- "题目数": 40,
+ "题目数": 41,
  "年份": "2011",
  "来源": "懒笔记 paper 页（结构化正文）"
 }

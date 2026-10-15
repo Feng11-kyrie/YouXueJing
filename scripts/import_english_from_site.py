@@ -106,6 +106,120 @@ def parse_choice_questions(t, lo, hi):
     return out
 
 
+def _subjective_from_pdf(tier, year):
+    """
+    从 PDF 取**主观题**（翻译 / 写作）。
+
+    **不能按 Section/Part 名称硬匹配** —— 实测两卷的编号与分节都不同：
+
+        英语一 2024：翻译 46–50（`(46)` 标记待译句）、写作 51/52
+        英语二 2021：写作是 **47/48**（不是 51/52），
+                      且分节标记里出现过两个 `Part B`
+
+    所以改用**通用的 `Directions` 锚点**：PDF 里每道主观题都以
+    `NN. Directions:` 或 `NN. Directions :` 开头（NN 是题号），
+    取到下一个 Directions 或段末为止，就是要写的内容。
+
+    翻译单独处理：它的待译句以 `(46)` … `(50)` 标在篇章里。
+    """
+    import glob
+    sub = "英语一" if tier == "EN1" else "英语二"
+    srcdir = os.environ.get("KYZHENTI", "/tmp/kyzhenti/公共课/英语真题")
+    cands = [c for c in glob.glob(f'{srcdir}/{sub}/*{year}*真题.pdf')
+             if '带书签' not in c and '无解析' not in c]
+    if not cands:
+        return []
+    from scripts.parse_english import norm_lines
+    try:
+        lines = norm_lines(cands[0])
+    except Exception:                                       # noqa: BLE001
+        return []
+
+    out = []
+    # ---- 翻译：篇章里的 (46)…(50)（英语二只有 (46)）----
+    joined = " ".join(lines)
+    lo, hi = (46, 50) if tier == "EN1" else (46, 46)
+    hits = [m for m in re.finditer(r'\((4[6-9]|50)\)', joined)
+            if lo <= int(m.group(1)) <= hi]
+    if not hits and tier == "EN2":
+        # 英语二的翻译**不用 (46) 标记**，而是给一整段要求译成中文。
+        # 从 `NN. Directions:` 锚点取正文即可（实测 2021：`46. Directions:
+        # Translate the following text into Chinese...` + 后面整段英文）。
+        for i, l in enumerate(lines):
+            m = re.match(r'^\s*(\d{1,2})\s*[.、]\s*Directions?\s*[:：]?', l)
+            if not m:
+                continue
+            seg = " ".join(lines[i + 1:i + 4]).lower()
+            if "translate the following" in seg:
+                body = " ".join(lines[i + 1:])
+                body = re.sub(r'^.*?points\)\s*', '', " ".join(body.split()),
+                              count=1)
+                body = re.sub(r'\s*Section\s+[A-Z].*$', '', body)
+                out.append({"题号": int(m.group(1)), "题干": "翻译下面这段文字",
+                            "材料": body[:1600], "题型": "翻译", "分值": 15})
+                break
+    if hits:
+        # 篇章正文 = 第一个标记之前的一段（去掉 Directions）
+        head = joined[:hits[0].start()]
+        head = re.sub(r'.*?Directions\s*:?', '', head, count=1, flags=re.S)
+        head = " ".join(head.split())[-1400:]
+        for i, m in enumerate(hits):
+            n = int(m.group(1))
+            end = hits[i + 1].start() if i + 1 < len(hits) else len(joined)
+            sent = " ".join(joined[m.end():end].split())
+            # 截到句子结束（PDF 断行会把下一句粘上来）
+            sent = re.split(r'(?<=[.?!])\s+(?=[A-Z“"(])', sent)[0].strip()
+            if len(sent) < 25:
+                sent = " ".join(joined[m.start():m.start() + 340].split())
+            out.append({"题号": n, "题干": sent, "材料": head,
+                        "题型": "翻译", "分值": 10 if tier == "EN1" else 15})
+
+    # ---- 写作：所有 "NN. Directions" 锚点 ----
+    anchors = []
+    for i, l in enumerate(lines):
+        m = re.match(r'^\s*(\d{1,2})\s*[.、]\s*Directions?\s*[:：]?', l)
+        if m:
+            anchors.append((i, int(m.group(1))))
+    for k, (i, n) in enumerate(anchors):
+        end = anchors[k + 1][0] if k + 1 < len(anchors) else len(lines)
+        body = " ".join(lines[i + 1:end])
+        body = " ".join(body.split())
+        # 去掉下一题的开头（如 "Section III"）
+        body = re.sub(r'\s*Section\s*[IVX]+.*$', '', body)
+        if len(body) < 25:
+            continue
+        # **必须按关键词区分翻译与写作** —— 实测英语二的翻译篇也以
+        # `46. Directions:` 开头，只看锚点会把它误判成写作（出现过 46/47/48
+        # 全被标成"写作"）。翻译的指令里一定有 translate/译，
+        # 写作的一定有 write/essay/letter。
+        low = body.lower()
+        # 判据要精确：英语二的翻译指令是
+        #   `Translate the following text into Chinese. **Write** your
+        #    translation on the ANSWER SHEET.`
+        # —— 里面就有 "write"，所以不能用 "write" 判写作（我第一版这么写，
+        # 结果英语二的翻译被判成了写作，46/47/48 全标错）。
+        is_trans = "translate the following" in low
+        is_write = bool(re.search(r'write\s+(an?\s+)?(essay|letter|email|note)',
+                                  low))
+        if is_trans and not is_write:
+            continue          # 已在翻译分支处理
+        if not is_write:
+            continue          # 既不是翻译也不是写作，跳过
+        out.append({"题号": n, "题干": "写作要求",
+                    "材料": body[:1800], "题型": "写作",
+                    "分值": 10 if "essay based on the chart" in body.lower()
+                            or "write an essay" in body.lower() else 10})
+
+    # 按题号排序并去重
+    seen, dedup = set(), []
+    for it in sorted(out, key=lambda x: x["题号"]):
+        if it["题号"] in seen:
+            continue
+        seen.add(it["题号"])
+        dedup.append(it)
+    return dedup
+
+
 def _stem_for(lines, num):
     """
     取某题的**题干**：题号独立成行，下一行就是题干
@@ -197,7 +311,7 @@ def parse_paper(t, tier, year=None):
     cz = parse_choice_questions(t, 1, 20)
     rd = parse_choice_questions(t, 21, 40)
     if len(cz) != 20 or len(rd) != 20:
-        return None, f"完形 {len(cz)}/20 阅读 {len(rd)}/20"
+        return None, f"完形 {len(cz)}/20 阅读 {len(rd)}/20"  # 只校验客观题
     rec = {"tier": tier, "篇目": []}
     # 完形：一篇文章 + 20 空。
     # 【文章从 PDF 取，不从本页取】实测本页的正文里**空的位置只剩数字**、
@@ -223,8 +337,15 @@ def parse_paper(t, tier, year=None):
             "材料": _article_for(lines, f"Text {k // 5 + 1}", first),
             "小题": [{"题号": n, "题干": _stem_for(lines, n),
                       "选项": rd[n]} for n in chunk]})
+    # 主观题（翻译/写作）：从 PDF 取篇章与要求
+    subs_list = _subjective_from_pdf(tier, year)
+    for it in subs_list:
+        rec["篇目"].append({
+            "部分": "TRANS" if it["题型"] == "翻译" else "WRITE",
+            "材料": it["材料"], "小题": [it]})
     rec["题目数"] = sum(len(p["小题"]) for p in rec["篇目"])
-    return rec, f"完整 {rec['题目数']} 题"
+    extra = f' + 主观 {len(subs_list)} 题' if subs_list else ''
+    return rec, f"完整 {rec['题目数']} 题{extra}"
 
 
 def _clean(obj):

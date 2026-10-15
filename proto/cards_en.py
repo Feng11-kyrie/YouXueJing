@@ -371,3 +371,112 @@ def cloze_card(passage, year, tier, done, user):
         render_opts()
         ui.label("提示：点空 → 下面选答案（选完立即判分）。已作答的空会显示字母。") \
             .classes("t-xs muted")
+
+
+# ---------------------------------------------------------------------------
+# 主观题：翻译 / 写作 —— 接 AI 评阅
+# ---------------------------------------------------------------------------
+# 用户问"翻译和写作可以ai评分吗" → 实测可以，但**分清层次**：
+#   ✅ 可靠：指出具体语言错误（客观、可核验）
+#   ⚠️ 中等：给档次（与人工阅卷同档的概率较高）
+#   ❌ 不可靠：精确分数（考研是人工分档给分）
+# 所以界面**只给档次 + 问题清单**，并明确标注"AI 评阅（参考，非官方得分）"，
+# 同时把**官方评分标准**一并露出 —— 光给分数是暗箱。
+from yj import ai_grade as aig
+
+
+def subjective_block(q, year, tier, done, user):
+    """
+    一道主观题（翻译 46–50 / 写作 51–52）。
+    """
+    code = q.get("部分") or ("TRANS" if q.get("题型") == "翻译" else "WRITE")
+    task = "TRANSLATION" if code == "TRANS" else "WRITING"
+    rb = aig.rubric_for(task, tier)
+    qid = q["id"]
+    ref = (en.explanation(tier, year, q.get("题号")) or {})
+
+    with ui.card().classes("softcard w-full p-3 gap-2 shadow-none"):
+        with ui.row().classes("items-center gap-2"):
+            ui.label(f'第 {q["题号"]} 题 · {q.get("题型")}').classes("font-semibold")
+            ui.label(f'{q.get("分值", 10)} 分').classes("text-xs text-gray-500")
+            ui.label("主观题 · 不自动判分").classes("text-xs") \
+                .style("color:#B45309")
+
+        # 题目要求 / 篇章
+        if q.get("材料"):
+            with ui.expansion("材料 / 题目", value=True).classes("w-full"):
+                ui.label(q["材料"]).classes(
+                    "text-[15px] leading-7 whitespace-pre-wrap") \
+                    .style("font-family:Georgia,'Times New Roman',serif")
+        if q.get("题干"):
+            ui.label(q["题干"]).classes("text-[15px] leading-6 whitespace-pre-wrap")
+
+        ans = ui.textarea(
+            label=("你的译文" if task == "TRANSLATION" else "你的作文")).props(
+            "outlined autogrow").classes("w-full")
+        ans.style("font-size:15px")
+
+        out_box = ui.column().classes("w-full gap-1")
+        with ui.row().classes("items-center gap-2"):
+            btn = ui.button("提交并请 AI 评阅", on_click=lambda: run())
+
+        def show_rubric():
+            """官方评分标准 —— 必须露出，学生才知道真实尺度。"""
+            with ui.expansion("官方评分标准", value=False).classes("w-full"):
+                ui.label(rb["名称"]).classes("t-sm font-semibold")
+                for name, score, desc in rb["档次"]:
+                    ui.label(f'{name}（{score} 分）：{desc}').classes("t-sm")
+
+        def run():
+            text = (ans.value or "").strip()
+            if len(text) < 15:
+                ui.notify("作答太短 —— 至少写一两句再提交。", color="warning")
+                return
+            out_box.clear()
+            with out_box:
+                ui.label("AI 评阅中…（约 10–20 秒）").classes("t-sm muted")
+            btn.set_enabled(False)
+            ui.timer(0.1, lambda: _do(text), once=True)
+
+        def _do(text):
+            try:
+                r = aig.grade(task, tier, q.get("题干") or "", text,
+                              reference=(ref.get("_参考译文") or ""))
+            except Exception as e:                          # noqa: BLE001
+                r = {"error": f"{type(e).__name__}: {str(e)[:80]}"}
+            out_box.clear()
+            with out_box:
+                if r.get("error"):
+                    ui.label(f'评阅失败：{r["error"]}').classes("t-sm") \
+                        .style("color:#8C2C2C")
+                else:
+                    # 【红线】明确标注这是参考、不是官方得分
+                    ui.label(f'AI 评阅（{r.get("来源", "参考，非官方得分")}）') \
+                        .classes("t-sm font-semibold mt-1") \
+                        .style("color:#B45309")
+                    with ui.row().classes("items-center gap-3"):
+                        ui.label(f'档次：{r.get("档次") or "—"}').classes("t-body font-semibold")
+                        if r.get("位置"):
+                            ui.label(r["位置"]).classes("t-sm muted")
+                    if r.get("问题"):
+                        ui.label("主要问题").classes("t-sm font-semibold mt-1")
+                        for i, p in enumerate(r["问题"], 1):
+                            ui.label(f'{i}. {p}').classes(
+                                "t-sm whitespace-pre-wrap").style("line-height:1.8")
+                    if r.get("建议"):
+                        ui.label(f'建议：{r["建议"]}').classes("t-sm mt-1") \
+                            .style("color:#17418F")
+                # 参考译文/范文：有就展示（学生要对照）
+                if ref.get("_参考译文"):
+                    with ui.expansion("参考译文（机构整理，仅供参考）") \
+                            .classes("w-full mt-1"):
+                        ui.label(ref["_参考译文"]).classes(
+                            "t-sm whitespace-pre-wrap").style("line-height:1.9")
+                show_rubric()
+            btn.set_enabled(True)
+
+        show_rubric()
+        # 注意：ui.label **不解析 Markdown**（写 **粗体** 会原样显示星号）
+        ui.label("说明：AI 评阅用于自查，不是官方得分 —— "
+                 "考研翻译/写作是人工分档给分，同一篇不同阅卷人也可能差一档。") \
+            .classes("t-xs muted")

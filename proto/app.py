@@ -37,7 +37,8 @@ from nicegui import ui                            # noqa: E402
 from yj import data, diagnose, profile as profile_mod, path as path_mod  # noqa: E402
 from yj import llm, graph, zhengzhi as zz           # noqa: E402
 from yj import english as en                          # noqa: E402
-from proto.cards_en import passage_card, cloze_card    # noqa: E402
+from proto.cards_en import (passage_card, cloze_card,   # noqa: E402
+                            subjective_block)
 from proto import store_lite as store              # noqa: E402
 from proto.cards import (question_card, SUBJECT_COLORS,   # noqa: E402
                          ZZ_PART_COLORS)
@@ -1010,8 +1011,18 @@ def exam_english(tier: str = "EN1", year: str = None, view: str = "全部",
             ui.label(f"筛选「{view}」下没有题目。").classes("t-sm muted")
             return
         for ps in shown:
-            if ps.get("部分") == "CLOZE":
+            code = ps.get("部分")
+            if code == "CLOZE":
                 cloze_card(ps, year, tier, done, user)
+            elif code in ("TRANS", "WRITE"):
+                # 主观题：不自动判分，走 AI 评阅（cards_en.subjective_block）
+                with ui.card().classes("softcard w-full p-2 gap-1 shadow-none"):
+                    with ui.row().classes("items-center gap-2"):
+                        ui.label(ps.get("部分全称") or ps.get("部分名") or code) \
+                            .classes("t-lead font-bold")
+                        ui.label("主观题").classes("t-xs muted")
+                for q in ps.get("小题", []):
+                    subjective_block(q, year, tier, done, user)
             else:
                 passage_card(ps, year, tier, done, user)
 
