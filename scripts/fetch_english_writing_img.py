@@ -64,15 +64,21 @@ def main():
                     sec = WRITE_SEC.get((tier, idx))
                     if not sec:
                         continue
-                    try:
-                        pg.goto(f"{SITE}/{year}-{slug}/{sec}/",
-                                wait_until="domcontentloaded", timeout=30000)
-                        pg.wait_for_timeout(1800)
-                        urls = pg.evaluate("""() => [...document.querySelectorAll('img')]
-                            .map(i=>i.getAttribute('src'))
-                            .filter(s=>s && !s.includes('favicon'))""")
-                    except Exception:                   # noqa: BLE001
-                        urls = []
+                    # 【要重试】实测连续快速请求会被限流，页面拿不到图片元素
+                    # （表现为 "0/2 张图"），隔久一点重试就正常。
+                    urls = []
+                    for attempt in range(3):
+                        try:
+                            pg.goto(f"{SITE}/{year}-{slug}/{sec}/",
+                                    wait_until="domcontentloaded", timeout=30000)
+                            pg.wait_for_timeout(2200 + attempt * 1500)
+                            urls = pg.evaluate("""() => [...document.querySelectorAll('img')]
+                                .map(i=>i.getAttribute('src'))
+                                .filter(s=>s && !s.includes('favicon'))""")
+                            if urls:
+                                break
+                        except Exception:               # noqa: BLE001
+                            pass
                     if not urls:
                         continue
                     src = urls[0]
@@ -88,7 +94,7 @@ def main():
                             got[qn] = f"img/{fn}"
                     except Exception:                   # noqa: BLE001
                         pass
-                    time.sleep(0.5)
+                    time.sleep(1.2)
                 print(f"  {en.TIERS[tier]['简称']} {year}: "
                       f"{len(got)}/{len(qnums)} 张图 " +
                       ", ".join(f"{k}→{v.split('/')[-1]}" for k, v in got.items()))
@@ -104,7 +110,7 @@ def main():
                     with open(tmp, "w", encoding="utf-8") as f:
                         json.dump(rec, f, ensure_ascii=False, indent=1)
                     os.replace(tmp, p)
-                time.sleep(0.6)
+                time.sleep(1.5)
         b.close()
     print("完成")
 

@@ -13,7 +13,14 @@
       "B": "appointed",
       "C": "commented",
       "D": "designated"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": true,
+     "id": "EN2-2010-1",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 2,
@@ -23,7 +30,14 @@
       "B": "activated",
       "C": "followed",
       "D": "prompted"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2010-2",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 3,
@@ -33,7 +47,14 @@
       "B": "numbers",
       "C": "amounts",
       "D": "sums"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2010-3",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 4,
@@ -43,7 +64,14 @@
       "B": "normal",
       "C": "unusual",
       "D": "extreme"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2010-4",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 5,
@@ -53,7 +81,14 @@
       "B": "in",
       "C": "from",
       "D": "by"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2010-5",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 6,
@@ -63,7 +98,14 @@
       "B": "absence",
       "C": "presence",
       "D": "favor"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2010-6",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 7,
@@ -73,7 +115,14 @@
       "B": "phenomenon",
       "C": "concept",
       "D": "notice"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2010-7",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 8,
@@ -83,7 +132,14 @@
       "B": "for",
       "C": "among",
       "D": "to"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2010-8",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 9,
@@ -93,7 +149,14 @@
       "B": "crop up",
       "C": "fill up",
       "D": "cover up"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2010-9",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 10,
@@ -103,7 +166,14 @@
       "B": "if",
       "C": "unless",
       "D": "until"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2010-10",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 11,
@@ -113,7 +183,14 @@
       "B": "enormous",
       "C": "significant",
       "D": "magnificent"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2010-11",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 12,
@@ -123,7 +200,14 @@
       "B": "examples",
       "C": "patterns",
       "D": "samples"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2010-12",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 13,
@@ -133,7 +217,14 @@
       "B": "immersed",
       "C": "injected",
       "D": "infected"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2010-13",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 14,
@@ -143,7 +234,14 @@
       "B": "relayed",
       "C": "relieved",
       "D": "remained"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2010-14",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 15,
@@ -153,7 +251,14 @@
       "B": "delivering",
       "C": "taking",
       "D": "giving"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2010-15",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 16,
@@ -163,7 +268,14 @@
       "B": "available",
       "C": "reliable",
       "D": "applicable"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2010-16",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 17,
@@ -173,7 +285,14 @@
       "B": "principal",
       "C": "innovative",
       "D": "initial"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2010-17",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 18,
@@ -183,7 +302,14 @@
       "B": "restricted",
       "C": "recommended",
       "D": "introduced"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2010-18",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 19,
@@ -193,7 +319,14 @@
       "B": "issues",
       "C": "agonies",
       "D": "sufferings"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2010-19",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 20,
@@ -203,9 +336,18 @@
       "B": "caring for",
       "C": "concerned with",
       "D": "warding off"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": true,
+     "id": "EN2-2010-20",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "完形",
+   "部分全称": "完形填空 Use of English"
   },
   {
    "部分": "READ",
@@ -219,7 +361,14 @@
       "B": "the auctioneer finally got the two pieces at the highest bids",
       "C": "Beautiful Inside My Head Forever won over all masterpieces",
       "D": "it was successfully made just before the world financial crisis"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": true,
+     "id": "EN2-2010-21",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 22,
@@ -229,7 +378,14 @@
       "B": "people stopped every kind of spending and stayed away from galleries",
       "C": "art collection as a fashion had lost its appeal to a great extent",
       "D": "works of art in general had gone out of fashion so they were not worth buying"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2010-22",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 23,
@@ -239,7 +395,14 @@
       "B": "The art market surpassed many other industries in momentum.",
       "C": "The art market generally went downward in various ways.",
       "D": "Some art dealers were awaiting better chances to come."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2010-23",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 24,
@@ -249,7 +412,14 @@
       "B": "contemporary trends",
       "C": "factors promoting artwork circulation",
       "D": "styles representing Impressionists"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2010-24",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 25,
@@ -259,9 +429,18 @@
       "B": "Up-to-date Art Auctions",
       "C": "Art Market in Decline",
       "D": "Shifted Interest in Arts"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2010-25",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "阅读",
+   "部分全称": "阅读理解 Part A"
   },
   {
    "部分": "READ",
@@ -275,7 +454,14 @@
       "B": "Trusting them.",
       "C": "Supporting their careers.",
       "D": "Sharing housework."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2010-26",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 27,
@@ -285,7 +471,14 @@
       "B": "exerting influence",
       "C": "causing damage",
       "D": "creating pressure"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2010-27",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 28,
@@ -295,7 +488,14 @@
       "B": "nearly 50 percent of recent divorces are caused by failed conversation",
       "C": "women attach much importance to communication between couples",
       "D": "a female tends to be more talkative at home than her spouse"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2010-28",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 29,
@@ -305,7 +505,14 @@
       "B": "Marriage break-up stems from sex inequalities.",
       "C": "Husband and wife have different expectations from their marriage.",
       "D": "Conversational patterns between man and wife are different."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2010-29",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 30,
@@ -315,9 +522,18 @@
       "B": "a detailed description of the stereotypical cartoon",
       "C": "other possible reasons for a high divorce rate in the U.S.",
       "D": "a brief introduction to the political scientist Andrew Hacker"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2010-30",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "阅读",
+   "部分全称": "阅读理解 Part A"
   },
   {
    "部分": "READ",
@@ -331,7 +547,14 @@
       "B": "should be changed gradually",
       "C": "are deeply rooted in history",
       "D": "are basically private concerns"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2010-31",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 32,
@@ -341,7 +564,14 @@
       "B": "show the urgent need of daily necessities",
       "C": "indicate their effect on people's buying power",
       "D": "manifest the significant role of good habits"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2010-32",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 33,
@@ -351,7 +581,14 @@
       "B": "Crest.",
       "C": "Colgate.",
       "D": "Unilever."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2010-33",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 34,
@@ -361,7 +598,14 @@
       "B": "automatic behavior creation",
       "C": "commercial promotions",
       "D": "scientific experiments"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2010-34",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 35,
@@ -371,9 +615,18 @@
       "B": "negative",
       "C": "positive",
       "D": "biased"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2010-35",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "阅读",
+   "部分全称": "阅读理解 Part A"
   },
   {
    "部分": "READ",
@@ -387,7 +640,14 @@
       "B": "defendants are immune from trial by their peers",
       "C": "no age limit should be imposed for jury service",
       "D": "judgment should consider the opinion of the public"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2010-36",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 37,
@@ -397,7 +657,14 @@
       "B": "the prevalent discrimination against certain races",
       "C": "the conflicting ideals in jury selection procedures",
       "D": "the arrogance common among the Supreme Court judges"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2010-37",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 38,
@@ -407,7 +674,14 @@
       "B": "they fell far short of the required qualifications",
       "C": "they were supposed to perform domestic duties",
       "D": "they tended to evade public engagement"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2010-38",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 39,
@@ -417,7 +691,14 @@
       "B": "educational requirements became less rigid in the selection of federal jurors",
       "C": "jurors at the state level ought to be representative of the entire community",
       "D": "states ought to conform to the federal court in reforming the jury system"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2010-39",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     },
     {
      "题号": 40,
@@ -427,9 +708,102 @@
       "B": "its characteristics and tradition",
       "C": "its problems and their solutions",
       "D": "its tradition and development"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": true,
+     "id": "EN2-2010-40",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "阅读",
+   "部分全称": "阅读理解 Part A"
+  },
+  {
+   "部分": "NEW",
+   "材料": "Read the following text and decide whether each of the statements is true or false. Choose T if the statement is true or F if the statement is not true. Mark your answers on ANSWER SHEET 1. (10 points) Copying Birds May Save Aircraft Fuel Both Boeing and Airbus have trumpeted the efficiency of their newest aircraft, the 787 and A350 respectively. Their clever designs and lightweight composites certainly make a difference. But a group of researchers at Stanford University, led by Ilan Kroo, has suggested that airlines could take a more naturalistic approach to cutting jet-fuel use and it would not require them to buy new aircraft. The answer, says Dr. Kroo, lies with birds. Since 1914, scientists have known that birds flying in formation – a V-shape – expend less energy. The air flowing over a bird's wings curls upwards behind the wingtips, a phenomenon known as upwash. Other birds flying in the upwash experience reduced drag, and spend less energy propelling themselves. Peter Lissaman, an aeronautics expert who was formerly at Caltech and the University of Southern California, has suggested that a formation of 25 birds might enjoy a range increase of 71%. When applied to aircraft, the principles are not substantially different. Dr. Kroo and his team modeled what would happen if three passenger jets departing from Los Angeles, San Francisco and Las Vegas were to assemble over Utah, assume an inverted V-formation, occasionally change places so all could have a turn in the most favourable positions, and proceed to London. They found that the aircraft consumed as much as 15% less fuel (coupled with a reduction in carbon-dioxide output). Nitrogen-oxide emissions during the cruising portions of the flight fell by around a quarter. There are, of course, knots to be worked out. One consideration is safety, or at least the perception of it. Would passengers feel comfortable travelling in company? Dr. Kroo points out that the aircraft could be separated by several nautical miles, and would not be in the intimate groupings favoured by display teams like the Red Arrows. A passenger peering out of the window might not even see the other planes. Whether the separation distances involved would satisfy air-traffic-control regulations is another matter, although a working group at the International Civil Aviation Organisation has included the possibility of formation flying in a blueprint for new operational guidelines. It remains to be seen how weather conditions affect the air flows that make formation flight more efficient. In zones of increased turbulence, the planes' wakes will decay more quickly and the effect will diminish. Dr. Kroo says this is one of the areas his team will investigate further. It might also be hard for airlines to co-ordinate the departure times and destinations of passenger aircraft in a way that would allow them to gain from formation flight. Cargo aircraft, in contrast, might be easier to reschedule, as might routine military flights. As it happens, America's armed forces are on the case already. Earlier this year the country's Defence Advanced Research Projects Agency announced plans to pay Boeing to investigate formation flight, though the programme has yet to begin. There are reports that some military aircraft flew in formation when they were low on fuel during the Second World War, but Dr. Lissaman says they are unsubstantiated. \"My father was an RAF pilot and my cousin the skipper of a Lancaster lost over Berlin,\" he adds. So he should know. 41. Findings of the Stanford University researchers will promote the sales of new Boeing and Airbus aircraft. [ T ] True [ F ] False 42. The upwash experience may save propelling energy as well as reducing resistance. [ T ] True [ F ] False 43. Formation flight is more comfortable because passengers can not see the other planes. [ T ] True [ F ] False 44. The role that weather plays in formation flight has not yet been clearly defined. [ T ] True [ F ] False 45. It has been documented that during World War Ⅱ, America's armed forces once tried formation flight to save fuel. [ T ] True [ F ] False Section III Translation 考研英语二2010年真题 46. Translate the following text into Chinese. Write your translation on the ANSWER SHEET. (15 points) \"Sustainability\" has become a popular word these days, but to Ted Ning, the concept will always have personal meaning. Having endured a painful period of unsustainability in his own life made it clear to him that sustainability-oriented values must be expressed through everyday action and choice. Ning recalls spending a confusing year in the late 1990s selling insurance. He'd been through the dot-com boom and burst and, desperate for a job, signed on with a Boulder agency. It didn't go well. \"It was a really bad move because that's not my passion,\" says Ning, whose dilemma about the job translated, predictably, into a lack of sales. \"I was miserable. I had so much anxiety that I would wake up in the middle of the night and stare at the ceiling. I had no money and needed the job. Everyone said, 'Just wait, you'll turn the corner, give it some time.'\" Section IV Writing 考研英语二2010年真题 Part A 47. You have just come back from the U.S. as a member of a Sino-American cultural exchange program. Write a letter to your American colleague to 1) express your thanks for his/her warm reception; 2) welcome him/her to visit China in due course. You should write about 100 words on ANSWER SHEET 2. Do not sign your own name at the end of the letter. Use “Zhang Wei” instead. Do not write your address.(10 points) 48. In this section, you are asked to write an essay based on the following chart. In your writing, you should 1) interpret the chart and 2) give your comments. You should write at least 150 words. Write your essay on ANSWER SHEET 2. (15 points) 全卷客观题答案速查 考研英语二2010年真题全卷客观题参考答案速查如下表，按卷面顺序逐题型列出；写作、翻译等主观题无标准答案，参考范文与逐题解析见对应题型解析页。 考研英语二 2010年 真题（整卷） 客观题参考答案速查表 题型（卷面位置）\t参考答案 完形填空（四选一） Section I （1–20 题）\t1 D designated · 2 C followed · 3 B numbers · 4 A moderate · 5 A with · 6 B absence · 7 D notice · 8 C among · 9 B crop up · 10 A as · 11 C significant · 12 D samples · 13 D infected · 14 A released · 15 C taking · 16 B available · 17 D initial · 18 C recommended · 19 A problems · 20 B caring for （逐题解析见 完形填空（四选一）解析页 ） 阅读理解（四选一） Section II Part A (1) （21–25 题）\t21 D · 22 A · 23 B · 24 C · 25 C （逐题解析见 阅读理解（四选一）解析页 ） 阅读理解（四选一） Section II Part A (2) （26–30 题）\t26 A · 27 C · 28 B · 29 D · 30 B （逐题解析见 阅读理解（四选一）解析页 ） 阅读理解（四选一） Section II Part A (3) （31–35 题）\t31 A · 32 A · 33 D · 34 C · 35 B （逐题解析见 阅读理解（四选一）解析页 ） 阅读理解（四选一） Section II Part A (4) （36–40 题）\t36 D · 37 A · 38 C · 39 B · 40 D （逐题解析见 阅读理解（四选一）解析页 ） 阅读理解（四选一） Section II Part B （41–45 题）\t41 F · 42 T · 43 F · 44 T · 45 F （逐题解析见 阅读理解（四选一）解析页 ） 英译汉（段落翻译） Section III\t主观题 · 参考范文与逐题解析见 英译汉（段落翻译）解析页 写作 Section IV Part A\t主观题 · 参考范文与逐题解析见 写作解析页 写作 Section IV Part B\t主观题 · 参考范文与逐题解析见 写作解析页 全卷构成 考研英语二 2010年 · 全卷构成 Section I 完形填空（四选一） 原文精读 试卷排版 题目解析 同题型列表 下载 Section II Part A (1) 阅读理解（四选一） 原文精读 试卷排版 题目解析 同题型列表 下载 Section II Part A (2) 阅读理解（四选一） 原文精读 试卷排版 题目解析 同题型列表 下载 Section II Part A (3) 阅读理解（四选一） 原文精读 试卷排版 题目解析 同题型列表 下载 Section II Part A (4) 阅读理解（四选一） 原文精读 试卷排版 题目解析 同题型列表 下载 Section II Part B 阅读理解（四选一） 原文精读 试卷排版 题目解析 同题型列表 下载 Section III 英译汉（段落翻译） 原文精读 试卷排版 题目解析 同题型列表 下载 Section IV Part A 写作 试卷排版 题目解析 同题型列表 下载 Section IV Part B 写作 试卷排版 题目解析 同题型列表 下载 FAQ · 常见问题 关于考研英语二 2010年 真题（整卷）的常见问题 2010年考研英语二真题由哪几个题型构成？ 2010年考研英语二真题分四大题型、共9个模块、45道编号题：完形填空（四选一）1篇20空、阅读理解四选一（Section II Part A）4篇各5题共20题、阅读新题型判断正误（Section II Part B）1篇5题、英译汉翻译（Section III）1篇、写作（Section IV）小作文与大作文各1篇。完形10分、阅读Part A共40分、Part B共10分、翻译15分、两篇作文合计25分。 2010年考研英语二阅读部分一共有几篇文章、多少道题？ 2010年考研英语二阅读部分共5篇篇章、25道题：Section II Part A的Text 1至Text 4为四选一阅读，每篇5题、合计20题；Section II Part B为一篇判断正误（T/F）新题型，含41至45题共5道。连同完形填空所用的1篇短文，全卷7篇英文材料合计约2609词。 2010年考研英语二真题各篇章的CEFR难度是怎样分布的？ 2010年考研英语二7篇英文材料的CEFR难度为C1占5篇、B2占1篇、B1占1篇：4篇四选一阅读（艺术市场、男女交流、消费习惯、陪审团）与判断题篇章（仿生编队飞行）均为C1高阶；完形填空的甲型H1N1流感短文为B2；英译汉的Sustainability短文最浅，为B1。整体阅读篇章偏向C1，是英语二第一年中等偏上的取材。 2010年考研英语二翻译题的篇幅和难度如何？ 2010年考研英语二英译汉（Section III）是一篇约150词的整段短文，CEFR难度为B1，是全卷最浅的英文材料，满分15分。原文围绕Ted Ning对Sustainability（可持续性）的个人体会展开，句式以记叙加引语为主，长难句和专业术语较少，是英语二翻译考整段而非英语一摘句的典型形态。 2010年考研英语二完形填空篇章的高频词有哪些？ 2010年考研英语二完形填空短文围绕甲型H1N1流感疫情，词频最高的实词集中在卫生医疗与疫情主题：swine（猪流感）出现3次，vaccine（疫苗）、epidemic（流行病）、health（健康）、state（州/状态）各3次，hospitalization（住院）、outbreak（暴发）、official（官员）、global（全球）等各2次。掌握这组词有助于读懂约 340 词的疫情报道型完形。 2010年考研英语二完形填空考的是什么内容？ 2010年考研英语二完形填空讲的是2009年甲型H1N1（猪流感）疫情。短文以世界卫生组织2009年6月11日宣布该疫情为全球大流行开篇，叙述疫情从墨西哥暴发、蔓延至美国各州及全球，世卫总干事陈冯富珍称其严重程度为moderate（中等），并介绍美国联邦卫生部门投放达菲、订购新疫苗等应对措施。考查重点是上下文逻辑、近义词辨析与固定搭配。 2010年考研英语二阅读Text 1讲了什么主题？ 2010年考研英语二阅读Text 1讲世界艺术品市场由盛转衰，选自《经济学人》2009年题为Suspended Animation的文章。文章以2008年9月15日达明·赫斯特（Damien Hirst）在伦敦苏富比的56件作品专场拍卖创单一艺术家成交纪录开篇，而同日雷曼兄弟在纽约申请破产，由此引出金融危机后艺术品市场的暴跌——当代艺术成交腰斩、最热门板块年内跌近90%，但专家认为市场已触底、买家仍在。21至25题考主旨、句意理解与标题选择。 2010年考研英语二阅读Text 2和Text 3分别考什么？ 2010年考研英语二阅读Text 2讲男女交流方式差异如何伤害婚姻，选自《华盛顿邮报》题为Sex, Lies and Conversation的文章，指出美国男性在公共场合比女性话多、在家却话少，社会学家研究发现近一半离婚的女性把缺乏沟通列为主因。Text 3讲企业如何为消费者制造习惯，选自《纽约时报》题为Warning: Habits May Be Good for You的文章，以宝洁、高露洁、联合利华等公司花重金研究消费线索、培养刷牙喝瓶装水等自动行为为例，引出公共卫生借鉴商业手法养成洗手习惯的话题。 2010年考研英语二阅读Text 4考的是什么话题？ 2010年考研英语二阅读Text 4讲美国陪审团制度（jury system）及其民主改革。文章先列举陪审团体现的核心民主原则——公民随机抽选、不因种族宗教性别被排除、被告由同侪审判等，再回顾1968年前精英陪审团、长期把女性排除在外等与民主理想相悖的做法，最后讲1968年《陪审员选拔与服务法》和1975年Taylor v. Louisiana判决推动陪审团选拔走向随机与代表性。36至40题考事实细节、推断与全文重心。 2010年考研英语二阅读新题型（判断正误题）考的是什么文章？ 2010年考研英语二阅读新题型（Section II Part B判断正误T/F）的篇章是Copying Birds May Save Aircraft Fuel（效仿飞鸟可为飞机省油），选自《经济学人》2009年题为V for victory的文章，约530词、CEFR为C1。文章介绍斯坦福大学Ilan Kroo团队提出客机像候鸟一样列V字编队飞行可借上洗气流（upwash）减阻省油，模拟显示三架客机编队可省约15%燃油，并讨论安全、空管规定、天气等现实难点。41至45题要求据原文判断陈述真假。 2010年考研英语二翻译题考的是什么内容？ 2010年考研英语二英译汉考一段关于可持续生活的短文：以Ted Ning为例，说明Sustainability（可持续性）虽成流行词，但在亲历一段难以为继的人生低谷后，他体会到可持续的价值观必须通过日常行动与选择来体现。文中还叙述他在上世纪90年代末经历互联网泡沫破灭后无奈去博德一家公司卖保险、因不热爱而业绩惨淡、夜不能寐的经历。整段约150词，考点是记叙文与引语的通顺翻译。 2010年考研英语二的两篇作文题目是什么？ 2010年考研英语二写作分两部分。小作文（Section IV Part A，10分）要求以中美文化交流项目成员身份给美国同事写一封约100词的信，既感谢对方热情接待、又欢迎其适时来华访问，落款统一用Zhang Wei、不写地址。大作文（Section IV Part B，15分）是图表作文，要求根据所给图表至少写150词，先解读图表、再发表评论，是英语二典型的图表描述加议论形式。 2010年考研英语二是英语二的第一年考试吗？难度怎么样？ 是。2010年是考研英语二（英语二）首次开考的年份，伴随专业学位硕士招生改革推出，供部分专业学位类别考生使用。难度上英语二整体低于同年英语一：完形短文约350词但理解难度较低，阅读四篇约1500词、判断题取代了英语一的七选五/排序等更难新题型，翻译为整段记叙文而非英语一的长难句摘译。2010年英语二作为开局卷，取材偏社会生活与科普，被普遍视为中等难度。 2010年考研英语二真题的标准答案和解析在哪里看？ 考研英语官方不单独公布各题标准答案，目前网传的2010年考研英语二答案与解析均来自各考研机构整理，作参考用、偶有出入。建议核对多家版本：完形与阅读为客观选择题（20空完形＋20题四选一＋5题判断），翻译和作文为主观题，按评分标准给分。在懒笔记整卷页可按真实排版查看2010年考研英语二的完形、四篇阅读、判断题、翻译与两篇作文的题目原貌，并逐篇看文章原文与精读。 2010年考研英语二翻译的参考译文哪里能找到？ 2010年考研英语二英译汉（Sustainability/Ted Ning一段）的参考译文在各考研机构的真题解析里都能找到，但因属主观题，不同版本译法不一、并无唯一官方译文。把握原文意思即可：开篇可译为「如今『可持续性』已成流行词，但对Ted Ning而言它始终带着个人体会——在亲历一段难以为继的人生后，他清楚地认识到，以可持续为导向的价值观必须通过日常行动和选择来体现」。在懒笔记翻译详情页可对照英文原文逐句研读。 2010年考研英语二有没有听力？包含哪些题型？ 2010年考研英语二没有听力。考研英语（无论英语一还是英语二）均为纯笔试，不含听力与口语。2010年考研英语二的题型为：完形填空（四选一，20空）、阅读理解四选一（4篇20题）、阅读新题型判断正误（1篇5题）、英译汉翻译（1段）、应用文小作文与图表大作文各1篇，全卷满分100分、考试时间180分钟。 本页数据最后更新：2026 18 © 2026 懒笔记 · 蜀ICP备2024049450号-1 · 川公网安备51019002006323号 · 增值电信业务经营许可证：川B2-20240301 · 真题版权归全国硕士研究生招生考试 / 全国大学英语四六级考试委员会所有 · 隐私政策 · 用户协议",
+   "Directions": "判断正误（T/F）",
+   "小题": [
+    {
+     "题号": 41,
+     "题干": "第 41 题（判断正误）",
+     "选项": {
+      "T": "True（正确）",
+      "F": "False（错误）"
+     },
+     "部分": "NEW",
+     "部分名": "新题型",
+     "边界题": true,
+     "id": "EN2-2010-41",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
+    },
+    {
+     "题号": 42,
+     "题干": "第 42 题（判断正误）",
+     "选项": {
+      "T": "True（正确）",
+      "F": "False（错误）"
+     },
+     "部分": "NEW",
+     "部分名": "新题型",
+     "边界题": false,
+     "id": "EN2-2010-42",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
+    },
+    {
+     "题号": 43,
+     "题干": "第 43 题（判断正误）",
+     "选项": {
+      "T": "True（正确）",
+      "F": "False（错误）"
+     },
+     "部分": "NEW",
+     "部分名": "新题型",
+     "边界题": false,
+     "id": "EN2-2010-43",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
+    },
+    {
+     "题号": 44,
+     "题干": "第 44 题（判断正误）",
+     "选项": {
+      "T": "True（正确）",
+      "F": "False（错误）"
+     },
+     "部分": "NEW",
+     "部分名": "新题型",
+     "边界题": false,
+     "id": "EN2-2010-44",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
+    },
+    {
+     "题号": 45,
+     "题干": "第 45 题（判断正误）",
+     "选项": {
+      "T": "True（正确）",
+      "F": "False（错误）"
+     },
+     "部分": "NEW",
+     "部分名": "新题型",
+     "边界题": true,
+     "id": "EN2-2010-45",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": false
+    }
+   ],
+   "部分名": "新题型",
+   "部分全称": "新题型 Part B"
   },
   {
    "部分": "TRANS",
@@ -440,38 +814,66 @@
      "题干": "翻译下面这段文字",
      "材料": "\"Sustainabi lity\" has become a popular word these days, but to Ted Ning, the concept will always have personal meaning. Having endured a painful period of unsustainability in his own life made it clear to him that sustainability-oriented values must be expressed through everyday action and choice. Ning recalls spending a confusing year in the late 1990s selling insurance. He'd been through the dot-corn boom and burst and, desperate for a job, signed on with a Boulder agency. It didn't go well. \"It was a really bad move because that's not my passion,\" says Ning, whose dilemma about the job translated, predictably, into a lack of sales. \"I was miserable. I had so much anxiety that I would wake up in the middle of the night and stare at the ceiling. I had no money and needed the job. Everyone said, 'Just wait, you'll turn the comer, give it some time.\"'",
      "题型": "翻译",
-     "分值": 15
+     "分值": 15,
+     "部分": "TRANS",
+     "部分名": "翻译",
+     "边界题": true,
+     "id": "EN2-2010-46",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": true
     }
-   ]
+   ],
+   "部分名": "翻译",
+   "部分全称": "翻译 Part C"
   },
   {
    "部分": "WRITE",
-   "材料": "You have just come back from the U.S. as a member of a Sino-American cultural exchange program. Write a letter to your American colleague to 1) express your thanks for his/her warm reception; 2) welcome him/her to visit China in due course. You should write about 100 words on ANSWER SHEET 2. Do not sign your own name at the end of the letter. Use \"Zhang Wei\" instead. Do not write your address. (10 points)+ PartB",
+   "材料": "You have just come back from the U.S. as a member of a Sino-American cultural exchange program.\nWrite a letter to your American colleague to\n1) express your thanks for his/her warm reception;\n2) welcome him/her to visit China in due course.\nYou should write about 100 words on ANSWER SHEET 2.\nDo not sign your own name at the end of the letter. Use “Zhang Wei” instead.\nDo not write your address.(10 points)",
    "小题": [
     {
      "题号": 47,
      "题干": "写作要求",
-     "材料": "You have just come back from the U.S. as a member of a Sino-American cultural exchange program. Write a letter to your American colleague to 1) express your thanks for his/her warm reception; 2) welcome him/her to visit China in due course. You should write about 100 words on ANSWER SHEET 2. Do not sign your own name at the end of the letter. Use \"Zhang Wei\" instead. Do not write your address. (10 points)+ PartB",
+     "材料": "You have just come back from the U.S. as a member of a Sino-American cultural exchange program.\nWrite a letter to your American colleague to\n1) express your thanks for his/her warm reception;\n2) welcome him/her to visit China in due course.\nYou should write about 100 words on ANSWER SHEET 2.\nDo not sign your own name at the end of the letter. Use “Zhang Wei” instead.\nDo not write your address.(10 points)",
      "题型": "写作",
-     "分值": 10
+     "分值": 10,
+     "部分": "WRITE",
+     "部分名": "写作",
+     "边界题": true,
+     "id": "EN2-2010-47",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": true
     }
-   ]
+   ],
+   "部分名": "写作",
+   "部分全称": "写作 Part A/B"
   },
   {
    "部分": "WRITE",
-   "材料": "In this section, you are asked to write an essay based on the following chart. In your writing, you should 1) interpret the chart and 2) give your comments. You should write at least 150 words. Write your essay on ANSWER SHEET 2. (15 points) Mobile-phone subscriptions (2000-2008) subscription number -----------------.-- 4 billion CJ Developing countries Developed-countries 3 billion 2 billion I billion ...,..___.-P .............. ....l..f...._......,.L......l\"-fi'&--f �p;il- ........ -o 2000 2001 2002 2003 2004 2005 2006 2007 2008 (year)",
+   "材料": "In this section, you are asked to write an essay based on the following chart. In your writing, you should\n1) interpret the chart and\n2) give your comments.\nYou should write at least 150 words.\nWrite your essay on ANSWER SHEET 2. (15 points)",
    "小题": [
     {
      "题号": 48,
      "题干": "写作要求",
-     "材料": "In this section, you are asked to write an essay based on the following chart. In your writing, you should 1) interpret the chart and 2) give your comments. You should write at least 150 words. Write your essay on ANSWER SHEET 2. (15 points) Mobile-phone subscriptions (2000-2008) subscription number -----------------.-- 4 billion CJ Developing countries Developed-countries 3 billion 2 billion I billion ...,..___.-P .............. ....l..f...._......,.L......l\"-fi'&--f �p;il- ........ -o 2000 2001 2002 2003 2004 2005 2006 2007 2008 (year) ",
+     "材料": "In this section, you are asked to write an essay based on the following chart. In your writing, you should\n1) interpret the chart and\n2) give your comments.\nYou should write at least 150 words.\nWrite your essay on ANSWER SHEET 2. (15 points)",
      "题型": "写作",
-     "分值": 10
+     "分值": 10,
+     "部分": "WRITE",
+     "部分名": "写作",
+     "边界题": true,
+     "id": "EN2-2010-48",
+     "tier": "EN2",
+     "year": "2010",
+     "主观": true,
+     "图片": "img/EN2-2010-48.jpg"
     }
-   ]
+   ],
+   "部分名": "写作",
+   "部分全称": "写作 Part A/B"
   }
  ],
- "题目数": 43,
+ "题目数": 48,
  "年份": "2010",
  "来源": "懒笔记 paper 页（结构化正文）"
 }

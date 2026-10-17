@@ -13,7 +13,14 @@
       "B": "normal",
       "C": "steady",
       "D": "pleasant"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": true,
+     "id": "EN2-2022-1",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 2,
@@ -23,7 +30,14 @@
       "B": "compared",
       "C": "confused",
       "D": "confronted"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2022-2",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 3,
@@ -33,7 +47,14 @@
       "B": "Though",
       "C": "Once",
       "D": "Unless"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2022-3",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 4,
@@ -43,7 +64,14 @@
       "B": "strange",
       "C": "wrong",
       "D": "easy"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2022-4",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 5,
@@ -53,7 +81,14 @@
       "B": "Explain",
       "C": "Remember",
       "D": "Suppose"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2022-5",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 6,
@@ -63,7 +98,14 @@
       "B": "well-advised",
       "C": "well-informed",
       "D": "well-chosen"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2022-6",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 7,
@@ -73,7 +115,14 @@
       "B": "generate",
       "C": "supplement",
       "D": "calculate"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2022-7",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 8,
@@ -83,7 +132,14 @@
       "B": "purpose",
       "C": "question",
       "D": "condition"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2022-8",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 9,
@@ -93,7 +149,14 @@
       "B": "sacrifice",
       "C": "continue",
       "D": "explore"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2022-9",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 10,
@@ -103,7 +166,14 @@
       "B": "interests",
       "C": "memories",
       "D": "skills"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2022-10",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 11,
@@ -113,7 +183,14 @@
       "B": "because",
       "C": "while",
       "D": "before"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2022-11",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 12,
@@ -123,7 +200,14 @@
       "B": "make up for",
       "C": "hang on to",
       "D": "cut down on"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2022-12",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 13,
@@ -133,7 +217,14 @@
       "B": "occasional",
       "C": "intensive",
       "D": "emotional"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2022-13",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 14,
@@ -143,7 +234,14 @@
       "B": "test",
       "C": "decision",
       "D": "plan"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2022-14",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 15,
@@ -153,7 +251,14 @@
       "B": "gentle",
       "C": "rapid",
       "D": "funny"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2022-15",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 16,
@@ -163,7 +268,14 @@
       "B": "in charge of",
       "C": "in response to",
       "D": "in addition to"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2022-16",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 17,
@@ -173,7 +285,14 @@
       "B": "innovative",
       "C": "invisible",
       "D": "instant"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2022-17",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 18,
@@ -183,7 +302,14 @@
       "B": "harder",
       "C": "quieter",
       "D": "quicker"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2022-18",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 19,
@@ -193,7 +319,14 @@
       "B": "generously",
       "C": "productively",
       "D": "gratefully"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN2-2022-19",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 20,
@@ -203,9 +336,18 @@
       "B": "in turn",
       "C": "on average",
       "D": "above all"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": true,
+     "id": "EN2-2022-20",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "完形",
+   "部分全称": "完形填空 Use of English"
   },
   {
    "部分": "READ",
@@ -219,7 +361,14 @@
       "B": "at the demand of regular shoppers.",
       "C": "as a replacement for organic eggs.",
       "D": "on specially designed farms."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": true,
+     "id": "EN2-2022-21",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 22,
@@ -229,7 +378,14 @@
       "B": "accelerating the disposal of waste.",
       "C": "creating a sustainable system.",
       "D": "attracting customers to his products."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2022-22",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 23,
@@ -239,7 +395,14 @@
       "B": "the setbacks in the egg industry.",
       "C": "the potential of regenerative products.",
       "D": "the promotional success of supermarkets."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2022-23",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 24,
@@ -249,7 +412,14 @@
       "B": "are likely to buy climate-friendly eggs.",
       "C": "are curious about new food.",
       "D": "are amazed at agriculture advances."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2022-24",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 25,
@@ -259,9 +429,18 @@
       "B": "standard definition.",
       "C": "nutritional value.",
       "D": "moral implication."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2022-25",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "阅读",
+   "部分全称": "阅读理解 Part A"
   },
   {
    "部分": "READ",
@@ -275,7 +454,14 @@
       "B": "the old workforce is as active as the younger one.",
       "C": "one in three Americans enjoy earlier retirement.",
       "D": "more Americans are willing to work in retirement."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2022-26",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 27,
@@ -285,7 +471,14 @@
       "B": "boredom can be relieved after retirement.",
       "C": "the mental health of retirees is overlooked.",
       "D": "\"unretirement\" contributes to the economy."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2022-27",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 28,
@@ -295,7 +488,14 @@
       "B": "population growth.",
       "C": "longer life expectancy.",
       "D": "rising living costs."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2022-28",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 29,
@@ -305,7 +505,14 @@
       "B": "taking up odd jobs.",
       "C": "getting well-paid work.",
       "D": "spending less."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2022-29",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 30,
@@ -315,9 +522,18 @@
       "B": "unafraid.",
       "C": "disappointed.",
       "D": "enthusiastic."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2022-30",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "阅读",
+   "部分全称": "阅读理解 Part A"
   },
   {
    "部分": "READ",
@@ -331,7 +547,14 @@
       "B": "leak user information for profit",
       "C": "undermine users' decision-making",
       "D": "remind users of hidden costs"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2022-31",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 32,
@@ -341,7 +564,14 @@
       "B": "their complex designs",
       "C": "their severe damage",
       "D": "their strong presence"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2022-32",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 33,
@@ -351,7 +581,14 @@
       "B": "talk with relevant teams",
       "C": "turn to independent agencies",
       "D": "rely on professional training"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2022-33",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 34,
@@ -361,7 +598,14 @@
       "B": "protect consumers from being tricked",
       "C": "grant companies data privacy rights",
       "D": "restrict access to problematic content"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2022-34",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 35,
@@ -371,9 +615,18 @@
       "B": "businesses' self-discipline",
       "C": "strict regulatory standards",
       "D": "consumers' safety awareness"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2022-35",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "阅读",
+   "部分全称": "阅读理解 Part A"
   },
   {
    "部分": "READ",
@@ -387,7 +640,14 @@
       "B": "narrowly interpreted.",
       "C": "difficult to ignore.",
       "D": "poorly summarized."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2022-36",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 37,
@@ -397,7 +657,14 @@
       "B": "It is a behavior easy to measure.",
       "C": "It is important to students' health.",
       "D": "It is a hot topic in ethics classes."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2022-37",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 38,
@@ -407,7 +674,14 @@
       "B": "are less sociable than other professors.",
       "C": "are not sensitive to political issues.",
       "D": "are not necessarily ethically better."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2022-38",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 39,
@@ -417,7 +691,14 @@
       "B": "predictable.",
       "C": "uncertain.",
       "D": "unrepeatable."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN2-2022-39",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 40,
@@ -427,9 +708,18 @@
       "B": "can be analyzed statistically.",
       "C": "is a result of multiple factors.",
       "D": "is a sign of self-development."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": true,
+     "id": "EN2-2022-40",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "阅读",
+   "部分全称": "阅读理解 Part A"
   },
   {
    "部分": "NEW",
@@ -447,7 +737,14 @@
       "E": "Listen to Your Body.",
       "F": "Go Through the Motions.",
       "G": "Round Out Your Routine."
-     }
+     },
+     "部分": "NEW",
+     "部分名": "新题型",
+     "边界题": true,
+     "id": "EN2-2022-41",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 42,
@@ -460,7 +757,14 @@
       "E": "Listen to Your Body.",
       "F": "Go Through the Motions.",
       "G": "Round Out Your Routine."
-     }
+     },
+     "部分": "NEW",
+     "部分名": "新题型",
+     "边界题": false,
+     "id": "EN2-2022-42",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 43,
@@ -473,7 +777,14 @@
       "E": "Listen to Your Body.",
       "F": "Go Through the Motions.",
       "G": "Round Out Your Routine."
-     }
+     },
+     "部分": "NEW",
+     "部分名": "新题型",
+     "边界题": false,
+     "id": "EN2-2022-43",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 44,
@@ -486,7 +797,14 @@
       "E": "Listen to Your Body.",
       "F": "Go Through the Motions.",
       "G": "Round Out Your Routine."
-     }
+     },
+     "部分": "NEW",
+     "部分名": "新题型",
+     "边界题": false,
+     "id": "EN2-2022-44",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     },
     {
      "题号": 45,
@@ -499,9 +817,18 @@
       "E": "Listen to Your Body.",
       "F": "Go Through the Motions.",
       "G": "Round Out Your Routine."
-     }
+     },
+     "部分": "NEW",
+     "部分名": "新题型",
+     "边界题": true,
+     "id": "EN2-2022-45",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "新题型",
+   "部分全称": "新题型 Part B"
   },
   {
    "部分": "TRANS",
@@ -512,35 +839,63 @@
      "题干": "翻译下面这段文字",
      "材料": "Although we try our best, sometimes our paintings rarely turn out as originally planned. Changes in the light, the limitations of your painting materials, and the lack of experience and technique mean that what you start out trying to achieve may not come to life the way that you expected. Although this can be frustrating and disappointing, it turns out that this can actually be good for you. Unexpected results have two benefits: you pretty quickly learn to deal with disappointment, and realise that when one door closes, another opens. You also quickly learn to adapt and come up with creative solutions to the problems the painting presents, and thinking outside the box will become your second nature. In fact, creative problem-solving skills are incredibly useful in daily life, with which you're more likely to be able to find a solution when a problem arises. 2022年 英 语 （ 二）试 题 第1 3页 共1 4页",
      "题型": "翻译",
-     "分值": 15
+     "分值": 15,
+     "部分": "TRANS",
+     "部分名": "翻译",
+     "边界题": true,
+     "id": "EN2-2022-46",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": true
     }
-   ]
+   ],
+   "部分名": "翻译",
+   "部分全称": "翻译 Part C"
   },
   {
    "部分": "WRITE",
-   "材料": "Suppose you are planning a campus food festival. Write an e-mail to the international students in your university to 1) introduce the food festival, and 2) invite them to participate. You should write about 100 words on the ANSWER SHEET. Do not use your own name. Use “Li Ming ,9 instead. (10 points) Part B",
+   "材料": "Suppose you are planning a campus food festival. Write an e-mail to the international students in your university to\n1) introduce the food festival, and\n2) invite them to participate.\nYou should write about 100 words on the ANSWER SHEET.\nDo not use your own name. Use “Li Ming\" instead. (10 points)",
    "小题": [
     {
      "题号": 47,
      "题干": "写作要求",
-     "材料": "Suppose you are planning a campus food festival. Write an e-mail to the international students in your university to 1) introduce the food festival, and 2) invite them to participate. You should write about 100 words on the ANSWER SHEET. Do not use your own name. Use “Li Ming ,9 instead. (10 points) Part B",
+     "材料": "Suppose you are planning a campus food festival. Write an e-mail to the international students in your university to\n1) introduce the food festival, and\n2) invite them to participate.\nYou should write about 100 words on the ANSWER SHEET.\nDo not use your own name. Use “Li Ming\" instead. (10 points)",
      "题型": "写作",
-     "分值": 10
+     "分值": 10,
+     "部分": "WRITE",
+     "部分名": "写作",
+     "边界题": true,
+     "id": "EN2-2022-47",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": true
     }
-   ]
+   ],
+   "部分名": "写作",
+   "部分全称": "写作 Part A/B"
   },
   {
    "部分": "WRITE",
-   "材料": "Write an essay based on the following chart. In your writing, you should 1) interpret the chart, and 2) give your comments. You should write about 150 words on the ANSWER SHEET. (15 points) 2022年 英 语 （ 二）试 题 第1 4页 共1 4页",
+   "材料": "Write an essay based on the following chart. In your writing, you should\n1) interpret the chart, and\n2) give your comments.\nYou should write about 150 words on the ANSWER SHEET. (15 points)\n\n图表/图意：2022年 英 语 （ 二）试 题 第1 4页 共1 4页",
    "小题": [
     {
      "题号": 48,
      "题干": "写作要求",
-     "材料": "Write an essay based on the following chart. In your writing, you should 1) interpret the chart, and 2) give your comments. You should write about 150 words on the ANSWER SHEET. (15 points) 2022年 英 语 （ 二）试 题 第1 4页 共1 4页",
+     "材料": "Write an essay based on the following chart. In your writing, you should\n1) interpret the chart, and\n2) give your comments.\nYou should write about 150 words on the ANSWER SHEET. (15 points)\n\n图表/图意：2022年 英 语 （ 二）试 题 第1 4页 共1 4页",
      "题型": "写作",
-     "分值": 10
+     "分值": 10,
+     "部分": "WRITE",
+     "部分名": "写作",
+     "边界题": true,
+     "id": "EN2-2022-48",
+     "tier": "EN2",
+     "year": "2022",
+     "主观": true,
+     "图片": "img/EN2-2022-48.jpg"
     }
-   ]
+   ],
+   "部分名": "写作",
+   "部分全称": "写作 Part A/B"
   }
  ],
  "题目数": 48,

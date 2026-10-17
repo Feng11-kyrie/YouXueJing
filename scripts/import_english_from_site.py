@@ -135,6 +135,24 @@ def _partb_from_lines(lines, t):
             j += 2
         else:
             j += 1
+    # 【Part B 不是只有"选句/排序"】实测英语二 2010 是**判断题**：
+    #   "decide whether each of the statements is true or false.
+    #    Choose T if the statement is true or F if the statement is not true."
+    # 这种没有 A–G 句库，选项就是 True/False，也要能导入。
+    tf = any(re.search(r'true\s+or\s+false|Choose\s+T\b', x, re.I)
+             for x in seg[:8])
+    if len(bank) < 5 and tf:
+        body_tf = []
+        for l2 in seg:
+            if re.match(r'^(Part\s*B|Directions)', l2):
+                continue
+            body_tf.append(l2)
+        mat_tf = " ".join(body_tf).strip()
+        qs_tf = [{"题号": n, "题干": f'第 {n} 题（判断正误）',
+                  "选项": {"T": "True（正确）", "F": "False（错误）"}}
+                 for n in range(41, 46)]
+        return {"部分": "NEW", "材料": mat_tf,
+                "Directions": "判断正误（T/F）", "小题": qs_tf}
     if len(bank) < 5:
         return None
     # 材料 = Directions 到句子库之前
@@ -311,7 +329,12 @@ def _subjective_from_pdf(tier, year):
         #   `51. Directions:`  `51, Directions;`（逗号+分号）
         #   `48. Directio ns :`（**单词中间有空格**，OCR/排版造成）
         # 单词中间也可能被拆开：`48. Directio ns :`
-        m = re.match(r'^\s*(\d{1,2})\s*[.、,，]\s*D\s*i\s*r\s*e\s*c\s*t?\s*i?\s*o?\s*n\s*s?\s*[:：;；]?', l, re.I)
+        # 【OCR 会把 Directions 认坏】实测英语一 2021 印成 `52. Dtretlons:`
+        # （D-t-r-e-t-l-o-n-s）。所以不逐字符匹配，改为：
+        # 「题号 + 逗号/点 + 一个以 D 开头、7–14 字符、可带冒号的单词」
+        # 允许两种毛病：OCR 认坏（`Dtretlons`）与单词被拆开（`Directio ns`）
+        # 所以是「D + 5–20 个字母或空格 + 可选冒号」，行尾结束。
+        m = re.match(r'^\s*(\d{1,2})\s*[.、,，]\s*D[A-Za-z](?:[A-Za-z ]{4,18})[:：;；]?\s*$', l)
         if m:
             anchors.append((i, int(m.group(1))))
             continue

@@ -13,7 +13,14 @@
       "B": "Despite",
       "C": "Besides",
       "D": "Without"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": true,
+     "id": "EN1-2024-1",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 2,
@@ -23,7 +30,14 @@
       "B": "demanding",
       "C": "improving",
       "D": "tracing"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2024-2",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 3,
@@ -33,7 +47,14 @@
       "B": "convenience",
       "C": "guidance",
       "D": "reference"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2024-3",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 4,
@@ -43,7 +64,14 @@
       "B": "temporarily",
       "C": "successively",
       "D": "eventually"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2024-4",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 5,
@@ -53,7 +81,14 @@
       "B": "started out",
       "C": "settled down",
       "D": "went by"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2024-5",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 6,
@@ -63,7 +98,14 @@
       "B": "volumes",
       "C": "benefits",
       "D": "sources"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2024-6",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 7,
@@ -73,7 +115,14 @@
       "B": "simple",
       "C": "flexible",
       "D": "stable"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2024-7",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 8,
@@ -83,7 +132,14 @@
       "B": "yield to",
       "C": "insist on",
       "D": "act as"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2024-8",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 9,
@@ -93,7 +149,14 @@
       "B": "In terms of",
       "C": "Thanks to",
       "D": "Rather than"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2024-9",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 10,
@@ -103,7 +166,14 @@
       "B": "shared",
       "C": "represented",
       "D": "occupied"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2024-10",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 11,
@@ -113,7 +183,14 @@
       "B": "expect",
       "C": "require",
       "D": "direct"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2024-11",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 12,
@@ -123,7 +200,14 @@
       "B": "lead",
       "C": "clear",
       "D": "change"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2024-12",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 13,
@@ -133,7 +217,14 @@
       "B": "deriving from",
       "C": "relying on",
       "D": "pointing at"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2024-13",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 14,
@@ -143,7 +234,14 @@
       "B": "Since",
       "C": "Unless",
       "D": "Although"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2024-14",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 15,
@@ -153,7 +251,14 @@
       "B": "positions",
       "C": "principles",
       "D": "reasons"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2024-15",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 16,
@@ -163,7 +268,14 @@
       "B": "analyses",
       "C": "produces",
       "D": "mixes"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2024-16",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 17,
@@ -173,7 +285,14 @@
       "B": "compare",
       "C": "protect",
       "D": "complement"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2024-17",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 18,
@@ -183,7 +302,14 @@
       "B": "By contrast",
       "C": "For example",
       "D": "Above all"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2024-18",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 19,
@@ -193,7 +319,14 @@
       "B": "suit",
       "C": "secure",
       "D": "include"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2024-19",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 20,
@@ -203,9 +336,18 @@
       "B": "obvious",
       "C": "impressive",
       "D": "delicate"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": true,
+     "id": "EN1-2024-20",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "完形",
+   "部分全称": "完形填空 Use of English"
   },
   {
    "部分": "READ",
@@ -219,7 +361,14 @@
       "B": "keeping them from rusting",
       "C": "letting them grow in value",
       "D": "hiding them from the locals"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": true,
+     "id": "EN1-2024-21",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 22,
@@ -229,7 +378,14 @@
       "B": "illustrate the high status of blacksmiths in that period",
       "C": "contrast the attitudes of different civilisations towards nails",
       "D": "show the preciousness of nail-making technology at that time"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2024-22",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 23,
@@ -239,7 +395,14 @@
       "B": "Wider use of new energies.",
       "C": "Fiercer market competition.",
       "D": "Reduced cost of raw materials."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2024-23",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 24,
@@ -249,7 +412,14 @@
       "B": "have remained basically the same since Roman times",
       "C": "are less studied than other everyday products",
       "D": "are one of the world's most significant inventions"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2024-24",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 25,
@@ -259,9 +429,18 @@
       "B": "Technological innovation is integral to economic success.",
       "C": "Technology defines people's understanding of the world.",
       "D": "Sophisticated technologies develop from small inventions."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2024-25",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "阅读",
+   "部分全称": "阅读理解 Part A"
   },
   {
    "部分": "READ",
@@ -275,7 +454,14 @@
       "B": "assigning babies to specific adult caregivers",
       "C": "teaching parenting skills to older children",
       "D": "carrying infants around by their parents"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2024-26",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 27,
@@ -285,7 +471,14 @@
       "B": "an approach to integrating alloparenting into western society",
       "C": "the conventional parenting style in western culture",
       "D": "the differences between western and African ways of living"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2024-27",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 28,
@@ -295,7 +488,14 @@
       "B": "consolidates family relationships",
       "C": "results in the child-centred family",
       "D": "departs from the course of evolution"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2024-28",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 29,
@@ -305,7 +505,14 @@
       "B": "They have difficulty finding enough caregivers.",
       "C": "They ought to improve their carer-to-child ratio.",
       "D": "They should try to prevent parental depression."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2024-29",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 30,
@@ -315,9 +522,18 @@
       "B": "For a happier family, learn from the hunter-gatherers",
       "C": "Mixed-age playgroup, a better choice for lonely children",
       "D": "Tracing the history of parenting: from Africa to Europe"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2024-30",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "阅读",
+   "部分全称": "阅读理解 Part A"
   },
   {
    "部分": "READ",
@@ -331,7 +547,14 @@
       "B": "He is popular with users of an AI art generator.",
       "C": "He attracts admiration from other illustrators.",
       "D": "He specializes in classical painting digitalization."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2024-31",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 32,
@@ -341,7 +564,14 @@
       "B": "produce artworks in unpredictable styles",
       "C": "make unauthorized use of online images",
       "D": "collect user information without consent"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2024-32",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 33,
@@ -351,7 +581,14 @@
       "B": "a new method to identify AI images",
       "C": "AI-generated work bearing his name",
       "D": "heated disputes regarding his copyright"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2024-33",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 34,
@@ -361,7 +598,14 @@
       "B": "offer their services to public institutions",
       "C": "strengthen their relationships with AI users",
       "D": "adopt a different strategy for AI model training"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2024-34",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 35,
@@ -371,9 +615,18 @@
       "B": "AI's expanded role in artistic creation.",
       "C": "Privacy issues in the application of AI.",
       "D": "Opposing views on AI development."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2024-35",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "阅读",
+   "部分全称": "阅读理解 Part A"
   },
   {
    "部分": "READ",
@@ -387,7 +640,14 @@
       "B": "a controversial conservation area",
       "C": "a place with commercial potential",
       "D": "a headache for nearby communities"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2024-36",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 37,
@@ -397,7 +657,14 @@
       "B": "weakens the EPA's regulatory power",
       "C": "will end conflicts among local residents",
       "D": "may face opposition from mining operators"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2024-37",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 38,
@@ -407,7 +674,14 @@
       "B": "Puzzled.",
       "C": "Relieved.",
       "D": "Encouraged."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2024-38",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 39,
@@ -417,7 +691,14 @@
       "B": "It has triggered a radical reform in commercial fisheries.",
       "C": "It has set a fine example of respecting state authorities.",
       "D": "It has ensured the coordination of protection efforts."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2024-39",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 40,
@@ -427,9 +708,18 @@
       "B": "attach due importance to wetlands protections",
       "C": "recognize the need to expand wildlife refuges",
       "D": "improve the wellbeing of endangered species"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": true,
+     "id": "EN1-2024-40",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "阅读",
+   "部分全称": "阅读理解 Part A"
   },
   {
    "部分": "NEW",
@@ -447,7 +737,14 @@
       "E": "The real value of artifacts can only be recognized in their countries of origin rather than anywhere else.",
       "F": "Ways to get artifacts from other countries must be decent and lawful.",
       "G": "Concern over security is no excuse for refusing to return artifacts to their countries of origin."
-     }
+     },
+     "部分": "NEW",
+     "部分名": "新题型",
+     "边界题": true,
+     "id": "EN1-2024-41",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 42,
@@ -460,7 +757,14 @@
       "E": "The real value of artifacts can only be recognized in their countries of origin rather than anywhere else.",
       "F": "Ways to get artifacts from other countries must be decent and lawful.",
       "G": "Concern over security is no excuse for refusing to return artifacts to their countries of origin."
-     }
+     },
+     "部分": "NEW",
+     "部分名": "新题型",
+     "边界题": false,
+     "id": "EN1-2024-42",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 43,
@@ -473,7 +777,14 @@
       "E": "The real value of artifacts can only be recognized in their countries of origin rather than anywhere else.",
       "F": "Ways to get artifacts from other countries must be decent and lawful.",
       "G": "Concern over security is no excuse for refusing to return artifacts to their countries of origin."
-     }
+     },
+     "部分": "NEW",
+     "部分名": "新题型",
+     "边界题": false,
+     "id": "EN1-2024-43",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 44,
@@ -486,7 +797,14 @@
       "E": "The real value of artifacts can only be recognized in their countries of origin rather than anywhere else.",
       "F": "Ways to get artifacts from other countries must be decent and lawful.",
       "G": "Concern over security is no excuse for refusing to return artifacts to their countries of origin."
-     }
+     },
+     "部分": "NEW",
+     "部分名": "新题型",
+     "边界题": false,
+     "id": "EN1-2024-44",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     },
     {
      "题号": 45,
@@ -499,9 +817,18 @@
       "E": "The real value of artifacts can only be recognized in their countries of origin rather than anywhere else.",
       "F": "Ways to get artifacts from other countries must be decent and lawful.",
       "G": "Concern over security is no excuse for refusing to return artifacts to their countries of origin."
-     }
+     },
+     "部分": "NEW",
+     "部分名": "新题型",
+     "边界题": true,
+     "id": "EN1-2024-45",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "新题型",
+   "部分全称": "新题型 Part B"
   },
   {
    "部分": "TRANS",
@@ -512,63 +839,119 @@
      "题干": "They sometimes travel more than sixty miles to find food or water, and are very good at working out where other elephants are — even when they are out of sight.",
      "材料": "“Elephants never forget” — or so they say — and that piece of folklore seems to have some foundation. The African savanna elephant, also known as the African bush elephant, is distributed across 37 African countries. They move between a variety of habitats, including forests, grasslands, woodlands, wetlands and agricultural land. (46) They sometimes travel more than sixty miles to find food or water, and are very good at working out where other elephants are — even when they are out of sight. Using tracking devices, researchers have shown that they have “remarkable spatial acuity.” When finding their way to waterholes, they headed off in exactly the right direction, on one occasion from a distance of roughly thirty miles. What is more, they almost always seem to choose the nearest waterhole. (47) The researchers are convinced that the elephants always know precisely where they are in relation to all the resources they need, and can therefore take shortcuts, as well as following familiar routes. Although the cues used by African elephants for long-distance navigation are not yet understood, smell may well play a part. Elephants are very choosy eaters, but until recently little was known about how they selected their food. (48) One possibility was that they merely used their eyes and tried out the plants they found, but that would probably result in a lot of wasted time and energy, not least because their eyesight is actually not very good. (49) The volatile chemicals produced by plants can be carried a long way, and they are very characteristic: Each plant or tree has its own particular odor signature. What is more, they can be detected even when they are not actually visible. New research suggests that smell is a crucial factor in guiding elephants — and probably other herbivores — to the best food resources. The researchers first established what kinds of plant the elephants preferred either to eat or avoid when foraging freely. They then set up a “food station” experiment, in which they gave the elephants a series of choices based only on smell. (50) The experiment showed that elephants may well use smell to identify patches of trees that are good to eat, and secondly to assess the quality of the trees within each patch. Free-ranging elephants presumably also use this information to locate their preferred food. Their well-developed hippocampal structures may enable elephants, like rats and people, to construct cognitive maps.",
      "题型": "翻译",
-     "分值": 2
+     "分值": 2,
+     "部分": "TRANS",
+     "部分名": "翻译",
+     "边界题": true,
+     "id": "EN1-2024-46",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": true
     },
     {
      "题号": 47,
      "题干": "The researchers are convinced that the elephants always know precisely where they are in relation to all the resources they need, and can therefore take shortcuts, as well as following familiar routes.",
      "材料": "“Elephants never forget” — or so they say — and that piece of folklore seems to have some foundation. The African savanna elephant, also known as the African bush elephant, is distributed across 37 African countries. They move between a variety of habitats, including forests, grasslands, woodlands, wetlands and agricultural land. (46) They sometimes travel more than sixty miles to find food or water, and are very good at working out where other elephants are — even when they are out of sight. Using tracking devices, researchers have shown that they have “remarkable spatial acuity.” When finding their way to waterholes, they headed off in exactly the right direction, on one occasion from a distance of roughly thirty miles. What is more, they almost always seem to choose the nearest waterhole. (47) The researchers are convinced that the elephants always know precisely where they are in relation to all the resources they need, and can therefore take shortcuts, as well as following familiar routes. Although the cues used by African elephants for long-distance navigation are not yet understood, smell may well play a part. Elephants are very choosy eaters, but until recently little was known about how they selected their food. (48) One possibility was that they merely used their eyes and tried out the plants they found, but that would probably result in a lot of wasted time and energy, not least because their eyesight is actually not very good. (49) The volatile chemicals produced by plants can be carried a long way, and they are very characteristic: Each plant or tree has its own particular odor signature. What is more, they can be detected even when they are not actually visible. New research suggests that smell is a crucial factor in guiding elephants — and probably other herbivores — to the best food resources. The researchers first established what kinds of plant the elephants preferred either to eat or avoid when foraging freely. They then set up a “food station” experiment, in which they gave the elephants a series of choices based only on smell. (50) The experiment showed that elephants may well use smell to identify patches of trees that are good to eat, and secondly to assess the quality of the trees within each patch. Free-ranging elephants presumably also use this information to locate their preferred food. Their well-developed hippocampal structures may enable elephants, like rats and people, to construct cognitive maps.",
      "题型": "翻译",
-     "分值": 2
+     "分值": 2,
+     "部分": "TRANS",
+     "部分名": "翻译",
+     "边界题": false,
+     "id": "EN1-2024-47",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": true
     },
     {
      "题号": 48,
      "题干": "One possibility was that they merely used their eyes and tried out the plants they found, but that would probably result in a lot of wasted time and energy, not least because their eyesight is actually not very good.",
      "材料": "“Elephants never forget” — or so they say — and that piece of folklore seems to have some foundation. The African savanna elephant, also known as the African bush elephant, is distributed across 37 African countries. They move between a variety of habitats, including forests, grasslands, woodlands, wetlands and agricultural land. (46) They sometimes travel more than sixty miles to find food or water, and are very good at working out where other elephants are — even when they are out of sight. Using tracking devices, researchers have shown that they have “remarkable spatial acuity.” When finding their way to waterholes, they headed off in exactly the right direction, on one occasion from a distance of roughly thirty miles. What is more, they almost always seem to choose the nearest waterhole. (47) The researchers are convinced that the elephants always know precisely where they are in relation to all the resources they need, and can therefore take shortcuts, as well as following familiar routes. Although the cues used by African elephants for long-distance navigation are not yet understood, smell may well play a part. Elephants are very choosy eaters, but until recently little was known about how they selected their food. (48) One possibility was that they merely used their eyes and tried out the plants they found, but that would probably result in a lot of wasted time and energy, not least because their eyesight is actually not very good. (49) The volatile chemicals produced by plants can be carried a long way, and they are very characteristic: Each plant or tree has its own particular odor signature. What is more, they can be detected even when they are not actually visible. New research suggests that smell is a crucial factor in guiding elephants — and probably other herbivores — to the best food resources. The researchers first established what kinds of plant the elephants preferred either to eat or avoid when foraging freely. They then set up a “food station” experiment, in which they gave the elephants a series of choices based only on smell. (50) The experiment showed that elephants may well use smell to identify patches of trees that are good to eat, and secondly to assess the quality of the trees within each patch. Free-ranging elephants presumably also use this information to locate their preferred food. Their well-developed hippocampal structures may enable elephants, like rats and people, to construct cognitive maps.",
      "题型": "翻译",
-     "分值": 2
+     "分值": 2,
+     "部分": "TRANS",
+     "部分名": "翻译",
+     "边界题": false,
+     "id": "EN1-2024-48",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": true
     },
     {
      "题号": 49,
      "题干": "The volatile chemicals produced by plants can be carried a long way, and they are very characteristic: Each plant or tree has its own particular odor signature.",
      "材料": "“Elephants never forget” — or so they say — and that piece of folklore seems to have some foundation. The African savanna elephant, also known as the African bush elephant, is distributed across 37 African countries. They move between a variety of habitats, including forests, grasslands, woodlands, wetlands and agricultural land. (46) They sometimes travel more than sixty miles to find food or water, and are very good at working out where other elephants are — even when they are out of sight. Using tracking devices, researchers have shown that they have “remarkable spatial acuity.” When finding their way to waterholes, they headed off in exactly the right direction, on one occasion from a distance of roughly thirty miles. What is more, they almost always seem to choose the nearest waterhole. (47) The researchers are convinced that the elephants always know precisely where they are in relation to all the resources they need, and can therefore take shortcuts, as well as following familiar routes. Although the cues used by African elephants for long-distance navigation are not yet understood, smell may well play a part. Elephants are very choosy eaters, but until recently little was known about how they selected their food. (48) One possibility was that they merely used their eyes and tried out the plants they found, but that would probably result in a lot of wasted time and energy, not least because their eyesight is actually not very good. (49) The volatile chemicals produced by plants can be carried a long way, and they are very characteristic: Each plant or tree has its own particular odor signature. What is more, they can be detected even when they are not actually visible. New research suggests that smell is a crucial factor in guiding elephants — and probably other herbivores — to the best food resources. The researchers first established what kinds of plant the elephants preferred either to eat or avoid when foraging freely. They then set up a “food station” experiment, in which they gave the elephants a series of choices based only on smell. (50) The experiment showed that elephants may well use smell to identify patches of trees that are good to eat, and secondly to assess the quality of the trees within each patch. Free-ranging elephants presumably also use this information to locate their preferred food. Their well-developed hippocampal structures may enable elephants, like rats and people, to construct cognitive maps.",
      "题型": "翻译",
-     "分值": 2
+     "分值": 2,
+     "部分": "TRANS",
+     "部分名": "翻译",
+     "边界题": false,
+     "id": "EN1-2024-49",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": true
     },
     {
      "题号": 50,
      "题干": "The experiment showed that elephants may well use smell to identify patches of trees that are good to eat, and secondly to assess the quality of the trees within each patch.",
      "材料": "“Elephants never forget” — or so they say — and that piece of folklore seems to have some foundation. The African savanna elephant, also known as the African bush elephant, is distributed across 37 African countries. They move between a variety of habitats, including forests, grasslands, woodlands, wetlands and agricultural land. (46) They sometimes travel more than sixty miles to find food or water, and are very good at working out where other elephants are — even when they are out of sight. Using tracking devices, researchers have shown that they have “remarkable spatial acuity.” When finding their way to waterholes, they headed off in exactly the right direction, on one occasion from a distance of roughly thirty miles. What is more, they almost always seem to choose the nearest waterhole. (47) The researchers are convinced that the elephants always know precisely where they are in relation to all the resources they need, and can therefore take shortcuts, as well as following familiar routes. Although the cues used by African elephants for long-distance navigation are not yet understood, smell may well play a part. Elephants are very choosy eaters, but until recently little was known about how they selected their food. (48) One possibility was that they merely used their eyes and tried out the plants they found, but that would probably result in a lot of wasted time and energy, not least because their eyesight is actually not very good. (49) The volatile chemicals produced by plants can be carried a long way, and they are very characteristic: Each plant or tree has its own particular odor signature. What is more, they can be detected even when they are not actually visible. New research suggests that smell is a crucial factor in guiding elephants — and probably other herbivores — to the best food resources. The researchers first established what kinds of plant the elephants preferred either to eat or avoid when foraging freely. They then set up a “food station” experiment, in which they gave the elephants a series of choices based only on smell. (50) The experiment showed that elephants may well use smell to identify patches of trees that are good to eat, and secondly to assess the quality of the trees within each patch. Free-ranging elephants presumably also use this information to locate their preferred food. Their well-developed hippocampal structures may enable elephants, like rats and people, to construct cognitive maps.",
      "题型": "翻译",
-     "分值": 2
+     "分值": 2,
+     "部分": "TRANS",
+     "部分名": "翻译",
+     "边界题": true,
+     "id": "EN1-2024-50",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": true
     }
-   ]
+   ],
+   "部分名": "翻译",
+   "部分全称": "翻译 Part C"
   },
   {
    "部分": "WRITE",
-   "材料": "Read the following email from an international student and write a reply. Write your answer in about 100 words on the ANSWER SHEET. Do not use your own name in your email; use “Li Ming” instead. (10 points) Part B",
+   "材料": "Read the following email from an international student and write a reply.\nDear Li Ming,\nI've got a class assignment to make an oral report on an ancient Chinese scientist, but I'm not sure how to prepare for it. Can you give me some advice? Thank you for your help.\nYours,\nPaul\nWrite your answer in about 100 words on the ANSWER SHEET.\nDo not use your own name in your email; use\"Li Ming\" instead.(10 points)",
    "小题": [
     {
      "题号": 51,
      "题干": "写作要求",
-     "材料": "Read the following email from an international student and write a reply. Write your answer in about 100 words on the ANSWER SHEET. Do not use your own name in your email; use “Li Ming” instead. (10 points) Part B",
+     "材料": "Read the following email from an international student and write a reply.\nDear Li Ming,\nI've got a class assignment to make an oral report on an ancient Chinese scientist, but I'm not sure how to prepare for it. Can you give me some advice? Thank you for your help.\nYours,\nPaul\nWrite your answer in about 100 words on the ANSWER SHEET.\nDo not use your own name in your email; use\"Li Ming\" instead.(10 points)",
      "题型": "写作",
-     "分值": 10
+     "分值": 10,
+     "部分": "WRITE",
+     "部分名": "写作",
+     "边界题": true,
+     "id": "EN1-2024-51",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": true
     }
-   ]
+   ],
+   "部分名": "写作",
+   "部分全称": "写作 Part A/B"
   },
   {
    "部分": "WRITE",
-   "材料": "Write an essay based on the picture and the chart below. In your essay, you should 1) describe the picture and the chart briefly, 2) interpret the implied meaning, and 3) give your comments. Write your answer in 160-200 words on the ANSWER SHEET. (20 points) 2020 年 2021 年 2022 年 某市近三年公园数量 （单位：座） Dear Li Ming, I’ve got a class assignment to make an oral report on an ancient Chinese scientist, but I’m not sure how to prepare for it. Can you give me some advice? Thank you for your help. Yours, Paul",
+   "材料": "Write an essay based on the picture and the chart below. In your essay, you should\n1) describe the picture and the chart briefly,\n2) interpret the implied meaning, and\n3) give your comments.\nWrite your answer in 160-200 words on the ANSWER SHEET. (20 points)\n\n图表/图意：某市近三年公园数量 （单位：座）",
    "小题": [
     {
      "题号": 52,
      "题干": "写作要求",
-     "材料": "Write an essay based on the picture and the chart below. In your essay, you should 1) describe the picture and the chart briefly, 2) interpret the implied meaning, and 3) give your comments. Write your answer in 160-200 words on the ANSWER SHEET. (20 points) 2020 年 2021 年 2022 年 某市近三年公园数量 （单位：座） Dear Li Ming, I’ve got a class assignment to make an oral report on an ancient Chinese scientist, but I’m not sure how to prepare for it. Can you give me some advice? Thank you for your help. Yours, Paul",
+     "材料": "Write an essay based on the picture and the chart below. In your essay, you should\n1) describe the picture and the chart briefly,\n2) interpret the implied meaning, and\n3) give your comments.\nWrite your answer in 160-200 words on the ANSWER SHEET. (20 points)\n\n图表/图意：某市近三年公园数量 （单位：座）",
      "题型": "写作",
-     "分值": 10
+     "分值": 10,
+     "部分": "WRITE",
+     "部分名": "写作",
+     "边界题": true,
+     "id": "EN1-2024-52",
+     "tier": "EN1",
+     "year": "2024",
+     "主观": true,
+     "图片": "img/EN1-2024-52.jpg"
     }
-   ]
+   ],
+   "部分名": "写作",
+   "部分全称": "写作 Part A/B"
   }
  ],
  "题目数": 52,

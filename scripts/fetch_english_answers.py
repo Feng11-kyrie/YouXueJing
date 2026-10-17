@@ -112,7 +112,7 @@ def parse_blocks_with_exp(t, lo, hi):
                     break
                 # 下一行：`D` 或 `[ D ]` 或 `[ D ] Without`
                 if j + 1 < len(blk):
-                    m2 = re.match(r'\[?\s*([A-G])\s*\]?', blk[j + 1])
+                    m2 = re.match(r'\[?\s*([A-GTtFf])\s*\]?', blk[j + 1])
                     if m2:
                         ans = m2.group(1)
                     break
@@ -223,7 +223,10 @@ def parse_partb_answers(t, lo=41, hi=45):
     答案标记 `【答案】\n[ X ]` **不带题号**，所以按出现顺序对应 41–45。
     数量必须恰好等于 5 才采纳（与完形同一策略：宁可不要，不要错配）。
     """
-    got = re.findall(r'【答案】\s*\n?\s*\[\s*([A-Ga-g])\s*\]', t)
+    # 两种排版：`【答案】\n[ E ]`（选句/排序）与 `【答案】\nF`（判断题，无方括号）
+    got = re.findall(r'【答案】\s*\n?\s*\[\s*([A-Ga-gTtFf])\s*\]', t)
+    if len(got) != hi - lo + 1:
+        got = re.findall(r'【答案】\s*\n?\s*([A-GTtFf])\s*(?=\n|$)', t)
     if len(got) != hi - lo + 1:
         return {}
     return {lo + i: _letter(a) for i, a in enumerate(got)}
