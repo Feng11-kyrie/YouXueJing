@@ -253,6 +253,8 @@ def _comprehensive_block(q, year, user):
          （题库 JSON 里那份被清洗掉了，但页面渲染的是含分值的原文。）
       ③ **自评分与自动判分严格分开存**：source='selfscore'，
          界面也绝不说成"判分结果" —— 这是用户自己给的判断。
+         ④ **自动反馈是"可选"且必须标明依据**：有官方评分标准的题按分档给分，
+         没有的只做结构体检；两种来源在标题上要能一眼分开（见 cards_subj）。
     """
     from yj import data as _data
     sol = _data.solution(year, q["题号"]) if year else None   # {文本, 是否AI生成}
@@ -261,7 +263,7 @@ def _comprehensive_block(q, year, user):
     except (TypeError, ValueError):
         total = 0
 
-    ui.label(f"综合应用题 · 手写解答题（本题 {total} 分，不做自动判分）") \
+    ui.label(f"综合应用题 · 手写解答题（本题 {total} 分 · 自动反馈仅供参考）") \
         .classes("t-sm font-semibold").style("color:#B45309")
 
     # ---- 作答提示 + 「查看解析」按钮（用户要的那个入口）
@@ -330,14 +332,15 @@ def _comprehensive_block(q, year, user):
                  "请对照教材自行核对后给分。") \
             .classes("t-xs").style("color:#B45309")
 
-    # ---- 自动反馈（免费结构体检 + BYOK AI 精评）----
+    # ---- 自动反馈（免费评分：有评分标准就分档，否则结构体检 + BYOK AI 精评）----
     # 用户要求：政治和 408 也像英语那样，默认免费评分 + 可接自己的 Key 做 AI 精评。
     # 注意仍保留下面的"自评给分"—— 那是用户自己判分，与自动评分**分开存**。
     try:
         from proto.cards_subj import subj_panel
         with ui.expansion("获取自动反馈（可选）", value=False).classes("w-full"):
             subj_panel(q, "408", q.get("题干") or "", "", float(total or 10),
-                       user, need_words=150)
+                       user, need_words=150,
+                       reference=(sol["文本"] if sol else ""))
     except Exception:                                       # noqa: BLE001
         pass
 

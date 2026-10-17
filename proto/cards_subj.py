@@ -49,8 +49,35 @@ def _terms_of(q, subject):
     return out
 
 
+def _free_score(q, subject, text, prompt_text, material, full, need_words,
+                reference):
+    """
+    免费评分走哪条路（顺序不能反）：
+
+      ① **有官方评分标准**（data/408/rubrics/<年>.json）→ 按分档给分
+      ② 没有 → 结构体检（篇幅 / 分点 / 考点词）
+
+    为什么不能"一律按评分标准"：408 的评分标准在公开资料里只找到
+    2025 年 41 题这一份（见 docs/handover_408_rubrics.md 与
+    data/408/rubrics/_coverage.md），其余年份只能退回结构体检。
+    两条路的结论**必须能区分**，否则学生会把"体检分"当成"阅卷分"。
+    """
+    if subject == "408":
+        rub = rc.rubric_for(q.get("year"), q.get("题号"))
+        if rub:
+            r = rc.score_by_rubric(text, rub, full,
+                                   reference=reference or "",
+                                   terms=_terms_of(q, subject))
+            r["依据"] = "官方评分标准"
+            return r
+    r = rc.score_generic(text, prompt_text, material or "", full,
+                         need_words, terms=_terms_of(q, subject))
+    r["依据"] = "结构体检"
+    return r
+
+
 def subj_panel(q, subject, prompt_text, material, full, user,
-               need_words=120, storage_key=None):
+               need_words=120, storage_key=None, reference=""):
     """
     渲染一道主观题的作答 + 评分区。
 
@@ -58,6 +85,7 @@ def subj_panel(q, subject, prompt_text, material, full, user,
     prompt_text : 题干
     material    : 材料（政治的材料分析题有；408 一般为空）
     full        : 该题满分
+    reference   : 参考答案（有则用于校正"是否答到点子"；没有也能判）
     """
     key = storage_key or q.get("id") or f'{subject}-{q.get("题号")}'
     rb = _rubric_for(subject, full)
@@ -72,8 +100,8 @@ def subj_panel(q, subject, prompt_text, material, full, user,
         if len(text) < 5:
             ui.notify("先写一点内容再评分。", color="warning")
             return
-        r = rc.score_generic(text, prompt_text, material or "", full,
-                             need_words, terms=_terms_of(q, subject))
+        r = _free_score(q, subject, text, prompt_text, material, full,
+                        need_words, reference)
         _render(out, r, full, free=True)
 
     def run_ai():
@@ -116,7 +144,8 @@ def subj_panel(q, subject, prompt_text, material, full, user,
         ui.button("免费评分", on_click=run_free).props("unelevated dense")
         b = ui.button("AI 精评", on_click=run_ai).props(
             "unelevated dense" if llm_key.get().get("key") else "outline dense disabled")
-    ui.label("免费评分只评「篇幅 / 分点 / 呼应题干」—— 评不了知识正确性；"
+    ui.label("免费评分：有官方评分标准的题按「分档」给分，其余只做结构体检"
+             "（篇幅 / 分点 / 考点词）—— 都评不了代码是否真的正确；"
              "要更准的评阅需在顶部接入自己的 API Key。") \
         .classes("t-xs").style("color:#9CA3AF")
 
@@ -129,12 +158,16 @@ def _render(box, r, full, free):
                 .style("color:#8C2C2C")
             return
         if free:
-            ui.label(f'结构体检　{r.get("分数")} / {full:g}').classes(
-                "t-lead font-bold")
+            # 两种来源必须一眼分得开：分档给分 vs 结构体检。
+            # 把"体检分"写成"评分标准分"会让学生误以为是阅卷分数。
+            is_rubric = r.get("类型") == "rubric"
+            ui.label(f'{r.get("依据", "结构体检")}　{r.get("分数")} / {full:g}') \
+                .classes("t-lead font-bold") \
+                .style("color:#17418F" if is_rubric else "")
             ui.label(r.get("来源", "")).classes("t-xs").style("color:#6B7280")
             for it in r.get("分项") or []:
                 ui.label(f'　{it["项"]}：{it["得分"]} / {it["满分"]} —— {it["说明"]}') \
-                    .classes("t-sm")
+                    .classes("t-sm").style("line-height:1.7")
         else:
             ui.label("AI 精评（参考，非官方得分）").classes("t-lead font-bold") \
                 .style("color:#B45309")
