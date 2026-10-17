@@ -341,14 +341,14 @@ def solution(year, num):
     if item:
         is_ai = n in (rec.get("生成") or [])
         return {"文本": item, "是否AI生成": is_ai,
-                "来源标注": ("AI 生成，未经官方核验" if is_ai
+                "来源标注": ("AI 生成" if is_ai
                          else "答案册抽取（OCR，可能有错字）")}
     # 2) 单选解析文件
     cr = choice_records().get(y) or {}
     item = (cr.get("解答") or {}).get(n)
     if item:
         return {"文本": item, "是否AI生成": True,
-                "来源标注": "AI 生成（未经官方核验）"}
+                "来源标注": "AI 生成"}
     return None
 
 

@@ -301,7 +301,9 @@ def _comprehensive_block(q, year, user):
                     # 来源标注必须分开：答案册抽取 ≠ AI 生成。
                     # 把 AI 写的解法说成官方答案就是编造，这条是红线。
                     if sol["是否AI生成"]:
-                        ui.label("参考答案（AI 生成，未经官方核验）") \
+                        # 综合题的"答案"本身是 AI 补写的（本地答案册没有），
+                        # 这里保留"AI 生成"提示，但不再用"未经官方核验"的说法。
+                        ui.label("参考答案（AI 生成）") \
                             .classes("t-sm font-semibold") \
                             .style("color:#B45309")
                         ui.label("这道题本地答案册没有可提取的解析（扫描件残缺或倾斜"
