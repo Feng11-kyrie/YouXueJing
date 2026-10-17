@@ -518,6 +518,19 @@
   },
   {
    "部分": "WRITE",
+   "材料": "Suppose you and Jack are going to do a survey on the protection of old houses in an ancient town. Write him an email to 1) put forward your plan, and 2) ask for his opinion. Write your answer in about 100 words on the ANSWER SHEET. Do not use your own name in your email; use “Li Ming” instead. (10 points) Part B",
+   "小题": [
+    {
+     "题号": 47,
+     "题干": "写作要求",
+     "材料": "Suppose you and Jack are going to do a survey on the protection of old houses in an ancient town. Write him an email to 1) put forward your plan, and 2) ask for his opinion. Write your answer in about 100 words on the ANSWER SHEET. Do not use your own name in your email; use “Li Ming” instead. (10 points) Part B",
+     "题型": "写作",
+     "分值": 10
+    }
+   ]
+  },
+  {
+   "部分": "WRITE",
    "材料": "Write an essay based on the chart below. In your writing, you should 1) describe and interpret the chart, and 2) give your comments. Write your answer in about 150 words on the ANSWER SHEET. (15 points) 某高校劳动实践课学生主要收获调查 54.40% 32.60% 91.30% 84.80% 0% 20% 40% 60% 80% 100% 感觉到心情舒畅 提升了合作能力 学习了相关知识 提升了动手能力",
    "小题": [
     {
@@ -530,7 +543,7 @@
    ]
   }
  ],
- "题目数": 47,
+ "题目数": 48,
  "年份": "2024",
  "来源": "懒笔记 paper 页（结构化正文）"
 }

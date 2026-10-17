@@ -187,10 +187,24 @@ def explanation(tier, year, num):
     rec = load_json(expl_path_of(tier, year))
     if not rec:
         return None
-    e = (rec.get("解答") or {}).get(str(num))
-    if not e:
-        return None
-    return e
+    ans = rec.get("解答") or {}
+    e = ans.get(str(num))
+    if e:
+        return e
+    # 【翻译的参考译文是**整卷一份**，不分题号】
+    # 写盘时只存了 `_参考译文` 一个键（一篇文章对应 46–50 五题共用），
+    # 所以按题号取不到时回退到整卷那一份。
+    #
+    # **但必须限定在翻译题上** —— 我最初没限制，结果写作题（51/52）
+    # 也拿到了翻译的参考译文，显示成"参考译文"而不是"参考范文"。
+    try:
+        if part_of(num, tier)[0] == "TRANS":   # 注意返回的是元组 (代码, 边界题?)
+            ref = ans.get("_参考译文")
+            if ref:
+                return {"_参考译文": ref, "来源": "懒笔记"}
+    except Exception:                                       # noqa: BLE001
+        pass
+    return None
 
 
 def part_stats(tier, year):

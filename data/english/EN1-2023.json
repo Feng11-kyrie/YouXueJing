@@ -570,6 +570,19 @@
   },
   {
    "部分": "WRITE",
+   "材料": "Write a notice to recruit a student for Prof. Smith’s research project on campus sports activities. Specify the duties and requirements of the job. You should write about 100 words on the ANSWER SHEET. Do not use your own name at the end of the notice; use “Li Ming” instead. (10 points) Part B",
+   "小题": [
+    {
+     "题号": 51,
+     "题干": "写作要求",
+     "材料": "Write a notice to recruit a student for Prof. Smith’s research project on campus sports activities. Specify the duties and requirements of the job. You should write about 100 words on the ANSWER SHEET. Do not use your own name at the end of the notice; use “Li Ming” instead. (10 points) Part B",
+     "题型": "写作",
+     "分值": 10
+    }
+   ]
+  },
+  {
+   "部分": "WRITE",
    "材料": "Write an essay of 160-200 words based on the picture below. In your essay, you should 1) describe the picture briefly, 2) interpret the implied meaning, and 3) give your comments. You should write neatly on the ANSWER SHEET. (20 points)",
    "小题": [
     {
@@ -582,7 +595,7 @@
    ]
   }
  ],
- "题目数": 51,
+ "题目数": 52,
  "年份": "2023",
  "来源": "懒笔记 paper 页（结构化正文）"
 }

@@ -570,6 +570,19 @@
   },
   {
    "部分": "WRITE",
+   "材料": "Read the following email from an international student and write a reply. Write your answer in about 100 words on the ANSWER SHEET. Do not use your own name in your email; use “Li Ming” instead. (10 points) Part B",
+   "小题": [
+    {
+     "题号": 51,
+     "题干": "写作要求",
+     "材料": "Read the following email from an international student and write a reply. Write your answer in about 100 words on the ANSWER SHEET. Do not use your own name in your email; use “Li Ming” instead. (10 points) Part B",
+     "题型": "写作",
+     "分值": 10
+    }
+   ]
+  },
+  {
+   "部分": "WRITE",
    "材料": "Write an essay based on the picture and the chart below. In your essay, you should 1) describe the picture and the chart briefly, 2) interpret the implied meaning, and 3) give your comments. Write your answer in 160-200 words on the ANSWER SHEET. (20 points) 2020 年 2021 年 2022 年 某市近三年公园数量 （单位：座） Dear Li Ming, I’ve got a class assignment to make an oral report on an ancient Chinese scientist, but I’m not sure how to prepare for it. Can you give me some advice? Thank you for your help. Yours, Paul",
    "小题": [
     {
@@ -582,7 +595,7 @@
    ]
   }
  ],
- "题目数": 51,
+ "题目数": 52,
  "年份": "2024",
  "来源": "懒笔记 paper 页（结构化正文）"
 }

@@ -224,8 +224,16 @@ def _subjective_from_pdf(tier, year):
     # ---- 写作：所有 "NN. Directions" 锚点 ----
     anchors = []
     for i, l in enumerate(lines):
+        # 形态一：`51. Directions:`
         m = re.match(r'^\s*(\d{1,2})\s*[.、]\s*Directions?\s*[:：]?', l)
         if m:
+            anchors.append((i, int(m.group(1))))
+            continue
+        # 形态二：`51.` 单独一行，下一行才是 `Directions:`
+        # 实测 2024 英语一的小作文就是这样，我第一版只认形态一，
+        # **结果 51 题整道没进库**（真题只有 52 一道写作题）。
+        m = re.fullmatch(r'\s*(\d{1,2})\s*[.、]\s*', l)
+        if m and i + 1 < len(lines) and re.match(r'^Directions?\s*[:：]?', lines[i + 1]):
             anchors.append((i, int(m.group(1))))
     for k, (i, n) in enumerate(anchors):
         end = anchors[k + 1][0] if k + 1 < len(anchors) else len(lines)
@@ -246,8 +254,12 @@ def _subjective_from_pdf(tier, year):
         # —— 里面就有 "write"，所以不能用 "write" 判写作（我第一版这么写，
         # 结果英语二的翻译被判成了写作，46/47/48 全标错）。
         is_trans = "translate the following" in low
-        is_write = bool(re.search(r'write\s+(an?\s+)?(essay|letter|email|note)',
-                                  low))
+        # 写作的判据只要 **出现 write** 即可 —— 翻译已经用
+        # `translate the following` 精确排除了。
+        # 实测 2024 英语一小作文的指令是 `... and write a reply. Write your
+        # answer in about 100 words`，我原先只认 essay|letter|email|note，
+        # 结果 `write a reply` 不匹配 → **51 题整道没进库**。
+        is_write = bool(re.search(r'\bwrite\b', low))
         if is_trans and not is_write:
             continue          # 已在翻译分支处理
         if not is_write:

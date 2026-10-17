@@ -518,6 +518,19 @@
   },
   {
    "部分": "WRITE",
+   "材料": "Suppose you are planning a short play based on a classic Chinese novel. Write your friend John an email to: 1) introduce the play, and 2) invite him to take part in it. Write your answer in about 100 words on the ANSWER SHEET. Do not use your own name in your email. Use “Li Ming” instead. (10 points) Part B",
+   "小题": [
+    {
+     "题号": 47,
+     "题干": "写作要求",
+     "材料": "Suppose you are planning a short play based on a classic Chinese novel. Write your friend John an email to: 1) introduce the play, and 2) invite him to take part in it. Write your answer in about 100 words on the ANSWER SHEET. Do not use your own name in your email. Use “Li Ming” instead. (10 points) Part B",
+     "题型": "写作",
+     "分值": 10
+    }
+   ]
+  },
+  {
+   "部分": "WRITE",
    "材料": "Write an essay based on the chart below. In your essay, you should 1) describe and interpret the chart, and 2) give your comments. Write your answer in about 150 words on the ANSWER SHEET. (15 points) 90.80% 68.30% 34.70% 31.80% 18.40% 看电视 散步 养花 阅读 下棋 某社区老年人主要日常休闲活动调查",
    "小题": [
     {
@@ -530,7 +543,7 @@
    ]
   }
  ],
- "题目数": 47,
+ "题目数": 48,
  "年份": "2025",
  "来源": "懒笔记 paper 页（结构化正文）"
 }

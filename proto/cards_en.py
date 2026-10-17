@@ -452,6 +452,24 @@ def subjective_block(q, year, tier, done, user):
         with ui.row().classes("items-center gap-2"):
             btn = ui.button("提交并请 AI 评阅", on_click=lambda: run())
 
+        # 【参考材料要**一开始就能看**，不能只在评阅后出现】
+        # 学生做题时需要对照参考译文/范文，而不是评阅完才给。
+        # 我第一版把它放在评阅结果里，实测页面上根本看不到。
+        if ref.get("_参考译文"):
+            with ui.expansion("参考译文（机构整理，仅供参考）") \
+                    .classes("w-full"):
+                ui.label(ref["_参考译文"]).classes(
+                    "t-sm whitespace-pre-wrap").style("line-height:1.9")
+        if ref.get("参考范文"):
+            _word = ref.get("词数")
+            _title = (f'参考范文（{_word} 词 · 机构整理，非官方标准答案）'
+                      if _word else "参考范文（机构整理，非官方标准答案）")
+            with ui.expansion(_title).classes("w-full"):
+                ui.label(ref["参考范文"]).classes(
+                    "t-sm whitespace-pre-wrap").style(
+                    "line-height:1.9;"
+                    "font-family:Georgia,'Times New Roman',serif")
+
         def show_rubric():
             """官方评分标准 —— 必须露出，学生才知道真实尺度。"""
             with ui.expansion("官方评分标准", value=False).classes("w-full"):
@@ -498,12 +516,6 @@ def subjective_block(q, year, tier, done, user):
                     if r.get("建议"):
                         ui.label(f'建议：{r["建议"]}').classes("t-sm mt-1") \
                             .style("color:#17418F")
-                # 参考译文/范文：有就展示（学生要对照）
-                if ref.get("_参考译文"):
-                    with ui.expansion("参考译文（机构整理，仅供参考）") \
-                            .classes("w-full mt-1"):
-                        ui.label(ref["_参考译文"]).classes(
-                            "t-sm whitespace-pre-wrap").style("line-height:1.9")
                 show_rubric()
             btn.set_enabled(True)
 

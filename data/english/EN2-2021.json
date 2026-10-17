@@ -518,6 +518,19 @@
   },
   {
    "部分": "WRITE",
+   "材料": "Suppose you are organizing an online meeting.Write an enail to Jack,an interational student, to 1) invite him to participate, and 2) tel im the details. You should write about 100 words on the ANSWER SHEET. Do not use your own name.Use\"Li Ming\"instead.(10 points) Part B",
+   "小题": [
+    {
+     "题号": 47,
+     "题干": "写作要求",
+     "材料": "Suppose you are organizing an online meeting.Write an enail to Jack,an interational student, to 1) invite him to participate, and 2) tel im the details. You should write about 100 words on the ANSWER SHEET. Do not use your own name.Use\"Li Ming\"instead.(10 points) Part B",
+     "题型": "写作",
+     "分值": 10
+    }
+   ]
+  },
+  {
+   "部分": "WRITE",
    "材料": "Write an essay based on the chart below.In your writing,you should 1) interpret the chart, and 2) give your comments, You should write about 150 words on the ANSWER SHEET.(15 points) 某市居民锻炼方式调查 60.0%54.3% 50.0%47.7% 40.0% 30.0% 23.9% 20.0%15.8% 10.0% 0.0%-独白锻炼和家人一起 和朋友一走团体活动 英语（二）试题 .14.（共14页）",
    "小题": [
     {
@@ -530,7 +543,7 @@
    ]
   }
  ],
- "题目数": 47,
+ "题目数": 48,
  "年份": "2021",
  "来源": "懒笔记 paper 页（结构化正文）"
 }

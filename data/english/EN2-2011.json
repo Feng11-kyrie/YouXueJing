@@ -505,6 +505,32 @@
   },
   {
    "部分": "WRITE",
+   "材料": "In this section there is a text in English. Translate it into Chinese. Write your translation on ANSWER SHEET 2. (15 points) Who would have thought that, globally, the IT industry produces about the same volume of gree呻ouse gases as the world's airlines do — roughly 2 percent of all CO2 emissions? Many everyday tasks take a surprising toll on the environment. A Google search can leak between 0.2 and 7 .0 grams of CO2, depending on how many attempts are needed to get the \"right\" answer. To deliver results to its users quickly, then, Google has to maintain vast data centres around the world, packed with powerful computers. While producing large quantities of CO2, these computers emit a great deal of heat, so the centres need to be well air-conditioned, which uses even more energy. However, Google and other big tech providers monitor their efficiency closely and make improvements. Monitoring is the first step on the road to reduction, but there is much more to be done, and not just by big companies. - 13 -",
+   "小题": [
+    {
+     "题号": 46,
+     "题干": "写作要求",
+     "材料": "In this section there is a text in English. Translate it into Chinese. Write your translation on ANSWER SHEET 2. (15 points) Who would have thought that, globally, the IT industry produces about the same volume of gree呻ouse gases as the world's airlines do — roughly 2 percent of all CO2 emissions? Many everyday tasks take a surprising toll on the environment. A Google search can leak between 0.2 and 7 .0 grams of CO2, depending on how many attempts are needed to get the \"right\" answer. To deliver results to its users quickly, then, Google has to maintain vast data centres around the world, packed with powerful computers. While producing large quantities of CO2, these computers emit a great deal of heat, so the centres need to be well air-conditioned, which uses even more energy. However, Google and other big tech providers monitor their efficiency closely and make improvements. Monitoring is the first step on the road to reduction, but there is much more to be done, and not just by big companies. - 13 -",
+     "题型": "写作",
+     "分值": 10
+    }
+   ]
+  },
+  {
+   "部分": "WRITE",
+   "材料": "Suppose your cousin Li Ming has just been admitted to a university. Write him小er a letter to 1) congratulate him加r, and 2) give him加r suggestions on how to get prepared for university life. You should write about 100 words on ANSWER SHEET 2. Do not sign your own name at the end of the letter. Use \"Zhang Wei\" instead. Do not write the address. (10 points) PartB",
+   "小题": [
+    {
+     "题号": 47,
+     "题干": "写作要求",
+     "材料": "Suppose your cousin Li Ming has just been admitted to a university. Write him小er a letter to 1) congratulate him加r, and 2) give him加r suggestions on how to get prepared for university life. You should write about 100 words on ANSWER SHEET 2. Do not sign your own name at the end of the letter. Use \"Zhang Wei\" instead. Do not write the address. (10 points) PartB",
+     "题型": "写作",
+     "分值": 10
+    }
+   ]
+  },
+  {
+   "部分": "WRITE",
    "材料": "Write an essay based on the following chart. In your writing, you should 1) interpret the chart and 2) give your comments. You should write at least 150 words. Write your essay on ANSWER SHEET 2. (15 points) 40% 35% 30% 25% 20% 15% 10% 5% 0% 2008年 口国产品牌 2009年 • 日系品牌 口美系品牌 2008、 2009年国内轿车市场部分品牌市场份额示意图 - 14 -",
    "小题": [
     {
@@ -517,7 +543,7 @@
    ]
   }
  ],
- "题目数": 46,
+ "题目数": 48,
  "年份": "2011",
  "来源": "懒笔记 paper 页（结构化正文）"
 }

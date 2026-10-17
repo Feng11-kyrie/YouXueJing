@@ -544,6 +544,19 @@
   },
   {
    "部分": "WRITE",
+   "材料": "You are supposed to write for the Postgraduates' Association a notice to recruit volunteers for an international conference on globalization. The notice should include the basic qualifications for applicants and the other information which you think is relevant. You should write about 100 words on ANSWER SHEET 2. Do not sign your own name at the end of the notice. Use \"Postgraduates' Association\" instead. ( 10 points) PartB",
+   "小题": [
+    {
+     "题号": 51,
+     "题干": "写作要求",
+     "材料": "You are supposed to write for the Postgraduates' Association a notice to recruit volunteers for an international conference on globalization. The notice should include the basic qualifications for applicants and the other information which you think is relevant. You should write about 100 words on ANSWER SHEET 2. Do not sign your own name at the end of the notice. Use \"Postgraduates' Association\" instead. ( 10 points) PartB",
+     "题型": "写作",
+     "分值": 10
+    }
+   ]
+  },
+  {
+   "部分": "WRITE",
    "材料": "Write an essay of 160-200 words based on the following drawing. In your essay, you should 1) describe the drawing briefly, 2) explain its intended meaning, and 3) give your comments. You should write neatly on ANSWER SHEET 2. (20 points) - 14 -",
    "小题": [
     {
@@ -556,7 +569,7 @@
    ]
   }
  ],
- "题目数": 49,
+ "题目数": 50,
  "年份": "2010",
  "来源": "懒笔记 paper 页（结构化正文）"
 }

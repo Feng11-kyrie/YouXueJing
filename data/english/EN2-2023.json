@@ -515,9 +515,22 @@
      "分值": 15
     }
    ]
+  },
+  {
+   "部分": "WRITE",
+   "材料": "An art exhibition and a robot show are to be held on Sunday, and your friend David asks you which one he should go to. Write him an email to 1) make a suggestion, and 2) give your reason(s). Write your answer in about 100 words on the ANSWER SHEET. Do not use your own name in your email, use “Li Ming” instead. (10 points)",
+   "小题": [
+    {
+     "题号": 47,
+     "题干": "写作要求",
+     "材料": "An art exhibition and a robot show are to be held on Sunday, and your friend David asks you which one he should go to. Write him an email to 1) make a suggestion, and 2) give your reason(s). Write your answer in about 100 words on the ANSWER SHEET. Do not use your own name in your email, use “Li Ming” instead. (10 points)",
+     "题型": "写作",
+     "分值": 10
+    }
+   ]
   }
  ],
- "题目数": 46,
+ "题目数": 47,
  "年份": "2023",
  "来源": "懒笔记 paper 页（结构化正文）"
 }

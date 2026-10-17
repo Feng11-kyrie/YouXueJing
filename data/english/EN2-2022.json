@@ -518,6 +518,19 @@
   },
   {
    "部分": "WRITE",
+   "材料": "Suppose you are planning a campus food festival. Write an e-mail to the international students in your university to 1) introduce the food festival, and 2) invite them to participate. You should write about 100 words on the ANSWER SHEET. Do not use your own name. Use “Li Ming ,9 instead. (10 points) Part B",
+   "小题": [
+    {
+     "题号": 47,
+     "题干": "写作要求",
+     "材料": "Suppose you are planning a campus food festival. Write an e-mail to the international students in your university to 1) introduce the food festival, and 2) invite them to participate. You should write about 100 words on the ANSWER SHEET. Do not use your own name. Use “Li Ming ,9 instead. (10 points) Part B",
+     "题型": "写作",
+     "分值": 10
+    }
+   ]
+  },
+  {
+   "部分": "WRITE",
    "材料": "Write an essay based on the following chart. In your writing, you should 1) interpret the chart, and 2) give your comments. You should write about 150 words on the ANSWER SHEET. (15 points) 2022年 英 语 （ 二）试 题 第1 4页 共1 4页",
    "小题": [
     {
@@ -530,7 +543,7 @@
    ]
   }
  ],
- "题目数": 47,
+ "题目数": 48,
  "年份": "2022",
  "来源": "懒笔记 paper 页（结构化正文）"
 }

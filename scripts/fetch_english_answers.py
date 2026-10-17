@@ -64,6 +64,125 @@ def _letter(s):
     return "".join(out)
 
 
+def parse_blocks_with_exp(t, lo, hi):
+    """
+    解析分节页，返回 {题号: {"答案": 字母, "解析": 文本}}。
+
+    页面结构（正文区）：
+        26.                       ← 题号独立成行
+        According to ...          ← 题干
+        [ A ] / 选项文本 / ...
+        【答案】
+        D                          ← 答案字母
+        （细节题）                 ← 题型
+        【判型】...【定位】...【选项】...   ← 解析主体
+        27.                       ← 下一题
+
+    完形的答案行是 `[ D ] Without`（带方括号和首个词），也要兼容。
+    """
+    lines = [l.strip() for l in t.split("\n")]
+    # 找所有"题号独立成行"的位置
+    starts = []
+    for i, l in enumerate(lines):
+        m = re.fullmatch(r'(\d{1,2})\s*[.、]', l)
+        if m:
+            n = int(m.group(1))
+            if lo <= n <= hi:
+                starts.append((i, n))
+    # 去掉目录里的重复题号：取每个题号**最后一次**出现（正文在目录之后）
+    last = {}
+    for i, n in starts:
+        last[n] = i
+    pos = sorted(last.items(), key=lambda kv: kv[1])
+
+    out = {}
+    for k, (n, i0) in enumerate(pos):
+        i1 = pos[k + 1][1] if k + 1 < len(pos) else len(lines)
+        blk = lines[i0:i1]
+        # 找答案
+        ans = None
+        ai = None
+        for j, l in enumerate(blk):
+            if '【答案】' in l:
+                ai = j
+                # 同一行就有字母：`【答案】D`
+                m = re.search(r'【答案】\s*\[?\s*([A-G])\s*\]?', l)
+                if m:
+                    ans = m.group(1)
+                    break
+                # 下一行：`D` 或 `[ D ]` 或 `[ D ] Without`
+                if j + 1 < len(blk):
+                    m2 = re.match(r'\[?\s*([A-G])\s*\]?', blk[j + 1])
+                    if m2:
+                        ans = m2.group(1)
+                    break
+        if ans is None:
+            continue
+        # 解析 = 答案之后到块尾，去掉表格化的选项重复段（保留正文）
+        body = []
+        for l in blk[ai + 1:]:
+            if not l:
+                continue
+            body.append(l)
+        # 去掉开头的答案行残留（`[ D ] Without` 里的 Without 保留会有用）
+        if body:
+            body[0] = re.sub(r'^\[?\s*[A-G]\s*\]?\s*', '', body[0]).strip()
+            if not body[0]:
+                body.pop(0)
+        out[n] = {"答案": ans, "解析": "\n".join(body)[:4000]}
+    return out
+
+
+def parse_ordering_blocks_with_exp(t, lo=41, hi=45):
+    """
+    **段落排序题**的逐题解析（与填空/小标题题不同，它没有 `【答案】`）。
+
+    页面结构（实测 2010 英语一）：
+        正确顺序 / 41 / B / → / 42 / F / …          ← 整体正确顺序链
+        通读验证…                                     ← 整篇总结
+        41.                                           ← 逐题解析开始
+        正确段
+        B                                             ← 该位正确段
+        【引出后一段】
+        段 F …
+        【辨错段】
+        段 C …
+
+    所以：块起点是 `NN.`，答案取 `正确段` 的下一行，
+    解析取该块其余内容。
+    """
+    lines = [l.strip() for l in t.split("\n")]
+    starts = [(i, int(m.group(1))) for i, l in enumerate(lines)
+              if (m := re.fullmatch(r'(\d{1,2})\s*[.、]', l))
+              and lo <= int(m.group(1)) <= hi]
+    # 取每个题号的**最后一次**出现（逐题解析在最后，正文前面还有卷面）
+    last = {}
+    for i, n in starts:
+        last[n] = i
+    pos = sorted(last.items(), key=lambda kv: kv[1])
+    out = {}
+    for k, (n, i0) in enumerate(pos):
+        i1 = pos[k + 1][1] if k + 1 < len(pos) else len(lines)
+        blk = lines[i0:i1]
+        ans = None
+        ai = None
+        for j, l in enumerate(blk):
+            if l in ("正确段", "正确答案", "正确项"):
+                ai = j
+                for k2 in range(j + 1, min(j + 3, len(blk))):
+                    m = re.fullmatch(r'[A-G]', blk[k2])
+                    if m:
+                        ans = blk[k2]
+                        ai = k2
+                        break
+                break
+        if ans is None:
+            continue
+        body = [x for x in blk[ai + 1:] if x]
+        out[n] = {"答案": ans, "解析": "\n".join(body)[:4000]}
+    return out
+
+
 def parse_cloze_answers(t, lo=1, hi=20):
     """
     完形：`【答案】\\n[ D ] Without` —— **不带题号**，按出现顺序对应 1..20。
@@ -211,7 +330,29 @@ def fetch(tier, year, verbose=True, write=False):
                 wait_until="domcontentloaded", timeout=45000)
         pg.wait_for_timeout(1500)
 
-        for sec, (lo, hi) in SECTIONS:
+        # 【2026 的分节路径不一样】站点把四篇阅读合并成一页 `section2-part-a`
+        # （含 21–40），而 `section2-part-a-1` 是 404。
+        #
+        # 关键：**必须先用 HTTP 探测状态码，不能靠 goto 失败来发现** ——
+        # goto 一个 404 会触发 "Download is starting"，之后**同一个 page
+        # 就卡在下载状态**，后续 goto 全部失败（实测：回退分支里再 goto
+        # 合并页也报错，而我单独新建 page 访问同一个 URL 是 200）。
+        secs = list(SECTIONS)
+        try:
+            r = pg.context.request.get(f"{SITE}/{year}-{slug}/section2-part-a-1/",
+                                       timeout=20000)
+            if r.status != 200:
+                # 实测 2026：`section2-part-a` 就是 **21–25**（只是省了 `-1` 后缀），
+                # a-2=26–30、a-3=31–35、a-4=36–40 —— 所以只替换第一份、范围不变。
+                secs = [("section2-part-a", (21, 25))
+                        if x[0] == "section2-part-a-1" else x for x in secs]
+                if verbose:
+                    print(f"      （part-a-1 状态 {r.status} → 改用合并页 part-a）")
+        except Exception:                               # noqa: BLE001
+            pass
+
+        for sec, (lo, hi) in secs:
+            partb_ordering = False
             url = f"{SITE}/{year}-{slug}/{sec}/"
             try:
                 pg.goto(url, wait_until="domcontentloaded", timeout=45000)
@@ -233,9 +374,16 @@ def fetch(tier, year, verbose=True, write=False):
                 #   · 段落排序：一整条正确顺序链（`正确顺序` 块 或 `41=B → …`）
                 # 我最初按"英语一一定是排序"写死，结果只有排序那几年成功，
                 # 其余年份明明有 `【答案】` 却拿不到 —— 所以**两种都试、取多的**。
-                a = parse_partb_answers(t, lo, hi)
-                b = parse_en1_partb_ordering(t)
-                got = a if len(a) >= len(b) else b
+                # 【变量名别用 b】这里原本写成 `b = parse_en1_partb_ordering(t)`，
+                # 把 fetch() 里的浏览器对象 `b = pw.chromium.launch()` 覆盖了，
+                # 导致函数末尾 `b.close()` 抛 AttributeError: 'dict' object has no attribute 'close'。
+                g1 = parse_partb_answers(t, lo, hi)
+                g2 = parse_en1_partb_ordering(t)
+                if len(g2) > len(g1):
+                    got = g2
+                    partb_ordering = True      # 排序题：解析结构不同
+                else:
+                    got = g1
             elif sec == "section2-part-c":
                 ref = parse_reference(t)
                 if ref:
@@ -244,12 +392,29 @@ def fetch(tier, year, verbose=True, write=False):
                     got = {}
             else:
                 got = parse_numbered_answers(t, lo, hi)
+            # 【补解析】分节页上每题都有完整解析（【判型】【定位】【选项】…），
+            # 原先只存了答案字母、解析全丢 —— 用户要求"题目都有答案和解析"。
+            # 注意 got 是 {题号(int): 字母}，解析单独放 exps，
+            # 写进 out 时再合并（结构不同，不能就地改 got）。
+            exps = {}
+            if got and sec != "section2-part-c":
+                try:
+                    if sec == "section2-part-b" and partb_ordering:
+                        exps = parse_ordering_blocks_with_exp(t, lo, hi)
+                    else:
+                        exps = parse_blocks_with_exp(t, lo, hi)
+                except Exception:                       # noqa: BLE001
+                    exps = {}
             if got:
                 if "_参考译文" in got:
                     out["_参考译文"] = got["_参考译文"]
                 else:
                     for n, a in got.items():
-                        out[str(n)] = {"答案": a, "来源": "懒笔记"}
+                        rec = {"答案": a, "来源": "懒笔记"}
+                        e2 = exps.get(int(n)) or {}
+                        if e2.get("解析"):
+                            rec["解析"] = e2["解析"]
+                        out[str(n)] = rec
             if verbose:
                 n = 1 if "_参考译文" in got else len(got)
                 print(f"      {sec:<18} {n:>2} 条")
@@ -261,10 +426,33 @@ def fetch(tier, year, verbose=True, write=False):
 
 
 def _save(tier, year, got):
-    """原子写盘（中断不会留半个文件）"""
+    """
+    原子写盘（中断不会留半个文件）。
+
+    **必须与已有文件合并，不能整体覆盖** —— 实测踩到：
+    主观题脚本刚写入的 `参考范文` / `_参考译文`，被本脚本下一次
+    `--all` 运行时**整个覆盖掉**（参考范文从 17 条变回 0）。
+    政治那边也因为"重新解析覆盖"丢过三次答案，同一个教训。
+
+    合并规则：新抓到的答案/解析覆盖同题号的旧值；
+    其它键（如 `_参考译文`、`参考范文`、`词数`）原样保留。
+    """
     if not got:
         return
-    rec = {"tier": tier, "年份": str(year), "解答": got,
+    p0 = en.expl_path_of(tier, year)
+    old = {}
+    if os.path.exists(p0):
+        try:
+            old = (json.load(open(p0, encoding="utf-8")).get("解答") or {})
+        except Exception:                                   # noqa: BLE001
+            old = {}
+    merged = dict(old)
+    for k, v in got.items():
+        if isinstance(v, dict) and isinstance(merged.get(k), dict):
+            merged[k] = {**merged[k], **v}
+        else:
+            merged[k] = v
+    rec = {"tier": tier, "年份": str(year), "解答": merged,
            "来源": "懒笔记 english-exam.lazynote.cn"}
     p = en.expl_path_of(tier, year)
     tmp = p + ".tmp"

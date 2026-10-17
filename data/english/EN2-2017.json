@@ -518,6 +518,19 @@
   },
   {
    "部分": "WRITE",
+   "材料": "Suppose you are invited by Professor Williams to give a presentation about Chinese culture to a group of international students. Write a reply to 1) accept the invitation, and 2) introduce the key points of your presentation. You should write about 100 words on the ANSWER SHEET. Do not use your own name. Use \"Li Ming\" instead. Do not write your address. (10 points) PartB",
+   "小题": [
+    {
+     "题号": 47,
+     "题干": "写作要求",
+     "材料": "Suppose you are invited by Professor Williams to give a presentation about Chinese culture to a group of international students. Write a reply to 1) accept the invitation, and 2) introduce the key points of your presentation. You should write about 100 words on the ANSWER SHEET. Do not use your own name. Use \"Li Ming\" instead. Do not write your address. (10 points) PartB",
+     "题型": "写作",
+     "分值": 10
+    }
+   ]
+  },
+  {
+   "部分": "WRITE",
    "材料": "Write an essay based on the chart below. In your writing, you should 1) interpret the chart, and 2) give your comments. You should write about 150 words on the ANSWER SHEET. (15 points) 100 00 8000 6000 4000 2000 20 13 年 20 1 4年 20 15 年 I+博物馆数 益（ 家） 一量 参观人数 （十 万人 次 ）1 20 13 -2015年 我国博物馆 数散和参观人数 - 14 -",
    "小题": [
     {
@@ -530,7 +543,7 @@
    ]
   }
  ],
- "题目数": 47,
+ "题目数": 48,
  "年份": "2017",
  "来源": "懒笔记 paper 页（结构化正文）"
 }

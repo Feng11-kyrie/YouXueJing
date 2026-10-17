@@ -518,6 +518,19 @@
   },
   {
    "部分": "WRITE",
+   "材料": "Some international students are coming to your university. Write them an email in the name of the Students' Union to 1) extend your welcome and 2) provide some suggestions for their campus life here. You should write about 100 words on ANSWER SHEET 2. Do not sign your name at the end of the letter. Use \"Li Ming\" instead. Do not write the address. (10 points) PartB",
+   "小题": [
+    {
+     "题号": 51,
+     "题干": "写作要求",
+     "材料": "Some international students are coming to your university. Write them an email in the name of the Students' Union to 1) extend your welcome and 2) provide some suggestions for their campus life here. You should write about 100 words on ANSWER SHEET 2. Do not sign your name at the end of the letter. Use \"Li Ming\" instead. Do not write the address. (10 points) PartB",
+     "题型": "写作",
+     "分值": 10
+    }
+   ]
+  },
+  {
+   "部分": "WRITE",
    "材料": "Write an essay of 160-200 words based on the following drawing. In your essay you should 1) describe the drawing briefly 2) explain its intended meaning, and 3) give your comments. You should write neatly on ANSWER SHEET 2. (20 points) - 14 -",
    "小题": [
     {
@@ -530,7 +543,7 @@
    ]
   }
  ],
- "题目数": 47,
+ "题目数": 48,
  "年份": "2012",
  "来源": "懒笔记 paper 页（结构化正文）"
 }

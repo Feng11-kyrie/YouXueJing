@@ -544,6 +544,19 @@
   },
   {
    "部分": "WRITE",
+   "材料": "Suppose you are a librarian in your university. Write a notice of about 100 words, providing the newly-enrolled international students with relevant information about the library. You should write neatly on the ANSWER SHEET. Do not sign your own name at the end of the notice. Use \"Li Ming\" instead. Do not write the address. ( 10 points) PartB",
+   "小题": [
+    {
+     "题号": 51,
+     "题干": "写作要求",
+     "材料": "Suppose you are a librarian in your university. Write a notice of about 100 words, providing the newly-enrolled international students with relevant information about the library. You should write neatly on the ANSWER SHEET. Do not sign your own name at the end of the notice. Use \"Li Ming\" instead. Do not write the address. ( 10 points) PartB",
+     "题型": "写作",
+     "分值": 10
+    }
+   ]
+  },
+  {
+   "部分": "WRITE",
    "材料": "Write an essay of 160-200 words based on the following pictures. In your essay, you should 1) describe the pictures briefly, 2) interpret the meaning, and 3) give your comments. You should write neatly on the ANSWER SHEET. (20 points) ID - 14 -",
    "小题": [
     {
@@ -556,7 +569,7 @@
    ]
   }
  ],
- "题目数": 49,
+ "题目数": 50,
  "年份": "2016",
  "来源": "懒笔记 paper 页（结构化正文）"
 }
