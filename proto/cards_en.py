@@ -617,7 +617,7 @@ def subjective_block(q, year, tier, done, user, show_material=True):
         def run_ai():
             k = llm_key.get()
             if not k["key"]:
-                ui.notify("还没有接入 API Key —— 展开下方「接入我的 API Key」填入即可。",
+                ui.notify("还没有接入 API Key —— 请在页面顶部「接入我的 API Key」里填写。",
                           color="warning")
                 return
             text = (ans.value or "").strip()
@@ -657,56 +657,10 @@ def subjective_block(q, year, tier, done, user, show_material=True):
             else:
                 ai_btn.props("outline disabled")
 
-        # ---------- 小字提示（用户要求） ----------
-        if has_key:
-            ui.label("当前使用你自己接入的 API Key —— 费用由你的厂商账号承担，"
-                     "每次评阅约 ¥0.006（1 万次约 ¥60，价格以厂商官网为准）。") \
-                .classes("t-xs").style("color:#6B7280")
-        else:
-            ui.label("当前使用免费版评分（本地计算，不消耗 token、不花钱）。"
-                     "若想用更精确的 AI 评分，需接入你自己的大模型 API Key —— "
-                     "DeepSeek 每次约 ¥0.006（不到 1 分钱，1 万次约 ¥60）。") \
-                .classes("t-xs").style("color:#6B7280")
-
-        # ---------- 接入 Key ----------
-        with ui.expansion("接入我的 API Key（可选）", value=False) \
-                .classes("w-full"):
-            prov = ui.select(list(llm_key.PROVIDERS), value=None,
-                             label="厂商").props("dense outlined").classes("w-48")
-            key_in = ui.input("API Key", password=True,
-                              password_toggle_button=True).props(
-                "outlined dense").classes("w-full")
-            base_in = ui.input("接口地址 Base URL").props(
-                "outlined dense").classes("w-full")
-            model_in = ui.input("模型名").props(
-                "outlined dense").classes("w-full")
-
-            def fill_provider(e):
-                p = llm_key.PROVIDERS.get(e.value or "")
-                if p:
-                    base_in.value = p["base"]
-                    model_in.value = p["model"]
-            prov.on_value_change(fill_provider)
-
-            def save_key():
-                if not (key_in.value or "").strip():
-                    ui.notify("请先填入 API Key。", color="warning")
-                    return
-                if llm_key.set_key(key_in.value, base_in.value, model_in.value):
-                    ui.notify("已保存到你的浏览器（不会上传服务器）。",
-                              color="positive")
-                    ui.navigate.reload()
-                else:
-                    ui.notify("保存失败 —— 请刷新页面后重试。", color="negative")
-
-            with ui.row().classes("gap-2"):
-                ui.button("保存", on_click=save_key).props("unelevated dense")
-                ui.button("清除", on_click=lambda: (llm_key.clear(),
-                                                 ui.navigate.reload())) \
-                    .props("flat dense")
-            ui.label("密钥只保存在你自己的浏览器 cookie 里，不会写进服务器数据库；"
-                     "清除浏览器数据即失效。") \
-                .classes("t-xs muted")
+        # 【提醒只在页面顶部出现一次，这里不重复】
+        # 用户指出："不必在每一个可以选择 AI 评分的题目下都提醒" ——
+        # 英语一翻译 5 题 + 写作 2 题，逐题提醒会刷屏。
+        # 未接入 Key 时 AI 按钮本身就是禁用状态，已经足够说明。
 
         ui.label("说明：评阅结果用于自查，不是官方得分 —— "
                  "考研翻译/写作是人工分档给分。") \

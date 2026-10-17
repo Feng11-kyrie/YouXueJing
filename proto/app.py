@@ -37,6 +37,7 @@ from nicegui import ui                            # noqa: E402
 from yj import data, diagnose, profile as profile_mod, path as path_mod  # noqa: E402
 from yj import llm, graph, zhengzhi as zz           # noqa: E402
 from yj import english as en                          # noqa: E402
+from proto import llm_key                              # noqa: E402
 from proto.cards_en import (passage_card, cloze_card,   # noqa: E402
                             subjective_block, two_col, partb_block,
                             subjective_two_col, answer_sheet_en,
@@ -998,6 +999,64 @@ def exam_zhengzhi(year: str = None, page: int = 1, user: str = "demo",
 
 
 # ================================================================ 考研英语真题
+def _key_panel():
+    """
+    **接入自己的 API Key**（BYOK）。
+
+    放在页面顶部、只出现一次 —— 用户指出"不必在每一个可以选择 AI 评分的
+    题目下都提醒"，Key 录入同理：逐题一个输入框更乱。
+
+    密钥存浏览器 cookie（`app.storage.browser`），**不进服务器数据库**：
+    这是用户自己的密钥，存他自己浏览器最自然，泄露影响面也最小。
+    """
+    cur = llm_key.get()
+    prov = ui.select(list(llm_key.PROVIDERS), value=None, label="厂商") \
+        .props("dense outlined").classes("w-44")
+    key_in = ui.input("API Key", value=cur["key"], password=True,
+                      password_toggle_button=True) \
+        .props("outlined dense").classes("w-full")
+    base_in = ui.input("接口地址 Base URL", value=cur["base"]) \
+        .props("outlined dense").classes("w-full")
+    model_in = ui.input("模型名", value=cur["model"]) \
+        .props("outlined dense").classes("w-full")
+
+    def fill(e):
+        p = llm_key.PROVIDERS.get(e.value or "")
+        if p:
+            base_in.value = p["base"]
+            model_in.value = p["model"]
+            ui.notify(f'{p["备注"]}')
+    prov.on_value_change(fill)
+
+    def save():
+        if not (key_in.value or "").strip():
+            ui.notify("请先填入 API Key。", color="warning")
+            return
+        if llm_key.set_key(key_in.value, base_in.value, model_in.value):
+            ui.notify("已保存到你的浏览器（不会上传服务器）。", color="positive")
+            ui.navigate.reload()
+        else:
+            ui.notify("保存失败 —— 请刷新页面后重试。", color="negative")
+
+    def drop():
+        llm_key.clear()
+        ui.notify("已清除，恢复到免费版评分。", color="positive")
+        ui.navigate.reload()
+
+    with ui.column().classes("w-full gap-2 mt-1"):
+        prov
+        key_in
+        base_in
+        model_in
+        with ui.row().classes("gap-2"):
+            ui.button("保存", on_click=save).props("unelevated dense")
+            if cur["key"]:
+                ui.button("清除", on_click=drop).props("flat dense")
+        ui.label("密钥只保存在你自己的浏览器 cookie 里，不会写进服务器数据库；"
+                 "清除浏览器数据即失效。免费版评分不需要任何密钥。") \
+            .classes("t-xs muted")
+
+
 def _tier_tabs(active_tier, year, view, user):
     """
     **卷种切换条**（英语一 / 英语二）。
@@ -1106,8 +1165,31 @@ def exam_english(tier: str = "EN1", year: str = None, view: str = "全部",
                 dlg.open()
             ui.button("交卷 · 看成绩", on_click=open_report) \
                 .props("unelevated")
-            ui.label("未做完也可以交卷 —— 只给已作答部分的得分与正确率") \
-                .classes("t-xs muted")
+
+        # ---- 评分方式说明（**只在这里出现一次**）----
+        # 用户要求："在最上面给用户说明默认免费版评分，若想得到更精确的 AI
+        # 评分需接入大模型厂商 API Key"，并删掉原来的"未做完也可以交卷"一句。
+        with ui.row().classes("items-start gap-2 flex-wrap w-full")                 .style("background:#F8FAFC;border:1px solid #E5E9F0;"
+                       "border-radius:10px;padding:8px 12px"):
+            ui.icon("info").style("color:#5B7FBF;font-size:18px;margin-top:2px")
+            with ui.column().classes("gap-0 flex-1"):
+                if llm_key.get().get("key"):
+                    ui.label("当前使用你自己接入的 API Key 进行 AI 评阅 —— "
+                             "费用由你的厂商账号承担，每次约 ¥0.006"
+                             "（1 万次约 ¥60，价格以厂商官网为准）。") \
+                        .classes("t-sm")
+                else:
+                    ui.label("默认使用免费版评分（本地计算，不消耗 token、不花钱）；"
+                             "若想获得更精确的 AI 评分，需接入你自己的大模型厂商 API Key "
+                             "—— DeepSeek 每次约 ¥0.006（不到 1 分钱，1 万次约 ¥60）。") \
+                        .classes("t-sm")
+                with ui.expansion("接入我的 API Key" if not llm_key.get().get("key")
+                                  else "管理我的 API Key", value=False) \
+                        .classes("w-full"):
+                    _key_panel()
+            ui.label("免费版评分：翻译按与参考译文的语义相似度、"
+                     "作文按字数/句式/词汇/衔接计算，属客观指标估算，非阅卷分数。") \
+                .classes("t-xs muted w-full")
 
         if not shown:
             ui.label(f"筛选「{view}」下没有题目。").classes("t-sm muted")
