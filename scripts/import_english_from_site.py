@@ -401,7 +401,11 @@ def _article_for(lines, marker, first_q):
             start = i + 1
             break
     if start is None:
-        return ""
+        # 【有的 PDF 没有 `Section I` 标题】实测英语一 2020 的文件直接从
+        # "Read the following text. Choose the best word(s)…" 开始，
+        # 锚点找不到就整段材料为空（表现出"完形没有文章"）。
+        # 兜底：从第 0 行开始，靠下面的"遇到第一个选项行就停"来截断。
+        start = 0
     end = len(lines)
     for j in range(start, len(lines)):
         if re.fullmatch(rf'{first_q}\s*[.、]?', lines[j]):
@@ -460,13 +464,22 @@ def _cloze_body_from_pdf(tier, year):
             start = i + 1
             break
     if start is None:
-        return ""
+        # 【有的 PDF 没有 `Section I` 标题】实测英语一 2020 的文件直接从
+        # "Read the following text. Choose the best word(s)…" 开始，
+        # 锚点找不到就整段材料为空（表现出"完形没有文章"）。
+        # 兜底：从第 0 行开始，靠下面的"遇到第一个选项行就停"来截断。
+        start = 0
     body = []
     for l in lines[start:]:
         # 去掉 Directions 说明（它不是文章）。
         # 注意 Directions 是**多行**的，续行形如
         #   `C or D on the ANSWER SHEET. (10 points)`，所以还要按关键词过滤。
         if re.match(r'^(Directions|Read\s+the\s+following\s+text)\b', l):
+            continue
+        # 节标题也要去掉（实测英语一 2020 用的是罗马数字 Ⅰ：`Section Ⅰ Use of English`）
+        if re.match(r'^Section\s+[ⅠⅡⅢⅣI]\b', l):
+            continue
+        if re.match(r'^Use of English$', l):
             continue
         if re.search(r'ANSWER\s*SHEET|directions?\s*[:：]|points\)\s*$', l):
             continue

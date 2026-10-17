@@ -223,26 +223,54 @@ def _split_cloze(text, lo=1, hi=20):
     把完形文章切成 [文本片段, 空号, 文本片段, 空号, ...]。
 
     返回 (片段列表, 空号列表)，两者交替；片段数 = 空数 + 1。
-    匹配不到足够的空就返回 (None, []) —— 由调用方退化处理。
+
+    **为什么不能要求"必须 1..20 连续"**（最初就是这么写的，结果 17 个年份
+    识别失败）：实测三种情况都会让严格匹配失效：
+      · 空标记形态不一：`_1_`、`your_2_`、`high 3`、`4 why`（有无下划线混用）
+      · **某个数字被 OCR 丢了**：英语二 2012 的正文里根本没有 `7`
+      · 正文里有干扰数字：`10 tons`、`37 countries`
+    所以改成：**按出现顺序贪心匹配，允许跳号**；跳过的号不渲染位置，
+    但那道题仍会出现在右侧题目区，照样能作答。
     """
-    import re
+    cands = [(m.start(), m.end(), int(m.group(1)))
+             for m in re.finditer(r'(?<![\d.])(\d{1,2})(?![\d.])', text)
+             if lo <= int(m.group(1)) <= hi]
+    if not cands:
+        return None, []
+
+    # 贪心：期望 lo；命中则前进，命中 expect+1 视为"上一号丢了"也接受
+    accepted = []
+    expect = lo
+    for s, e, n in cands:
+        if n == expect:
+            accepted.append((s, e, n))
+            expect += 1
+        elif n == expect + 1:
+            accepted.append((s, e, n))
+            expect = n + 1
+
+    # 还太少 → 退一步：只取"号码严格递增"的首次出现（容忍更多噪声）
+    if len(accepted) < 15:
+        seen = set()
+        accepted = []
+        last = 0
+        for s, e, n in cands:
+            if n in seen or n <= last:
+                continue
+            seen.add(n)
+            accepted.append((s, e, n))
+            last = n
+
+    if len(accepted) < 10:
+        return None, []
+
     parts, nums = [], []
     pos = 0
-    for m in re.finditer(r'(?<![\d.])(\d{1,2})(?![\d.])', text):
-        n = int(m.group(1))
-        if not (lo <= n <= hi):
-            continue
-        # 空号必须**单调递增**（正文里也会有数字，如年份、百分比）
-        if nums and n != nums[-1] + 1:
-            continue
-        if not nums and n != lo:
-            continue
-        parts.append(text[pos:m.start()])
+    for s, e, n in accepted:
+        parts.append(text[pos:s])
         nums.append(n)
-        pos = m.end()
+        pos = e
     parts.append(text[pos:])
-    if len(nums) < 10:            # 空太少说明匹配错了，不硬用
-        return None, []
     return parts, nums
 
 
@@ -363,21 +391,32 @@ def cloze_card(passage, year, tier, done, user):
         def render_page():
             """渲染右侧**当前组**的 5 道题。"""
             right.clear()
-            n_pages = max(1, (len(nums) + PER - 1) // PER)
+            # 【按**题号区间**分组，不按"识别到的空"分组】
+            # 实测英语一 2018 只识别到 16 个空（OCR 丢了 4 个数字），
+            # 若按 nums 分组，第 17–20 题在右侧**永远翻不到**。
+            # 改成固定区间 1–5 / 6–10 / …，题目按题号取，
+            # 空识别失败只影响左侧文章里的可点位置，不影响答题。
+            all_nums = sorted(int(k) for k in subs)
+            n_pages = max(1, (max(all_nums + [hi]) + PER - 1) // PER) \
+                if (hi := max(all_nums) if all_nums else 20) else 4
+            n_pages = max(1, (max(all_nums) + PER - 1) // PER) if all_nums else 1
             page["i"] = max(0, min(page["i"], n_pages - 1))
-            i0 = page["i"] * PER
-            group = nums[i0:i0 + PER]
+            lo_n = page["i"] * PER + 1
+            hi_n = lo_n + PER - 1
+            group = [n for n in all_nums if lo_n <= n <= hi_n]
             with right:
                 with ui.row().classes("items-center gap-2 flex-wrap"):
                     for k in range(n_pages):
-                        lo = nums[k * PER]
-                        hi = nums[min(len(nums) - 1, k * PER + PER - 1)]
+                        lo = k * PER + 1
+                        hi = min(lo + PER - 1, max(all_nums) if all_nums else 20)
                         on = (k == page["i"])
                         ui.button(f'{lo}–{hi}',
                                   on_click=lambda _=None, k=k:
                                   (page.update(i=k), render_page())) \
                             .props("unelevated" if on else "flat dense")
-                    ui.label(f'{len(nums)} 空 · 每 {PER} 空一组') \
+                    ui.label(f'{len(all_nums)} 空 · 每 {PER} 空一组'
+                             + (f'（文章里可点 {len(nums)} 处）'
+                                if len(nums) < len(all_nums) else "")) \
                         .classes("t-xs muted ml-auto")
 
                 for n in group:

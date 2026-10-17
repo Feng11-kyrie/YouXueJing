@@ -13,14 +13,7 @@
       "B": "resolve",
       "C": "discuss",
       "D": "ignore"
-     },
-     "部分": "CLOZE",
-     "部分名": "完形",
-     "边界题": true,
-     "id": "EN2-2018-1",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 2,
@@ -30,14 +23,7 @@
       "B": "wait",
       "C": "regret",
       "D": "seek"
-     },
-     "部分": "CLOZE",
-     "部分名": "完形",
-     "边界题": false,
-     "id": "EN2-2018-2",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 3,
@@ -47,14 +33,7 @@
       "B": "last",
       "C": "mislead",
       "D": "rise"
-     },
-     "部分": "CLOZE",
-     "部分名": "完形",
-     "边界题": false,
-     "id": "EN2-2018-3",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 4,
@@ -64,14 +43,7 @@
       "B": "tie",
       "C": "treat",
       "D": "expose"
-     },
-     "部分": "CLOZE",
-     "部分名": "完形",
-     "边界题": false,
-     "id": "EN2-2018-4",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 5,
@@ -81,14 +53,7 @@
       "B": "review",
       "C": "trial",
       "D": "concept"
-     },
-     "部分": "CLOZE",
-     "部分名": "完形",
-     "边界题": false,
-     "id": "EN2-2018-5",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 6,
@@ -98,14 +63,7 @@
       "B": "weaken",
       "C": "interrupt",
       "D": "deliver"
-     },
-     "部分": "CLOZE",
-     "部分名": "完形",
-     "边界题": false,
-     "id": "EN2-2018-6",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 7,
@@ -115,14 +73,7 @@
       "B": "If",
       "C": "Though",
       "D": "Unless"
-     },
-     "部分": "CLOZE",
-     "部分名": "完形",
-     "边界题": false,
-     "id": "EN2-2018-7",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 8,
@@ -132,14 +83,7 @@
       "B": "happen",
       "C": "disappear",
       "D": "change"
-     },
-     "部分": "CLOZE",
-     "部分名": "完形",
-     "边界题": false,
-     "id": "EN2-2018-8",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 9,
@@ -149,14 +93,7 @@
       "B": "regardless of",
       "C": "such as",
       "D": "owing to"
-     },
-     "部分": "CLOZE",
-     "部分名": "完形",
-     "边界题": false,
-     "id": "EN2-2018-9",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 10,
@@ -166,14 +103,7 @@
       "B": "forgive",
       "C": "forget",
       "D": "disagree"
-     },
-     "部分": "CLOZE",
-     "部分名": "完形",
-     "边界题": false,
-     "id": "EN2-2018-10",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 11,
@@ -183,14 +113,7 @@
       "B": "marriage",
       "C": "schooling",
       "D": "food"
-     },
-     "部分": "CLOZE",
-     "部分名": "完形",
-     "边界题": false,
-     "id": "EN2-2018-11",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 12,
@@ -200,14 +123,7 @@
       "B": "rest on",
       "C": "learn from",
       "D": "begin with"
-     },
-     "部分": "CLOZE",
-     "部分名": "完形",
-     "边界题": false,
-     "id": "EN2-2018-12",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 13,
@@ -217,14 +133,7 @@
       "B": "persistence",
       "C": "inquiry",
       "D": "diligence"
-     },
-     "部分": "CLOZE",
-     "部分名": "完形",
-     "边界题": false,
-     "id": "EN2-2018-13",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 14,
@@ -234,14 +143,7 @@
       "B": "self-destructive",
       "C": "self-evident",
       "D": "self-deceptive"
-     },
-     "部分": "CLOZE",
-     "部分名": "完形",
-     "边界题": false,
-     "id": "EN2-2018-14",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 15,
@@ -251,14 +153,7 @@
       "B": "resist",
       "C": "replace",
       "D": "trace"
-     },
-     "部分": "CLOZE",
-     "部分名": "完形",
-     "边界题": false,
-     "id": "EN2-2018-15",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 16,
@@ -268,14 +163,7 @@
       "B": "predict",
       "C": "design",
       "D": "conceal"
-     },
-     "部分": "CLOZE",
-     "部分名": "完形",
-     "边界题": false,
-     "id": "EN2-2018-16",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 17,
@@ -285,14 +173,7 @@
       "B": "promise",
       "C": "choose",
       "D": "pretend"
-     },
-     "部分": "CLOZE",
-     "部分名": "完形",
-     "边界题": false,
-     "id": "EN2-2018-17",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 18,
@@ -302,14 +183,7 @@
       "B": "plan",
       "C": "duty",
       "D": "outcome"
-     },
-     "部分": "CLOZE",
-     "部分名": "完形",
-     "边界题": false,
-     "id": "EN2-2018-18",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 19,
@@ -319,14 +193,7 @@
       "B": "whether",
       "C": "where",
       "D": "how"
-     },
-     "部分": "CLOZE",
-     "部分名": "完形",
-     "边界题": false,
-     "id": "EN2-2018-19",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 20,
@@ -336,18 +203,9 @@
       "B": "investments",
       "C": "strategies",
       "D": "limitations"
-     },
-     "部分": "CLOZE",
-     "部分名": "完形",
-     "边界题": true,
-     "id": "EN2-2018-20",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     }
-   ],
-   "部分名": "完形",
-   "部分全称": "完形填空 Use of English"
+   ]
   },
   {
    "部分": "READ",
@@ -361,14 +219,7 @@
       "B": "academic training",
       "C": "pioneering spirit",
       "D": "mechanical memorization"
-     },
-     "部分": "READ",
-     "部分名": "阅读",
-     "边界题": true,
-     "id": "EN2-2018-21",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 22,
@@ -378,14 +229,7 @@
       "B": "have no career motivation",
       "C": "are not academically successful",
       "D": "are financially disadvantaged"
-     },
-     "部分": "READ",
-     "部分名": "阅读",
-     "边界题": false,
-     "id": "EN2-2018-22",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 23,
@@ -395,14 +239,7 @@
       "B": "used to have more job opportunities",
       "C": "are reluctant to work in manufacturing",
       "D": "are entitled to more educational privileges"
-     },
-     "部分": "READ",
-     "部分名": "阅读",
-     "边界题": false,
-     "id": "EN2-2018-23",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 24,
@@ -412,14 +249,7 @@
       "B": "may narrow the gap in working-class jobs",
       "C": "is expected to yield a better-trained workforce",
       "D": "indicates the overvaluing of higher education"
-     },
-     "部分": "READ",
-     "部分名": "阅读",
-     "边界题": false,
-     "id": "EN2-2018-24",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 25,
@@ -429,18 +259,9 @@
       "B": "tolerant",
       "C": "disappointed",
       "D": "cautious"
-     },
-     "部分": "READ",
-     "部分名": "阅读",
-     "边界题": false,
-     "id": "EN2-2018-25",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     }
-   ],
-   "部分名": "阅读",
-   "部分全称": "阅读理解 Part A"
+   ]
   },
   {
    "部分": "READ",
@@ -454,14 +275,7 @@
       "B": "changing",
       "C": "falling",
       "D": "rising"
-     },
-     "部分": "READ",
-     "部分名": "阅读",
-     "边界题": false,
-     "id": "EN2-2018-26",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 27,
@@ -471,14 +285,7 @@
       "B": "is as extensive as in Europe",
       "C": "faces many challenges",
       "D": "has proved to be impractical"
-     },
-     "部分": "READ",
-     "部分名": "阅读",
-     "边界题": false,
-     "id": "EN2-2018-27",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 28,
@@ -488,14 +295,7 @@
       "B": "wind energy has replaced fossil fuels",
       "C": "tech giants are investing in clean energy",
       "D": "there is a shortage of clean energy supply"
-     },
-     "部分": "READ",
-     "部分名": "阅读",
-     "边界题": false,
-     "id": "EN2-2018-28",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 29,
@@ -505,14 +305,7 @@
       "B": "It is commonly used in car manufacturing.",
       "C": "Its continuous supply is becoming a reality.",
       "D": "Its sustainable exploitation will remain difficult."
-     },
-     "部分": "READ",
-     "部分名": "阅读",
-     "边界题": false,
-     "id": "EN2-2018-29",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 30,
@@ -522,18 +315,9 @@
       "B": "will accelerate global environmental change",
       "C": "is not really encouraged by the US government",
       "D": "is not competitive enough with regard to its cost"
-     },
-     "部分": "READ",
-     "部分名": "阅读",
-     "边界题": false,
-     "id": "EN2-2018-30",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     }
-   ],
-   "部分名": "阅读",
-   "部分全称": "阅读理解 Part A"
+   ]
   },
   {
    "部分": "READ",
@@ -547,14 +331,7 @@
       "B": "user information",
       "C": "physical assets",
       "D": "quality service"
-     },
-     "部分": "READ",
-     "部分名": "阅读",
-     "边界题": false,
-     "id": "EN2-2018-31",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 32,
@@ -564,14 +341,7 @@
       "B": "mess up customer records",
       "C": "pose a risk to Facebook users",
       "D": "mislead the European commission"
-     },
-     "部分": "READ",
-     "部分名": "阅读",
-     "边界题": false,
-     "id": "EN2-2018-32",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 33,
@@ -581,14 +351,7 @@
       "B": "may worsen the economic imbalance",
       "C": "should not provide just one legal solution",
       "D": "cannot keep pace with the changing market"
-     },
-     "部分": "READ",
-     "部分名": "阅读",
-     "边界题": false,
-     "id": "EN2-2018-33",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 34,
@@ -598,14 +361,7 @@
       "B": "they are not financially reliable",
       "C": "the services are generally digital",
       "D": "the services are paid for by advertisers"
-     },
-     "部分": "READ",
-     "部分名": "阅读",
-     "边界题": false,
-     "id": "EN2-2018-34",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 35,
@@ -615,18 +371,9 @@
       "B": "a typical competition pattern among digital giants",
       "C": "the benefits provided for digital giants' customers",
       "D": "the relationship between digital giants and their users"
-     },
-     "部分": "READ",
-     "部分名": "阅读",
-     "边界题": false,
-     "id": "EN2-2018-35",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     }
-   ],
-   "部分名": "阅读",
-   "部分全称": "阅读理解 Part A"
+   ]
   },
   {
    "部分": "READ",
@@ -640,14 +387,7 @@
       "B": "list your immediate tasks",
       "C": "make specific daily plans",
       "D": "seize every minute to work"
-     },
-     "部分": "READ",
-     "部分名": "阅读",
-     "边界题": false,
-     "id": "EN2-2018-36",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 37,
@@ -657,14 +397,7 @@
       "B": "daily schedules are indispensable to studying",
       "C": "students are hardly motivated by monthly goals",
       "D": "detailed plans may not be as fruitful as expected"
-     },
-     "部分": "READ",
-     "部分名": "阅读",
-     "边界题": false,
-     "id": "EN2-2018-37",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 38,
@@ -674,14 +407,7 @@
       "B": "a major contributor to physical health",
       "C": "an effective way to save time and energy",
       "D": "an essential factor in accomplishing any work"
-     },
-     "部分": "READ",
-     "部分名": "阅读",
-     "边界题": false,
-     "id": "EN2-2018-38",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 39,
@@ -691,14 +417,7 @@
       "B": "can bring about greater efficiency",
       "C": "is aimed at better balance in work",
       "D": "is driven by task urgency"
-     },
-     "部分": "READ",
-     "部分名": "阅读",
-     "边界题": false,
-     "id": "EN2-2018-39",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 40,
@@ -708,18 +427,9 @@
       "B": "approaches to getting more done in less time",
       "C": "the key to eliminating distractions",
       "D": "the cause of the lack of focus time"
-     },
-     "部分": "READ",
-     "部分名": "阅读",
-     "边界题": true,
-     "id": "EN2-2018-40",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     }
-   ],
-   "部分名": "阅读",
-   "部分全称": "阅读理解 Part A"
+   ]
   },
   {
    "部分": "NEW",
@@ -737,14 +447,7 @@
       "E": "Find the \"me too\"s",
       "F": "Skip the small talk",
       "G": "Ask for an opinion"
-     },
-     "部分": "NEW",
-     "部分名": "新题型",
-     "边界题": true,
-     "id": "EN2-2018-41",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 42,
@@ -757,14 +460,7 @@
       "E": "Find the \"me too\"s",
       "F": "Skip the small talk",
       "G": "Ask for an opinion"
-     },
-     "部分": "NEW",
-     "部分名": "新题型",
-     "边界题": false,
-     "id": "EN2-2018-42",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 43,
@@ -777,14 +473,7 @@
       "E": "Find the \"me too\"s",
       "F": "Skip the small talk",
       "G": "Ask for an opinion"
-     },
-     "部分": "NEW",
-     "部分名": "新题型",
-     "边界题": false,
-     "id": "EN2-2018-43",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 44,
@@ -797,14 +486,7 @@
       "E": "Find the \"me too\"s",
       "F": "Skip the small talk",
       "G": "Ask for an opinion"
-     },
-     "部分": "NEW",
-     "部分名": "新题型",
-     "边界题": false,
-     "id": "EN2-2018-44",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     },
     {
      "题号": 45,
@@ -817,18 +499,9 @@
       "E": "Find the \"me too\"s",
       "F": "Skip the small talk",
       "G": "Ask for an opinion"
-     },
-     "部分": "NEW",
-     "部分名": "新题型",
-     "边界题": true,
-     "id": "EN2-2018-45",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": false
+     }
     }
-   ],
-   "部分名": "新题型",
-   "部分全称": "新题型 Part B"
+   ]
   },
   {
    "部分": "TRANS",
@@ -839,63 +512,35 @@
      "题干": "翻译下面这段文字",
      "材料": "A fifth grader gets a homework assignment to select his future career path from a list of occupations. He ticks \"astronaut\" but quickl y adds \"scientist\" to the list and selects it as well. The boy is convinced that if he reads enough, he can explore as many career paths as he likes. And so he reads - everything from encyclopedias to science fiction novels. He reads so passionately that his parents have to institute a \"no reading policy\" at the dinner table. That boy was Bill Gates, and he hasn't stopped reading yet - not even after becoming one of the most successful people on the planet. Nowadays, his reading material has changed from science fiction and reference books: recently, he revealed that he reads at least 50 nonfiction books a year. Gates chooses nonfiction titles because they explain how the world works. \"Each book opens up new avenues of knowledge to explore\", Gates says. - 13 - Section N Writing",
      "题型": "翻译",
-     "分值": 15,
-     "部分": "TRANS",
-     "部分名": "翻译",
-     "边界题": true,
-     "id": "EN2-2018-46",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": true
+     "分值": 15
     }
-   ],
-   "部分名": "翻译",
-   "部分全称": "翻译 Part C"
+   ]
   },
   {
    "部分": "WRITE",
-   "材料": "Suppose you have to cancel your travel plan and will not be able to visit Professor Smith. Write him an email to\n1)apologize and explain the situation, and\n2)suggest a future meeting.\nYou should write about 100 words on the ANSWER SHEET.\nDo not use your own name. Use “Li Ming” instead.\nDo not write your address. (10 points)",
+   "材料": "Suppose you have to cancel your travel plan and will not be able to visit Professor Smith. Write him an email to 1) apologize and explain the situation, and 2) suggest a future meeting. You should write about 100 words on the ANSWER SHEET. Do not use your own name. Use \"Li Ming\" instead. Do not write your address. (10 points) PartB",
    "小题": [
     {
      "题号": 47,
      "题干": "写作要求",
-     "材料": "Suppose you have to cancel your travel plan and will not be able to visit Professor Smith. Write him an email to\n1)apologize and explain the situation, and\n2)suggest a future meeting.\nYou should write about 100 words on the ANSWER SHEET.\nDo not use your own name. Use “Li Ming” instead.\nDo not write your address. (10 points)",
+     "材料": "Suppose you have to cancel your travel plan and will not be able to visit Professor Smith. Write him an email to 1) apologize and explain the situation, and 2) suggest a future meeting. You should write about 100 words on the ANSWER SHEET. Do not use your own name. Use \"Li Ming\" instead. Do not write your address. (10 points) PartB",
      "题型": "写作",
-     "分值": 10,
-     "部分": "WRITE",
-     "部分名": "写作",
-     "边界题": true,
-     "id": "EN2-2018-47",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": true
+     "分值": 10
     }
-   ],
-   "部分名": "写作",
-   "部分全称": "写作 Part A/B"
+   ]
   },
   {
    "部分": "WRITE",
-   "材料": "Write an essay based on the chart below. In your writing, you should\n1)interpret the chart, and\n2)give your comments.\nYou should write about 150 words on the ANSWER SHEET. (15 points)\n\n图表/图意：价格 · 环境 ·特 色 · 其他 20 17 年某市消 费者选择餐 厅时 的关 注因素",
+   "材料": "Write an essay based on the chart below. In your writing, you should 1) interpret the chart, and 2) give your comments. You should write about 150 words on the ANSWER SHEET. (15 points) 4.7 0% 26. 80% 服务 价格 · 环境 ·特 色 · 其他 20 17 年某市消 费者选择餐 厅时 的关 注因素",
    "小题": [
     {
      "题号": 48,
      "题干": "写作要求",
-     "材料": "Write an essay based on the chart below. In your writing, you should\n1)interpret the chart, and\n2)give your comments.\nYou should write about 150 words on the ANSWER SHEET. (15 points)\n\n图表/图意：价格 · 环境 ·特 色 · 其他 20 17 年某市消 费者选择餐 厅时 的关 注因素",
+     "材料": "Write an essay based on the chart below. In your writing, you should 1) interpret the chart, and 2) give your comments. You should write about 150 words on the ANSWER SHEET. (15 points) 4.7 0% 26. 80% 服务 价格 · 环境 ·特 色 · 其他 20 17 年某市消 费者选择餐 厅时 的关 注因素 ",
      "题型": "写作",
-     "分值": 10,
-     "部分": "WRITE",
-     "部分名": "写作",
-     "边界题": true,
-     "id": "EN2-2018-48",
-     "tier": "EN2",
-     "year": "2018",
-     "主观": true,
-     "图片": "img/EN2-2018-48.jpg"
+     "分值": 10
     }
-   ],
-   "部分名": "写作",
-   "部分全称": "写作 Part A/B"
+   ]
   }
  ],
  "题目数": 48,
