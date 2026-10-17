@@ -1158,7 +1158,7 @@ def exam_english(tier: str = "EN1", year: str = None, view: str = "全部",
                     if view != "全部" else "")).classes("t-sm muted")
 
         # ---- 答题卡（用户要求：英语也要有）----
-        answer_sheet_en(tier, year, done)
+        answer_sheet_en(tier, year, done, user=user)
 
         # ---- 交卷 ----
         with ui.row().classes("items-center gap-2"):

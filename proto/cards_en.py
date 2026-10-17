@@ -544,7 +544,9 @@ def subjective_block(q, year, tier, done, user, show_material=True):
     need_words = 100 if task == "WRITING" and score_max <= 12 else (
         160 if task == "WRITING" else 0)
 
-    with ui.card().classes("softcard w-full p-3 gap-2 shadow-none"):
+    _sc = ui.card().classes("softcard w-full p-3 gap-2 shadow-none")
+    _sc.props(f'data-q="{q["题号"]}"')       # 答题卡跳转锚点
+    with _sc:
         with ui.row().classes("items-center gap-2"):
             ui.label(f'第 {q["题号"]} 题 · {q.get("题型")}').classes("font-semibold")
             ui.label(f'{score_max:g} 分').classes("text-xs text-gray-500")
@@ -587,10 +589,8 @@ def subjective_block(q, year, tier, done, user, show_material=True):
                 ui.label(ref["参考范文"]).classes("t-sm whitespace-pre-wrap") \
                     .style("line-height:1.9;"
                            "font-family:Georgia,'Times New Roman',serif")
-        with ui.expansion("官方评分标准", value=False).classes("w-full"):
-            ui.label(rb["名称"]).classes("t-sm font-semibold")
-            for name, score, desc in rb["档次"]:
-                ui.label(f'{name}（{score} 分）：{desc}').classes("t-sm")
+        # 「官方评分标准」展开块已按用户要求移除：每道主观题都挂一份占地方，
+        # 而且学生基本不会展开看。档次口径仍在 AI 评阅结果里体现。
 
         ans = ui.textarea(
             label=("你的译文" if task == "TRANSLATION" else "你的作文")).props(
@@ -765,23 +765,37 @@ def _goto(n, tier, year):
         _scroll_to(n)
 
 
-def answer_sheet_en(tier, year, done, total=45):
+def answer_sheet_en(tier, year, done, user=None, total=45):
     """
-    英语答题卡：**一行 45 格**，点格子滚动到对应题目。
+    英语答题卡：**客观题 1–45 + 主观题（翻译 / 写作）**，点格子滚动到对应题目。
 
     为什么与 `app._answer_sheet` 不共用：
       · 那个是**分页式**的（408/政治真题页每页 10 题，点格子翻页）
       · 英语是**一页长滚动**（完形+阅读+新题型+主观题连排），无"页"可翻
     所以这里点格子用 `scrollIntoView` 跳到题目锚点 `[data-q=N]`。
 
-    颜色：绿=答对、红=答错、灰白=未做。
+    颜色：
+      客观题  绿=答对、红=答错、白=未做
+      主观题  蓝=已评分（免费版或 AI）、白虚线=未评分
+              —— 主观题**没有对错**，所以不能沿用红绿，用虚线边框区分。
+
+    用户要求："答题卡上没有翻译和作文的题号，加上并且也能定位到原题"。
     """
-    obj = []
-    for ps in (en.paper(tier, year) or {}).get("篇目", []):
-        if ps.get("部分") in ("TRANS", "WRITE"):
-            continue
-        obj.extend(ps.get("小题") or [])
+    rec = en.paper(tier, year) or {}
+    obj, subj = [], []
+    for ps in rec.get("篇目", []):
+        code = ps.get("部分")
+        for q in ps.get("小题") or []:
+            (subj if code in ("TRANS", "WRITE") else obj).append(q)
     obj.sort(key=lambda q: int(q["题号"]))
+    subj.sort(key=lambda q: int(q["题号"]))
+
+    grades = {}
+    if user:
+        try:
+            grades = store.get_ai_grades(user)
+        except Exception:                                   # noqa: BLE001
+            grades = {}
 
     def status(q):
         r = done.get(q["id"])
@@ -792,6 +806,16 @@ def answer_sheet_en(tier, year, done, total=45):
     n_ok = sum(1 for q in obj if status(q) == "ok")
     n_bad = sum(1 for q in obj if status(q) == "bad")
     n_todo = len(obj) - n_ok - n_bad
+    n_sub_graded = sum(1 for q in subj if q["id"] in grades)
+
+    def cell(n, bg, bd, dashed=False):
+        c = ui.label(str(n)).classes(
+            "asheet-cell text-center cursor-pointer rounded")
+        c.props(f'data-cell="{n}"')
+        c.style(f"min-width:2rem;padding:1px 4px;font-size:13px;"
+                f"background:{bg};border:1px {'dashed' if dashed else 'solid'} {bd}")
+        c.on("click", lambda _=None, nn=n: _goto(nn, tier, year))
+        return c
 
     with ui.card().classes("softcard w-full p-2 gap-1"):
         with ui.row().classes("items-center gap-3 flex-wrap w-full"):
@@ -800,16 +824,23 @@ def answer_sheet_en(tier, year, done, total=45):
             with ui.element("div").classes("flex flex-wrap gap-1 flex-1"):
                 for q in obj:
                     st = status(q)
-                    bg = {"ok": "#E8F5E9", "bad": "#FDECEA",
-                          "todo": "#FFFFFF"}[st]
-                    bd = {"ok": "#8BC79B", "bad": "#E3A8A8",
-                          "todo": "#D5DBE3"}[st]
-                    cell = ui.label(str(q["题号"])).classes(
-                        "asheet-cell text-center cursor-pointer rounded")
-                    cell.props(f'data-cell="{q["题号"]}"')
-                    cell.style(f"min-width:2rem;padding:1px 4px;font-size:13px;"
-                               f"background:{bg};border:1px solid {bd}")
-                    cell.on("click", lambda _=None, n=q["题号"]: _goto(n, tier, year))
+                    cell(q["题号"],
+                         {"ok": "#E8F5E9", "bad": "#FDECEA",
+                          "todo": "#FFFFFF"}[st],
+                         {"ok": "#8BC79B", "bad": "#E3A8A8",
+                          "todo": "#D5DBE3"}[st])
+
+        if subj:
+            with ui.row().classes("items-center gap-3 flex-wrap w-full"):
+                ui.label("主观题").classes("t-sm font-semibold muted")
+                ui.label(f'已评分 {n_sub_graded} · 未评 {len(subj) - n_sub_graded}') \
+                    .classes("t-xs muted")
+                with ui.element("div").classes("flex flex-wrap gap-1 flex-1"):
+                    for q in subj:
+                        graded = q["id"] in grades
+                        cell(q["题号"], "#EAF2FB" if graded else "#FFFFFF",
+                             "#93B4E0" if graded else "#C3CEE0",
+                             dashed=not graded)
 
 
 # ---------------------------------------------------------------------------
