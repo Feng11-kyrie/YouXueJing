@@ -30,6 +30,8 @@ from nicegui import ui
 
 from yj import english as en
 from yj import ai_grade as aig
+from yj import rubric_checker as rc
+from proto import llm_key
 from proto import store_lite as store
 
 CORRECT = "#1B5E36"
@@ -477,9 +479,59 @@ def _band_to_score(band, full, rubric):
     return round(mid / top * full, 2)
 
 
+def _render_result(box, r, full, is_free):
+    """在 box 里渲染一次评分结果（免费版与 AI 版共用）。"""
+    box.clear()
+    with box:
+        if r.get("error"):
+            ui.label(f'评分失败：{r["error"]}').classes("t-sm") \
+                .style("color:#8C2C2C")
+            return
+        score = r.get("分数")
+        if is_free:
+            ui.label(f'免费版评分　{score:g} / {full:g}' if score is not None
+                     else '免费版评分不可用').classes("t-lead font-bold")
+            ui.label(r.get("来源", "")).classes("t-xs") \
+                .style("color:#6B7280")
+        else:
+            ui.label("AI 评阅（参考，非官方得分）").classes("t-lead font-bold") \
+                .style("color:#B45309")
+            if r.get("档次"):
+                with ui.row().classes("items-center gap-3"):
+                    ui.label(f'档次：{r["档次"]}').classes("t-body font-semibold")
+                    if r.get("位置"):
+                        ui.label(r["位置"]).classes("t-sm muted")
+                    if score is not None:
+                        ui.label(f'折算 {score:g} / {full:g} 分').classes("t-sm muted")
+
+        # 分项（免费版有；AI 版没有）
+        if r.get("分项"):
+            for it in r["分项"]:
+                ui.label(f'　{it["项"]}：{it["得分"]} / {it["满分"]} —— {it["说明"]}') \
+                    .classes("t-sm")
+
+        # 问题 / 建议
+        if r.get("问题"):
+            ui.label("发现的问题").classes("t-sm font-semibold mt-1")
+            for i, p in enumerate(r["问题"], 1):
+                ui.label(f'{i}. {p}').classes("t-sm whitespace-pre-wrap") \
+                    .style("line-height:1.8")
+        if r.get("建议"):
+            ui.label(f'建议：{r["建议"]}').classes("t-sm mt-1") \
+                .style("color:#17418F")
+
+
 def subjective_block(q, year, tier, done, user, show_material=True):
     """
     一道主观题（翻译 46–50 / 写作 51–52）。
+
+    **两条评分路径**（用户要求）：
+      · 默认「免费版评分」—— 纯本地计算，**不消耗 token、不花钱**
+      · 「AI 深度评阅」—— 用**用户自己的 API Key**，账单落在用户自己的厂商账号；
+        没接 Key 时按钮禁用，并提示怎么接、花多少钱
+
+    为什么默认免费：AI 评阅每次约 ¥0.006，而大多数练习只需要
+    "字数够不够、意思传到没、有没有漏译"这类反馈 —— 本地算得又快又免费。
     """
     code = q.get("部分") or ("TRANS" if q.get("题型") == "翻译" else "WRITE")
     task = "TRANSLATION" if code == "TRANS" else "WRITING"
@@ -488,15 +540,15 @@ def subjective_block(q, year, tier, done, user, show_material=True):
     ref = (en.explanation(tier, year, q.get("题号")) or {})
     # 该题满分：写作按题号（小作文 10 / 大作文 20），翻译按部分均摊
     score_max = en.score_of(q.get("题号"), tier) or float(q.get("分值") or 0)
+    need_words = 100 if task == "WRITING" and score_max <= 12 else (
+        160 if task == "WRITING" else 0)
 
     with ui.card().classes("softcard w-full p-3 gap-2 shadow-none"):
         with ui.row().classes("items-center gap-2"):
             ui.label(f'第 {q["题号"]} 题 · {q.get("题型")}').classes("font-semibold")
-            ui.label(f'{q.get("分值", 10)} 分').classes("text-xs text-gray-500")
-            ui.label("主观题 · 不自动判分").classes("text-xs") \
-                .style("color:#B45309")
+            ui.label(f'{score_max:g} 分').classes("text-xs text-gray-500")
+            ui.label("主观题").classes("text-xs").style("color:#B45309")
 
-        # 题目要求 / 篇章（两栏布局时由左栏统一显示，这里不再重复）
         if show_material and q.get("材料"):
             with ui.expansion("材料 / 题目", value=True).classes("w-full"):
                 ui.label(q["材料"]).classes(
@@ -505,103 +557,159 @@ def subjective_block(q, year, tier, done, user, show_material=True):
         if q.get("题干"):
             ui.label(q["题干"]).classes("text-[15px] leading-6 whitespace-pre-wrap")
 
+        # 参考材料常显
+        if ref.get("_参考译文"):
+            with ui.expansion("参考译文（机构整理，仅供参考）").classes("w-full"):
+                ui.label(ref["_参考译文"]).classes("t-sm whitespace-pre-wrap") \
+                    .style("line-height:1.9")
+        if ref.get("参考范文"):
+            _w = ref.get("词数")
+            _t = (f'参考范文（{_w} 词 · 机构整理，非官方标准答案）'
+                  if _w else "参考范文（机构整理，非官方标准答案）")
+            with ui.expansion(_t).classes("w-full"):
+                ui.label(ref["参考范文"]).classes("t-sm whitespace-pre-wrap") \
+                    .style("line-height:1.9;"
+                           "font-family:Georgia,'Times New Roman',serif")
+        with ui.expansion("官方评分标准", value=False).classes("w-full"):
+            ui.label(rb["名称"]).classes("t-sm font-semibold")
+            for name, score, desc in rb["档次"]:
+                ui.label(f'{name}（{score} 分）：{desc}').classes("t-sm")
+
         ans = ui.textarea(
             label=("你的译文" if task == "TRANSLATION" else "你的作文")).props(
             "outlined autogrow").classes("w-full")
         ans.style("font-size:15px")
 
         out_box = ui.column().classes("w-full gap-1")
-        with ui.row().classes("items-center gap-2"):
-            btn = ui.button("提交并请 AI 评阅", on_click=lambda: run())
 
-        # 【参考材料要**一开始就能看**，不能只在评阅后出现】
-        # 学生做题时需要对照参考译文/范文，而不是评阅完才给。
-        # 我第一版把它放在评阅结果里，实测页面上根本看不到。
-        if ref.get("_参考译文"):
-            with ui.expansion("参考译文（机构整理，仅供参考）") \
-                    .classes("w-full"):
-                ui.label(ref["_参考译文"]).classes(
-                    "t-sm whitespace-pre-wrap").style("line-height:1.9")
-        if ref.get("参考范文"):
-            _word = ref.get("词数")
-            _title = (f'参考范文（{_word} 词 · 机构整理，非官方标准答案）'
-                      if _word else "参考范文（机构整理，非官方标准答案）")
-            with ui.expansion(_title).classes("w-full"):
-                ui.label(ref["参考范文"]).classes(
-                    "t-sm whitespace-pre-wrap").style(
-                    "line-height:1.9;"
-                    "font-family:Georgia,'Times New Roman',serif")
-
-        def show_rubric():
-            """官方评分标准 —— 必须露出，学生才知道真实尺度。"""
-            with ui.expansion("官方评分标准", value=False).classes("w-full"):
-                ui.label(rb["名称"]).classes("t-sm font-semibold")
-                for name, score, desc in rb["档次"]:
-                    ui.label(f'{name}（{score} 分）：{desc}').classes("t-sm")
-
-        def run():
+        # ---------- 评分按钮 ----------
+        def run_free():
             text = (ans.value or "").strip()
-            if len(text) < 15:
-                ui.notify("作答太短 —— 至少写一两句再提交。", color="warning")
+            if len(text) < 3:
+                ui.notify("先写一点内容再评分。", color="warning")
+                return
+            out_box.clear()
+            with out_box:
+                ui.label("本地计算中…").classes("t-sm muted")
+            ui.timer(0.05, lambda: _do_free(text), once=True)
+
+        def _do_free(text):
+            try:
+                if task == "TRANSLATION":
+                    r = rc.score_translation(text, ref.get("_参考译文") or "",
+                                             score_max)
+                else:
+                    r = rc.score_writing(text, need_words or 100, score_max)
+            except Exception as e:                          # noqa: BLE001
+                r = {"error": f"{type(e).__name__}: {str(e)[:80]}"}
+            _render_result(out_box, r, score_max, is_free=True)
+            # 免费版结果也落库，成绩单里能看到（标注为"免费版评分"）
+            if r.get("分数") is not None:
+                try:
+                    import json as _json
+                    store.save_ai_grade(
+                        user, qid, task, "免费版评分", None, float(r["分数"]),
+                        float(score_max), _json.dumps(r, ensure_ascii=False),
+                        "free")
+                except Exception:                           # noqa: BLE001
+                    pass
+
+        def run_ai():
+            k = llm_key.get()
+            if not k["key"]:
+                ui.notify("还没有接入 API Key —— 展开下方「接入我的 API Key」填入即可。",
+                          color="warning")
+                return
+            text = (ans.value or "").strip()
+            if len(text) < 3:
+                ui.notify("先写一点内容再评阅。", color="warning")
                 return
             out_box.clear()
             with out_box:
                 ui.label("AI 评阅中…（约 10–20 秒）").classes("t-sm muted")
-            btn.set_enabled(False)
-            ui.timer(0.1, lambda: _do(text), once=True)
+            ui.timer(0.05, lambda: _do_ai(text, k), once=True)
 
-        def _do(text):
+        def _do_ai(text, k):
             try:
                 r = aig.grade(task, tier, q.get("题干") or "", text,
-                              reference=(ref.get("_参考译文") or ""))
+                              reference=(ref.get("_参考译文") or ""),
+                              api_key=k["key"], base_url=k["base"] or None,
+                              model=k["model"] or None)
             except Exception as e:                          # noqa: BLE001
                 r = {"error": f"{type(e).__name__}: {str(e)[:80]}"}
-
-            # 【落库】用户要求"AI 评分可以加入总分"，那就必须存下来。
-            # 不存的话刷新就没了：既算不进成绩单，也看不到上次写成什么样。
             if not r.get("error"):
                 try:
-                    import hashlib
                     import json as _json
-                    sig = hashlib.sha256(
-                        (text + (ref.get("_参考译文") or "")).encode(
-                            "utf-8")).hexdigest()[:16]
-                    band_score = _band_to_score(r.get("档次"), score_max, rb)
+                    bs = _band_to_score(r.get("档次"), score_max, rb)
                     store.save_ai_grade(
-                        user, qid, task, r.get("档次"), r.get("位置"),
-                        band_score, float(q.get("分值") or score_max),
-                        _json.dumps(r, ensure_ascii=False), sig)
-                except Exception:                       # noqa: BLE001
-                    pass      # 落库失败不影响本次展示
-            out_box.clear()
-            with out_box:
-                if r.get("error"):
-                    ui.label(f'评阅失败：{r["error"]}').classes("t-sm") \
-                        .style("color:#8C2C2C")
-                else:
-                    # 【红线】明确标注这是参考、不是官方得分
-                    ui.label(f'AI 评阅（{r.get("来源", "参考，非官方得分")}）') \
-                        .classes("t-sm font-semibold mt-1") \
-                        .style("color:#B45309")
-                    with ui.row().classes("items-center gap-3"):
-                        ui.label(f'档次：{r.get("档次") or "—"}').classes("t-body font-semibold")
-                        if r.get("位置"):
-                            ui.label(r["位置"]).classes("t-sm muted")
-                    if r.get("问题"):
-                        ui.label("主要问题").classes("t-sm font-semibold mt-1")
-                        for i, p in enumerate(r["问题"], 1):
-                            ui.label(f'{i}. {p}').classes(
-                                "t-sm whitespace-pre-wrap").style("line-height:1.8")
-                    if r.get("建议"):
-                        ui.label(f'建议：{r["建议"]}').classes("t-sm mt-1") \
-                            .style("color:#17418F")
-                show_rubric()
-            btn.set_enabled(True)
+                        user, qid, task, r.get("档次"), r.get("位置"), bs,
+                        float(score_max), _json.dumps(r, ensure_ascii=False), "ai")
+                except Exception:                           # noqa: BLE001
+                    pass
+            _render_result(out_box, r, score_max, is_free=False)
 
-        show_rubric()
-        # 注意：ui.label **不解析 Markdown**（写 **粗体** 会原样显示星号）
-        ui.label("说明：AI 评阅用于自查，不是官方得分 —— "
-                 "考研翻译/写作是人工分档给分，同一篇不同阅卷人也可能差一档。") \
+        has_key = bool(llm_key.get().get("key"))
+        with ui.row().classes("items-center gap-2 flex-wrap"):
+            ui.button("免费评分", on_click=run_free).props("unelevated")
+            ai_btn = ui.button("AI 深度评阅", on_click=run_ai)
+            if has_key:
+                ai_btn.props("unelevated")
+            else:
+                ai_btn.props("outline disabled")
+
+        # ---------- 小字提示（用户要求） ----------
+        if has_key:
+            ui.label("当前使用你自己接入的 API Key —— 费用由你的厂商账号承担，"
+                     "每次评阅约 ¥0.006（1 万次约 ¥60，价格以厂商官网为准）。") \
+                .classes("t-xs").style("color:#6B7280")
+        else:
+            ui.label("当前使用免费版评分（本地计算，不消耗 token、不花钱）。"
+                     "若想用更精确的 AI 评分，需接入你自己的大模型 API Key —— "
+                     "DeepSeek 每次约 ¥0.006（不到 1 分钱，1 万次约 ¥60）。") \
+                .classes("t-xs").style("color:#6B7280")
+
+        # ---------- 接入 Key ----------
+        with ui.expansion("接入我的 API Key（可选）", value=False) \
+                .classes("w-full"):
+            prov = ui.select(list(llm_key.PROVIDERS), value=None,
+                             label="厂商").props("dense outlined").classes("w-48")
+            key_in = ui.input("API Key", password=True,
+                              password_toggle_button=True).props(
+                "outlined dense").classes("w-full")
+            base_in = ui.input("接口地址 Base URL").props(
+                "outlined dense").classes("w-full")
+            model_in = ui.input("模型名").props(
+                "outlined dense").classes("w-full")
+
+            def fill_provider(e):
+                p = llm_key.PROVIDERS.get(e.value or "")
+                if p:
+                    base_in.value = p["base"]
+                    model_in.value = p["model"]
+            prov.on_value_change(fill_provider)
+
+            def save_key():
+                if not (key_in.value or "").strip():
+                    ui.notify("请先填入 API Key。", color="warning")
+                    return
+                if llm_key.set_key(key_in.value, base_in.value, model_in.value):
+                    ui.notify("已保存到你的浏览器（不会上传服务器）。",
+                              color="positive")
+                    ui.navigate.reload()
+                else:
+                    ui.notify("保存失败 —— 请刷新页面后重试。", color="negative")
+
+            with ui.row().classes("gap-2"):
+                ui.button("保存", on_click=save_key).props("unelevated dense")
+                ui.button("清除", on_click=lambda: (llm_key.clear(),
+                                                 ui.navigate.reload())) \
+                    .props("flat dense")
+            ui.label("密钥只保存在你自己的浏览器 cookie 里，不会写进服务器数据库；"
+                     "清除浏览器数据即失效。") \
+                .classes("t-xs muted")
+
+        ui.label("说明：评阅结果用于自查，不是官方得分 —— "
+                 "考研翻译/写作是人工分档给分。") \
             .classes("t-xs muted")
 
 
@@ -785,15 +893,18 @@ def score_report(tier, year, user):
                     .classes("t-xs")
 
         # ---- 主观题 ----
-        ui.label("主观题（AI 评阅 · 参考，非官方得分）") \
+        ui.label("主观题（自动评分 · 参考，非官方得分）") \
             .classes("t-sm font-semibold mt-2").style("color:#B45309")
         if not any(x.get("band") for x in r["sub_list"]):
             ui.label("　还没有 AI 评阅 —— 在下面翻译/写作题里提交作答即可").classes("t-xs muted")
         for x in r["sub_list"]:
             if x.get("band"):
+                # 分清来源：免费版 / AI 评阅 —— 两者可信度不同，不能混标
+                src = ("免费版评分" if x["band"] == "免费版评分"
+                       else f'AI·{x["band"]} {x.get("position") or ""}')
                 ui.label(f'　第 {x["题号"]} 题（{x.get("题型") or ""}）　'
-                         f'{x["band"]} {x.get("position") or ""} · '
-                         f'{x["score"]:g}/{x["score_max"]:g} 分').classes("t-xs")
+                         f'{src} · {x["score"]:g}/{x["score_max"]:g} 分') \
+                    .classes("t-xs")
             else:
                 ui.label(f'　第 {x["题号"]} 题（{x.get("题型") or ""}）　未评阅') \
                     .classes("t-xs muted")
@@ -803,7 +914,11 @@ def score_report(tier, year, user):
         if r["complete"]:
             ui.label(f'总分 {r["total_score"]:g} / {r["total_max"]:g}').classes(
                 "text-2xl font-bold")
-            ui.label(f'　客观题 {r["obj_score"]:g} + AI 评阅 {r["sub_total"]:g}') \
+            _free_n = sum(1 for x in r["sub_list"] if x.get("band") == "免费版评分")
+            _ai_n = sum(1 for x in r["sub_list"]
+                        if x.get("band") and x["band"] != "免费版评分")
+            ui.label(f'　客观题 {r["obj_score"]:g} + 主观题评分 {r["sub_total"]:g}'
+                     f'（免费版 {_free_n} 题 / AI 评阅 {_ai_n} 题）') \
                 .classes("t-xs muted")
             ui.label("说明：主观题分数由 AI 按官方评分标准评定，仅供参考 —— "
                      "真实考试是人工分档给分。").classes("t-xs muted")
@@ -815,7 +930,7 @@ def score_report(tier, year, user):
                 f'折算分完全不可比，报一个总分反而误导。').classes("t-sm sub")
             ui.label(
                 f'你可以参考：已作答部分得分 {r["obj_score"]:g} / {r["obj_max"]:g}（客观题）'
-                + (f' + AI 评阅 {r["sub_total"]:g} 分' if r["sub_total"] else "")
+                + (f' + 主观题评分 {r["sub_total"]:g} 分' if r["sub_total"] else "")
             ).classes("t-sm")
 
 

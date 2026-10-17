@@ -12,6 +12,13 @@ pandas>=2.0                  # 表格展示
 # 启动:  .venv/bin/python proto/app_nicegui.py --port 8899
 nicegui>=2.0
 
+# ---- 免费版评分：本地语义相似度（翻译评分用）----
+# 不需要 torch —— fastembed 基于 ONNX，首次使用会下载约 50MB 的
+# BAAI/bge-small-zh-v1.5 模型，之后纯本地推理、不花任何 API 费用。
+# 不装也不影响运行：装不上时免费评分会提示"不可用"，AI 评阅仍可用。
+fastembed>=0.4
+numpy>=1.24
+
 # ---- 可选：OCR 抽取扫描版答案册（scripts/ocr_solutions.py）----
 # 只有"从纯扫描的答案册里补综合题解析"时才需要，**运行应用不需要**。
 # 体积很大（paddlepaddle 约 200MB + 首次运行自动下载模型约 30MB），

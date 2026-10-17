@@ -124,14 +124,29 @@ def _cache_key(task, payload, cfg=None):
     return "llm:" + hashlib.sha256(raw.encode("utf-8")).hexdigest()[:32]
 
 
-def complete(task, prompt, payload=None, use_cache=True):
+def complete(task, prompt, payload=None, use_cache=True,
+             api_key=None, base_url=None, model=None):
     """
     统一调用入口。
+
+    api_key / base_url / model：**用户自带的密钥**（BYOK）。
+    用户要求"不接自己的 Key 就用免费版评分，接了就用 AI 评分" ——
+    所以这里允许按次传入，**不覆盖全局配置**：
+    服务端自己的 key 仍用于其他功能（如讲义生成），用户自带的只用于这一次调用，
+    而且账单落在**用户自己的厂商账号**上。
 
     返回 {text, source}，source ∈ {"cache", "llm", "template", "error"}
     上层可据此在界面上标注内容来源 —— 这是"表述真实"的技术保障。
     """
     cfg = _secrets()
+    if api_key:
+        # 浅拷贝一份，避免污染全局配置
+        cfg = dict(cfg)
+        cfg["api_key"] = api_key
+        if base_url:
+            cfg["base_url"] = base_url
+        if model:
+            cfg["model"] = model
     key = _cache_key(task, payload if payload is not None else prompt, cfg)
     if use_cache:
         hit = store.cache_get(key)

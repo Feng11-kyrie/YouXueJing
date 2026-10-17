@@ -111,7 +111,8 @@ def _rubric_text(rb):
     return "\n".join(lines)
 
 
-def grade(task, tier, prompt_text, student_answer, reference=None):
+def grade(task, tier, prompt_text, student_answer, reference=None,
+          api_key=None, base_url=None, model=None):
     """
     评阅一次。返回 dict：
         {"档次": "第三档 9–12", "位置": "中段", "问题": [...],
@@ -165,7 +166,8 @@ def grade(task, tier, prompt_text, student_answer, reference=None):
         (f"{task}|{tier}|{prompt_text[:2000]}|{student_answer[:3000]}"
          f"|{reference or ''}").encode("utf-8")).hexdigest()[:16]
     r = llm.complete("ai_grade", p,
-                     payload={"task": task, "tier": tier, "sig": sig, "v": 1})
+                     payload={"task": task, "tier": tier, "sig": sig, "v": 1},
+                     api_key=api_key, base_url=base_url, model=model)
     text = (r or {}).get("text") or ""
     if not text:
         return {"error": (r or {}).get("error") or "评阅失败（模型无返回）"}
