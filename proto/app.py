@@ -1183,9 +1183,14 @@ def exam_english(tier: str = "EN1", year: str = None, view: str = "全部",
                              "不花钱）；若想获得更精确的 AI 评分，需接入你自己的大模型"
                              "厂商 API Key —— 每次不到 1 分钱。") \
                         .classes("t-sm")
-                with ui.expansion("接入我的 API Key" if not llm_key.get().get("key")
-                                  else "管理我的 API Key", value=False) \
-                        .classes("w-full"):
+                # 【换颜色】原来是默认灰黑、看起来像正文而不是可点的入口。
+                # 用主题蓝 + 钥匙图标，明确"这是一个操作入口"。
+                _has_key = bool(llm_key.get().get("key"))
+                with ui.expansion(
+                        ("管理我的 API Key" if _has_key else "接入我的 API Key"),
+                        value=False) \
+                        .classes("w-full") \
+                        .style("color:#17418F"):
                     _key_panel()
             ui.label("免费版评分：翻译按与参考译文的语义相似度、"
                      "作文按字数/句式/词汇/衔接计算，属客观指标估算，非阅卷分数。") \
