@@ -114,7 +114,7 @@ OPT = re.compile(r'(?m)^\s*([A-D])\s*[.．、,，]?\s*(.+?)'
                  r'(?=\n\s*[A-D]\s*[.．、,，]?\s|\Z)', re.S)
 
 # 字母序列切分：找出 A、B、C、D 四个标记（要求按顺序连续出现）
-OPT_SEQ = re.compile(r'(?<![A-Za-z0-9])([A-D])\s*[.．、,，]?\s*(?=[^\s])')
+OPT_SEQ = re.compile(r'(?<![A-Za-z0-9])([A-D])(?![A-Za-z])\s*[.．、,，]?\s*(?=[^\s])')
 
 def _norm_letters(s):
     """全角字母 → 半角大写"""
