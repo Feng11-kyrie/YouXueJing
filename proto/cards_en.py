@@ -33,6 +33,12 @@ from yj import ai_grade as aig
 from proto import store_lite as store
 
 CORRECT = "#1B5E36"
+
+# 完形的"跳到某空"函数注册表。
+# 为什么需要：完形一次只渲染当前组的 5 道题，别的空在 DOM 里**不存在**，
+# 所以答题卡点 1–20 不能只靠 scrollIntoView —— 必须先让它切到那一组。
+# key = (tier, year)
+_CLOZE_JUMP = {}
 WRONG = "#8C2C2C"
 
 
@@ -377,7 +383,9 @@ def cloze_card(passage, year, tier, done, user):
                         continue
                     cur = picked.get(n) or ""
                     ans = q.get("_ans") or ""
-                    with ui.card().classes("softcard w-full p-2 gap-1 shadow-none"):
+                    _qc = ui.card().classes("softcard w-full p-2 gap-1 shadow-none")
+                    _qc.props(f'data-q="{n}"')      # 答题卡跳转锚点
+                    with _qc:
                         with ui.row().classes("items-center gap-2"):
                             ui.label(f'第 {n} 空').classes("font-semibold")
                             if ans and cur:
@@ -415,6 +423,8 @@ def cloze_card(passage, year, tier, done, user):
                                     "t-xs whitespace-pre-wrap mt-1") \
                                     .style("color:#6B7280;line-height:1.7")
 
+        # 注册给答题卡用：点答题卡上的 1–20 → 切到该空所在组 + 高亮
+        _CLOZE_JUMP[(tier, year)] = jump
         paint_slots()
         render_page()
         ui.label("提示：点左侧文章里的数字跳到该空；右侧每 5 空一组，"
@@ -648,6 +658,34 @@ def two_col(passage, year, tier, done, user, left=None):
 # ---------------------------------------------------------------------------
 # 英语答题卡（与 408/政治的分页式不同）
 # ---------------------------------------------------------------------------
+def _scroll_to(n):
+    """滚到题号 n 的锚点。"""
+    ui.run_javascript(
+        f'''(() => {{
+            const el = document.querySelector('[data-q="{n}"]');
+            if (el) el.scrollIntoView({{behavior:'smooth', block:'center'}});
+        }})()''')
+
+
+def _goto(n, tier, year):
+    """
+    答题卡点击 → 定位到那道题。
+
+    **完形（1–20）要特殊处理**：它一次只渲染当前组的 5 道题，
+    别的空在 DOM 里根本不存在，直接 scrollIntoView 找不到元素。
+    所以先调完形注册的 `jump(n)` 切到那一组，**等它渲染完**再滚。
+
+    这就是用户报的"后面几道题无法定位"的原因之一 ——
+    原先只有阅读（21–40）有 `data-q` 锚点，完形 1–20 和新题型 41–45 都没有。
+    """
+    j = _CLOZE_JUMP.get((tier, year))
+    if j and 1 <= int(n) <= 20:
+        j(n)                                   # 切到该空所在组 + 高亮
+        ui.timer(0.3, lambda: _scroll_to(n), once=True)   # 等重绘后再滚
+    else:
+        _scroll_to(n)
+
+
 def answer_sheet_en(tier, year, done, total=45):
     """
     英语答题卡：**一行 45 格**，点格子滚动到对应题目。
@@ -688,14 +726,11 @@ def answer_sheet_en(tier, year, done, total=45):
                     bd = {"ok": "#8BC79B", "bad": "#E3A8A8",
                           "todo": "#D5DBE3"}[st]
                     cell = ui.label(str(q["题号"])).classes(
-                        "text-center cursor-pointer rounded")
+                        "asheet-cell text-center cursor-pointer rounded")
+                    cell.props(f'data-cell="{q["题号"]}"')
                     cell.style(f"min-width:2rem;padding:1px 4px;font-size:13px;"
                                f"background:{bg};border:1px solid {bd}")
-                    cell.on("click", lambda _=None, n=q["题号"]: ui.run_javascript(
-                        f'''(() => {{
-                            const el = document.querySelector('[data-q="{n}"]');
-                            if (el) el.scrollIntoView({{behavior:'smooth', block:'center'}});
-                        }})()'''))
+                    cell.on("click", lambda _=None, n=q["题号"]: _goto(n, tier, year))
 
 
 # ---------------------------------------------------------------------------
@@ -851,7 +886,9 @@ def _partb_row(q, year, tier, done, user):
     locked = {"v": bool(prev)}
     letters = sorted((q.get("选项") or {}).keys()) or list("ABCDEFG")
 
-    with ui.card().classes("softcard w-full p-2 gap-1 shadow-none"):
+    _card = ui.card().classes("softcard w-full p-2 gap-1 shadow-none")
+    _card.props(f'data-q="{q["题号"]}"')            # 答题卡跳转锚点
+    with _card:
         with ui.row().classes("items-center gap-2 flex-wrap"):
             ui.label(f'第 {q["题号"]} 题').classes("font-semibold")
             ui.label(f'{q.get("题号")} → ').classes("t-xs muted")
