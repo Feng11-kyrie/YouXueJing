@@ -114,6 +114,9 @@ ui.add_head_html("""
   .cell.ok { background:#E6F6EC; border-color:#7DCB9A; color:#1B5E36; }
   .cell.bad { background:#FDECEC; border-color:#E9A0A0; color:#8C2C2C; }
   .cell.cur { outline:2px solid var(--accent); outline-offset:1px; font-weight:700; }
+  /* 主观题格子：没有对错，所以不用红绿 —— 蓝=已评分，虚线=未评分 */
+  .cell.sub { background:#EAF2FB; border-color:#93B4E0; color:#17418F; }
+  .cell.sub.todo { background:#fff; border:1px dashed #C3CEE0; color:#5A6B80; }
   /* 卡片：不再用"细灰框+白底"（像 Excel 导出的表格），改成无边框+浅底+悬停浮起 */
   .softcard { background:#fff; border:1px solid var(--line); border-radius:12px;
               transition:box-shadow .16s, transform .16s, border-color .16s; }
@@ -153,6 +156,23 @@ ui.add_head_html("""
 
 
 # ================================================================ 公共外壳
+def _key_entry():
+    """
+    页面顶部的 **API Key 入口**（每一页都有）。
+
+    为什么从英语页挪到这里：原来只有英语真题页里有这个入口，
+    用户在 408 / 政治页根本找不到 —— 可这两科也有「AI 精评」按钮，
+    没入口就永远用不了。用户原话："408和政治在顶部没有看到接入key的入口"。
+    """
+    has = bool(llm_key.get().get("key"))
+    title = ("管理我的 API Key（已接入，用于 AI 精评）" if has
+             else "接入我的 API Key（可选，用于 AI 精评）")
+    with ui.expansion(title, value=False).classes("w-full").style(
+            "color:#17418F;background:#F8FAFC;border:1px solid #E5E9F0;"
+            "border-radius:10px;padding:2px 10px;font-size:13px"):
+        _key_panel()
+
+
 @contextlib.contextmanager
 def shell(active: str, user: str):
     """
@@ -258,6 +278,7 @@ def shell(active: str, user: str):
                           ui.label("看我的画像")
         # 内容区
         with ui.column().classes("flex-1 p-6 gap-3 min-w-0"):
+            _key_entry()
             yield
 
 
@@ -483,7 +504,17 @@ def home(user: str = "demo"):
 
 
 # ================================================================ 真题页
-def _answer_sheet(shown, done, cur, pages_n, goto):
+def _scroll_to_q(n, attr="data-zzq"):
+    """答题卡点击 → 滚到那道题的锚点（主观题不是分页的，只能滚动定位）。"""
+    ui.run_javascript(
+        f'''(() => {{
+            const el = document.querySelector('[{attr}="{n}"]');
+            if (el) el.scrollIntoView({{behavior:'smooth', block:'center'}});
+        }})()''')
+
+
+def _answer_sheet(shown, done, cur, pages_n, goto,
+                  extra=None, graded=None, extra_label="主观题"):
     """
     **答题卡**（真题页共用：408 与政治）。
 
@@ -494,7 +525,11 @@ def _answer_sheet(shown, done, cur, pages_n, goto):
       · 从左侧竖栏改成**题目区上方的一条横卡** —— 用户要求"答题卡放第一题上面"，
         改完题目区宽 +240px，且 47 个格子横排只占 2 行
       · 格子颜色：绿=答对、红=答错、白=未做、加深边框=当前页
-      · 点格子跳到对应页
+      · 客观题点格子 → 翻到对应页；**主观题点格子 → 滚到那道题**（不分页）
+
+    为什么要有 subjective 这一行：政治的分析题（34–38）不在客观题分页里，
+    原来的答题卡只列了 1–33 —— 用户问"政治为什么没有主观题的答题卡（可以定位到原题）"。
+    408 不用传 extra：它的 41–47 本来就在 shown 里。
     """
     with ui.card().classes("softcard w-full p-2 gap-1"):
         with ui.row().classes("items-center gap-3 w-full no-wrap"):
@@ -520,6 +555,24 @@ def _answer_sheet(shown, done, cur, pages_n, goto):
             ui.button(icon="chevron_right",
                       on_click=lambda: goto(page=min(pages_n, cur + 1))) \
                 .props("flat dense").set_enabled(cur < pages_n)
+
+        # 主观题：没有对错、也不分页 —— 点格子滚到原题
+        if extra:
+            with ui.row().classes("items-center gap-3 w-full no-wrap"):
+                ui.label(extra_label).classes("t-sm font-semibold muted shrink-0")
+                with ui.element("div").classes("flex flex-wrap gap-1 flex-1"):
+                    for q in extra:
+                        g = bool(graded and q["id"] in graded)
+                        cell = ui.element("div").classes(
+                            "cell sub" + ("" if g else " todo"))
+                        cell.on("click", lambda _=None, n=int(q["题号"]):
+                                _scroll_to_q(n))
+                        with cell:
+                            ui.label(str(q["题号"])).classes("t-xs")
+                # 免费评分不落库（避免覆盖 AI 精评结果），所以这里的"已评分"
+                # 只指 AI 精评 —— 写清楚，别让人以为点了免费评分格子会变蓝。
+                ui.label("蓝=已 AI 精评 · 虚线=未评（点题号定位）") \
+                    .classes("t-xs muted shrink-0")
 
 
 def _exam_tabs(active_id, page, user, extra=""):
@@ -971,22 +1024,34 @@ def exam_zhengzhi(year: str = None, page: int = 1, user: str = "demo",
                  + f"　（当前显示 {len(shown)} 道）") \
             .classes("t-sm muted")
 
-        _answer_sheet(shown, done, cur, pages_n, goto)
+        # 分析题补一个带年份的 id：原来没有 id，subj_panel 只能退回
+        # "ZZ-34" —— 不同年份的第 34 题会互相覆盖 AI 评分记录。
+        ana = [{**it, "id": f"ZZ-{year}-{it['题号']}"} for it in ana]
+        try:
+            graded = store.get_ai_grades(user)
+        except Exception:                                   # noqa: BLE001
+            graded = {}
 
+        _answer_sheet(shown, done, cur, pages_n, goto,
+                      extra=ana, graded=graded)
+
+        # 【不能在这里 return】筛「只错题」而恰好没有错题时，如果直接返回，
+        # 下面的分析题也不渲染了 —— 答题卡上的 34–38 点了就定位不到。
+        # 所以只跳过客观题列表，分析题照常显示。
         if not shown:
-            ui.label(f"筛选「{view}」下没有题目。").classes("t-sm muted")
-            return
-        # 【按题号顺序平铺，不按部分分块】
-        # 用户要求："政治真题部分你要按照题目顺序来啊，在这部分内容不要分块，
-        # 分块部分应该在挑考点练习那里。"
-        # 理由也站得住：真题是按题号**连续作答**的，拆成五个可折叠块之后
-        # 得反复展开/收起，也看不出题号顺序。每题仍带部分标签（马原/毛中特/…），
-        # 信息没有丢失；要"按部分针对性练"去挑考点练习页。
-        items = shown[(cur - 1) * PER: cur * PER]
-        ui.label(f'第 {items[0]["题号"]}–{items[-1]["题号"]} 题'
-                 f'（共 {len(shown)} 道）').classes("t-lead font-semibold")
-        for it in items:
-            question_card(it, year, done, user, exam="ZZ")
+            ui.label(f"筛选「{view}」下没有客观题。").classes("t-sm muted")
+        else:
+            # 【按题号顺序平铺，不按部分分块】
+            # 用户要求："政治真题部分你要按照题目顺序来啊，在这部分内容不要分块，
+            # 分块部分应该在挑考点练习那里。"
+            # 理由也站得住：真题是按题号**连续作答**的，拆成五个可折叠块之后
+            # 得反复展开/收起，也看不出题号顺序。每题仍带部分标签（马原/毛中特/…），
+            # 信息没有丢失；要"按部分针对性练"去挑考点练习页。
+            items = shown[(cur - 1) * PER: cur * PER]
+            ui.label(f'第 {items[0]["题号"]}–{items[-1]["题号"]} 题'
+                     f'（共 {len(shown)} 道）').classes("t-lead font-semibold")
+            for it in items:
+                question_card(it, year, done, user, exam="ZZ")
 
         if ana:
             ui.separator().style("border-color:var(--line)")
@@ -998,7 +1063,8 @@ def exam_zhengzhi(year: str = None, page: int = 1, user: str = "demo",
                      "两者都是参考，不等于阅卷分数。") \
                 .classes("t-sm").style("color:#6B7280")
             for it in ana:
-                with ui.card().classes("softcard w-full p-3 gap-1"):
+                with ui.card().classes("softcard w-full p-3 gap-1") \
+                        .props(f'data-zzq="{it["题号"]}"'):     # 答题卡定位锚点
                     with ui.row().classes("items-center gap-2"):
                         ui.label(f'第 {it["题号"]} 题').classes("font-semibold")
                         ui.label(f'{it["题型"]} · {it["分值"]} 分') \
@@ -1011,7 +1077,7 @@ def exam_zhengzhi(year: str = None, page: int = 1, user: str = "demo",
                     from proto.cards_subj import subj_panel
                     subj_panel(it, "ZZ", it.get("题干") or "",
                                it.get("材料") or "", float(it.get("分值") or 10),
-                               user, need_words=150)
+                               user, need_words=150, storage_key=it["id"])
 
 
 # ================================================================ 考研英语真题
@@ -1200,15 +1266,10 @@ def exam_english(tier: str = "EN1", year: str = None, view: str = "全部",
                              "若想获得更精确的 AI 评分，需接入你自己的大模型厂商 "
                              "API Key —— 每次不到 1 分钱。") \
                         .classes("t-sm")
-                # 【换颜色】原来是默认灰黑、看起来像正文而不是可点的入口。
-                # 用主题蓝 + 钥匙图标，明确"这是一个操作入口"。
-                _has_key = bool(llm_key.get().get("key"))
-                with ui.expansion(
-                        ("管理我的 API Key" if _has_key else "接入我的 API Key"),
-                        value=False) \
-                        .classes("w-full") \
-                        .style("color:#17418F"):
-                    _key_panel()
+                # 入口已挪到页面顶部（每页都有），这里只留一句指路，
+                # 避免同一页出现两个一模一样的 "接入我的 API Key"。
+                ui.label("接入 / 管理自己的 API Key：点页面最上方的"
+                         "「接入我的 API Key」即可。").classes("t-xs muted")
             ui.label("免费版评分：翻译按与参考译文的语义相似度、"
                      "作文按字数/句式/词汇/衔接计算，属客观指标估算，非阅卷分数。") \
                 .classes("t-xs muted w-full")
