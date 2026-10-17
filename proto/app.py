@@ -1175,13 +1175,13 @@ def exam_english(tier: str = "EN1", year: str = None, view: str = "全部",
             with ui.column().classes("gap-0 flex-1"):
                 if llm_key.get().get("key"):
                     ui.label("当前使用你自己接入的 API Key 进行 AI 评阅 —— "
-                             "费用由你的厂商账号承担，每次约 ¥0.006"
-                             "（1 万次约 ¥60，价格以厂商官网为准）。") \
+                             "费用由你的厂商账号承担，每次不到 1 分钱"
+                             "（价格以厂商官网为准）。") \
                         .classes("t-sm")
                 else:
                     ui.label("默认使用免费版评分（本地计算，不消耗 token、不花钱）；"
                              "若想获得更精确的 AI 评分，需接入你自己的大模型厂商 API Key "
-                             "—— DeepSeek 每次约 ¥0.006（不到 1 分钱，1 万次约 ¥60）。") \
+                             "—— 每次不到 1 分钱。") \
                         .classes("t-sm")
                 with ui.expansion("接入我的 API Key" if not llm_key.get().get("key")
                                   else "管理我的 API Key", value=False) \
