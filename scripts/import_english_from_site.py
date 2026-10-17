@@ -307,15 +307,20 @@ def _subjective_from_pdf(tier, year):
     anchors = []
     for i, l in enumerate(lines):
         # 形态一：`51. Directions:`
-        m = re.match(r'^\s*(\d{1,2})\s*[.、]\s*Directions?\s*[:：]?', l)
+        # 实测的写法比想象的多：
+        #   `51. Directions:`  `51, Directions;`（逗号+分号）
+        #   `48. Directio ns :`（**单词中间有空格**，OCR/排版造成）
+        # 单词中间也可能被拆开：`48. Directio ns :`
+        m = re.match(r'^\s*(\d{1,2})\s*[.、,，]\s*D\s*i\s*r\s*e\s*c\s*t?\s*i?\s*o?\s*n\s*s?\s*[:：;；]?', l, re.I)
         if m:
             anchors.append((i, int(m.group(1))))
             continue
         # 形态二：`51.` 单独一行，下一行才是 `Directions:`
         # 实测 2024 英语一的小作文就是这样，我第一版只认形态一，
         # **结果 51 题整道没进库**（真题只有 52 一道写作题）。
-        m = re.fullmatch(r'\s*(\d{1,2})\s*[.、]\s*', l)
-        if m and i + 1 < len(lines) and re.match(r'^Directions?\s*[:：]?', lines[i + 1]):
+        m = re.fullmatch(r'\s*(\d{1,2})\s*[.、,，]\s*', l)
+        if m and i + 1 < len(lines) and re.match(
+                r'^D\s*i\s*r\s*e\s*c\s*t?\s*i?\s*o?\s*n', lines[i + 1], re.I):
             anchors.append((i, int(m.group(1))))
     for k, (i, n) in enumerate(anchors):
         end = anchors[k + 1][0] if k + 1 < len(anchors) else len(lines)

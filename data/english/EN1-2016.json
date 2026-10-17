@@ -13,7 +13,14 @@
       "B": "by way of",
       "C": "on behalf of",
       "D": "with regard to"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": true,
+     "id": "EN1-2016-1",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 2,
@@ -23,7 +30,14 @@
       "B": "provide for",
       "C": "compete with",
       "D": "decide on"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2016-2",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 3,
@@ -33,7 +47,14 @@
       "B": "close",
       "C": "arrange",
       "D": "postpone"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2016-3",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 4,
@@ -43,7 +64,14 @@
       "B": "In time",
       "C": "Above all",
       "D": "For example"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2016-4",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 5,
@@ -53,7 +81,14 @@
       "B": "Lest",
       "C": "After",
       "D": "Unless"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2016-5",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 6,
@@ -63,7 +98,14 @@
       "B": "into",
       "C": "from",
       "D": "through"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2016-6",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 7,
@@ -73,7 +115,14 @@
       "B": "or",
       "C": "so",
       "D": "but"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2016-7",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 8,
@@ -83,7 +132,14 @@
       "B": "recite",
       "C": "copy",
       "D": "create"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2016-8",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 9,
@@ -93,7 +149,14 @@
       "B": "piling",
       "C": "wrapping",
       "D": "tying"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2016-9",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 10,
@@ -103,7 +166,14 @@
       "B": "lighting",
       "C": "hiding",
       "D": "serving"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2016-10",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 11,
@@ -113,7 +183,14 @@
       "B": "meeting",
       "C": "collection",
       "D": "union"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2016-11",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 12,
@@ -123,7 +200,14 @@
       "B": "part",
       "C": "live",
       "D": "deal"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2016-12",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 13,
@@ -133,7 +217,14 @@
       "B": "until",
       "C": "for",
       "D": "if"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2016-13",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 14,
@@ -143,7 +234,14 @@
       "B": "obtain",
       "C": "challenge",
       "D": "avoid"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2016-14",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 15,
@@ -153,7 +251,14 @@
       "B": "persuaded",
       "C": "viewed",
       "D": "exposed"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2016-15",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 16,
@@ -163,7 +268,14 @@
       "B": "however",
       "C": "whenever",
       "D": "wherever"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2016-16",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 17,
@@ -173,7 +285,14 @@
       "B": "brought",
       "C": "shaped",
       "D": "pushed"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2016-17",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 18,
@@ -183,7 +302,14 @@
       "B": "invested",
       "C": "donated",
       "D": "divided"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2016-18",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 19,
@@ -193,7 +319,14 @@
       "B": "shows",
       "C": "warms",
       "D": "breaks"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2016-19",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 20,
@@ -203,9 +336,18 @@
       "B": "once",
       "C": "so that",
       "D": "in that"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": true,
+     "id": "EN1-2016-20",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "完形",
+   "部分全称": "完形填空 Use of English"
   },
   {
    "部分": "READ",
@@ -219,7 +361,14 @@
       "B": "New runways would be constructed.",
       "C": "Websites about dieting would thrive.",
       "D": "The fashion industry would decline."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": true,
+     "id": "EN1-2016-21",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 22,
@@ -229,7 +378,14 @@
       "B": "heightening the value of.",
       "C": "losing faith in.",
       "D": "doing harm to."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2016-22",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 23,
@@ -239,7 +395,14 @@
       "B": "Its inherent problems are getting worse.",
       "C": "Models are no longer under peer pressure.",
       "D": "New standards are being set in Denmark."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2016-23",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 24,
@@ -249,7 +412,14 @@
       "B": "caring too much about models' character.",
       "C": "showing little concern for health factors.",
       "D": "setting a high age threshold for models."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2016-24",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 25,
@@ -259,9 +429,18 @@
       "B": "Just Another Round of Struggle for Beauty",
       "C": "A Dilemma for the Starving Models in France",
       "D": "A Challenge to the Fashion Industry's Body Ideals"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2016-25",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "阅读",
+   "部分全称": "阅读理解 Part A"
   },
   {
    "部分": "READ",
@@ -275,7 +454,14 @@
       "B": "is fully backed by the royal family.",
       "C": "didn't start till the Shakespearean age.",
       "D": "has brought much benefit to the NHS."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2016-26",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 27,
@@ -285,7 +471,14 @@
       "B": "properly protected.",
       "C": "effectively reinforced.",
       "D": "gradually destroyed."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2016-27",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 28,
@@ -295,7 +488,14 @@
       "B": "The Conservatives may abandon \"off-plan\" building.",
       "C": "Ukip may gain from its support for rural conservation.",
       "D": "The Liberal Democrats are losing political influence."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2016-28",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 29,
@@ -305,7 +505,14 @@
       "B": "stresses the necessity of easing the housing crisis.",
       "C": "highlights his firm stand against lobby pressure.",
       "D": "reveals a strong prejudice against urban areas."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2016-29",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 30,
@@ -315,9 +522,18 @@
       "B": "the enviable urban lifestyle in Britain.",
       "C": "the town-and-country planning in Britain.",
       "D": "the political life in today's Britain."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2016-30",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "阅读",
+   "部分全称": "阅读理解 Part A"
   },
   {
    "部分": "READ",
@@ -331,7 +547,14 @@
       "B": "skepticism.",
       "C": "approval.",
       "D": "uncertainty."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2016-31",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 32,
@@ -341,7 +564,14 @@
       "B": "protecting it from being defamed.",
       "C": "winning trust from consumers.",
       "D": "raising the quality of its products."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2016-32",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 33,
@@ -351,7 +581,14 @@
       "B": "more effective.",
       "C": "more lasting.",
       "D": "less severe."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2016-33",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 34,
@@ -361,7 +598,14 @@
       "B": "comes across as reliable evidence.",
       "C": "increases the chance of being penalized.",
       "D": "constitutes part of the investigation."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2016-34",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 35,
@@ -371,9 +615,18 @@
       "B": "The necessary amount of companies' spending on it is unknown.",
       "C": "Companies' financial capacity for it has been overestimated.",
       "D": "It has brought much benefit to the banking industry."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2016-35",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "阅读",
+   "部分全称": "阅读理解 Part A"
   },
   {
    "部分": "READ",
@@ -387,7 +640,14 @@
       "B": "the increasing online ad sales.",
       "C": "the pressure from its investors.",
       "D": "the complaints from its readers."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2016-36",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 37,
@@ -397,7 +657,14 @@
       "B": "make strategic adjustments.",
       "C": "seek new sources of readership.",
       "D": "aim for efficient management."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2016-37",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 38,
@@ -407,7 +674,14 @@
       "B": "is meant for the most loyal customers.",
       "C": "will have the cost of printing reduced.",
       "D": "expands the popularity of the paper."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2016-38",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 39,
@@ -417,7 +691,14 @@
       "B": "cautiousness facilitates problem-solving.",
       "C": "aggressiveness better meets challenges.",
       "D": "legacy businesses are becoming outdated."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2016-39",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 40,
@@ -427,9 +708,18 @@
       "B": "Make Your Print Newspaper a Luxury Good",
       "C": "Keep Your Newspapers Forever in Fashion",
       "D": "Cherish the Newspaper Still in Your Hand"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": true,
+     "id": "EN1-2016-40",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "阅读",
+   "部分全称": "阅读理解 Part A"
   },
   {
    "部分": "NEW",
@@ -447,7 +737,14 @@
       "E": "Work with professionals",
       "F": "Know your goals",
       "G": "Make it efficient"
-     }
+     },
+     "部分": "NEW",
+     "部分名": "新题型",
+     "边界题": true,
+     "id": "EN1-2016-41",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 42,
@@ -460,7 +757,14 @@
       "E": "Work with professionals",
       "F": "Know your goals",
       "G": "Make it efficient"
-     }
+     },
+     "部分": "NEW",
+     "部分名": "新题型",
+     "边界题": false,
+     "id": "EN1-2016-42",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 43,
@@ -473,7 +777,14 @@
       "E": "Work with professionals",
       "F": "Know your goals",
       "G": "Make it efficient"
-     }
+     },
+     "部分": "NEW",
+     "部分名": "新题型",
+     "边界题": false,
+     "id": "EN1-2016-43",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 44,
@@ -486,7 +797,14 @@
       "E": "Work with professionals",
       "F": "Know your goals",
       "G": "Make it efficient"
-     }
+     },
+     "部分": "NEW",
+     "部分名": "新题型",
+     "边界题": false,
+     "id": "EN1-2016-44",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     },
     {
      "题号": 45,
@@ -499,9 +817,18 @@
       "E": "Work with professionals",
       "F": "Know your goals",
       "G": "Make it efficient"
-     }
+     },
+     "部分": "NEW",
+     "部分名": "新题型",
+     "边界题": true,
+     "id": "EN1-2016-45",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "新题型",
+   "部分全称": "新题型 Part B"
   },
   {
    "部分": "TRANS",
@@ -512,63 +839,118 @@
      "题干": "We don't have to learn how to be mentally healthy; it is built into us in the same way that our bodies know how to heal a cut or mend a broken bone.",
      "材料": "Mental health is our birthright. (46) We don't have to learn how to be mentally healthy; it is built into us in the same way that our bodies know how to heal a cut or mend a broken bone. Mental health can't be learned, only reawakened. It is like the immune system of the body, which under stress or through lack of nutrition or exercise can be weakened, but which never leaves us. When we don't understand the value of mental health and we don't know how to gain access to it, mental health will remain hidden from us. (47) Our mental health doesn't really go anywhere; like the sun behind a cloud, it can be temporarily hidden from view, but it is fully capable of being restored in an instant. Mental health is the seed that contains self-esteem - confidence in ourselves and an ability to trust in our common sense. It allows us to have perspective on our lives - the ability to not take ourselves too seriously, to laugh at ourselves, to see the bigger picture, and to see that things will work out. It's a form of innate or unlearned optimism. ( 48) Mental health allows us to view others with sympathy if they are having troubles, with kindness if they are in pain, and with unconditional love no matter who they are. Mental health is the source of creativity for solving problems, resolving conflict, making our surroundings more beautiful, managing our home life, or coming up with a creative business idea or invention to make our lives easier. It gives us patience for ourselves and toward others as well as patience while driving, catching a fish, working on our car, or raising a child. It allows us to see the beauty that surrounds us each moment in nature, in culture, in the flow of our daily lives. ( 49) Although mental health is the cure-all for living our lives, it is perfectly ordinary as you will see that it has been there to direct you through all your difficult decisions. It has been available even in the most mundane of life situations to show you right from wrong, good from bad, friend from foe. Mental health has commonly been called conscience, instinct, wisdom, common sense, or the inner voice. We think of it simply as a healthy and helpful flow of intelligent thought. (50) As you will come to see, knowing that mental health is always available and knowing to trust it allow us to slow down to the moment and live life happily.",
      "题型": "翻译",
-     "分值": 2
+     "分值": 2,
+     "部分": "TRANS",
+     "部分名": "翻译",
+     "边界题": true,
+     "id": "EN1-2016-46",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": true
     },
     {
      "题号": 47,
      "题干": "Our mental health doesn't really go anywhere; like the sun behind a cloud, it can be temporarily hidden from view, but it is fully capable of being restored in an instant.",
      "材料": "Mental health is our birthright. (46) We don't have to learn how to be mentally healthy; it is built into us in the same way that our bodies know how to heal a cut or mend a broken bone. Mental health can't be learned, only reawakened. It is like the immune system of the body, which under stress or through lack of nutrition or exercise can be weakened, but which never leaves us. When we don't understand the value of mental health and we don't know how to gain access to it, mental health will remain hidden from us. (47) Our mental health doesn't really go anywhere; like the sun behind a cloud, it can be temporarily hidden from view, but it is fully capable of being restored in an instant. Mental health is the seed that contains self-esteem - confidence in ourselves and an ability to trust in our common sense. It allows us to have perspective on our lives - the ability to not take ourselves too seriously, to laugh at ourselves, to see the bigger picture, and to see that things will work out. It's a form of innate or unlearned optimism. ( 48) Mental health allows us to view others with sympathy if they are having troubles, with kindness if they are in pain, and with unconditional love no matter who they are. Mental health is the source of creativity for solving problems, resolving conflict, making our surroundings more beautiful, managing our home life, or coming up with a creative business idea or invention to make our lives easier. It gives us patience for ourselves and toward others as well as patience while driving, catching a fish, working on our car, or raising a child. It allows us to see the beauty that surrounds us each moment in nature, in culture, in the flow of our daily lives. ( 49) Although mental health is the cure-all for living our lives, it is perfectly ordinary as you will see that it has been there to direct you through all your difficult decisions. It has been available even in the most mundane of life situations to show you right from wrong, good from bad, friend from foe. Mental health has commonly been called conscience, instinct, wisdom, common sense, or the inner voice. We think of it simply as a healthy and helpful flow of intelligent thought. (50) As you will come to see, knowing that mental health is always available and knowing to trust it allow us to slow down to the moment and live life happily.",
      "题型": "翻译",
-     "分值": 2
+     "分值": 2,
+     "部分": "TRANS",
+     "部分名": "翻译",
+     "边界题": false,
+     "id": "EN1-2016-47",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": true
     },
     {
      "题号": 48,
      "题干": "Mental health allows us to view others with sympathy if they are having troubles, with kindness if they are in pain, and with unconditional love no matter who they are.",
      "材料": "Mental health is our birthright. (46) We don't have to learn how to be mentally healthy; it is built into us in the same way that our bodies know how to heal a cut or mend a broken bone. Mental health can't be learned, only reawakened. It is like the immune system of the body, which under stress or through lack of nutrition or exercise can be weakened, but which never leaves us. When we don't understand the value of mental health and we don't know how to gain access to it, mental health will remain hidden from us. (47) Our mental health doesn't really go anywhere; like the sun behind a cloud, it can be temporarily hidden from view, but it is fully capable of being restored in an instant. Mental health is the seed that contains self-esteem - confidence in ourselves and an ability to trust in our common sense. It allows us to have perspective on our lives - the ability to not take ourselves too seriously, to laugh at ourselves, to see the bigger picture, and to see that things will work out. It's a form of innate or unlearned optimism. ( 48) Mental health allows us to view others with sympathy if they are having troubles, with kindness if they are in pain, and with unconditional love no matter who they are. Mental health is the source of creativity for solving problems, resolving conflict, making our surroundings more beautiful, managing our home life, or coming up with a creative business idea or invention to make our lives easier. It gives us patience for ourselves and toward others as well as patience while driving, catching a fish, working on our car, or raising a child. It allows us to see the beauty that surrounds us each moment in nature, in culture, in the flow of our daily lives. ( 49) Although mental health is the cure-all for living our lives, it is perfectly ordinary as you will see that it has been there to direct you through all your difficult decisions. It has been available even in the most mundane of life situations to show you right from wrong, good from bad, friend from foe. Mental health has commonly been called conscience, instinct, wisdom, common sense, or the inner voice. We think of it simply as a healthy and helpful flow of intelligent thought. (50) As you will come to see, knowing that mental health is always available and knowing to trust it allow us to slow down to the moment and live life happily.",
      "题型": "翻译",
-     "分值": 2
+     "分值": 2,
+     "部分": "TRANS",
+     "部分名": "翻译",
+     "边界题": false,
+     "id": "EN1-2016-48",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": true
     },
     {
      "题号": 49,
      "题干": "Although mental health is the cure-all for living our lives, it is perfectly ordinary as you will see that it has been there to direct you through all your difficult decisions.",
      "材料": "Mental health is our birthright. (46) We don't have to learn how to be mentally healthy; it is built into us in the same way that our bodies know how to heal a cut or mend a broken bone. Mental health can't be learned, only reawakened. It is like the immune system of the body, which under stress or through lack of nutrition or exercise can be weakened, but which never leaves us. When we don't understand the value of mental health and we don't know how to gain access to it, mental health will remain hidden from us. (47) Our mental health doesn't really go anywhere; like the sun behind a cloud, it can be temporarily hidden from view, but it is fully capable of being restored in an instant. Mental health is the seed that contains self-esteem - confidence in ourselves and an ability to trust in our common sense. It allows us to have perspective on our lives - the ability to not take ourselves too seriously, to laugh at ourselves, to see the bigger picture, and to see that things will work out. It's a form of innate or unlearned optimism. ( 48) Mental health allows us to view others with sympathy if they are having troubles, with kindness if they are in pain, and with unconditional love no matter who they are. Mental health is the source of creativity for solving problems, resolving conflict, making our surroundings more beautiful, managing our home life, or coming up with a creative business idea or invention to make our lives easier. It gives us patience for ourselves and toward others as well as patience while driving, catching a fish, working on our car, or raising a child. It allows us to see the beauty that surrounds us each moment in nature, in culture, in the flow of our daily lives. ( 49) Although mental health is the cure-all for living our lives, it is perfectly ordinary as you will see that it has been there to direct you through all your difficult decisions. It has been available even in the most mundane of life situations to show you right from wrong, good from bad, friend from foe. Mental health has commonly been called conscience, instinct, wisdom, common sense, or the inner voice. We think of it simply as a healthy and helpful flow of intelligent thought. (50) As you will come to see, knowing that mental health is always available and knowing to trust it allow us to slow down to the moment and live life happily.",
      "题型": "翻译",
-     "分值": 2
+     "分值": 2,
+     "部分": "TRANS",
+     "部分名": "翻译",
+     "边界题": false,
+     "id": "EN1-2016-49",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": true
     },
     {
      "题号": 50,
      "题干": "As you will come to see, knowing that mental health is always available and knowing to trust it allow us to slow down to the moment and live life happily.",
      "材料": "Mental health is our birthright. (46) We don't have to learn how to be mentally healthy; it is built into us in the same way that our bodies know how to heal a cut or mend a broken bone. Mental health can't be learned, only reawakened. It is like the immune system of the body, which under stress or through lack of nutrition or exercise can be weakened, but which never leaves us. When we don't understand the value of mental health and we don't know how to gain access to it, mental health will remain hidden from us. (47) Our mental health doesn't really go anywhere; like the sun behind a cloud, it can be temporarily hidden from view, but it is fully capable of being restored in an instant. Mental health is the seed that contains self-esteem - confidence in ourselves and an ability to trust in our common sense. It allows us to have perspective on our lives - the ability to not take ourselves too seriously, to laugh at ourselves, to see the bigger picture, and to see that things will work out. It's a form of innate or unlearned optimism. ( 48) Mental health allows us to view others with sympathy if they are having troubles, with kindness if they are in pain, and with unconditional love no matter who they are. Mental health is the source of creativity for solving problems, resolving conflict, making our surroundings more beautiful, managing our home life, or coming up with a creative business idea or invention to make our lives easier. It gives us patience for ourselves and toward others as well as patience while driving, catching a fish, working on our car, or raising a child. It allows us to see the beauty that surrounds us each moment in nature, in culture, in the flow of our daily lives. ( 49) Although mental health is the cure-all for living our lives, it is perfectly ordinary as you will see that it has been there to direct you through all your difficult decisions. It has been available even in the most mundane of life situations to show you right from wrong, good from bad, friend from foe. Mental health has commonly been called conscience, instinct, wisdom, common sense, or the inner voice. We think of it simply as a healthy and helpful flow of intelligent thought. (50) As you will come to see, knowing that mental health is always available and knowing to trust it allow us to slow down to the moment and live life happily.",
      "题型": "翻译",
-     "分值": 2
+     "分值": 2,
+     "部分": "TRANS",
+     "部分名": "翻译",
+     "边界题": true,
+     "id": "EN1-2016-50",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": true
     }
-   ]
+   ],
+   "部分名": "翻译",
+   "部分全称": "翻译 Part C"
   },
   {
    "部分": "WRITE",
-   "材料": "Suppose you are a librarian in your university. Write a notice of about 100 words, providing the newly-enrolled international students with relevant information about the library. You should write neatly on the ANSWER SHEET. Do not sign your own name at the end of the notice. Use \"Li Ming\" instead. Do not write the address. ( 10 points) PartB",
+   "材料": "Suppose you are a librarian in your university. Write a notice of about 100 words, providing the newly-enrolled international students with relevant information about the library.\nYou should write neatly on the ANSWER SHEET.\nDo not sign your own name at the end of the notice. Use “Li Ming” instead.\nDo not write the address. (10 points)",
    "小题": [
     {
      "题号": 51,
      "题干": "写作要求",
-     "材料": "Suppose you are a librarian in your university. Write a notice of about 100 words, providing the newly-enrolled international students with relevant information about the library. You should write neatly on the ANSWER SHEET. Do not sign your own name at the end of the notice. Use \"Li Ming\" instead. Do not write the address. ( 10 points) PartB",
+     "材料": "Suppose you are a librarian in your university. Write a notice of about 100 words, providing the newly-enrolled international students with relevant information about the library.\nYou should write neatly on the ANSWER SHEET.\nDo not sign your own name at the end of the notice. Use “Li Ming” instead.\nDo not write the address. (10 points)",
      "题型": "写作",
-     "分值": 10
+     "分值": 10,
+     "部分": "WRITE",
+     "部分名": "写作",
+     "边界题": true,
+     "id": "EN1-2016-51",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": true
     }
-   ]
+   ],
+   "部分名": "写作",
+   "部分全称": "写作 Part A/B"
   },
   {
    "部分": "WRITE",
-   "材料": "Write an essay of 160-200 words based on the following pictures. In your essay, you should 1) describe the pictures briefly, 2) interpret the meaning, and 3) give your comments. You should write neatly on the ANSWER SHEET. (20 points) ID",
+   "材料": "Write an essay of 160-200 words based on the following  pictures.  In  your essay, you should\nl) describe the pictures briefly,\n2)interpret the meaning, and\n3)give your comments.\nYou should write neatly on the ANSWER SHEET. (20 points)",
    "小题": [
     {
      "题号": 52,
      "题干": "写作要求",
-     "材料": "Write an essay of 160-200 words based on the following pictures. In your essay, you should 1) describe the pictures briefly, 2) interpret the meaning, and 3) give your comments. You should write neatly on the ANSWER SHEET. (20 points) ID ",
+     "材料": "Write an essay of 160-200 words based on the following  pictures.  In  your essay, you should\nl) describe the pictures briefly,\n2)interpret the meaning, and\n3)give your comments.\nYou should write neatly on the ANSWER SHEET. (20 points)",
      "题型": "写作",
-     "分值": 10
+     "分值": 10,
+     "部分": "WRITE",
+     "部分名": "写作",
+     "边界题": true,
+     "id": "EN1-2016-52",
+     "tier": "EN1",
+     "year": "2016",
+     "主观": true
     }
-   ]
+   ],
+   "部分名": "写作",
+   "部分全称": "写作 Part A/B"
   }
  ],
  "题目数": 52,

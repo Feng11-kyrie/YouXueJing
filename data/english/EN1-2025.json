@@ -13,7 +13,14 @@
       "B": "prone",
       "C": "available",
       "D": "alien"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": true,
+     "id": "EN1-2025-1",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 2,
@@ -23,7 +30,14 @@
       "B": "frequently",
       "C": "gradually",
       "D": "temporarily"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2025-2",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 3,
@@ -33,7 +47,14 @@
       "B": "submerged",
       "C": "relocated",
       "D": "isolated"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2025-3",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 4,
@@ -43,7 +64,14 @@
       "B": "programs",
       "C": "remains",
       "D": "surroundings"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2025-4",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 5,
@@ -53,7 +81,14 @@
       "B": "off",
       "C": "under",
       "D": "via"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2025-5",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 6,
@@ -63,7 +98,14 @@
       "B": "rivers",
       "C": "seasons",
       "D": "winds"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2025-6",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 7,
@@ -73,7 +115,14 @@
       "B": "separated",
       "C": "comprised",
       "D": "protected"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2025-7",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 8,
@@ -83,7 +132,14 @@
       "B": "restoring",
       "C": "updating",
       "D": "supplying"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2025-8",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 9,
@@ -93,7 +149,14 @@
       "B": "until",
       "C": "after",
       "D": "once"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2025-9",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 10,
@@ -103,7 +166,14 @@
       "B": "resources",
       "C": "products",
       "D": "structures"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2025-10",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 11,
@@ -113,7 +183,14 @@
       "B": "select",
       "C": "display",
       "D": "examine"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2025-11",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 12,
@@ -123,7 +200,14 @@
       "B": "Unlike",
       "C": "Besides",
       "D": "Among"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2025-12",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 13,
@@ -133,7 +217,14 @@
       "B": "unknown",
       "C": "unorganized",
       "D": "undisturbed"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2025-13",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 14,
@@ -143,7 +234,14 @@
       "B": "transferred",
       "C": "resumed",
       "D": "canceled"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2025-14",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 15,
@@ -153,7 +251,14 @@
       "B": "theories",
       "C": "documents",
       "D": "techniques"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2025-15",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 16,
@@ -163,7 +268,14 @@
       "B": "provided",
       "C": "employed",
       "D": "adjusted"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2025-16",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 17,
@@ -173,7 +285,14 @@
       "B": "light",
       "C": "reality",
       "D": "mind"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2025-17",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 18,
@@ -183,7 +302,14 @@
       "B": "connected",
       "C": "blocked",
       "D": "altered"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2025-18",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 19,
@@ -193,7 +319,14 @@
       "B": "suggesting",
       "C": "predicting",
       "D": "recalling"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2025-19",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 20,
@@ -203,9 +336,18 @@
       "B": "diverse",
       "C": "marginal",
       "D": "dependent"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": true,
+     "id": "EN1-2025-20",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "完形",
+   "部分全称": "完形填空 Use of English"
   },
   {
    "部分": "READ",
@@ -219,7 +361,14 @@
       "B": "watch RSC actors' performances",
       "C": "play the roles in Shakespeare",
       "D": "study drama under RSC artists"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": true,
+     "id": "EN1-2025-21",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 22,
@@ -229,7 +378,14 @@
       "B": "expanding vocabulary helps develop reading fluency",
       "C": "emotion affects understanding of sophisticated works",
       "D": "the classroom activity stimulates interest in the arts"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2025-22",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 23,
@@ -239,7 +395,14 @@
       "B": "omission of small details",
       "C": "casual style of writing",
       "D": "preference for big words"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2025-23",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 24,
@@ -249,7 +412,14 @@
       "B": "Identifying with literary characters.",
       "C": "Drawing inspiration from nature.",
       "D": "Concentrating on real-life situations."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2025-24",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 25,
@@ -259,9 +429,18 @@
       "B": "the language of Shakespeare may be formidable for pupils",
       "C": "other old dramatists may be included in primary education",
       "D": "pupils may be reluctant to work on other old dramatists"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2025-25",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "阅读",
+   "部分全称": "阅读理解 Part A"
   },
   {
    "部分": "READ",
@@ -275,7 +454,14 @@
       "B": "intention to reduce their research",
       "C": "suspicions about sustainable energy",
       "D": "waste of electricity in their projects"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2025-26",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 27,
@@ -285,7 +471,14 @@
       "B": "have aroused groundless worries",
       "C": "are hard to handle at present",
       "D": "are justifiable in the long run"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2025-27",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 28,
@@ -295,7 +488,14 @@
       "B": "the urgency of addressing climate change",
       "C": "the rewards of scientific endeavours",
       "D": "the value of fostering human ingenuity"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2025-28",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 29,
@@ -305,7 +505,14 @@
       "B": "is a triumph against energy shortage",
       "C": "owes much to global net-zero initiatives",
       "D": "aims to explore the power of intelligence"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2025-29",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 30,
@@ -315,9 +522,18 @@
       "B": "The need for supercomputers is difficult to meet.",
       "C": "Energy-intensive research work is inevitable.",
       "D": "The goals of researchers ought to be realistic."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2025-30",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "阅读",
+   "部分全称": "阅读理解 Part A"
   },
   {
    "部分": "READ",
@@ -331,7 +547,14 @@
       "B": "have surpassed cable in revenue",
       "C": "are unpopular with advertisers",
       "D": "are confronted with a real threat"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2025-31",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 32,
@@ -341,7 +564,14 @@
       "B": "reaped benefits from the war with digital pirates",
       "C": "promised to become big job creators in the US",
       "D": "used to collaborate with file-uploading platforms"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2025-32",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 33,
@@ -351,7 +581,14 @@
       "B": "led a national protest against online piracy",
       "C": "was urged to form an enforcement task force",
       "D": "failed to win support from local authorities"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2025-33",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 34,
@@ -361,7 +598,14 @@
       "B": "will possibly overwhelm legitimate streamers",
       "C": "is unlikely to diminish in the near future",
       "D": "has been underestimated by some analysts"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2025-34",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 35,
@@ -371,9 +615,18 @@
       "B": "The criminal nature of copyright violation.",
       "C": "The prospect of eliminating online piracy.",
       "D": "The economic harm from illegal streaming."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2025-35",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "阅读",
+   "部分全称": "阅读理解 Part A"
   },
   {
    "部分": "READ",
@@ -387,7 +640,14 @@
       "B": "contrast them with everyday items",
       "C": "bring up the issue of preservation",
       "D": "comment on their historical value"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2025-36",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 37,
@@ -397,7 +657,14 @@
       "B": "convey information in a more direct way",
       "C": "require more intentional preservation",
       "D": "are less likely to suffer serious damage"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2025-37",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 38,
@@ -407,7 +674,14 @@
       "B": "undervaluation of libraries",
       "C": "researchers' underperformance",
       "D": "users' overreliance on technology"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2025-38",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 39,
@@ -417,7 +691,14 @@
       "B": "the infeasibility of constantly migrating digital assets",
       "C": "the possibility of losing information in obsolete formats",
       "D": "the inconvenience of storing information on analog devices"
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2025-39",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 40,
@@ -427,9 +708,18 @@
       "B": "Contributions of librarians should be recognized.",
       "C": "Accessing databases is essential to researchers.",
       "D": "Keeping digital historical records is a challenge."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": true,
+     "id": "EN1-2025-40",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "阅读",
+   "部分全称": "阅读理解 Part A"
   },
   {
    "部分": "NEW",
@@ -447,7 +737,14 @@
       "E": "That makes it sound easy, and artificial, but Peters insists it is still a massive challenge. He typically takes between 10,000 and 20,000 shots to get one butterfly take-off sequence in focus. At such high shutter speeds, the depth of field is tiny, and as butterflies do not fly in a straight line they swiftly flutter out of focus. As well as thousands of attempts, it takes patience and fieldcraft to anticipate a butterfly's likely flight-line and catch it—in focus.",
       "F": "So what's the appeal of a long, sweaty day in pursuit of an elusive, fast-moving wild animal? \"It just feels bloody brilliant,\" says Peters. \"If I've had a full day of good encounters with butterflies, met interesting butterfly people and I've got some good shots, that becomes a vault in my spiritual bank. It's a happy feeling.\"",
       "G": "A children's author and poet who had become a keen amateur photographer, Peters watched the butterflies and idly wondered if he could capture them in flight. It swiftly became an obsession as he recovered from a successful operation to remove the cancer. In recent summers, he has travelled the length and breadth of Britain to photograph all 58 native species of butterfly. Now the fruits of those summers have been published in a beautiful new book."
-     }
+     },
+     "部分": "NEW",
+     "部分名": "新题型",
+     "边界题": true,
+     "id": "EN1-2025-41",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 42,
@@ -460,7 +757,14 @@
       "E": "That makes it sound easy, and artificial, but Peters insists it is still a massive challenge. He typically takes between 10,000 and 20,000 shots to get one butterfly take-off sequence in focus. At such high shutter speeds, the depth of field is tiny, and as butterflies do not fly in a straight line they swiftly flutter out of focus. As well as thousands of attempts, it takes patience and fieldcraft to anticipate a butterfly's likely flight-line and catch it—in focus.",
       "F": "So what's the appeal of a long, sweaty day in pursuit of an elusive, fast-moving wild animal? \"It just feels bloody brilliant,\" says Peters. \"If I've had a full day of good encounters with butterflies, met interesting butterfly people and I've got some good shots, that becomes a vault in my spiritual bank. It's a happy feeling.\"",
       "G": "A children's author and poet who had become a keen amateur photographer, Peters watched the butterflies and idly wondered if he could capture them in flight. It swiftly became an obsession as he recovered from a successful operation to remove the cancer. In recent summers, he has travelled the length and breadth of Britain to photograph all 58 native species of butterfly. Now the fruits of those summers have been published in a beautiful new book."
-     }
+     },
+     "部分": "NEW",
+     "部分名": "新题型",
+     "边界题": false,
+     "id": "EN1-2025-42",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 43,
@@ -473,7 +777,14 @@
       "E": "That makes it sound easy, and artificial, but Peters insists it is still a massive challenge. He typically takes between 10,000 and 20,000 shots to get one butterfly take-off sequence in focus. At such high shutter speeds, the depth of field is tiny, and as butterflies do not fly in a straight line they swiftly flutter out of focus. As well as thousands of attempts, it takes patience and fieldcraft to anticipate a butterfly's likely flight-line and catch it—in focus.",
       "F": "So what's the appeal of a long, sweaty day in pursuit of an elusive, fast-moving wild animal? \"It just feels bloody brilliant,\" says Peters. \"If I've had a full day of good encounters with butterflies, met interesting butterfly people and I've got some good shots, that becomes a vault in my spiritual bank. It's a happy feeling.\"",
       "G": "A children's author and poet who had become a keen amateur photographer, Peters watched the butterflies and idly wondered if he could capture them in flight. It swiftly became an obsession as he recovered from a successful operation to remove the cancer. In recent summers, he has travelled the length and breadth of Britain to photograph all 58 native species of butterfly. Now the fruits of those summers have been published in a beautiful new book."
-     }
+     },
+     "部分": "NEW",
+     "部分名": "新题型",
+     "边界题": false,
+     "id": "EN1-2025-43",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 44,
@@ -486,7 +797,14 @@
       "E": "That makes it sound easy, and artificial, but Peters insists it is still a massive challenge. He typically takes between 10,000 and 20,000 shots to get one butterfly take-off sequence in focus. At such high shutter speeds, the depth of field is tiny, and as butterflies do not fly in a straight line they swiftly flutter out of focus. As well as thousands of attempts, it takes patience and fieldcraft to anticipate a butterfly's likely flight-line and catch it—in focus.",
       "F": "So what's the appeal of a long, sweaty day in pursuit of an elusive, fast-moving wild animal? \"It just feels bloody brilliant,\" says Peters. \"If I've had a full day of good encounters with butterflies, met interesting butterfly people and I've got some good shots, that becomes a vault in my spiritual bank. It's a happy feeling.\"",
       "G": "A children's author and poet who had become a keen amateur photographer, Peters watched the butterflies and idly wondered if he could capture them in flight. It swiftly became an obsession as he recovered from a successful operation to remove the cancer. In recent summers, he has travelled the length and breadth of Britain to photograph all 58 native species of butterfly. Now the fruits of those summers have been published in a beautiful new book."
-     }
+     },
+     "部分": "NEW",
+     "部分名": "新题型",
+     "边界题": false,
+     "id": "EN1-2025-44",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     },
     {
      "题号": 45,
@@ -499,9 +817,18 @@
       "E": "That makes it sound easy, and artificial, but Peters insists it is still a massive challenge. He typically takes between 10,000 and 20,000 shots to get one butterfly take-off sequence in focus. At such high shutter speeds, the depth of field is tiny, and as butterflies do not fly in a straight line they swiftly flutter out of focus. As well as thousands of attempts, it takes patience and fieldcraft to anticipate a butterfly's likely flight-line and catch it—in focus.",
       "F": "So what's the appeal of a long, sweaty day in pursuit of an elusive, fast-moving wild animal? \"It just feels bloody brilliant,\" says Peters. \"If I've had a full day of good encounters with butterflies, met interesting butterfly people and I've got some good shots, that becomes a vault in my spiritual bank. It's a happy feeling.\"",
       "G": "A children's author and poet who had become a keen amateur photographer, Peters watched the butterflies and idly wondered if he could capture them in flight. It swiftly became an obsession as he recovered from a successful operation to remove the cancer. In recent summers, he has travelled the length and breadth of Britain to photograph all 58 native species of butterfly. Now the fruits of those summers have been published in a beautiful new book."
-     }
+     },
+     "部分": "NEW",
+     "部分名": "新题型",
+     "边界题": true,
+     "id": "EN1-2025-45",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "新题型",
+   "部分全称": "新题型 Part B"
   },
   {
    "部分": "TRANS",
@@ -512,63 +839,118 @@
      "题干": "Recent decades have seen science move into a convention where engagement in the subject can only be done through institutions, such as a university.",
      "材料": "Innovation and research have relied on public participation in science for centuries. It was a musician who discovered the planet Uranus in the 18th century by making his own telescope with mirrors composed of copper and tin. (46) Recent decades have seen science move into a convention where engagement in the subject can only be done through institutions, such as a university. Citizen science provides an opportunity for greater public engagement and the democratisation of science. In the information era, large data sets, small teams and financial restrictions have slowed scientific process. (47) But by utilising the natural curiosity of the general public it is possible to overcome many of these challenges by engaging non-scientists directly in the research process. Anyone can be a citizen scientist, regardless of age, nationality or academic experience. You don’t even need any formal training, just an inquisitive mind and the enthusiasm to join one of the thousands of citizen science projects to generate new knowledge and the means to understand a genuine scientific outcome. (48) Scientists have employed a variety of ways to engage the general public in their research, such as making data analysis into an online game or sample collection into a smartphone application. They’ve implored citizens to help with bug counting and categorising cancer cells, and even identifying distant galaxies. This form of accessible science means that great minds are able to join the race to create and develop projects with the potential to change the world. A citizen science-based approach can extend the field of vision and include different ideas and different brains to problem-solve and create, making innovation faster and more effective. The rise of citizen science has grown alongside the rise of do-it-yourself biology laboratories around the world. (49) These groups of people are part of a rapidly expanding biotechnological social movement of citizen scientists and professional scientists seeking to take discovery out of institutions and put it into the hands of anyone with the enthusiasm. There are around 40 official do-it-yourself biology centres across the globe in locations including Paris, London, Sydney, and Tel Aviv. (50) They pool resources, collaborate, think outside the box, and find solutions and ways around obstacles to explore science for the sake of science without the traditional boundaries of working inside a formal setting. So is it time to take the Petri dish out of the laboratory and into the garage?",
      "题型": "翻译",
-     "分值": 2
+     "分值": 2,
+     "部分": "TRANS",
+     "部分名": "翻译",
+     "边界题": true,
+     "id": "EN1-2025-46",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": true
     },
     {
      "题号": 47,
      "题干": "But by utilising the natural curiosity of the general public it is possible to overcome many of these challenges by engaging non-scientists directly in the research process.",
      "材料": "Innovation and research have relied on public participation in science for centuries. It was a musician who discovered the planet Uranus in the 18th century by making his own telescope with mirrors composed of copper and tin. (46) Recent decades have seen science move into a convention where engagement in the subject can only be done through institutions, such as a university. Citizen science provides an opportunity for greater public engagement and the democratisation of science. In the information era, large data sets, small teams and financial restrictions have slowed scientific process. (47) But by utilising the natural curiosity of the general public it is possible to overcome many of these challenges by engaging non-scientists directly in the research process. Anyone can be a citizen scientist, regardless of age, nationality or academic experience. You don’t even need any formal training, just an inquisitive mind and the enthusiasm to join one of the thousands of citizen science projects to generate new knowledge and the means to understand a genuine scientific outcome. (48) Scientists have employed a variety of ways to engage the general public in their research, such as making data analysis into an online game or sample collection into a smartphone application. They’ve implored citizens to help with bug counting and categorising cancer cells, and even identifying distant galaxies. This form of accessible science means that great minds are able to join the race to create and develop projects with the potential to change the world. A citizen science-based approach can extend the field of vision and include different ideas and different brains to problem-solve and create, making innovation faster and more effective. The rise of citizen science has grown alongside the rise of do-it-yourself biology laboratories around the world. (49) These groups of people are part of a rapidly expanding biotechnological social movement of citizen scientists and professional scientists seeking to take discovery out of institutions and put it into the hands of anyone with the enthusiasm. There are around 40 official do-it-yourself biology centres across the globe in locations including Paris, London, Sydney, and Tel Aviv. (50) They pool resources, collaborate, think outside the box, and find solutions and ways around obstacles to explore science for the sake of science without the traditional boundaries of working inside a formal setting. So is it time to take the Petri dish out of the laboratory and into the garage?",
      "题型": "翻译",
-     "分值": 2
+     "分值": 2,
+     "部分": "TRANS",
+     "部分名": "翻译",
+     "边界题": false,
+     "id": "EN1-2025-47",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": true
     },
     {
      "题号": 48,
      "题干": "Scientists have employed a variety of ways to engage the general public in their research, such as making data analysis into an online game or sample collection into a smartphone application.",
      "材料": "Innovation and research have relied on public participation in science for centuries. It was a musician who discovered the planet Uranus in the 18th century by making his own telescope with mirrors composed of copper and tin. (46) Recent decades have seen science move into a convention where engagement in the subject can only be done through institutions, such as a university. Citizen science provides an opportunity for greater public engagement and the democratisation of science. In the information era, large data sets, small teams and financial restrictions have slowed scientific process. (47) But by utilising the natural curiosity of the general public it is possible to overcome many of these challenges by engaging non-scientists directly in the research process. Anyone can be a citizen scientist, regardless of age, nationality or academic experience. You don’t even need any formal training, just an inquisitive mind and the enthusiasm to join one of the thousands of citizen science projects to generate new knowledge and the means to understand a genuine scientific outcome. (48) Scientists have employed a variety of ways to engage the general public in their research, such as making data analysis into an online game or sample collection into a smartphone application. They’ve implored citizens to help with bug counting and categorising cancer cells, and even identifying distant galaxies. This form of accessible science means that great minds are able to join the race to create and develop projects with the potential to change the world. A citizen science-based approach can extend the field of vision and include different ideas and different brains to problem-solve and create, making innovation faster and more effective. The rise of citizen science has grown alongside the rise of do-it-yourself biology laboratories around the world. (49) These groups of people are part of a rapidly expanding biotechnological social movement of citizen scientists and professional scientists seeking to take discovery out of institutions and put it into the hands of anyone with the enthusiasm. There are around 40 official do-it-yourself biology centres across the globe in locations including Paris, London, Sydney, and Tel Aviv. (50) They pool resources, collaborate, think outside the box, and find solutions and ways around obstacles to explore science for the sake of science without the traditional boundaries of working inside a formal setting. So is it time to take the Petri dish out of the laboratory and into the garage?",
      "题型": "翻译",
-     "分值": 2
+     "分值": 2,
+     "部分": "TRANS",
+     "部分名": "翻译",
+     "边界题": false,
+     "id": "EN1-2025-48",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": true
     },
     {
      "题号": 49,
      "题干": "These groups of people are part of a rapidly expanding biotechnological social movement of citizen scientists and professional scientists seeking to take discovery out of institutions and put it into the hands of anyone with the enthusiasm.",
      "材料": "Innovation and research have relied on public participation in science for centuries. It was a musician who discovered the planet Uranus in the 18th century by making his own telescope with mirrors composed of copper and tin. (46) Recent decades have seen science move into a convention where engagement in the subject can only be done through institutions, such as a university. Citizen science provides an opportunity for greater public engagement and the democratisation of science. In the information era, large data sets, small teams and financial restrictions have slowed scientific process. (47) But by utilising the natural curiosity of the general public it is possible to overcome many of these challenges by engaging non-scientists directly in the research process. Anyone can be a citizen scientist, regardless of age, nationality or academic experience. You don’t even need any formal training, just an inquisitive mind and the enthusiasm to join one of the thousands of citizen science projects to generate new knowledge and the means to understand a genuine scientific outcome. (48) Scientists have employed a variety of ways to engage the general public in their research, such as making data analysis into an online game or sample collection into a smartphone application. They’ve implored citizens to help with bug counting and categorising cancer cells, and even identifying distant galaxies. This form of accessible science means that great minds are able to join the race to create and develop projects with the potential to change the world. A citizen science-based approach can extend the field of vision and include different ideas and different brains to problem-solve and create, making innovation faster and more effective. The rise of citizen science has grown alongside the rise of do-it-yourself biology laboratories around the world. (49) These groups of people are part of a rapidly expanding biotechnological social movement of citizen scientists and professional scientists seeking to take discovery out of institutions and put it into the hands of anyone with the enthusiasm. There are around 40 official do-it-yourself biology centres across the globe in locations including Paris, London, Sydney, and Tel Aviv. (50) They pool resources, collaborate, think outside the box, and find solutions and ways around obstacles to explore science for the sake of science without the traditional boundaries of working inside a formal setting. So is it time to take the Petri dish out of the laboratory and into the garage?",
      "题型": "翻译",
-     "分值": 2
+     "分值": 2,
+     "部分": "TRANS",
+     "部分名": "翻译",
+     "边界题": false,
+     "id": "EN1-2025-49",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": true
     },
     {
      "题号": 50,
      "题干": "They pool resources, collaborate, think outside the box, and find solutions and ways around obstacles to explore science for the sake of science without the traditional boundaries of working inside a formal setting.",
      "材料": "Innovation and research have relied on public participation in science for centuries. It was a musician who discovered the planet Uranus in the 18th century by making his own telescope with mirrors composed of copper and tin. (46) Recent decades have seen science move into a convention where engagement in the subject can only be done through institutions, such as a university. Citizen science provides an opportunity for greater public engagement and the democratisation of science. In the information era, large data sets, small teams and financial restrictions have slowed scientific process. (47) But by utilising the natural curiosity of the general public it is possible to overcome many of these challenges by engaging non-scientists directly in the research process. Anyone can be a citizen scientist, regardless of age, nationality or academic experience. You don’t even need any formal training, just an inquisitive mind and the enthusiasm to join one of the thousands of citizen science projects to generate new knowledge and the means to understand a genuine scientific outcome. (48) Scientists have employed a variety of ways to engage the general public in their research, such as making data analysis into an online game or sample collection into a smartphone application. They’ve implored citizens to help with bug counting and categorising cancer cells, and even identifying distant galaxies. This form of accessible science means that great minds are able to join the race to create and develop projects with the potential to change the world. A citizen science-based approach can extend the field of vision and include different ideas and different brains to problem-solve and create, making innovation faster and more effective. The rise of citizen science has grown alongside the rise of do-it-yourself biology laboratories around the world. (49) These groups of people are part of a rapidly expanding biotechnological social movement of citizen scientists and professional scientists seeking to take discovery out of institutions and put it into the hands of anyone with the enthusiasm. There are around 40 official do-it-yourself biology centres across the globe in locations including Paris, London, Sydney, and Tel Aviv. (50) They pool resources, collaborate, think outside the box, and find solutions and ways around obstacles to explore science for the sake of science without the traditional boundaries of working inside a formal setting. So is it time to take the Petri dish out of the laboratory and into the garage?",
      "题型": "翻译",
-     "分值": 2
+     "分值": 2,
+     "部分": "TRANS",
+     "部分名": "翻译",
+     "边界题": true,
+     "id": "EN1-2025-50",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": true
     }
-   ]
+   ],
+   "部分名": "翻译",
+   "部分全称": "翻译 Part C"
   },
   {
    "部分": "WRITE",
-   "材料": "Read the following email from your classmate Paul and write him a reply. Write your answer in about 100 words on the ANSWER SHEET. Do not use your own name in your email; use “Li Ming” instead. (10 points) Part B",
+   "材料": "Read the following email from your classmate Paul and write him a reply.\nDear Li Ming,\nI was really excited to hear that you'd invite some young craftsmen to demonstrate their innovative craft-making on campus. May I know more about what they'll show? Also, I'd like to help with your preparation work. Please let me know what I can do.\nYours,\nPaul\nWrite your answer in about 100 words on the ANSWER SHEET.\nDo not use your own name in your email; use\"Li Ming\" instead.(10 points)",
    "小题": [
     {
      "题号": 51,
      "题干": "写作要求",
-     "材料": "Read the following email from your classmate Paul and write him a reply. Write your answer in about 100 words on the ANSWER SHEET. Do not use your own name in your email; use “Li Ming” instead. (10 points) Part B",
+     "材料": "Read the following email from your classmate Paul and write him a reply.\nDear Li Ming,\nI was really excited to hear that you'd invite some young craftsmen to demonstrate their innovative craft-making on campus. May I know more about what they'll show? Also, I'd like to help with your preparation work. Please let me know what I can do.\nYours,\nPaul\nWrite your answer in about 100 words on the ANSWER SHEET.\nDo not use your own name in your email; use\"Li Ming\" instead.(10 points)",
      "题型": "写作",
-     "分值": 10
+     "分值": 10,
+     "部分": "WRITE",
+     "部分名": "写作",
+     "边界题": true,
+     "id": "EN1-2025-51",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": true
     }
-   ]
+   ],
+   "部分名": "写作",
+   "部分全称": "写作 Part A/B"
   },
   {
    "部分": "WRITE",
-   "材料": "Write an essay of 160-200 based on the following table. In your essay, you should 1) describe the table briefly, 2) explain its intended meaning, and 3) give your comments. You should write neatly on the ANSWER SHEET. (20 points) 年份 空调（台） 洗衣机（台） 电冰箱（台） 2014 75.2 83.7 85.5 2017 96.1 91.7 95.3 2020 117.7 96.7 101.8 2023 145.9 98.2 103.4 近年来全国居民平均每百户年末主要耐用消费品拥有量 Dear Li Ming, I was really excited to hear that you’d invite some young craftsmen to demonstrate their innovative craft-making on campus. May I know more about what they’ll Show? Also, I’d like to help with your preparation work. Please let me know what I can do. Yours, Paul",
+   "材料": "Write an essay based on the table below. In your essay, you should\n1) describe the table briefly,\n2) interpret the table, and\n3) give your comments.\nWrite your answer in 160-200 words on the ANSWER SHEET. (20 points)\n\n图表/图意：年份 空调（台） 洗衣机（台） 电冰箱（台） 近年来全国居民平均每百户年末主要耐用消费品拥有量",
    "小题": [
     {
      "题号": 52,
      "题干": "写作要求",
-     "材料": "Write an essay of 160-200 based on the following table. In your essay, you should 1) describe the table briefly, 2) explain its intended meaning, and 3) give your comments. You should write neatly on the ANSWER SHEET. (20 points) 年份 空调（台） 洗衣机（台） 电冰箱（台） 2014 75.2 83.7 85.5 2017 96.1 91.7 95.3 2020 117.7 96.7 101.8 2023 145.9 98.2 103.4 近年来全国居民平均每百户年末主要耐用消费品拥有量 Dear Li Ming, I was really excited to hear that you’d invite some young craftsmen to demonstrate their innovative craft-making on campus. May I know more about what they’ll Show? Also, I’d like to help with your preparation work. Please let me know what I can do. Yours, Paul",
+     "材料": "Write an essay based on the table below. In your essay, you should\n1) describe the table briefly,\n2) interpret the table, and\n3) give your comments.\nWrite your answer in 160-200 words on the ANSWER SHEET. (20 points)\n\n图表/图意：年份 空调（台） 洗衣机（台） 电冰箱（台） 近年来全国居民平均每百户年末主要耐用消费品拥有量",
      "题型": "写作",
-     "分值": 10
+     "分值": 10,
+     "部分": "WRITE",
+     "部分名": "写作",
+     "边界题": true,
+     "id": "EN1-2025-52",
+     "tier": "EN1",
+     "year": "2025",
+     "主观": true
     }
-   ]
+   ],
+   "部分名": "写作",
+   "部分全称": "写作 Part A/B"
   }
  ],
  "题目数": 52,

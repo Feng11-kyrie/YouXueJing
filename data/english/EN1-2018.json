@@ -13,7 +13,14 @@
       "B": "like",
       "C": "for",
       "D": "from"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": true,
+     "id": "EN1-2018-1",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 2,
@@ -23,7 +30,14 @@
       "B": "concern",
       "C": "attention",
       "D": "interest"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2018-2",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 3,
@@ -33,7 +47,14 @@
       "B": "debt",
       "C": "hope",
       "D": "price"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2018-3",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 4,
@@ -43,7 +64,14 @@
       "B": "Then",
       "C": "Instead",
       "D": "Again"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2018-4",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 5,
@@ -53,7 +81,14 @@
       "B": "Unless",
       "C": "Although",
       "D": "When"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2018-5",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 6,
@@ -63,7 +98,14 @@
       "B": "produces",
       "C": "applies",
       "D": "maintains"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2018-6",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 7,
@@ -73,7 +115,14 @@
       "B": "compete",
       "C": "connect",
       "D": "compare"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2018-7",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 8,
@@ -83,7 +132,14 @@
       "B": "by",
       "C": "of",
       "D": "to"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2018-8",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 9,
@@ -93,7 +149,14 @@
       "B": "mood",
       "C": "period",
       "D": "circle"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2018-9",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 10,
@@ -103,7 +166,14 @@
       "B": "substitutes",
       "C": "colleagues",
       "D": "supporters"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2018-10",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 11,
@@ -113,7 +183,14 @@
       "B": "Lucky",
       "C": "Odd",
       "D": "Ironic"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2018-11",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 12,
@@ -123,7 +200,14 @@
       "B": "protect",
       "C": "surprise",
       "D": "delight"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2018-12",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 13,
@@ -133,7 +217,14 @@
       "B": "within",
       "C": "toward",
       "D": "over"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2018-13",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 14,
@@ -143,7 +234,14 @@
       "B": "added",
       "C": "introduced",
       "D": "entrusted"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2018-14",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 15,
@@ -153,7 +251,14 @@
       "B": "back",
       "C": "around",
       "D": "inside"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2018-15",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 16,
@@ -163,7 +268,14 @@
       "B": "proved",
       "C": "insisted",
       "D": "remembered"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2018-16",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 17,
@@ -173,7 +285,14 @@
       "B": "wronged",
       "C": "fooled",
       "D": "mocked"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2018-17",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 18,
@@ -183,7 +302,14 @@
       "B": "willing",
       "C": "hesitant",
       "D": "entitled"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2018-18",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 19,
@@ -193,7 +319,14 @@
       "B": "As a result",
       "C": "On the whole",
       "D": "For instance"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": false,
+     "id": "EN1-2018-19",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 20,
@@ -203,9 +336,18 @@
       "B": "incapable",
       "C": "unreliable",
       "D": "unsuitable"
-     }
+     },
+     "部分": "CLOZE",
+     "部分名": "完形",
+     "边界题": true,
+     "id": "EN1-2018-20",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "完形",
+   "部分全称": "完形填空 Use of English"
   },
   {
    "部分": "READ",
@@ -219,7 +361,14 @@
       "B": "Low-wage laborers.",
       "C": "Robot owners.",
       "D": "Middle-class workers."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": true,
+     "id": "EN1-2018-21",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 22,
@@ -229,7 +378,14 @@
       "B": "Optimists' opinions on new tech find little support.",
       "C": "Issues arising from automation need to be tackled.",
       "D": "Negative consequences of new tech can be avoided."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2018-22",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 23,
@@ -239,7 +395,14 @@
       "B": "job-hunting skills.",
       "C": "individual needs.",
       "D": "cooperative spirit."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2018-23",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 24,
@@ -249,7 +412,14 @@
       "B": "increasing the return on capital investment.",
       "C": "easing the hostility between rich and poor.",
       "D": "preventing the income gap from widening."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2018-24",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 25,
@@ -259,9 +429,18 @@
       "B": "possible solutions to it.",
       "C": "its alarming impacts.",
       "D": "its major variations."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2018-25",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "阅读",
+   "部分全称": "阅读理解 Part A"
   },
   {
    "部分": "READ",
@@ -275,7 +454,14 @@
       "B": "people's preference for social media platforms.",
       "C": "the administration's ability to handle information.",
       "D": "social media as a reliable source of news."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2018-26",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 27,
@@ -285,7 +471,14 @@
       "B": "define.",
       "C": "boast.",
       "D": "share."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2018-27",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 28,
@@ -295,7 +488,14 @@
       "B": "verify news by referring to diverse sources.",
       "C": "have a strong sense of responsibility.",
       "D": "like to exchange views on \"distributed trust\"."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2018-28",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 29,
@@ -305,7 +505,14 @@
       "B": "journalists' biased reporting.",
       "C": "readers' misinterpretation.",
       "D": "journalists' made-up stories."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2018-29",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 30,
@@ -315,9 +522,18 @@
       "B": "A Counteraction Against the Over-tweeting Trend.",
       "C": "The Accumulation of Mutual Trust on Social Media.",
       "D": "The Platforms for Projection of Personal Interests."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2018-30",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "阅读",
+   "部分全称": "阅读理解 Part A"
   },
   {
    "部分": "READ",
@@ -331,7 +547,14 @@
       "B": "It failed to pay due attention to patients' rights.",
       "C": "It fell short of the latter's expectations.",
       "D": "It put both sides into a dangerous situation."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2018-31",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 32,
@@ -341,7 +564,14 @@
       "B": "tough resistance.",
       "C": "necessary adjustments.",
       "D": "sincere apologies."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2018-32",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 33,
@@ -351,7 +581,14 @@
       "B": "leaking patients' data is worse than selling it.",
       "C": "making profits from patients' data is illegal.",
       "D": "the value of data comes from the processing of it."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2018-33",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 34,
@@ -361,7 +598,14 @@
       "B": "the ineffective enforcement of privacy law.",
       "C": "the uncontrolled use of new software.",
       "D": "the monopoly of big data by tech giants."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2018-34",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 35,
@@ -371,9 +615,18 @@
       "B": "cautious.",
       "C": "appreciative.",
       "D": "contemptuous."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2018-35",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "阅读",
+   "部分全称": "阅读理解 Part A"
   },
   {
    "部分": "READ",
@@ -387,7 +640,14 @@
       "B": "its rigid management.",
       "C": "the cost for technical upgrading.",
       "D": "the withdrawal of bank support."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2018-36",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 37,
@@ -397,7 +657,14 @@
       "B": "the inadequate funding from Congress.",
       "C": "the shrinking demand for postal service.",
       "D": "the incompetence of postal unions."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2018-37",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 38,
@@ -407,7 +674,14 @@
       "B": "making more investment in new vehicles.",
       "C": "adopting a new rate-increase mechanism.",
       "D": "attracting more first-class mail users."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2018-38",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 39,
@@ -417,7 +691,14 @@
       "B": "tolerance.",
       "C": "discontent.",
       "D": "gratitude."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": false,
+     "id": "EN1-2018-39",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 40,
@@ -427,9 +708,18 @@
       "B": "The Postal Service: Keep Away from My Cheese.",
       "C": "The USPS: Chronic Illness Requires a Quick Cure.",
       "D": "The Postal Service Needs More Than a Band-Aid."
-     }
+     },
+     "部分": "READ",
+     "部分名": "阅读",
+     "边界题": true,
+     "id": "EN1-2018-40",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "阅读",
+   "部分全称": "阅读理解 Part A"
   },
   {
    "部分": "NEW",
@@ -447,7 +737,14 @@
       "E": "The Eisenhower Executive Office Building (EEOB) commands a unique position in both the national history and the architectural heritage of the United States. Designed by Supervising Architect of the Treasury, Alfred B. Mullett, it was built from 1871 to 1888 to house the growing staffs of the State, War, and Navy Departments, and is considered one of the best examples of French Second Empire architecture in the country.",
       "F": "Construction took 17 years as the building slowly rose wing by wing. When the EEOB was finished, it was the largest office building in Washington, with nearly 2 miles of black and white tiled corridors. Almost all of the interior detail is of cast iron or plaster; the use of wood was minimized to insure fire safety. Eight monumental curving staircases of granite with over 4,000 individually cast bronze balusters are capped by four skylight domes and two stained glass rotundas.",
       "G": "The history of the EEOB began long before its foundations were laid. The first executive offices were constructed between 1799 and 1820. A series of fires (including those set by the British in 1814) and overcrowded conditions led to the construction of the existing Treasury Building. In 1866, the construction of the North Wing of the Treasury Building necessitated the demolition of the State Department building."
-     }
+     },
+     "部分": "NEW",
+     "部分名": "新题型",
+     "边界题": true,
+     "id": "EN1-2018-41",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 42,
@@ -460,7 +757,14 @@
       "E": "The Eisenhower Executive Office Building (EEOB) commands a unique position in both the national history and the architectural heritage of the United States. Designed by Supervising Architect of the Treasury, Alfred B. Mullett, it was built from 1871 to 1888 to house the growing staffs of the State, War, and Navy Departments, and is considered one of the best examples of French Second Empire architecture in the country.",
       "F": "Construction took 17 years as the building slowly rose wing by wing. When the EEOB was finished, it was the largest office building in Washington, with nearly 2 miles of black and white tiled corridors. Almost all of the interior detail is of cast iron or plaster; the use of wood was minimized to insure fire safety. Eight monumental curving staircases of granite with over 4,000 individually cast bronze balusters are capped by four skylight domes and two stained glass rotundas.",
       "G": "The history of the EEOB began long before its foundations were laid. The first executive offices were constructed between 1799 and 1820. A series of fires (including those set by the British in 1814) and overcrowded conditions led to the construction of the existing Treasury Building. In 1866, the construction of the North Wing of the Treasury Building necessitated the demolition of the State Department building."
-     }
+     },
+     "部分": "NEW",
+     "部分名": "新题型",
+     "边界题": false,
+     "id": "EN1-2018-42",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 43,
@@ -473,7 +777,14 @@
       "E": "The Eisenhower Executive Office Building (EEOB) commands a unique position in both the national history and the architectural heritage of the United States. Designed by Supervising Architect of the Treasury, Alfred B. Mullett, it was built from 1871 to 1888 to house the growing staffs of the State, War, and Navy Departments, and is considered one of the best examples of French Second Empire architecture in the country.",
       "F": "Construction took 17 years as the building slowly rose wing by wing. When the EEOB was finished, it was the largest office building in Washington, with nearly 2 miles of black and white tiled corridors. Almost all of the interior detail is of cast iron or plaster; the use of wood was minimized to insure fire safety. Eight monumental curving staircases of granite with over 4,000 individually cast bronze balusters are capped by four skylight domes and two stained glass rotundas.",
       "G": "The history of the EEOB began long before its foundations were laid. The first executive offices were constructed between 1799 and 1820. A series of fires (including those set by the British in 1814) and overcrowded conditions led to the construction of the existing Treasury Building. In 1866, the construction of the North Wing of the Treasury Building necessitated the demolition of the State Department building."
-     }
+     },
+     "部分": "NEW",
+     "部分名": "新题型",
+     "边界题": false,
+     "id": "EN1-2018-43",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 44,
@@ -486,7 +797,14 @@
       "E": "The Eisenhower Executive Office Building (EEOB) commands a unique position in both the national history and the architectural heritage of the United States. Designed by Supervising Architect of the Treasury, Alfred B. Mullett, it was built from 1871 to 1888 to house the growing staffs of the State, War, and Navy Departments, and is considered one of the best examples of French Second Empire architecture in the country.",
       "F": "Construction took 17 years as the building slowly rose wing by wing. When the EEOB was finished, it was the largest office building in Washington, with nearly 2 miles of black and white tiled corridors. Almost all of the interior detail is of cast iron or plaster; the use of wood was minimized to insure fire safety. Eight monumental curving staircases of granite with over 4,000 individually cast bronze balusters are capped by four skylight domes and two stained glass rotundas.",
       "G": "The history of the EEOB began long before its foundations were laid. The first executive offices were constructed between 1799 and 1820. A series of fires (including those set by the British in 1814) and overcrowded conditions led to the construction of the existing Treasury Building. In 1866, the construction of the North Wing of the Treasury Building necessitated the demolition of the State Department building."
-     }
+     },
+     "部分": "NEW",
+     "部分名": "新题型",
+     "边界题": false,
+     "id": "EN1-2018-44",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     },
     {
      "题号": 45,
@@ -499,9 +817,18 @@
       "E": "The Eisenhower Executive Office Building (EEOB) commands a unique position in both the national history and the architectural heritage of the United States. Designed by Supervising Architect of the Treasury, Alfred B. Mullett, it was built from 1871 to 1888 to house the growing staffs of the State, War, and Navy Departments, and is considered one of the best examples of French Second Empire architecture in the country.",
       "F": "Construction took 17 years as the building slowly rose wing by wing. When the EEOB was finished, it was the largest office building in Washington, with nearly 2 miles of black and white tiled corridors. Almost all of the interior detail is of cast iron or plaster; the use of wood was minimized to insure fire safety. Eight monumental curving staircases of granite with over 4,000 individually cast bronze balusters are capped by four skylight domes and two stained glass rotundas.",
       "G": "The history of the EEOB began long before its foundations were laid. The first executive offices were constructed between 1799 and 1820. A series of fires (including those set by the British in 1814) and overcrowded conditions led to the construction of the existing Treasury Building. In 1866, the construction of the North Wing of the Treasury Building necessitated the demolition of the State Department building."
-     }
+     },
+     "部分": "NEW",
+     "部分名": "新题型",
+     "边界题": true,
+     "id": "EN1-2018-45",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": false
     }
-   ]
+   ],
+   "部分名": "新题型",
+   "部分全称": "新题型 Part B"
   },
   {
    "部分": "TRANS",
@@ -512,63 +839,118 @@
      "题干": "By the date of his birth Europe was witnessing the passing of the religious drama, and the creation of new forms under the incentive of classical tragedy and comedy.",
      "材料": "Shakespeare's lifetime was coincident with a period of extraordinary activity and achievement in the drama. ( 46) By the date of his birth Europe was witnessing the passing of the religious drama, and the creation of new forms under the incentive of classical tragedy and comedy. These new forms were at first mainly written by scholars and performed by amateurs, but in England, as everywhere else in western Europe, the growth of a class of professional actors was threatening to make the drama popular, whether it should be new or old, classical or medieval, literary or farcical. Court, school, organizations of amateurs, and the traveling actors were all rivals in supplying a widespread desire for dramatic entertainment; and (47) no boy who went to a grammar school could be ignorant that the drama was a form of literature which gave glory to Greece and Rome and might yet bring honor to England. When Shakespeare was twelve years old the first public playhouse was built in London. For a time literature showed no interest in this public stage. Plays aiming at literary distinction were written for schools or court, or for the choir boys of St.Paul's and the royal chapel, who, however, gave plays in public as well as at court. ( 48) But the professional companies prospered in their permanent theaters, and university men with literary ambitions were quick to tum to these theaters as offering a means of livelihood. By the time that Shakespeare was twenty-five, Lyly, Peele, and Greene had made comedies that were at once popular and literary; Kyd had written a tragedy that crowded the pit; and Marlowe had brought poetry and genius to triumph on the common stage - where they had played no part since the death of Euripides. ( 49) A native literary drama had been created, its alliance with the public playhouses established, and at least some of its great traditions had been begun. The development of the Elizabethan drama for the next twenty-five years is of exceptional interest to students of literary history, for in this brief period we may trace the beginning, growth, blossoming, and decay of many kinds of plays, and of many great careers. We are amazed today at the mere number of plays produced, as well as by the number of dramatists writing at the same time for this London of two hundred thousand inhabitants. (50) To realize how great was the dramatic activity, we must remember further that hosts of plays have been lost, and that probably there is no author of note whose entire work has survived.",
      "题型": "翻译",
-     "分值": 2
+     "分值": 2,
+     "部分": "TRANS",
+     "部分名": "翻译",
+     "边界题": true,
+     "id": "EN1-2018-46",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": true
     },
     {
      "题号": 47,
      "题干": "no boy who went to a grammar school could be ignorant that the drama was a form of literature which gave glory to Greece and Rome and might yet bring honor to England.",
      "材料": "Shakespeare's lifetime was coincident with a period of extraordinary activity and achievement in the drama. ( 46) By the date of his birth Europe was witnessing the passing of the religious drama, and the creation of new forms under the incentive of classical tragedy and comedy. These new forms were at first mainly written by scholars and performed by amateurs, but in England, as everywhere else in western Europe, the growth of a class of professional actors was threatening to make the drama popular, whether it should be new or old, classical or medieval, literary or farcical. Court, school, organizations of amateurs, and the traveling actors were all rivals in supplying a widespread desire for dramatic entertainment; and (47) no boy who went to a grammar school could be ignorant that the drama was a form of literature which gave glory to Greece and Rome and might yet bring honor to England. When Shakespeare was twelve years old the first public playhouse was built in London. For a time literature showed no interest in this public stage. Plays aiming at literary distinction were written for schools or court, or for the choir boys of St.Paul's and the royal chapel, who, however, gave plays in public as well as at court. ( 48) But the professional companies prospered in their permanent theaters, and university men with literary ambitions were quick to tum to these theaters as offering a means of livelihood. By the time that Shakespeare was twenty-five, Lyly, Peele, and Greene had made comedies that were at once popular and literary; Kyd had written a tragedy that crowded the pit; and Marlowe had brought poetry and genius to triumph on the common stage - where they had played no part since the death of Euripides. ( 49) A native literary drama had been created, its alliance with the public playhouses established, and at least some of its great traditions had been begun. The development of the Elizabethan drama for the next twenty-five years is of exceptional interest to students of literary history, for in this brief period we may trace the beginning, growth, blossoming, and decay of many kinds of plays, and of many great careers. We are amazed today at the mere number of plays produced, as well as by the number of dramatists writing at the same time for this London of two hundred thousand inhabitants. (50) To realize how great was the dramatic activity, we must remember further that hosts of plays have been lost, and that probably there is no author of note whose entire work has survived.",
      "题型": "翻译",
-     "分值": 2
+     "分值": 2,
+     "部分": "TRANS",
+     "部分名": "翻译",
+     "边界题": false,
+     "id": "EN1-2018-47",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": true
     },
     {
      "题号": 48,
      "题干": "But the professional companies prospered in their permanent theaters, and university men with literary ambitions were quick to tum to these theaters as offering a means of livelihood.",
      "材料": "Shakespeare's lifetime was coincident with a period of extraordinary activity and achievement in the drama. ( 46) By the date of his birth Europe was witnessing the passing of the religious drama, and the creation of new forms under the incentive of classical tragedy and comedy. These new forms were at first mainly written by scholars and performed by amateurs, but in England, as everywhere else in western Europe, the growth of a class of professional actors was threatening to make the drama popular, whether it should be new or old, classical or medieval, literary or farcical. Court, school, organizations of amateurs, and the traveling actors were all rivals in supplying a widespread desire for dramatic entertainment; and (47) no boy who went to a grammar school could be ignorant that the drama was a form of literature which gave glory to Greece and Rome and might yet bring honor to England. When Shakespeare was twelve years old the first public playhouse was built in London. For a time literature showed no interest in this public stage. Plays aiming at literary distinction were written for schools or court, or for the choir boys of St.Paul's and the royal chapel, who, however, gave plays in public as well as at court. ( 48) But the professional companies prospered in their permanent theaters, and university men with literary ambitions were quick to tum to these theaters as offering a means of livelihood. By the time that Shakespeare was twenty-five, Lyly, Peele, and Greene had made comedies that were at once popular and literary; Kyd had written a tragedy that crowded the pit; and Marlowe had brought poetry and genius to triumph on the common stage - where they had played no part since the death of Euripides. ( 49) A native literary drama had been created, its alliance with the public playhouses established, and at least some of its great traditions had been begun. The development of the Elizabethan drama for the next twenty-five years is of exceptional interest to students of literary history, for in this brief period we may trace the beginning, growth, blossoming, and decay of many kinds of plays, and of many great careers. We are amazed today at the mere number of plays produced, as well as by the number of dramatists writing at the same time for this London of two hundred thousand inhabitants. (50) To realize how great was the dramatic activity, we must remember further that hosts of plays have been lost, and that probably there is no author of note whose entire work has survived.",
      "题型": "翻译",
-     "分值": 2
+     "分值": 2,
+     "部分": "TRANS",
+     "部分名": "翻译",
+     "边界题": false,
+     "id": "EN1-2018-48",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": true
     },
     {
      "题号": 49,
      "题干": "A native literary drama had been created, its alliance with the public playhouses established, and at least some of its great traditions had been begun.",
      "材料": "Shakespeare's lifetime was coincident with a period of extraordinary activity and achievement in the drama. ( 46) By the date of his birth Europe was witnessing the passing of the religious drama, and the creation of new forms under the incentive of classical tragedy and comedy. These new forms were at first mainly written by scholars and performed by amateurs, but in England, as everywhere else in western Europe, the growth of a class of professional actors was threatening to make the drama popular, whether it should be new or old, classical or medieval, literary or farcical. Court, school, organizations of amateurs, and the traveling actors were all rivals in supplying a widespread desire for dramatic entertainment; and (47) no boy who went to a grammar school could be ignorant that the drama was a form of literature which gave glory to Greece and Rome and might yet bring honor to England. When Shakespeare was twelve years old the first public playhouse was built in London. For a time literature showed no interest in this public stage. Plays aiming at literary distinction were written for schools or court, or for the choir boys of St.Paul's and the royal chapel, who, however, gave plays in public as well as at court. ( 48) But the professional companies prospered in their permanent theaters, and university men with literary ambitions were quick to tum to these theaters as offering a means of livelihood. By the time that Shakespeare was twenty-five, Lyly, Peele, and Greene had made comedies that were at once popular and literary; Kyd had written a tragedy that crowded the pit; and Marlowe had brought poetry and genius to triumph on the common stage - where they had played no part since the death of Euripides. ( 49) A native literary drama had been created, its alliance with the public playhouses established, and at least some of its great traditions had been begun. The development of the Elizabethan drama for the next twenty-five years is of exceptional interest to students of literary history, for in this brief period we may trace the beginning, growth, blossoming, and decay of many kinds of plays, and of many great careers. We are amazed today at the mere number of plays produced, as well as by the number of dramatists writing at the same time for this London of two hundred thousand inhabitants. (50) To realize how great was the dramatic activity, we must remember further that hosts of plays have been lost, and that probably there is no author of note whose entire work has survived.",
      "题型": "翻译",
-     "分值": 2
+     "分值": 2,
+     "部分": "TRANS",
+     "部分名": "翻译",
+     "边界题": false,
+     "id": "EN1-2018-49",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": true
     },
     {
      "题号": 50,
      "题干": "To realize how great was the dramatic activity, we must remember further that hosts of plays have been lost, and that probably there is no author of note whose entire work has survived.",
      "材料": "Shakespeare's lifetime was coincident with a period of extraordinary activity and achievement in the drama. ( 46) By the date of his birth Europe was witnessing the passing of the religious drama, and the creation of new forms under the incentive of classical tragedy and comedy. These new forms were at first mainly written by scholars and performed by amateurs, but in England, as everywhere else in western Europe, the growth of a class of professional actors was threatening to make the drama popular, whether it should be new or old, classical or medieval, literary or farcical. Court, school, organizations of amateurs, and the traveling actors were all rivals in supplying a widespread desire for dramatic entertainment; and (47) no boy who went to a grammar school could be ignorant that the drama was a form of literature which gave glory to Greece and Rome and might yet bring honor to England. When Shakespeare was twelve years old the first public playhouse was built in London. For a time literature showed no interest in this public stage. Plays aiming at literary distinction were written for schools or court, or for the choir boys of St.Paul's and the royal chapel, who, however, gave plays in public as well as at court. ( 48) But the professional companies prospered in their permanent theaters, and university men with literary ambitions were quick to tum to these theaters as offering a means of livelihood. By the time that Shakespeare was twenty-five, Lyly, Peele, and Greene had made comedies that were at once popular and literary; Kyd had written a tragedy that crowded the pit; and Marlowe had brought poetry and genius to triumph on the common stage - where they had played no part since the death of Euripides. ( 49) A native literary drama had been created, its alliance with the public playhouses established, and at least some of its great traditions had been begun. The development of the Elizabethan drama for the next twenty-five years is of exceptional interest to students of literary history, for in this brief period we may trace the beginning, growth, blossoming, and decay of many kinds of plays, and of many great careers. We are amazed today at the mere number of plays produced, as well as by the number of dramatists writing at the same time for this London of two hundred thousand inhabitants. (50) To realize how great was the dramatic activity, we must remember further that hosts of plays have been lost, and that probably there is no author of note whose entire work has survived.",
      "题型": "翻译",
-     "分值": 2
+     "分值": 2,
+     "部分": "TRANS",
+     "部分名": "翻译",
+     "边界题": true,
+     "id": "EN1-2018-50",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": true
     }
-   ]
+   ],
+   "部分名": "翻译",
+   "部分全称": "翻译 Part C"
   },
   {
    "部分": "WRITE",
-   "材料": "Write an email to all international experts on campus inviting them to attend the graduation ceremony. In your email you should include time, place and other relevant information about the ceremony. You should write about 100 words neatly on the ANSWER SHEET. Do not use your own name at the end of the email. Use \"Li Ming\" instead. (10 points) PartB",
+   "材料": "Write an email to all international experts on campus inviting them to attend the graduation ceremony. In your email you should include time, place and other relevant information about the ceremony.\nYou should write about 100 words neatly on the ANSWER SHEET.\nDo not use your own name at the end of the email. Use “Li Ming” instead. (10 points)",
    "小题": [
     {
      "题号": 51,
      "题干": "写作要求",
-     "材料": "Write an email to all international experts on campus inviting them to attend the graduation ceremony. In your email you should include time, place and other relevant information about the ceremony. You should write about 100 words neatly on the ANSWER SHEET. Do not use your own name at the end of the email. Use \"Li Ming\" instead. (10 points) PartB",
+     "材料": "Write an email to all international experts on campus inviting them to attend the graduation ceremony. In your email you should include time, place and other relevant information about the ceremony.\nYou should write about 100 words neatly on the ANSWER SHEET.\nDo not use your own name at the end of the email. Use “Li Ming” instead. (10 points)",
      "题型": "写作",
-     "分值": 10
+     "分值": 10,
+     "部分": "WRITE",
+     "部分名": "写作",
+     "边界题": true,
+     "id": "EN1-2018-51",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": true
     }
-   ]
+   ],
+   "部分名": "写作",
+   "部分全称": "写作 Part A/B"
   },
   {
    "部分": "WRITE",
-   "材料": "Write an essay of 160-200 words based on the picture below. In your essay, you should 1) describe the picture briefly, 2) interpret the meaning, and 3) give your comments. You should write neatly on the ANSWER SHEET. (20 points)",
+   "材料": "Write an essay of 160-200 words based on the picture below. In your essay, you should\n1)describe the picture briefly,\n2)interpret the meaning, and\n3)give your comments.\nYou should write neatly on the ANSWER SHEET.（20 points）",
    "小题": [
     {
      "题号": 52,
      "题干": "写作要求",
-     "材料": "Write an essay of 160-200 words based on the picture below. In your essay, you should 1) describe the picture briefly, 2) interpret the meaning, and 3) give your comments. You should write neatly on the ANSWER SHEET. (20 points) ",
+     "材料": "Write an essay of 160-200 words based on the picture below. In your essay, you should\n1)describe the picture briefly,\n2)interpret the meaning, and\n3)give your comments.\nYou should write neatly on the ANSWER SHEET.（20 points）",
      "题型": "写作",
-     "分值": 10
+     "分值": 10,
+     "部分": "WRITE",
+     "部分名": "写作",
+     "边界题": true,
+     "id": "EN1-2018-52",
+     "tier": "EN1",
+     "year": "2018",
+     "主观": true
     }
-   ]
+   ],
+   "部分名": "写作",
+   "部分全称": "写作 Part A/B"
   }
  ],
  "题目数": 52,
