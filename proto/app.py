@@ -1183,12 +1183,6 @@ def exam_english(tier: str = "EN1", year: str = None, view: str = "全部",
                              "不花钱）；若想获得更精确的 AI 评分，需接入你自己的大模型"
                              "厂商 API Key —— 每次不到 1 分钱。") \
                         .classes("t-sm")
-                    # 【限定范围很重要】不加"翻译和作文"三个字，用户会以为
-                    # 客观题也要接 Key 才判得准 —— 而客观题本来就即时判分、
-                    # 解析也是本地存的，完全不需要 AI。
-                    ui.label("客观题（完形/阅读/新题型）不受影响：提交即判分，"
-                             "答案与解析都是本地数据，不消耗 token。") \
-                        .classes("t-xs").style("color:#6B7280")
                 with ui.expansion("接入我的 API Key" if not llm_key.get().get("key")
                                   else "管理我的 API Key", value=False) \
                         .classes("w-full"):
