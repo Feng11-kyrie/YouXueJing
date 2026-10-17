@@ -330,6 +330,17 @@ def _comprehensive_block(q, year, user):
                  "请对照教材自行核对后给分。") \
             .classes("t-xs").style("color:#B45309")
 
+    # ---- 自动反馈（免费结构体检 + BYOK AI 精评）----
+    # 用户要求：政治和 408 也像英语那样，默认免费评分 + 可接自己的 Key 做 AI 精评。
+    # 注意仍保留下面的"自评给分"—— 那是用户自己判分，与自动评分**分开存**。
+    try:
+        from proto.cards_subj import subj_panel
+        with ui.expansion("获取自动反馈（可选）", value=False).classes("w-full"):
+            subj_panel(q, "408", q.get("题干") or "", "", float(total or 10),
+                       user, need_words=150)
+    except Exception:                                       # noqa: BLE001
+        pass
+
     # ---- 自评给分：输入框 + 保存（用户要求的那个输入框）
     prev = store.get_selfscore(user).get(q["id"])
     with ui.row().classes("items-center gap-2 no-wrap"):

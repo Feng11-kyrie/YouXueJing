@@ -265,3 +265,97 @@ def score_writing(student, need_words=100, full=10.0):
         ],
         "问题": problems, "来源": SOURCE,
     }
+
+
+# ---------------------------------------------------------------------------
+# 通用主观题评分（政治分析题 / 408 综合题）
+# ---------------------------------------------------------------------------
+# 与英语的差别（必须如实承认）：
+#   · 英语有**干净的参考译文/范文**（34 套逐句译文 + 68 篇范文）→ 可算语义相似度
+#   · 政治分析题 **没有任何参考答案**（85 道，解析为空）→ 只能做结构体检
+#   · 408 综合题的参考答案是**带水印的 OCR**（"微信：x1xj985211"）
+#     → 语义相似度会被水印词污染，也只做结构体检
+# 所以这里的"免费评分"是**结构体检**：字数、分点、是否回应题干关键词，
+# 给的是"表述完整度"而非"知识正确性"。界面必须说清楚。
+_CJK = re.compile(r'[\u4e00-\u9fff]')
+
+
+def score_generic(answer, prompt="", reference="", full=10.0,
+                  need_words=120):
+    """
+    政治/408 主观题的**结构体检**（免费、离线、即时）。
+
+    评三件事（都不需要"知道正确答案"）：
+      ① 篇幅：中文字数是否达到该题应有的量（论述题通常 120–300 字）
+      ② 分点：是否分层作答（"第一/①/首先"或换行编号）——
+         考研政治分析题、408 综合题都按采分点给分，不分点必丢分
+      ③ 回应题干：题干里的关键词（≥2 字的实词）在作答里出现了多少
+
+    返回结构与其他评分一致：{分数, 满分, 分项, 问题, 来源}
+    """
+    ans = (answer or "").strip()
+    if len(ans) < 10:
+        return {"分数": 0.0, "满分": full, "分项": [],
+                "问题": ["没有作答（或字数过少）"], "来源": SOURCE}
+
+    n_zh = len(_CJK.findall(ans))
+
+    # ① 篇幅（40%）
+    if n_zh >= need_words:
+        s_len = 1.0
+    elif n_zh >= need_words * 0.6:
+        s_len = 0.7
+    else:
+        s_len = max(0.0, n_zh / max(1, need_words) * 0.7)
+
+    # ② 分点（35%）：认序号词与换行编号
+    lines = [l for l in ans.split("\n") if l.strip()]
+    marks = len(re.findall(r'(?:^|\n)\s*(?:\d+[.、)]|[①②③④⑤⑥⑦⑧⑨⑩]|'
+                           r'第[一二三四五六七八九十]+)', ans))
+    marks += len(re.findall(r'(?:首先|其次|再次|最后|一方面|另一方面)', ans))
+    if marks >= 3:
+        s_pts = 1.0
+    elif marks >= 2:
+        s_pts = 0.75
+    elif marks == 1:
+        s_pts = 0.45
+    else:
+        s_pts = 0.15 if len(lines) >= 3 else 0.0
+
+    # ③ 回应题干（25%）：题干关键词覆盖率
+    kws = [w for w in re.findall(r'[\u4e00-\u9fff]{2,6}', prompt or "")
+           if len(w) >= 2][:12]
+    hit = [w for w in kws if w in ans]
+    cov = (len(hit) / len(kws)) if kws else 0.0
+    s_cov = min(1.0, cov / 0.5)          # 覆盖一半关键词即算满分
+
+    rate = 0.40 * s_len + 0.35 * s_pts + 0.25 * s_cov
+    score = round(rate * full, 1)
+
+    problems = []
+    if n_zh < need_words:
+        problems.append(f"篇幅偏少：{n_zh} 字（这类题通常需要"
+                        f"{need_words} 字以上）")
+    if marks < 2:
+        problems.append("没有明显分点 —— 论述题按采分点给分，"
+                        "建议用「第一/第二」或 ①②③ 分层")
+    if kws and cov < 0.3:
+        problems.append("作答与题干的呼应偏少 —— 有几个题干关键词没出现，"
+                        "可能没答到点上")
+    if not problems:
+        problems.append("篇幅与结构达到基本要求（注意：这不代表内容正确）")
+
+    return {
+        "分数": score, "满分": full,
+        "分项": [
+            {"项": "篇幅", "得分": round(s_len * full * 0.40, 1),
+             "满分": round(full * 0.40, 1), "说明": f"{n_zh} 字"},
+            {"项": "分点", "得分": round(s_pts * full * 0.35, 1),
+             "满分": round(full * 0.35, 1), "说明": f"识别到 {marks} 处分层标记"},
+            {"项": "呼应题干", "得分": round(s_cov * full * 0.25, 1),
+             "满分": round(full * 0.25, 1),
+             "说明": (f"题干关键词命中 {len(hit)}/{len(kws)}" if kws else "无关键词")},
+        ],
+        "问题": problems,
+        "来源": "结构体检（本地计算，不含知识正确性判断）",
+    }

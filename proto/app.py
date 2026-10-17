@@ -1004,6 +1004,11 @@ def exam_zhengzhi(year: str = None, page: int = 1, user: str = "demo",
                             ui.label(it["部分名"]).classes("text-xs") \
                                 .style(f'color:{ZZ_PART_COLORS.get(it.get("部分"), "#2563EB")}')
                     ui.label(it["题干"]).classes("text-[15px] leading-6 whitespace-pre-wrap")
+                    # 用户要求：主观题也提供「默认免费评分 + 接 API Key 的 AI 精评」
+                    from proto.cards_subj import subj_panel
+                    subj_panel(it, "ZZ", it.get("题干") or "",
+                               it.get("材料") or "", float(it.get("分值") or 10),
+                               user, need_words=150)
 
 
 # ================================================================ 考研英语真题
@@ -1187,9 +1192,10 @@ def exam_english(tier: str = "EN1", year: str = None, view: str = "全部",
                              "（价格以厂商官网为准）。") \
                         .classes("t-sm")
                 else:
-                    ui.label("翻译和作文默认使用免费版评分（本地计算，不消耗 token、"
-                             "不花钱）；若想获得更精确的 AI 评分，需接入你自己的大模型"
-                             "厂商 API Key —— 每次不到 1 分钱。") \
+                    ui.label("主观题（英语翻译/作文、政治分析题、408 综合题）默认使用"
+                             "免费版评分（本地计算，不消耗 token、不花钱）；"
+                             "若想获得更精确的 AI 评分，需接入你自己的大模型厂商 "
+                             "API Key —— 每次不到 1 分钱。") \
                         .classes("t-sm")
                 # 【换颜色】原来是默认灰黑、看起来像正文而不是可点的入口。
                 # 用主题蓝 + 钥匙图标，明确"这是一个操作入口"。
