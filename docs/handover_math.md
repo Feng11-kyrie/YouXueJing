@@ -21,8 +21,14 @@
 | 范围 | 来源 | 形态 |
 |---|---|---|
 | 数一 2010–2020 | [TsekaLuk/Kaoyan-Math1-Papers](https://github.com/TsekaLuk/Kaoyan-Math1-Papers) | Markdown + LaTeX + 详细解析 |
-| 数一 2011、2021–2025；数二全部 | [lx-ruc/kaoyanshuxue](https://github.com/lx-ruc/kaoyanshuxue) 的飞书文档导出（真题墙） | `<equation>LaTeX</equation>` + 答案/解析 |
-| 数三全部 | 同上，另按题目图片逐题转录/校对 | 每题 `备注` 写明是否图片转录 |
+| 数一 2011、2021–2025；数三全部 | [lx-ruc/kaoyanshuxue](https://github.com/lx-ruc/kaoyanshuxue) 的飞书文档导出（真题墙） | `<equation>LaTeX</equation>` + 答案/解析 |
+| 数二 2010–2019 | TsekaLuk/Kaoyan-Math2-Papers 的 1987–2019 解答册（LaTeX 文本） | 题干/选项/答案/解析 |
+| 数二 2020–2025 | [mathabc.xyz](https://mathabc.xyz) 试卷页 + 单题页 | LaTeX 题干/选项/答案/解析 |
+
+> 数二合并口径：题干/选项/解析取上面两源；**选择题答案一律以真题墙 `answers.json`
+> 为准**（agent 数据里有 4 处与真题墙不一致：2019-2、2022-1、2022-3、2023-10，
+> 已按真题墙纠正）。数二 2024/2025 源站解析有错位，只保留能对上答案的题，
+> 其余沿用导入器的解析。
 
 **为什么不用考研网 PDF**：数学 PDF 的公式是图片，文字层只剩汉字（实测 2022 数一
 抽出来是「设 ，则 / A. B. C. D.」），抽不出题干和选项。
