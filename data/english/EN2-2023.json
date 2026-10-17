@@ -873,9 +873,23 @@
    ],
    "部分名": "写作",
    "部分全称": "写作 Part A/B"
+  },
+  {
+   "部分": "WRITE",
+   "材料": "Write an essay based on the chart below. In your essay, you should\n1) describe and interpret the chart, and\n2) give your comments.\nWrite your answer in about 150 words on the ANSWER SHEET. (15 points)",
+   "小题": [
+    {
+     "题号": 48,
+     "题干": "写作",
+     "材料": "Write an essay based on the chart below. In your essay, you should\n1) describe and interpret the chart, and\n2) give your comments.\nWrite your answer in about 150 words on the ANSWER SHEET. (15 points)",
+     "题型": "写作",
+     "分值": 15,
+     "图片": "img/EN2-2023-48.jpg"
+    }
+   ]
   }
  ],
- "题目数": 47,
+ "题目数": 48,
  "年份": "2023",
  "来源": "懒笔记 paper 页（结构化正文）"
 }
