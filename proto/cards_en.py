@@ -24,6 +24,7 @@
 客观题的答案来自 `yj.english.explanation()`（懒笔记），**提交后才显示**。
 主观题（翻译/写作）不走这里，见 `subjective_block`。
 """
+import os
 import re
 
 from nicegui import ui
@@ -548,6 +549,22 @@ def subjective_block(q, year, tier, done, user, show_material=True):
             ui.label(f'第 {q["题号"]} 题 · {q.get("题型")}').classes("font-semibold")
             ui.label(f'{score_max:g} 分').classes("text-xs text-gray-500")
             ui.label("主观题").classes("text-xs").style("color:#B45309")
+
+        # 【大作文的配图必须显示】题干是 "describe the picture and the chart
+        # below"，没有图学生无从下手。图片在 data/english/img/，
+        # 由 /en_img 静态目录提供。
+        _img = (q.get("图片") or "").strip()
+        if _img:
+            with ui.card().classes("w-full p-2 gap-0 shadow-none") \
+                    .style("background:#fff;border:1px solid var(--line)"):
+                # **不用 ui.image**：它渲染成 Quasar 的 `q-img`，需要显式高度
+                # 才会触发加载 —— 实测给了 max-height 也没用，图片一直是
+                # naturalWidth=0（没发请求）。用原生 <img> 最省事可控。
+                ui.html(
+                    f'<img src="/en_img/{os.path.basename(_img)}" '
+                    f'alt="写作配图" '
+                    f'style="display:block;max-width:100%;height:auto;'
+                    f'max-height:460px;object-fit:contain;margin:0 auto">')
 
         if show_material and q.get("材料"):
             with ui.expansion("材料 / 题目", value=True).classes("w-full"):

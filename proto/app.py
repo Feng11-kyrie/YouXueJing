@@ -33,7 +33,7 @@ BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, BASE)
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from nicegui import ui                            # noqa: E402
+from nicegui import ui, app                            # noqa: E402
 from yj import data, diagnose, profile as profile_mod, path as path_mod  # noqa: E402
 from yj import llm, graph, zhengzhi as zz           # noqa: E402
 from yj import english as en                          # noqa: E402
@@ -42,6 +42,14 @@ from proto.cards_en import (passage_card, cloze_card,   # noqa: E402
                             subjective_block, two_col, partb_block,
                             subjective_two_col, answer_sheet_en,
                             score_report)
+
+# 写作配图（大作文的图表/漫画）静态目录。
+# 大作文题干是 "describe the picture and the chart below"，**没有图没法写** ——
+# 图片由 scripts/fetch_english_writing_img.py 下载到 data/english/img/。
+_EN_IMG = os.path.join(os.path.dirname(os.path.dirname(
+    os.path.abspath(__file__))), "data", "english", "img")
+if os.path.isdir(_EN_IMG):
+    app.add_static_files("/en_img", _EN_IMG)
 from proto import store_lite as store              # noqa: E402
 from proto.cards import (question_card, SUBJECT_COLORS,   # noqa: E402
                          ZZ_PART_COLORS)
