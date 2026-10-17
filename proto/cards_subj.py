@@ -36,6 +36,19 @@ def _rubric_for(subject, full):
                      ("不足", f"0–{full*0.5:g}", "思路不完整或关键结论错误")]}
 
 
+def _terms_of(q, subject):
+    """抽取"该题该点到的术语"——408 用官方考点名，政治用题干里的实词。"""
+    out = []
+    if subject == "408":
+        for k in ("主考点名", "次考点名"):
+            v = q.get(k)
+            if isinstance(v, (list, tuple)):
+                out.extend([x for x in v if x])
+            elif v:
+                out.append(v)
+    return out
+
+
 def subj_panel(q, subject, prompt_text, material, full, user,
                need_words=120, storage_key=None):
     """
@@ -59,7 +72,8 @@ def subj_panel(q, subject, prompt_text, material, full, user,
         if len(text) < 5:
             ui.notify("先写一点内容再评分。", color="warning")
             return
-        r = rc.score_generic(text, prompt_text, "", full, need_words)
+        r = rc.score_generic(text, prompt_text, material or "", full,
+                             need_words, terms=_terms_of(q, subject))
         _render(out, r, full, free=True)
 
     def run_ai():

@@ -281,7 +281,7 @@ _CJK = re.compile(r'[\u4e00-\u9fff]')
 
 
 def score_generic(answer, prompt="", reference="", full=10.0,
-                  need_words=120):
+                  need_words=120, terms=None):
     """
     政治/408 主观题的**结构体检**（免费、离线、即时）。
 
@@ -329,7 +329,32 @@ def score_generic(answer, prompt="", reference="", full=10.0,
     cov = (len(hit) / len(kws)) if kws else 0.0
     s_cov = min(1.0, cov / 0.5)          # 覆盖一半关键词即算满分
 
-    rate = 0.40 * s_len + 0.35 * s_pts + 0.25 * s_cov
+    # ④ 术语命中（可选，权重 30%）——**这是最有价值的信号**
+    # 408 每道题都带官方的「主考点名/次考点名」；政治的分析题可传材料关键词。
+    # 学生作答里出现该题考点的术语，是"答到点上"的强证据，
+    # 比"字数够不够"有意义得多。
+    term_hit, term_all = [], list(terms or [])
+    ans_low = ans
+    for w in term_all:
+        w = str(w).strip()
+        if len(w) < 2:
+            continue
+        # 考点名往往是长短语（"散列表的构造与冲突处理"），学生只会写到其中几个词。
+        # 所以按 **3 字子串** 判命中（"散列表"能对上，"的构造"这种通用片段也能对上，
+        # 但要求至少一个 3 字片段，比对整串宽松、又比 2 字精确）。
+        if w in ans_low:
+            term_hit.append(w)
+            continue
+        grams = [w[i:i + 3] for i in range(max(0, len(w) - 2))]
+        if any(g in ans_low for g in grams):
+            term_hit.append(w)
+    s_term = (len(term_hit) / len(term_all)) if term_all else 0.0
+    s_term = min(1.0, s_term / 0.6)        # 命中六成考点术语即算满分
+
+    if term_all:
+        rate = 0.30 * s_len + 0.30 * s_pts + 0.15 * s_cov + 0.25 * s_term
+    else:
+        rate = 0.40 * s_len + 0.35 * s_pts + 0.25 * s_cov
     score = round(rate * full, 1)
 
     problems = []
@@ -339,6 +364,9 @@ def score_generic(answer, prompt="", reference="", full=10.0,
     if marks < 2:
         problems.append("没有明显分点 —— 论述题按采分点给分，"
                         "建议用「第一/第二」或 ①②③ 分层")
+    if term_all and s_term < 0.4:
+        problems.append("考点术语出现得少：本题考点是「"
+                        + "、".join(term_all[:3]) + "」，作答里应明确点到这些概念")
     if kws and cov < 0.3:
         problems.append("作答与题干的呼应偏少 —— 有几个题干关键词没出现，"
                         "可能没答到点上")
@@ -348,14 +376,18 @@ def score_generic(answer, prompt="", reference="", full=10.0,
     return {
         "分数": score, "满分": full,
         "分项": [
-            {"项": "篇幅", "得分": round(s_len * full * 0.40, 1),
-             "满分": round(full * 0.40, 1), "说明": f"{n_zh} 字"},
-            {"项": "分点", "得分": round(s_pts * full * 0.35, 1),
-             "满分": round(full * 0.35, 1), "说明": f"识别到 {marks} 处分层标记"},
-            {"项": "呼应题干", "得分": round(s_cov * full * 0.25, 1),
-             "满分": round(full * 0.25, 1),
+            {"项": "篇幅", "得分": round(s_len * full * (0.30 if term_all else 0.40), 1),
+             "满分": round(full * (0.30 if term_all else 0.40), 1), "说明": f"{n_zh} 字"},
+            {"项": "分点", "得分": round(s_pts * full * (0.30 if term_all else 0.35), 1),
+             "满分": round(full * (0.30 if term_all else 0.35), 1),
+             "说明": f"识别到 {marks} 处分层标记"},
+            {"项": "呼应题干", "得分": round(s_cov * full * (0.15 if term_all else 0.25), 1),
+             "满分": round(full * (0.15 if term_all else 0.25), 1),
              "说明": (f"题干关键词命中 {len(hit)}/{len(kws)}" if kws else "无关键词")},
-        ],
+        ] + ([{"项": "考点术语", "得分": round(s_term * full * 0.25, 1),
+               "满分": round(full * 0.25, 1),
+               "说明": f"命中 {len(term_hit)}/{len(term_all)}："
+                       + ("、".join(term_hit[:3]) or "无")}] if term_all else []),
         "问题": problems,
         "来源": "结构体检（本地计算，不含知识正确性判断）",
     }
