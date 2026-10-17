@@ -175,7 +175,12 @@ def question_card(q, year, done, user, exam="408"):
                     if not e:
                         return
                     with exp_box:
-                        ui.label(f'解析（{e["来源"]}）：') \
+                        # 2026-10 逐题核对完 2010–2026 的客观题答案（多份公开答案表
+                        # + 人工裁定，见 scripts/zz_manual_answers.py）后，按用户要求
+                        # 不再挂「AI 生成（未经官方核验）」；题源抽取的解析仍标一下来源。
+                        src = str(e.get("来源") or "")
+                        tag = "（题源）" if src.startswith("题源") else ""
+                        ui.label(f"解析{tag}：") \
                             .classes("t-xs").style("color:#B45309")
                         ui.label(e["文本"]).classes("t-sm whitespace-pre-wrap") \
                             .style("line-height:1.9")
