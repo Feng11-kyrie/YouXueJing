@@ -39,7 +39,7 @@ REPO = "TsekaLuk/Kaoyan-Math1-Papers"
 BRANCH = "main"
 CACHE = os.path.join(BASE, ".cache", "math", "md")
 IMG = os.path.join(BASE, ".cache", "math", "img")
-OUT = os.path.join(BASE, "data", "math")
+OUT = os.path.join(BASE, "data", "math", "一")
 UA = "Mozilla/5.0"
 
 # 旧大纲（2010–2020）：8 选择 / 6 填空 / 9 解答；新大纲（2021 起）：10 / 6 / 6

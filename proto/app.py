@@ -37,6 +37,7 @@ from nicegui import ui, app                            # noqa: E402
 from yj import data, diagnose, profile as profile_mod, path as path_mod  # noqa: E402
 from yj import llm, graph, zhengzhi as zz           # noqa: E402
 from yj import english as en                          # noqa: E402
+from yj import math as math_data                      # noqa: E402
 from proto import llm_key                              # noqa: E402
 from proto.cards_en import (passage_card, cloze_card,   # noqa: E402
                             subjective_block, two_col, partb_block,
@@ -51,6 +52,7 @@ _EN_IMG = os.path.join(os.path.dirname(os.path.dirname(
 if os.path.isdir(_EN_IMG):
     app.add_static_files("/en_img", _EN_IMG)
 from proto import store_lite as store              # noqa: E402
+from proto.cards_math import math_card                # noqa: E402
 from proto.cards import (question_card, SUBJECT_COLORS,   # noqa: E402
                          ZZ_PART_COLORS)
 
@@ -339,15 +341,32 @@ def home(user: str = "demo"):
                         ui.button("进入 408",
                                   on_click=lambda: ui.navigate.to(
                                       f"/exam/408?user={user}")).props("unelevated")
+                    elif e["id"] == "ENG":
+                        ui.label(f"英语一 {len(en.years('EN1'))} 年 · "
+                                 f"英语二 {len(en.years('EN2'))} 年"
+                                 f"（2010–2026）") \
+                            .classes("t-xs muted")
+                        ui.button("进入英语",
+                                  on_click=lambda: ui.navigate.to(
+                                      f"/exam/english?user={user}")).props("unelevated")
+                    elif e["id"] == "MATH":
+                        ui.label(f"数一 {len(math_data.years('一'))} 年 · "
+                                 f"数二 {len(math_data.years('二'))} 年 · "
+                                 f"数三 {len(math_data.years('三'))} 年"
+                                 f"（2010–2025）") \
+                            .classes("t-xs muted")
+                        ui.button("进入数学",
+                                  on_click=lambda: ui.navigate.to(
+                                      f"/exam/math?user={user}")).props("unelevated")
                     else:
                         from yj import zhengzhi as _zz
                         _ys = _zz.years()
                         ui.label(f"已入库 {len(_ys)} 年真题"
-                                 f"（{('、'.join(_ys)) if _ys else '整理中'}）"
-                                 f"· 其余年份整理中") \
+                                 f"（{('、'.join(_ys)) if _ys else '整理中'}）") \
                             .classes("t-xs muted")
-                        ui.label("政治暂无独立页面 —— 内容层正在补齐（考纲图谱 + 历年真题）") \
-                            .classes("t-xs").style("color:#B45309")
+                        ui.button("进入政治",
+                                  on_click=lambda: ui.navigate.to(
+                                      f"/exam/zhengzhi?user={user}")).props("unelevated")
                     ui.label(f"考生规模 {e['考生规模']}").classes("t-xs muted")
 
         ui.separator().style("border-color:var(--line)")
@@ -1160,6 +1179,112 @@ def _tier_tabs(active_tier, year, view, user):
         ui.label(f'{tl.get("适用", "")}　·　已入库 {n_years} 年'
                  f'（{tl.get("首年", "")}–{tl.get("末年", "")}）') \
             .classes("t-sm muted ml-2")
+
+
+# ================================================================ 考研数学真题
+def _math_tier_tabs(active_tier, user):
+    """卷种切换条（数一 / 数二 / 数三）—— 与英语的一/二同一套交互。"""
+    with ui.row().classes("items-center gap-2 flex-wrap"):
+        ui.label("考研数学").classes("text-2xl font-bold mr-3")
+        have = math_data.tiers_available()
+        for t in ("一", "二", "三"):
+            on = (t == active_tier)
+            if t not in have:
+                ui.button(f"{math_data.TIERS[t]}（待入库）").props("flat dense disable")
+                continue
+            ui.button(math_data.TIERS[t],
+                      on_click=lambda _=None, x=t: ui.navigate.to(
+                          f"/exam/math?tier={x}&user={user}")) \
+                .props("unelevated" if on else "flat dense")
+        if have:
+            n = len(math_data.years(active_tier)) if active_tier in have else 0
+            ui.label(f"已入库 {n} 年").classes("t-sm muted ml-2")
+
+
+@ui.page("/exam/math")
+def exam_math(tier: str = "一", year: str = None, view: str = "全部",
+              user: str = "demo"):
+    """数学真题：按卷种 + 年份，逐题练习（选择/填空可判分，解答题看解析自评）。"""
+    store.ensure_user(user)
+    have = math_data.tiers_available()
+    tier = tier if tier in have else (have[0] if have else "一")
+    ys = math_data.years(tier)
+    if not ys:
+        with shell("/exam", user):
+            _math_tier_tabs(tier, user)
+            ui.label("数学真题还没有入库。").classes("t-body sub")
+        return
+    year = str(year) if str(year) in ys else ys[-1]
+    qs = math_data.questions(tier, year)
+    done = store.get_answers(user)
+
+    def goto(**kw):
+        s = {"tier": tier, "year": year, "view": view, "user": user}
+        s.update(kw)
+        s = {k: v for k, v in s.items() if v not in (None, "", 0)}
+        ui.navigate.to("/exam/math?" + "&".join(f"{k}={v}" for k, v in s.items()))
+
+    def qid(q):
+        return f"MATH-{tier}-{year}-{q['题号']}"
+
+    with shell("/exam", user):
+        _math_tier_tabs(tier, user)
+        _title(f"{year} 年{math_data.TIERS[tier]}真题")
+
+        st = math_data.stats(tier, year)
+        ui.label(f'{st["题数"]} 题 · 150 分 · 选择 {st["选择题"]} / '
+                 f'填空 {st["填空题"]} / 解答 {st["解答题"]}') \
+            .classes("t-sm sub")
+
+        with ui.row().classes("items-center gap-3 flex-wrap"):
+            ui.select({y: f"{y} 年" for y in reversed(ys)}, value=year,
+                      label="年份", on_change=lambda e: goto(year=str(e.value))) \
+                .props("dense outlined").classes("w-28")
+            ui.toggle(["全部", "未做"], value=view,
+                      on_change=lambda e: goto(view=e.value)) \
+                .props("dense unelevated")
+
+        if view == "未做":
+            shown = [q for q in qs if qid(q) not in done]
+        else:
+            shown = qs
+
+        # 答题卡：点题号滚动到那道题
+        with ui.card().classes("softcard w-full p-2 gap-1"):
+            with ui.row().classes("items-center gap-3 w-full no-wrap"):
+                ui.label("答题卡").classes("t-sm font-semibold muted shrink-0")
+                with ui.element("div").classes("flex flex-wrap gap-1 flex-1"):
+                    for q in qs:
+                        r_ = done.get(qid(q))
+                        cls = "cell"
+                        if r_:
+                            if r_.get("source") == "selfscore":
+                                cls += " sub"          # 主观题：蓝=已自评
+                            else:
+                                cls += " ok" if r_["is_correct"] else " bad"
+                        cell = ui.element("div").classes(cls)
+                        cell.on("click", lambda _=None, n=int(q["题号"]):
+                                _scroll_to_q(n, "data-mq"))
+                        with cell:
+                            ui.label(str(q["题号"])).classes("t-xs")
+                ui.label("绿=对 · 红=错 · 蓝=已自评 · 白=未做") \
+                    .classes("t-xs muted shrink-0")
+
+        if not shown:
+            ui.label("筛选「未做」下没有题目 —— 这份卷子已经做完了。") \
+                .classes("t-sm muted")
+            return
+
+        with ui.column().classes("w-full gap-2 min-w-0"):
+            cur = None
+            for q in shown:
+                head = ("一、选择题" if q["题型"] == "单项选择题" else
+                        "二、填空题" if q["题型"] == "填空题" else "三、解答题")
+                if head != cur:
+                    cur = head
+                    ui.label(head).classes("t-body font-semibold mt-2") \
+                        .style("color:var(--accent)")
+                math_card(q, tier, year, done, user)
 
 
 @ui.page("/exam/english")
