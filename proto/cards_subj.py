@@ -68,7 +68,7 @@ def _free_score(q, subject, text, prompt_text, material, full, need_words,
             r = rc.score_by_rubric(text, rub, full,
                                    reference=reference or "",
                                    terms=_terms_of(q, subject))
-            r["依据"] = "官方评分标准"
+            r["依据"] = "按评分标准分档"
             return r
     r = rc.score_generic(text, prompt_text, material or "", full,
                          need_words, terms=_terms_of(q, subject))
@@ -144,10 +144,15 @@ def subj_panel(q, subject, prompt_text, material, full, user,
         ui.button("免费评分", on_click=run_free).props("unelevated dense")
         b = ui.button("AI 精评", on_click=run_ai).props(
             "unelevated dense" if llm_key.get().get("key") else "outline dense disabled")
-    ui.label("免费评分：有官方评分标准的题按「分档」给分，其余只做结构体检"
-             "（篇幅 / 分点 / 考点词）—— 都评不了代码是否真的正确；"
-             "要更准的评阅需在顶部接入自己的 API Key。") \
-        .classes("t-xs").style("color:#9CA3AF")
+    # 说明必须分科目：408 判不了代码对不对，政治判不了观点对不对 ——
+    # 原来两科共用一句"评不了代码"，政治那边看着莫名其妙。
+    tip = ("免费评分：有评分标准的题按「分档」给分，其余做结构体检"
+           "（篇幅 / 分点 / 考点词）—— 都评不了算法与代码是否真的正确；"
+           "要更准的评阅需在顶部接入自己的 API Key。"
+           if subject == "408" else
+           "免费评分：按「篇幅 / 分点 / 呼应题干 / 考点词」做结构体检 —— "
+           "评不了观点是否正确；要更准的评阅需在顶部接入自己的 API Key。")
+    ui.label(tip).classes("t-xs").style("color:#9CA3AF")
 
 
 def _render(box, r, full, free):
@@ -161,7 +166,10 @@ def _render(box, r, full, free):
             # 两种来源必须一眼分得开：分档给分 vs 结构体检。
             # 把"体检分"写成"评分标准分"会让学生误以为是阅卷分数。
             is_rubric = r.get("类型") == "rubric"
-            ui.label(f'{r.get("依据", "结构体检")}　{r.get("分数")} / {full:g}') \
+            # 标题统一带「免费评分」前缀：按钮叫免费评分，结果却叫结构体检，
+            # 用户会以为这是两个功能（政治页就这么被误会过）。
+            ui.label(f'免费评分 · {r.get("依据", "结构体检")}　'
+                     f'{r.get("分数")} / {full:g}') \
                 .classes("t-lead font-bold") \
                 .style("color:#17418F" if is_rubric else "")
             ui.label(r.get("来源", "")).classes("t-xs").style("color:#6B7280")

@@ -337,7 +337,7 @@ def _comprehensive_block(q, year, user):
     # 注意仍保留下面的"自评给分"—— 那是用户自己判分，与自动评分**分开存**。
     try:
         from proto.cards_subj import subj_panel
-        with ui.expansion("获取自动反馈（可选）", value=False).classes("w-full"):
+        with ui.expansion("免费评分（可选）", value=False).classes("w-full"):
             subj_panel(q, "408", q.get("题干") or "", "", float(total or 10),
                        user, need_words=150,
                        reference=(sol["文本"] if sol else ""))

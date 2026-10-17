@@ -794,7 +794,8 @@ def score_by_rubric(answer, rubric, full=None, reference="", terms=None):
                               "得分": got_i, "满分": full_i})
         else:
             desc = "；".join(hits) if hits else "未达成"
-        if misses and seg.strip():
+        # 这一步已经拿到满分就别再列"没做到"—— 会让人以为扣了分
+        if misses and seg.strip() and got_i < full_i:
             probs.append(f"「{st.get('步骤')}」：" + "、".join(misses)
                          + f" —— 这一步 {full_i:g} 分")
         items.append({"项": st.get("步骤"), "得分": got_i, "满分": full_i,

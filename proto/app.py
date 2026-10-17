@@ -991,9 +991,12 @@ def exam_zhengzhi(year: str = None, page: int = 1, user: str = "demo",
         if ana:
             ui.separator().style("border-color:var(--line)")
             ui.label("分析题（主观题，50 分）").classes("t-lead font-semibold")
-            ui.label("政治分析题是手写论述题，没有唯一答案，因此不做自动判分 —— "
-                     "这里只展示题干，供你对照教材自己组织答案。") \
-                .classes("t-sm").style("color:#B45309")
+            # 这里原来写的是"因此不做自动判分"，但下面明明就有免费评分面板 ——
+            # 一句话自相矛盾，用户会以为政治分析题没有免费评分。改成如实说明。
+            ui.label("分析题也有免费评分：先自己写，再点「免费评分」拿到结构体检"
+                     "（篇幅 / 分点 / 呼应题干 / 考点词）；接入自己的 API Key 还能 AI 精评。"
+                     "两者都是参考，不等于阅卷分数。") \
+                .classes("t-sm").style("color:#6B7280")
             for it in ana:
                 with ui.card().classes("softcard w-full p-3 gap-1"):
                     with ui.row().classes("items-center gap-2"):
