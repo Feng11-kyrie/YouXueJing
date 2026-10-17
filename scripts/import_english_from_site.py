@@ -153,6 +153,107 @@ def _partb_from_lines(lines, t):
     return {"部分": "NEW", "材料": mat, "Directions": dirs, "小题": qs}
 
 
+def _translation_items(lines, tier):
+    """
+    取翻译部分：**整篇材料 + 逐句题干**。
+
+    材料 = 该 Part 的完整文章（翻译题要求译文中划线的几句，所以学生必须
+    看到全文语境）。题干 = 逐个待译句。
+
+    英语一：`Part C` 段，句首以 `(46)` … `(50)` 标出。
+    英语二：`Section Translation` / `46. Directions` 段，整段就是要译的内容。
+    """
+    from scripts.parse_english import split_parts_by_content
+    marks = split_parts_by_content(lines)
+    bounds = [i for i, _, _ in marks] + [len(lines)]
+    seg = {n: lines[i:bounds[k + 1]] for k, (i, kd, n) in enumerate(marks)}
+
+    # 段名在不同年份/卷种里不一样：`Part C` / `PartC` / `Section III Translation`
+    def _find_seg(*keys):
+        for k in keys:
+            if seg.get(k):
+                return seg[k]
+        for name, v in seg.items():
+            if any(k.lower() in name.lower() for k in keys):
+                return v
+        return []
+
+    if tier == "EN1":
+        body = _find_seg("Part C", "PartC", "Translation")
+        if not body:
+            # 【兜底】实测英语一 2020 把标题印成 `Part C Directions:`（同一行），
+            # 分节函数认不出（它要求标题独立成行）。这里直接在原始行上切。
+            for i, l in enumerate(lines):
+                if re.match(r'^\s*Part\s*C\b', l, re.I):
+                    body = [l]
+                    for l2 in lines[i + 1:]:
+                        if re.match(r'^\s*(Section\s+[IVX]+|Part\s+[AB]\b)', l2):
+                            break
+                        body.append(l2)
+                    break
+        if not body:
+            return []
+        text = " ".join(body)
+        # 去掉 Directions（到 "(N points)" 为止）
+        text = re.sub(r'^.*?\(\s*\d+\s*points\s*\)', '', text, count=1,
+                      flags=re.S | re.I)
+        # 去掉页脚与后续节标题
+        text = re.split(r'\s*(?:Section\s+[IVX]+|英语（[一二]）试题)', text)[0]
+        text = " ".join(text.split())
+        # 【括号内可能有空格】实测英语一 2016 印成 `( 48)`、`( 49)`，
+        # 原正则 `\((4[6-9]|50)\)` 匹配不到，只找到 3 句（应为 5 句）。
+        hits = [m for m in re.finditer(r'\(\s*(4[6-9]|50)\s*\)', text)]
+        mat = text
+        items = []
+        if len(hits) < 5:
+            # 【标记缺失时的兜底】实测英语一 2014/2017/2020 的 PDF 文字层里
+            # 没有 `(46)`…`(50)` 标记（划线句只以横线渲染，文字层没保留编号）。
+            # 这时仍要给出 46–50 五道题 —— 材料完整，学生照样能练翻译；
+            # 题干如实写"划线句见材料"，不假装知道是哪一句。
+            found = {int(m.group(1)): m for m in hits}
+            for n in range(46, 51):
+                m = found.get(n)
+                if m:
+                    i = hits.index(m)
+                    end = hits[i + 1].start() if i + 1 < len(hits) else len(text)
+                    sent = text[m.end():end].strip()
+                    sent = re.split(r'(?<=[.?!])\s+(?=[A-Z“"(])', sent)[0].strip()
+                else:
+                    sent = "（划线句见左侧材料）"
+                items.append({"题号": n, "题干": sent, "材料": mat[:1600],
+                              "题型": "翻译", "分值": 2})
+            return items
+        for i, m in enumerate(hits):
+            n = int(m.group(1))
+            end = hits[i + 1].start() if i + 1 < len(hits) else len(text)
+            sent = text[m.end():end].strip()
+            sent = re.split(r'(?<=[.?!])\s+(?=[A-Z“"(])', sent)[0].strip()
+            if len(sent) < 15:
+                sent = text[m.start():end].strip()
+            items.append({"题号": n, "题干": sent, "材料": mat[:1600],
+                          "题型": "翻译", "分值": 2})
+        return items
+
+    # 英语二：整段翻译（段名实测为 `Section III Translation`）
+    body = _find_seg("Translation", "Part C")
+    if not body:
+        # 兜底：找含 translate the following 的 Directions 段
+        for i, l in enumerate(lines):
+            if re.search(r'translate\s+the\s+following', l, re.I):
+                body = lines[i:]
+                break
+    if not body:
+        return []
+    text = " ".join(body)
+    text = re.sub(r'^.*?\(\s*\d+\s*points\s*\)', '', text, count=1,
+                  flags=re.S | re.I)
+    text = re.split(r'\s*(?:Section\s+[IVX]+|英语（[一二]）试题|Write\s+an?\s+essay)',
+                    text, flags=re.I)[0]
+    text = " ".join(text.split())
+    return [{"题号": 46, "题干": "翻译下面这段文字", "材料": text[:1600],
+             "题型": "翻译", "分值": 15}]
+
+
 def _subjective_from_pdf(tier, year):
     """
     从 PDF 取**主观题**（翻译 / 写作）。
@@ -183,43 +284,14 @@ def _subjective_from_pdf(tier, year):
         return []
 
     out = []
-    # ---- 翻译：篇章里的 (46)…(50)（英语二只有 (46)）----
-    joined = " ".join(lines)
-    lo, hi = (46, 50) if tier == "EN1" else (46, 46)
-    hits = [m for m in re.finditer(r'\((4[6-9]|50)\)', joined)
-            if lo <= int(m.group(1)) <= hi]
-    if not hits and tier == "EN2":
-        # 英语二的翻译**不用 (46) 标记**，而是给一整段要求译成中文。
-        # 从 `NN. Directions:` 锚点取正文即可（实测 2021：`46. Directions:
-        # Translate the following text into Chinese...` + 后面整段英文）。
-        for i, l in enumerate(lines):
-            m = re.match(r'^\s*(\d{1,2})\s*[.、]\s*Directions?\s*[:：]?', l)
-            if not m:
-                continue
-            seg = " ".join(lines[i + 1:i + 4]).lower()
-            if "translate the following" in seg:
-                body = " ".join(lines[i + 1:])
-                body = re.sub(r'^.*?points\)\s*', '', " ".join(body.split()),
-                              count=1)
-                body = re.sub(r'\s*Section\s+[A-Z].*$', '', body)
-                out.append({"题号": int(m.group(1)), "题干": "翻译下面这段文字",
-                            "材料": body[:1600], "题型": "翻译", "分值": 15})
-                break
-    if hits:
-        # 篇章正文 = 第一个标记之前的一段（去掉 Directions）
-        head = joined[:hits[0].start()]
-        head = re.sub(r'.*?Directions\s*:?', '', head, count=1, flags=re.S)
-        head = " ".join(head.split())[-1400:]
-        for i, m in enumerate(hits):
-            n = int(m.group(1))
-            end = hits[i + 1].start() if i + 1 < len(hits) else len(joined)
-            sent = " ".join(joined[m.end():end].split())
-            # 截到句子结束（PDF 断行会把下一句粘上来）
-            sent = re.split(r'(?<=[.?!])\s+(?=[A-Z“"(])', sent)[0].strip()
-            if len(sent) < 25:
-                sent = " ".join(joined[m.start():m.start() + 340].split())
-            out.append({"题号": n, "题干": sent, "材料": head,
-                        "题型": "翻译", "分值": 10 if tier == "EN1" else 15})
+    # ---- 翻译：整段篇章 + 待译句 (46)…(50) ----
+    # 【用分节切分，不要用关键词锚点】
+    # 我先是"从后往前找 translate the underlined / Part C"再截到首个 (46)，
+    # 实测三处都出错：英语一 2016 只截到一句（32 字）、2021 从句子中间开始、
+    # 2026 把 Part B 正文包了进来。**关键词在正文里也会出现，锚不住边界。**
+    # 改成按 Section/Part 标题切段，边界就确定了。
+    out.extend(_translation_items(lines, tier))
+
 
     # ---- 写作：所有 "NN. Directions" 锚点 ----
     anchors = []
