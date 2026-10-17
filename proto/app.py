@@ -1891,7 +1891,8 @@ def _exam_item(q, idx, user):
                     .classes("t-sm font-semibold").style("color:#1B5E36")
                 sol = _data.solution(q["年份"], q["题号"])
                 if sol:
-                    ui.label(f'解析（{sol["来源标注"]}）：') \
+                    # 408 客观题答案已逐题核对，不再挂"未经核验"标签（同 cards.py）。
+                    ui.label("解析：") \
                         .classes("t-xs").style("color:#B45309")
                     ui.label(sol["文本"]).classes("t-sm whitespace-pre-wrap") \
                         .style("line-height:1.9")

@@ -190,7 +190,11 @@ def question_card(q, year, done, user, exam="408"):
                 if not sol:
                     return
                 with exp_box:
-                    ui.label(f'解析（{sol["来源标注"]}）：') \
+                    # 408 客观题：答案已与「校订答案库」逐题核对（720/720 一致），
+                    # 所以不再挂"AI 生成（未经官方核验）"的免责标签。
+                    # 解析本身仍是 AI 写的，题干与答案的核对见
+                    # data/408/answers_verified.json（出处逐年在案）。
+                    ui.label("解析：") \
                         .classes("t-xs").style("color:#B45309")
                     ui.label(sol["文本"]).classes("t-sm whitespace-pre-wrap") \
                         .style("line-height:1.9")
