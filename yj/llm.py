@@ -125,7 +125,7 @@ def _cache_key(task, payload, cfg=None):
 
 
 def complete(task, prompt, payload=None, use_cache=True,
-             api_key=None, base_url=None, model=None):
+             api_key=None, base_url=None, model=None, system=None):
     """
     统一调用入口。
 
@@ -169,8 +169,9 @@ def complete(task, prompt, payload=None, use_cache=True,
                 max_tokens=cfg.get("max_tokens", 4000),
                 messages=[
                     {"role": "system",
-                     "content": "你是 408 考研学习助理。只依据给定的考点与真题统计作答，"
-                                "不要编造考纲外的知识点。输出使用中文 Markdown。"},
+                     "content": system or
+                     ("你是 408 考研学习助理。只依据给定的考点与真题统计作答，"
+                      "不要编造考纲外的知识点。输出使用中文 Markdown。")},
                     {"role": "user", "content": prompt},
                 ],
             )

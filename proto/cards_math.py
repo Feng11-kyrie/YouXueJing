@@ -317,8 +317,15 @@ def run_ai(answer, holder, q, full, user, qid):
 4. 用中文，简洁。"""
     r = llm.complete("math_grade", prompt, use_cache=False,
                      api_key=k["key"], base_url=k["base"] or None,
-                     model=k["model"] or None)
+                     model=k["model"] or None,
+                     system=("你是考研数学阅卷老师。只依据题目与参考答案给分，"
+                             "按步骤指出得分点，不编造题目以外的内容；"
+                             "最后一行必须输出「得分：X」。"))
     txt = r.get("text") or ""
+    if not txt or r.get("source") == "error":
+        ui.notify("AI 精评失败：" + (r.get("error") or "服务没有返回内容，检查 Key/额度"),
+                  color="negative")
+        return
     m = re.search(r"得分[:：]\s*([0-9.]+)", txt)
     score = float(m.group(1)) if m else None
     holder.clear()

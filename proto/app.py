@@ -353,7 +353,7 @@ def home(user: str = "demo"):
                         ui.label(f"数一 {len(math_data.years('一'))} 年 · "
                                  f"数二 {len(math_data.years('二'))} 年 · "
                                  f"数三 {len(math_data.years('三'))} 年"
-                                 f"（2010–2025）") \
+                                 f"（数一/二 2010–2025，数三另含 2009）") \
                             .classes("t-xs muted")
                         ui.button("进入数学",
                                   on_click=lambda: ui.navigate.to(
