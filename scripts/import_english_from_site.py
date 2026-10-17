@@ -198,7 +198,15 @@ def _translation_items(lines, tier):
         text = re.sub(r'^.*?\(\s*\d+\s*points\s*\)', '', text, count=1,
                       flags=re.S | re.I)
         # 去掉页脚与后续节标题
-        text = re.split(r'\s*(?:Section\s+[IVX]+|英语（[一二]）试题)', text)[0]
+        # 【OCR 会把 III 识别成 ill】实测英语一 2013/2018/2020 的材料尾部是
+        # `- 13 - Section ill Writing`，`[IVX]+` 匹配不到 `ill`。
+        # 所以同时匹配 `Section\s+\w+`（任何写法）+ 页码 `- 13 -`。
+        text = re.split(
+            r'\s*(?:Section\s+(?:[IVX]+|ill)\b|英语（[一二]）试题|\s-\s*\d+\s*-)',
+            text)[0]
+        # 页码可能出现在节标题**之前**（`… survived. - 13 - Section ill Writing`），
+        # 上一次切在 Section 处，页码留在了末尾。这里再清一遍。
+        text = re.sub(r'\s*-\s*\d+\s*-\s*$', '', text)
         text = " ".join(text.split())
         # 【括号内可能有空格】实测英语一 2016 印成 `( 48)`、`( 49)`，
         # 原正则 `\((4[6-9]|50)\)` 匹配不到，只找到 3 句（应为 5 句）。
@@ -220,7 +228,7 @@ def _translation_items(lines, tier):
                     sent = re.split(r'(?<=[.?!])\s+(?=[A-Z“"(])', sent)[0].strip()
                 else:
                     sent = "（划线句见左侧材料）"
-                items.append({"题号": n, "题干": sent, "材料": mat[:1600],
+                items.append({"题号": n, "题干": sent, "材料": mat[:4000],
                               "题型": "翻译", "分值": 2})
             return items
         for i, m in enumerate(hits):
@@ -230,7 +238,7 @@ def _translation_items(lines, tier):
             sent = re.split(r'(?<=[.?!])\s+(?=[A-Z“"(])', sent)[0].strip()
             if len(sent) < 15:
                 sent = text[m.start():end].strip()
-            items.append({"题号": n, "题干": sent, "材料": mat[:1600],
+            items.append({"题号": n, "题干": sent, "材料": mat[:4000],
                           "题型": "翻译", "分值": 2})
         return items
 
@@ -249,8 +257,10 @@ def _translation_items(lines, tier):
                   flags=re.S | re.I)
     text = re.split(r'\s*(?:Section\s+[IVX]+|英语（[一二]）试题|Write\s+an?\s+essay)',
                     text, flags=re.I)[0]
+    # 页码（`- 13 -`）—— 实测英语二 2010 的材料尾部粘着它
+    text = re.sub(r'\s*-\s*\d+\s*-\s*$', '', text)
     text = " ".join(text.split())
-    return [{"题号": 46, "题干": "翻译下面这段文字", "材料": text[:1600],
+    return [{"题号": 46, "题干": "翻译下面这段文字", "材料": text[:4000],
              "题型": "翻译", "分值": 15}]
 
 
@@ -313,6 +323,12 @@ def _subjective_from_pdf(tier, year):
         body = " ".join(body.split())
         # 去掉下一题的开头（如 "Section III"）
         body = re.sub(r'\s*Section\s*[IVX]+.*$', '', body)
+        # 去掉页脚（实测英语二 2021 第 48 题尾部粘了
+        # "英语（二）试题 .14.（共14页）"）。图表数据是题目的一部分、要保留，
+        # 所以只切页脚这一种模式，不能整段砍。
+        body = re.split(r'\s*英语（[一二]）试题', body)[0]
+        # 页码：写作题面后常粘 `- 14 -` / `- 1 -`（PDF 页脚）
+        body = re.sub(r'\s*-\s*\d+\s*-\s*', ' ', body)
         if len(body) < 25:
             continue
         # **必须按关键词区分翻译与写作** —— 实测英语二的翻译篇也以
@@ -337,7 +353,7 @@ def _subjective_from_pdf(tier, year):
         if not is_write:
             continue          # 既不是翻译也不是写作，跳过
         out.append({"题号": n, "题干": "写作要求",
-                    "材料": body[:1800], "题型": "写作",
+                    "材料": body[:3000], "题型": "写作",
                     "分值": 10 if "essay based on the chart" in body.lower()
                             or "write an essay" in body.lower() else 10})
 
@@ -389,6 +405,27 @@ def _article_for(lines, marker, first_q):
     return " ".join(x for x in lines[start:end] if x)
 
 
+def _clean_material(m):
+    """
+    **统一清洗材料里的 PDF 页脚**（所有篇目都过一遍）。
+
+    为什么要有这一步：页脚在不同来源里粘法不一样 ——
+      · 独立一行 `- 1 -`（完形，来自 PDF）
+      · 粘在段尾 `… survived. - 13 -`（阅读/翻译）
+      · 带中文 `英语（一）试题 .1.（共 14 页）`（英语一 2021 完形）
+    逐条路径分别处理会漏（我修了三轮还剩 12 处），
+    所以在**统一出口**做一次清洗，比在五个抽取函数里各写一遍可靠。
+    """
+    if not m:
+        return m
+    out = m
+    out = re.sub(r'英语（[一二]）试题[^\n]*', ' ', out)   # 中文页脚
+    out = re.sub(r'-\s*\d+\s*-', ' ', out)              # `- 13 -`
+    out = re.sub(r'\s*共\s*\d+\s*页', ' ', out)
+    out = re.sub(r'[ \t]{2,}', ' ', out)
+    return out.strip()
+
+
 def _cloze_body_from_pdf(tier, year):
     """
     从 GitHub 那份 PDF 里取完形文章（含空的位置）。
@@ -427,6 +464,9 @@ def _cloze_body_from_pdf(tier, year):
         if re.match(r'^(Directions|Read\s+the\s+following\s+text)\b', l):
             continue
         if re.search(r'ANSWER\s*SHEET|directions?\s*[:：]|points\)\s*$', l):
+            continue
+        # PDF 页脚：`- 1 -` / `- 13 -`
+        if re.fullmatch(r'-\s*\d+\s*-', l):
             continue
         # 选项区起点
         if re.match(r'^\s*1\s*[.、]\s*\[?[A-D]', l):
@@ -478,10 +518,19 @@ def parse_paper(t, tier, year=None):
 
     # 主观题（翻译/写作）：从 PDF 取篇章与要求
     subs_list = _subjective_from_pdf(tier, year)
-    for it in subs_list:
-        rec["篇目"].append({
-            "部分": "TRANS" if it["题型"] == "翻译" else "WRITE",
-            "材料": it["材料"], "小题": [it]})
+    # 【翻译的五句要合成一个篇目】原先每句各成一个篇目，导致同一篇 2600 字的
+    # 材料在页面上**重复渲染 5 次**（每题一张卡）。合成一个篇目后，
+    # 材料只显示一次、下面挂 46–50 五道小题。
+    trans = [x for x in subs_list if x["题型"] == "翻译"]
+    writes = [x for x in subs_list if x["题型"] == "写作"]
+    if trans:
+        rec["篇目"].append({"部分": "TRANS", "材料": trans[0]["材料"],
+                            "小题": sorted(trans, key=lambda x: x["题号"])})
+    for it in writes:
+        rec["篇目"].append({"部分": "WRITE", "材料": it["材料"], "小题": [it]})
+    # 统一清洗材料里的页脚（见 _clean_material）
+    for _ps in rec["篇目"]:
+        _ps["材料"] = _clean_material(_ps.get("材料") or "")
     rec["题目数"] = sum(len(p["小题"]) for p in rec["篇目"])
     extra = f' + 主观 {len(subs_list)} 题' if subs_list else ''
     return rec, f"完整 {rec['题目数']} 题{extra}"
