@@ -24,6 +24,8 @@
 客观题的答案来自 `yj.english.explanation()`（懒笔记），**提交后才显示**。
 主观题（翻译/写作）不走这里，见 `subjective_block`。
 """
+import re
+
 from nicegui import ui
 
 from yj import english as en
@@ -82,6 +84,8 @@ def _sub_question(q, year, tier, done, user):
     locked = {"v": bool(prev)}
 
     card = ui.card().classes("softcard w-full p-3 gap-2 shadow-none")
+    # 答题卡点击跳转用的锚点（英语没有分页，只能靠 scrollIntoView）
+    card.props(f'data-q="{q["题号"]}"')
     with card:
         with ui.row().classes("items-center gap-2"):
             ui.label(f'第 {q["题号"]} 题').classes("font-semibold")
@@ -417,6 +421,52 @@ def cloze_card(passage, year, tier, done, user):
                  "可点上方按钮换组。").classes("t-xs muted")
 
 
+def _band_to_score(band, full, rubric):
+    """
+    **档次 → 分数**。这是"AI 评分能加入总分"的关键一步。
+
+    为什么需要它：AI 输出的是**档名**（`第二档`），不是分数；
+    考研阅卷也是**按档给分**。所以折算规则必须来自官方档位本身，
+    不能自己编一个换算表。
+
+    做法：
+      1. 在 rubric 里按档名找到该档的区间（如 `第五档` → `17–20`）
+      2. 取区间**中值**（AI 说不清"17 还是 19"，报中值是诚实的）
+      3. 按该题满分缩放 —— 档位区间是**按题型全额**给的
+         （英语一写作 `17–20` 是 20 分制），小作文满分只有 10 分，
+         不缩放会把 18.5 算到一道 10 分的题上。
+
+    实测过的坑：
+      · 档位区间在 rubric 的 **score 字段**里，不在档名里
+        （`("第五档", "17–20", …)`）—— 从档名找数字会得到 0
+      · 只取档名匹配才能对上（`第二档` 是完整档名，无数字）
+    """
+    if not band or not full or not rubric:
+        return 0.0
+    band = str(band)
+    top = 0.0
+    hit = None
+    for name, score, _desc in rubric.get("档次", []):
+        nums = [float(x) for x in re.findall(r"\d+(?:\.\d+)?", str(score))]
+        if nums:
+            top = max(top, nums[-1])
+        # 档名匹配：AI 可能返回 `第二档` 或 `第二档（5–8 分）`
+        if hit is None and (str(name) == band or band.startswith(str(name))):
+            hit = nums
+    if hit is None:
+        # 退一步：直接按受支持的最小档给 0 分（宁可低估，不虚高）
+        return 0.0
+    if len(hit) >= 2:
+        mid = (hit[0] + hit[-1]) / 2
+    elif hit:
+        mid = hit[0]
+    else:
+        return 0.0
+    if top <= 0:
+        return 0.0
+    return round(mid / top * full, 2)
+
+
 def subjective_block(q, year, tier, done, user):
     """
     一道主观题（翻译 46–50 / 写作 51–52）。
@@ -426,6 +476,8 @@ def subjective_block(q, year, tier, done, user):
     rb = aig.rubric_for(task, tier)
     qid = q["id"]
     ref = (en.explanation(tier, year, q.get("题号")) or {})
+    # 该题满分：写作按题号（小作文 10 / 大作文 20），翻译按部分均摊
+    score_max = en.score_of(q.get("题号"), tier) or float(q.get("分值") or 0)
 
     with ui.card().classes("softcard w-full p-3 gap-2 shadow-none"):
         with ui.row().classes("items-center gap-2"):
@@ -494,6 +546,23 @@ def subjective_block(q, year, tier, done, user):
                               reference=(ref.get("_参考译文") or ""))
             except Exception as e:                          # noqa: BLE001
                 r = {"error": f"{type(e).__name__}: {str(e)[:80]}"}
+
+            # 【落库】用户要求"AI 评分可以加入总分"，那就必须存下来。
+            # 不存的话刷新就没了：既算不进成绩单，也看不到上次写成什么样。
+            if not r.get("error"):
+                try:
+                    import hashlib
+                    import json as _json
+                    sig = hashlib.sha256(
+                        (text + (ref.get("_参考译文") or "")).encode(
+                            "utf-8")).hexdigest()[:16]
+                    band_score = _band_to_score(r.get("档次"), score_max, rb)
+                    store.save_ai_grade(
+                        user, qid, task, r.get("档次"), r.get("位置"),
+                        band_score, float(q.get("分值") or score_max),
+                        _json.dumps(r, ensure_ascii=False), sig)
+                except Exception:                       # noqa: BLE001
+                    pass      # 落库失败不影响本次展示
             out_box.clear()
             with out_box:
                 if r.get("error"):
@@ -574,3 +643,286 @@ def two_col(passage, year, tier, done, user, left=None):
         with ui.column().classes("w-full gap-2 min-w-0"):
             for q in subs:
                 _sub_question(q, year, tier, done, user)
+
+
+# ---------------------------------------------------------------------------
+# 英语答题卡（与 408/政治的分页式不同）
+# ---------------------------------------------------------------------------
+def answer_sheet_en(tier, year, done, total=45):
+    """
+    英语答题卡：**一行 45 格**，点格子滚动到对应题目。
+
+    为什么与 `app._answer_sheet` 不共用：
+      · 那个是**分页式**的（408/政治真题页每页 10 题，点格子翻页）
+      · 英语是**一页长滚动**（完形+阅读+新题型+主观题连排），无"页"可翻
+    所以这里点格子用 `scrollIntoView` 跳到题目锚点 `[data-q=N]`。
+
+    颜色：绿=答对、红=答错、灰白=未做。
+    """
+    obj = []
+    for ps in (en.paper(tier, year) or {}).get("篇目", []):
+        if ps.get("部分") in ("TRANS", "WRITE"):
+            continue
+        obj.extend(ps.get("小题") or [])
+    obj.sort(key=lambda q: int(q["题号"]))
+
+    def status(q):
+        r = done.get(q["id"])
+        if not r:
+            return "todo"
+        return "ok" if r.get("is_correct") else "bad"
+
+    n_ok = sum(1 for q in obj if status(q) == "ok")
+    n_bad = sum(1 for q in obj if status(q) == "bad")
+    n_todo = len(obj) - n_ok - n_bad
+
+    with ui.card().classes("softcard w-full p-2 gap-1"):
+        with ui.row().classes("items-center gap-3 flex-wrap w-full"):
+            ui.label("答题卡").classes("t-sm font-semibold muted")
+            ui.label(f'对 {n_ok} · 错 {n_bad} · 未做 {n_todo}').classes("t-xs muted")
+            with ui.element("div").classes("flex flex-wrap gap-1 flex-1"):
+                for q in obj:
+                    st = status(q)
+                    bg = {"ok": "#E8F5E9", "bad": "#FDECEA",
+                          "todo": "#FFFFFF"}[st]
+                    bd = {"ok": "#8BC79B", "bad": "#E3A8A8",
+                          "todo": "#D5DBE3"}[st]
+                    cell = ui.label(str(q["题号"])).classes(
+                        "text-center cursor-pointer rounded")
+                    cell.style(f"min-width:2rem;padding:1px 4px;font-size:13px;"
+                               f"background:{bg};border:1px solid {bd}")
+                    cell.on("click", lambda _=None, n=q["题号"]: ui.run_javascript(
+                        f'''(() => {{
+                            const el = document.querySelector('[data-q="{n}"]');
+                            if (el) el.scrollIntoView({{behavior:'smooth', block:'center'}});
+                        }})()'''))
+
+
+# ---------------------------------------------------------------------------
+# 交卷成绩单
+# ---------------------------------------------------------------------------
+def score_report(tier, year, user):
+    """
+    交卷成绩单。
+
+    **口径（用户明确认可）**：
+      · 没做完 → **不给总分**，只给「已作答部分得分 + 正确率」
+      · 做完了 → 给总分
+      · AI 评阅的分**计入总分**（用户要求更直观），
+        但必须把「客观题得分」和「AI 评阅得分」**分开列** ——
+        混成一个数就分不清哪部分是机器判的
+
+    为什么没做完不给总分：只做完形（0.5 分/题、较易）和只做阅读（2 分/题、
+    较难）的折算分完全不可比，给一个"38/100"会误导成"你只有 38 分水平"。
+    """
+    done = store.get_answers(user)
+    grades = store.get_ai_grades(user)
+    r = en.report(tier, year, done, grades)
+    tn = en.TIERS[tier]["简称"]
+
+    with ui.card().classes("softcard w-full p-4 gap-2"):
+        with ui.row().classes("items-center gap-3 flex-wrap"):
+            ui.label(f"{year} 年{tn} · 成绩单").classes("t-lead font-bold")
+            if not r["complete"]:
+                ui.label("未完成").classes("t-xs font-semibold") \
+                    .style("color:#B45309;background:#FFF3E0;"
+                           "padding:1px 8px;border-radius:10px")
+
+        # ---- 完成度 ----
+        pct = round(r["done"] / r["total"] * 100) if r["total"] else 0
+        ui.label(f'已作答 {r["done"]}/{r["total"]} 题（{pct}%）') \
+            .classes("t-sm sub")
+
+        # ---- 客观题 ----
+        ui.label("客观题（自动判分）").classes("t-sm font-semibold mt-1")
+        ui.label(f'已作答 {r["obj_done"]}/{r["obj_total"]} 题 · '
+                 f'答对 {sum(p["答对"] for p in r["parts"] if not p["主观"])} 题 · '
+                 f'已作答部分得分 {r["obj_score"]:g} / {r["obj_max"]:g}') \
+            .classes("t-sm")
+        for p in r["parts"]:
+            if p["主观"]:
+                continue
+            if p["已作答"] == 0:
+                ui.label(f'　{p["名称"]}　未作答').classes("t-xs muted")
+            else:
+                ui.label(f'　{p["名称"]}　{p["已作答"]}/{p["题数"]} 题 · '
+                         f'答对 {p["答对"]} · {p["得分"]:g}/{p["满分"]:g} 分') \
+                    .classes("t-xs")
+
+        # ---- 主观题 ----
+        ui.label("主观题（AI 评阅 · 参考，非官方得分）") \
+            .classes("t-sm font-semibold mt-2").style("color:#B45309")
+        if not any(x.get("band") for x in r["sub_list"]):
+            ui.label("　还没有 AI 评阅 —— 在下面翻译/写作题里提交作答即可").classes("t-xs muted")
+        for x in r["sub_list"]:
+            if x.get("band"):
+                ui.label(f'　第 {x["题号"]} 题（{x.get("题型") or ""}）　'
+                         f'{x["band"]} {x.get("position") or ""} · '
+                         f'{x["score"]:g}/{x["score_max"]:g} 分').classes("t-xs")
+            else:
+                ui.label(f'　第 {x["题号"]} 题（{x.get("题型") or ""}）　未评阅') \
+                    .classes("t-xs muted")
+
+        # ---- 总分 ----
+        ui.separator()
+        if r["complete"]:
+            ui.label(f'总分 {r["total_score"]:g} / {r["total_max"]:g}').classes(
+                "text-2xl font-bold")
+            ui.label(f'　客观题 {r["obj_score"]:g} + AI 评阅 {r["sub_total"]:g}') \
+                .classes("t-xs muted")
+            ui.label("说明：主观题分数由 AI 按官方评分标准评定，仅供参考 —— "
+                     "真实考试是人工分档给分。").classes("t-xs muted")
+        else:
+            ui.label("未完成，不显示总分").classes("t-lead font-bold") \
+                .style("color:#B45309")
+            ui.label(
+                f'还有 {r["total"] - r["done"]} 题没做 —— 只做完形和只做阅读的'
+                f'折算分完全不可比，报一个总分反而误导。').classes("t-sm sub")
+            ui.label(
+                f'你可以参考：已作答部分得分 {r["obj_score"]:g} / {r["obj_max"]:g}（客观题）'
+                + (f' + AI 评阅 {r["sub_total"]:g} 分' if r["sub_total"] else "")
+            ).classes("t-sm")
+
+
+# ---------------------------------------------------------------------------
+# 新题型 Part B：句子库只显示一次
+# ---------------------------------------------------------------------------
+def partb_block(passage, year, tier, done, user):
+    """
+    新题型：**左材料+句子库（只显示一次）/ 右 41–45 作答位**。
+
+    为什么不用 `two_col`：Part B 的 5 道题**共用同一个 A–G 句子库**。
+    直接用 `_sub_question` 会把 7 个选项在每道题里各铺一遍 =
+    5 × 7 = 35 行，页面极长且重复。用户要求"选项去重"。
+
+    做法：
+      · 左栏：材料（正文/评论）+ **句子库 A–G 列一次**
+      · 右栏：41–45 各一行**字母选择器**（A–G 小按钮），提交后显示对错与解析
+    """
+    subs = sorted(passage.get("小题") or [], key=lambda q: int(q["题号"]))
+    mat = (passage.get("材料") or "").strip()
+    # 句子库：所有小题的选项应该相同（同一个 A–G 池）
+    bank = (subs[0].get("选项") or {}) if subs else {}
+
+    with ui.element("div").classes("w-full").style(
+            "display:grid;grid-template-columns:minmax(0,46fr) minmax(0,54fr);"
+            "gap:16px;align-items:start"):
+        # ---- 左栏：材料 + 句子库 ----
+        with ui.card().classes("softcard p-3 gap-2 shadow-none") \
+                .style("position:sticky;top:12px;"
+                       "max-height:calc(100vh - 90px);overflow:auto"):
+            with ui.row().classes("items-center gap-2"):
+                ui.label("新题型").classes("t-lead font-bold")
+                ui.label(f'{len(subs)} 题').classes("t-xs muted")
+                ui.label("左材料 · 右作答").classes("t-xs muted ml-auto")
+            if mat:
+                ui.label(mat).classes(
+                    "text-[15px] leading-7 whitespace-pre-wrap") \
+                    .style("font-family:Georgia,'Times New Roman',serif")
+            if bank:
+                ui.label("备选句（A–G）").classes("t-sm font-semibold mt-2")
+                for L, T in sorted(bank.items()):
+                    with ui.row().classes("items-start gap-2 w-full"):
+                        ui.label(L).classes(
+                            "font-semibold shrink-0 w-5 text-center rounded") \
+                            .style("background:#EEF3FA;color:#17418F")
+                        ui.label(T).classes(
+                            "text-[15px] flex-1 whitespace-pre-wrap") \
+                            .style("line-height:1.75")
+
+        # ---- 右栏：41–45 字母选择 ----
+        right = ui.column().classes("w-full gap-2 min-w-0")
+        with right:
+            for q in subs:
+                _partb_row(q, year, tier, done, user)
+
+
+def _partb_row(q, year, tier, done, user):
+    """
+    一道 Part B 题：**只给 A–G 字母按钮**，不再重复句子文本。
+
+    句子文本已经在左栏列过一次，这里只选字母 —— 与真实卷面一致
+    （卷面上 41–45 就是填字母）。
+    """
+    qid = q["id"]
+    ans = answer_of(q, tier, year)
+    prev = done.get(qid)
+    chosen = {"v": (prev or {}).get("chosen") or ""}
+    locked = {"v": bool(prev)}
+    letters = sorted((q.get("选项") or {}).keys()) or list("ABCDEFG")
+
+    with ui.card().classes("softcard w-full p-2 gap-1 shadow-none"):
+        with ui.row().classes("items-center gap-2 flex-wrap"):
+            ui.label(f'第 {q["题号"]} 题').classes("font-semibold")
+            ui.label(f'{q.get("题号")} → ').classes("t-xs muted")
+            if not ans:
+                ui.label("暂无答案").classes("t-xs").style("color:#B45309")
+        row = ui.row().classes("items-center gap-1 flex-wrap")
+        with row:
+            for L in letters:
+                btn = ui.button(L, on_click=lambda _=None, L=L: pick(L)) \
+                    .props("flat dense")
+                btn.style("min-width:2.1rem")
+
+        result = ui.label("").classes("t-sm")
+        exp_box = ui.column().classes("w-full gap-0")
+
+        def paint():
+            for child in row.default_slot.children:
+                pass
+            # 重画按钮状态
+            row.clear()
+            with row:
+                for L in letters:
+                    on = (chosen["v"] == L)
+                    b = ui.button(L, on_click=lambda _=None, L=L: pick(L))
+                    b.props("unelevated" if on else "flat dense")
+                    b.style("min-width:2.1rem")
+                    if locked["v"] and ans:
+                        if L == ans:
+                            b.style("background:#E8F5E9")
+                        elif on and L != ans:
+                            b.style("background:#FDECEA")
+
+        def pick(L):
+            if locked["v"]:
+                return
+            chosen["v"] = L
+            paint()
+
+        def submit():
+            if not chosen["v"]:
+                ui.notify("请先选一个字母。", color="warning")
+                return
+            if not ans:
+                ui.notify("这道题暂无答案，无法判分。", color="warning")
+                return
+            ok = (chosen["v"] == ans)
+            store.record_answer(user, qid, chosen["v"], ok, source="exam")
+            locked["v"] = True
+            paint()
+            submit_btn.set_enabled(False)
+            result.set_text(("答对了 ✓" if ok else f'答错了 ✗ 你选 {chosen["v"]}')
+                            + f'　正确答案 {ans}')
+            result.style(f'color:{"#1B5E36" if ok else "#8C2C2C"}')
+            show_exp()
+
+        submit_btn = ui.button("提交", on_click=submit).props("dense")
+        submit_btn.set_enabled(not prev)
+
+        def show_exp():
+            exp_box.clear()
+            e = en.explanation(tier, year, q["题号"]) or {}
+            if e.get("解析"):
+                with exp_box:
+                    ui.label("解析（懒笔记）：").classes("t-xs") \
+                        .style("color:#B45309")
+                    ui.label(e["解析"][:1200]).classes(
+                        "t-xs whitespace-pre-wrap").style("line-height:1.8")
+
+        paint()
+        if prev:
+            if ans:
+                result.set_text(f'已作答：{prev["chosen"]}　正确答案 {ans}')
+                result.style(f'color:{"#1B5E36" if prev.get("is_correct") else "#8C2C2C"}')
+            show_exp()

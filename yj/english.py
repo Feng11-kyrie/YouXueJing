@@ -75,14 +75,28 @@ PARTS = {
 SUBJECTIVE = {"TRANS", "WRITE"}
 
 
+# 【两卷的主观题题号区间不同】必须按卷种分开，否则英语二全算不出来
+#   英语一：翻译 46–50（5 句）、写作 51–52
+#   英语二：翻译 46    （1 段）、写作 47–48
+_TIER_RANGE = {
+    ("EN1", "TRANS"): (46, 50), ("EN1", "WRITE"): (51, 52),
+    ("EN2", "TRANS"): (46, 46), ("EN2", "WRITE"): (47, 48),
+}
+
+
 def part_of(num, tier="EN1"):
-    """题号 → 部分代码。返回 (代码, 边界题?)"""
+    """
+    题号 → 部分代码。返回 (代码, 边界题?)
+
+    **主观题的区间按卷种不同**：英语二写作是 47–48（不是 51–52）。
+    我最初只写了"英语二翻译只有 46"这一个特例，写作仍按 51–52 判断，
+    结果英语二的 47/48 落到"未归类"，分值算出 0 分。
+    """
     n = int(num)
     for code, d in PARTS.items():
         lo, hi = d["题号"]
-        # 英语二的翻译只有 46 题（1 段 15 分），不占 46–50
-        if tier == "EN2" and code == "TRANS" and n != 46:
-            continue
+        if code in SUBJECTIVE:
+            lo, hi = _TIER_RANGE.get((tier, code), (lo, hi))
         if lo <= n <= hi:
             return code, n in (lo, hi)
     return "未归类", False
@@ -239,3 +253,149 @@ def tier_list():
                     "首年": ys[0] if ys else None,
                     "末年": ys[-1] if ys else None, "题量": n})
     return out
+
+
+# ---------------------------------------------------------------------------
+# 计分：单题分值 + 成绩单
+# ---------------------------------------------------------------------------
+# 为什么要单独算单题分值：`PARTS` 里只定义了**部分总分**，而成绩单需要
+# 逐题累加。且主观题不能平均分 —— 小作文与大作文分值不同：
+#     英语一：小作文 51 = 10 分，大作文 52 = 20 分（合计 30）
+#     英语二：小作文 47 = 10 分，大作文 48 = 15 分（合计 25）
+# 翻译则是平均分（英语一 5 句 × 2 分；英语二 1 段 15 分）。
+_WRITE_SCORE = {
+    ("EN1", 51): 10, ("EN1", 52): 20,
+    ("EN2", 47): 10, ("EN2", 48): 15,
+}
+# 各部分题数（用于把部分总分摊到每题）
+_PART_COUNT = {
+    "CLOZE": {"EN1": 20, "EN2": 20},
+    "READ":  {"EN1": 20, "EN2": 20},
+    "NEW":   {"EN1": 5,  "EN2": 5},
+    "TRANS": {"EN1": 5,  "EN2": 1},
+}
+
+
+def score_of(num, tier="EN1"):
+    """某题的**分值**（分）。"""
+    code = part_of(num, tier)[0]
+    n = int(num)
+    if code == "WRITE":
+        return float(_WRITE_SCORE.get((tier, n), 0))
+    cnt = _PART_COUNT.get(code, {}).get(tier)
+    total = part_score(code, tier)
+    if not cnt or not total:
+        return 0.0
+    return round(total / cnt, 2)
+
+
+def report(tier, year, answers, ai_grades=None):
+    """
+    算一套卷的**成绩单**。
+
+    核心口径（用户认可）：
+      · 未做完时**不给总分**，只给「已作答部分的得分 + 正确率」
+      · AI 评阅按官方档位折算成分数，**计入总分**（用户要求更直观），
+        但成绩单上必须把「客观题得分」与「AI 评阅得分」**分开列**
+        —— 混成一个数就分不清哪部分是机器判的
+      · 未作答的题标 `answered=False`，**不按 0 分计入**（不能因为没做就拉低）
+
+    answers: {question_id: {"chosen":..., "is_correct":...}}
+    ai_grades: {question_id: {"score":..., "band":..., "score_max":...}}
+
+    返回 dict：
+      parts: [{code, 名称, 题数, 已作答, 答对, 得分, 满分, 主观?}]
+      obj_done / obj_total / obj_score / obj_max / obj_acc
+      sub_total / sub_max / sub_list（逐题 AI 档次与得分）
+      done / total（题数覆盖）
+      complete（是否全做完）
+    """
+    ai_grades = ai_grades or {}
+    rec = paper(tier, year) or {}
+    parts = []
+    obj_done = obj_total = 0
+    obj_score = obj_max = 0.0
+    sub_total = sub_max = 0.0
+    sub_list = []
+    done_n = total_n = 0
+
+    for ps in rec.get("篇目", []):
+        code = ps.get("部分")
+        if code not in PARTS:
+            continue
+        subs = ps.get("小题") or []
+        is_subj = code in SUBJECTIVE
+        d = 0
+        ok = 0
+        sc = 0.0
+        mx = 0.0
+        for q in subs:
+            qid = q["id"]
+            per = score_of(q["题号"], tier) or float(q.get("分值") or 0)
+            mx += per
+            total_n += 1
+            a = answers.get(qid)
+            if is_subj:
+                g = ai_grades.get(qid)
+                if g and g.get("score") is not None:
+                    d += 1
+                    done_n += 1
+                    sc += float(g["score"])
+                    sub_list.append({"题号": q["题号"], "题型": q.get("题型"),
+                                     "band": g.get("band"),
+                                     "position": g.get("position"),
+                                     "score": g.get("score"),
+                                     "score_max": per})
+                else:
+                    sub_list.append({"题号": q["题号"], "题型": q.get("题型"),
+                                     "band": None, "score": None,
+                                     "score_max": per})
+            else:
+                obj_total += 1
+                mx_obj = per
+                if a:
+                    d += 1
+                    done_n += 1
+                    obj_done += 1
+                    if a.get("is_correct"):
+                        ok += 1
+                        sc += per
+                        obj_score += per
+            # 累计客观题满分
+        if is_subj:
+            for item in sub_list:
+                if item["score_max"] and item["band"]:
+                    pass
+            sub_total += sc
+            sub_max += mx
+        else:
+            obj_max += mx
+        # **按部分合并**：阅读是 4 篇、翻译是 5 句，逐篇目列会拆成很多行
+        # （实测成绩单里出现 4 行"阅读"、5 行"翻译"），应按"部分"汇总。
+        found = next((x for x in parts if x["code"] == code), None)
+        if found:
+            found["题数"] += len(subs)
+            found["已作答"] += d
+            found["答对"] += ok
+            found["得分"] = round(found["得分"] + sc, 2)
+            found["满分"] = round(found["满分"] + mx, 2)
+        else:
+            parts.append({
+                "code": code, "名称": part_name(code),
+                "题数": len(subs), "已作答": d, "答对": ok,
+                "得分": round(sc, 2), "满分": round(mx, 2),
+                "主观": is_subj,
+            })
+
+    return {
+        "parts": parts,
+        "obj_done": obj_done, "obj_total": obj_total,
+        "obj_score": round(obj_score, 2), "obj_max": round(obj_max, 2),
+        "obj_acc": (round(obj_score / obj_max * 100, 1) if obj_max else 0.0),
+        "sub_total": round(sub_total, 2), "sub_max": round(sub_max, 2),
+        "sub_list": sub_list,
+        "done": done_n, "total": total_n,
+        "complete": done_n >= total_n and total_n > 0,
+        "total_score": round(obj_score + sub_total, 2),
+        "total_max": round(obj_max + sub_max, 2),
+    }

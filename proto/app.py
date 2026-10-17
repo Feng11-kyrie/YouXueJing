@@ -38,7 +38,8 @@ from yj import data, diagnose, profile as profile_mod, path as path_mod  # noqa:
 from yj import llm, graph, zhengzhi as zz           # noqa: E402
 from yj import english as en                          # noqa: E402
 from proto.cards_en import (passage_card, cloze_card,   # noqa: E402
-                            subjective_block, two_col)
+                            subjective_block, two_col, partb_block,
+                            answer_sheet_en, score_report)
 from proto import store_lite as store              # noqa: E402
 from proto.cards import (question_card, SUBJECT_COLORS,   # noqa: E402
                          ZZ_PART_COLORS)
@@ -1088,6 +1089,25 @@ def exam_english(tier: str = "EN1", year: str = None, view: str = "全部",
                  + (f'　（当前显示 {sum(len(p["小题"]) for p in shown)} 题）'
                     if view != "全部" else "")).classes("t-sm muted")
 
+        # ---- 答题卡（用户要求：英语也要有）----
+        answer_sheet_en(tier, year, done)
+
+        # ---- 交卷 ----
+        with ui.row().classes("items-center gap-2"):
+            def open_report():
+                with ui.dialog() as dlg, ui.card().classes(
+                        "w-[46rem] max-w-[95vw] p-0 gap-0"):
+                    with ui.column().classes("w-full p-3 gap-2") \
+                            .style("max-height:80vh;overflow:auto"):
+                        score_report(tier, year, user)
+                    ui.button("关闭", on_click=dlg.close) \
+                        .props("flat").classes("self-end m-2")
+                dlg.open()
+            ui.button("交卷 · 看成绩", on_click=open_report) \
+                .props("unelevated")
+            ui.label("未做完也可以交卷 —— 只给已作答部分的得分与正确率") \
+                .classes("t-xs muted")
+
         if not shown:
             ui.label(f"筛选「{view}」下没有题目。").classes("t-sm muted")
             return
@@ -1095,6 +1115,9 @@ def exam_english(tier: str = "EN1", year: str = None, view: str = "全部",
             code = ps.get("部分")
             if code == "CLOZE":
                 cloze_card(ps, year, tier, done, user)
+            elif code == "NEW":
+                # 新题型：句子库只显示一次（见 cards_en.partb_block）
+                partb_block(ps, year, tier, done, user)
             elif code in ("TRANS", "WRITE"):
                 # 主观题：不自动判分，走 AI 评阅（cards_en.subjective_block）
                 with ui.card().classes("softcard w-full p-2 gap-1 shadow-none"):

@@ -224,3 +224,72 @@ def stats():
             "勾选条数": c.execute("SELECT COUNT(*) FROM marks").fetchone()[0],
             "LLM缓存条数": c.execute("SELECT COUNT(*) FROM cache").fetchone()[0],
         }
+
+
+# ---------------------------------------------------------------------------
+# AI 评阅结果落库
+# ---------------------------------------------------------------------------
+# 用户要求"AI 评分可以加入总分" —— 那就必须**存下来**：
+# 不落库的话刷新就没了，既没法算总分、也看不到"上次写成什么样"。
+#
+# 单独一张表（而不是塞进 answers）：
+#   answers.chosen 存的是选项字母，语义是"客观题作答"；
+#   AI 评阅有档次、问题清单、建议，结构完全不同，混进去会污染那张表。
+def _ensure_ai_table(c):
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS ai_grades (
+            user_id     TEXT NOT NULL,
+            question_id TEXT NOT NULL,
+            task        TEXT NOT NULL,      -- TRANSLATION / WRITING
+            band        TEXT,               -- 档次（如"第二档"）
+            position    TEXT,               -- 上段/中段/下段
+            score       REAL,               -- 按官方档位折算的分数
+            score_max   REAL,               -- 该题满分
+            payload     TEXT,               -- 完整评阅结果（JSON）
+            answer_hash TEXT,               -- 作答内容的哈希（判断是否重评）
+            graded_at   TEXT NOT NULL,
+            PRIMARY KEY (user_id, question_id)
+        )
+    """)
+
+
+def save_ai_grade(user_id, question_id, task, band, position, score,
+                  score_max, payload_json, answer_hash):
+    """写入/覆盖一次 AI 评阅结果。"""
+    import json as _json
+    ensure_user(user_id)
+    with conn() as c:
+        _ensure_ai_table(c)
+        c.execute("""
+            INSERT INTO ai_grades(user_id, question_id, task, band, position,
+                                  score, score_max, payload, answer_hash, graded_at)
+            VALUES(?,?,?,?,?,?,?,?,?,?)
+            ON CONFLICT(user_id, question_id) DO UPDATE SET
+                band=excluded.band, position=excluded.position,
+                score=excluded.score, score_max=excluded.score_max,
+                payload=excluded.payload, answer_hash=excluded.answer_hash,
+                graded_at=excluded.graded_at
+        """, (user_id, question_id, task, band, position, score, score_max,
+              payload_json, answer_hash,
+              datetime.datetime.now().isoformat(timespec="seconds")))
+
+
+def get_ai_grades(user_id):
+    """取该用户所有 AI 评阅结果 {question_id: {...}}。"""
+    import json as _json
+    with conn() as c:
+        _ensure_ai_table(c)
+        rows = c.execute("SELECT * FROM ai_grades WHERE user_id=?",
+                         (user_id,)).fetchall()
+    out = {}
+    for r in rows:
+        try:
+            payload = _json.loads(r["payload"] or "{}")
+        except Exception:                                   # noqa: BLE001
+            payload = {}
+        out[r["question_id"]] = {
+            "task": r["task"], "band": r["band"], "position": r["position"],
+            "score": r["score"], "score_max": r["score_max"],
+            "graded_at": r["graded_at"], "payload": payload,
+        }
+    return out
