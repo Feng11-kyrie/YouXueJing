@@ -39,7 +39,8 @@ from yj import llm, graph, zhengzhi as zz           # noqa: E402
 from yj import english as en                          # noqa: E402
 from proto.cards_en import (passage_card, cloze_card,   # noqa: E402
                             subjective_block, two_col, partb_block,
-                            answer_sheet_en, score_report)
+                            subjective_two_col, answer_sheet_en,
+                            score_report)
 from proto import store_lite as store              # noqa: E402
 from proto.cards import (question_card, SUBJECT_COLORS,   # noqa: E402
                          ZZ_PART_COLORS)
@@ -1118,12 +1119,14 @@ def exam_english(tier: str = "EN1", year: str = None, view: str = "全部",
             elif code == "NEW":
                 # 新题型：句子库只显示一次（见 cards_en.partb_block）
                 partb_block(ps, year, tier, done, user)
-            elif code in ("TRANS", "WRITE"):
-                # 主观题：不自动判分，走 AI 评阅（cards_en.subjective_block）
+            elif code == "TRANS":
+                # 翻译：5 句共用一篇材料 → 左材料 + 右小题（材料只显示一次）
+                subjective_two_col(ps, year, tier, done, user)
+            elif code == "WRITE":
+                # 写作：每道题的题目/图表各不相同，各自成卡
                 with ui.card().classes("softcard w-full p-2 gap-1 shadow-none"):
                     with ui.row().classes("items-center gap-2"):
-                        ui.label(ps.get("部分全称") or ps.get("部分名") or code) \
-                            .classes("t-lead font-bold")
+                        ui.label("写作").classes("t-lead font-bold")
                         ui.label("主观题").classes("t-xs muted")
                 for q in ps.get("小题", []):
                     subjective_block(q, year, tier, done, user)

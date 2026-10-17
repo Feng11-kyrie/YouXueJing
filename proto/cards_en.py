@@ -467,7 +467,7 @@ def _band_to_score(band, full, rubric):
     return round(mid / top * full, 2)
 
 
-def subjective_block(q, year, tier, done, user):
+def subjective_block(q, year, tier, done, user, show_material=True):
     """
     一道主观题（翻译 46–50 / 写作 51–52）。
     """
@@ -486,8 +486,8 @@ def subjective_block(q, year, tier, done, user):
             ui.label("主观题 · 不自动判分").classes("text-xs") \
                 .style("color:#B45309")
 
-        # 题目要求 / 篇章
-        if q.get("材料"):
+        # 题目要求 / 篇章（两栏布局时由左栏统一显示，这里不再重复）
+        if show_material and q.get("材料"):
             with ui.expansion("材料 / 题目", value=True).classes("w-full"):
                 ui.label(q["材料"]).classes(
                     "text-[15px] leading-7 whitespace-pre-wrap") \
@@ -926,3 +926,45 @@ def _partb_row(q, year, tier, done, user):
                 result.set_text(f'已作答：{prev["chosen"]}　正确答案 {ans}')
                 result.style(f'color:{"#1B5E36" if prev.get("is_correct") else "#8C2C2C"}')
             show_exp()
+
+
+def subjective_two_col(passage, year, tier, done, user):
+    """
+    翻译/写作的**两栏布局**：左材料（sticky）/ 右小题。
+
+    为什么需要：翻译的 5 道题**共用同一篇材料**（一篇 2400–2800 字的文章，
+    5 句划线翻译）。原先每道小题各自带一份材料字段并各自渲染 ——
+    **同一篇文章在页面上重复显示 5 次**（用户指出"翻译重复显示了五次"）。
+
+    修法：材料只由左栏渲染一次，右栏的 `subjective_block` 传
+    `show_material=False`。
+    """
+    code = passage.get("部分")
+    name = passage.get("部分全称") or passage.get("部分名") or (
+        "翻译" if code == "TRANS" else "写作")
+    subs = passage.get("小题") or []
+    mat = (passage.get("材料") or "").strip()
+
+    with ui.element("div").classes("w-full").style(
+            "display:grid;grid-template-columns:minmax(0,44fr) minmax(0,56fr);"
+            "gap:16px;align-items:start"):
+        # 左栏：材料（sticky + 独立滚动，2600 字的文章也不会把页面撑太长）
+        with ui.card().classes("softcard p-3 gap-2 shadow-none") \
+                .style("position:sticky;top:12px;"
+                       "max-height:calc(100vh - 90px);overflow:auto"):
+            with ui.row().classes("items-center gap-2"):
+                ui.label(name).classes("t-lead font-bold")
+                ui.label(f'{len(subs)} 题').classes("t-xs muted")
+                ui.label("左材料 · 右作答").classes("t-xs muted ml-auto")
+            if mat:
+                ui.label(mat).classes(
+                    "text-[15px] leading-7 whitespace-pre-wrap") \
+                    .style("font-family:Georgia,'Times New Roman',serif")
+            else:
+                ui.label("（这一篇没有材料）").classes("t-sm muted")
+
+        # 右栏：小题（不再各自渲染材料）
+        right = ui.column().classes("w-full gap-2 min-w-0")
+        with right:
+            for q in subs:
+                subjective_block(q, year, tier, done, user, show_material=False)
