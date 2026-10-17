@@ -95,7 +95,7 @@ def math_card(q, tier, year, done, user):
     with card:
         with ui.row().classes("items-center gap-2 no-wrap"):
             ui.label(f'第 {q["题号"]} 题').classes("t-lead font-semibold")
-            ui.label(f'{kind} · {full} 分').classes("t-xs muted")
+            ui.label(f'{kind} · {full:g} 分').classes("t-xs muted")
             if rec:
                 if rec.get("source") == "selfscore":
                     ui.label("已自评").classes("t-xs").style("color:#17418F")
@@ -230,7 +230,7 @@ def math_card(q, tier, year, done, user):
                 except ValueError:
                     prev_self = None
             with ui.row().classes("items-center gap-2 flex-wrap"):
-                sc = ui.input(placeholder=f"自评得分（0–{full}）",
+                sc = ui.input(placeholder=f"自评得分（0–{full:g}）",
                               value=(f"{prev_self:g}" if prev_self is not None else "")) \
                     .props("dense outlined").classes("w-40")
 

@@ -88,7 +88,13 @@ def full_score(tier, year):
 
 
 def q_score(q, year):
-    """单题分值：题干里写了「本题满分 X 分」就用它，否则按题型默认。"""
+    """单题分值：题库里有「分值」就用它，其次题干里的「本题满分 X 分」，
+    最后按题型默认（选择/填空 4 或 5，解答 10）。"""
+    if q.get("分值"):
+        try:
+            return float(q["分值"])
+        except (TypeError, ValueError):
+            pass
     m = re.search(r"本题满分\s*(\d+)\s*分", q.get("题干") or "")
     if m:
         return int(m.group(1))
