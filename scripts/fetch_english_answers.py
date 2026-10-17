@@ -110,6 +110,76 @@ def parse_partb_answers(t, lo=41, hi=45):
     return {lo + i: _letter(a) for i, a in enumerate(got)}
 
 
+def parse_en1_partb_ordering(t):
+    """
+    **英语一 Part B：段落排序**的答案。
+
+    英语一的 Part B 与英语二不同 —— 它是"把 7 段打乱重排"，
+    答案不是逐题的 `【答案】\n[ E ]`，而是**一整条正确顺序链**。
+    实测两种呈现形态，都要支持：
+
+      ① 干净的"正确顺序"块（逐行交替）：
+             正确顺序
+             41
+             B
+             →
+             42
+             F
+             ...
+      ② FAQ 里的一句话：`41=B → 42=F → 43=D → 44=G → 预给E`
+
+    **注意"预给"**：排序题有一段是卷面已给的（如 2010 的 E 在 45 位），
+    那一位不需要作答、链上写成 `预给E`。若漏掉它，只拿到 4 个答案。
+    """
+    lines = [l.strip() for l in t.split("\n")]
+    out = {}
+    for i, l in enumerate(lines):
+        if l == "正确顺序":
+            j = i + 1
+            while j < len(lines):
+                m = re.fullmatch(r'(4[1-5])', lines[j])
+                if m and j + 1 < len(lines) and re.fullmatch(r'[A-G]', lines[j + 1]):
+                    out[int(m.group(1))] = lines[j + 1]
+                    j += 2
+                    if j < len(lines) and lines[j] == "→":
+                        j += 1
+                elif re.match(r'^预给\s*[A-G]', lines[j]) or l == "预给":
+                    break
+                else:
+                    break
+            if len(out) >= 4:
+                break
+    if len(out) >= 4:
+        return _fill_pregiven(t, out)
+    # 形态二：41=B → 42=F → … → 预给E
+    for m in re.finditer(r'(4[1-5])\s*=\s*([A-G])', t):
+        out.setdefault(int(m.group(1)), m.group(2))
+    if out:
+        return _fill_pregiven(t, out)
+    return out
+
+
+def _fill_pregiven(t, got):
+    """
+    排序题有一段是**卷面已给**的（2010 的 E 落在第 45 位），
+    答案链上写成 `预给E`。这一位学生不需要作答，但它确实在正确顺序里，
+    所以**要补上**——否则 UI 里会显示"暂无答案"，看起来像我们漏了。
+
+    补法：把 `预给X` 赋给链上缺失的那个位置号（缺失位置通常是最后一位）。
+    """
+    m = re.search(r'预给\s*([A-G])', t)
+    if not m:
+        return got
+    letter = m.group(1)
+    if letter in got.values():
+        return got
+    miss = [n for n in range(41, 46) if n not in got]
+    if len(miss) == 1:
+        got = dict(got)
+        got[miss[0]] = letter
+    return got
+
+
 def parse_reference(t):
     """
     翻译：没有"答案"，只有**参考译文**。抽出来存 `参考译文` 字段，
@@ -158,7 +228,14 @@ def fetch(tier, year, verbose=True, write=False):
             if sec == "section1":
                 got = parse_cloze_answers(t, lo, hi)
             elif sec == "section2-part-b":
-                got = parse_partb_answers(t, lo, hi)
+                # 【Part B 有三种题型，答案格式也随之不同】
+                #   · 句中填空 / 小标题匹配：逐题 `【答案】\n[ C ]`（多数年份）
+                #   · 段落排序：一整条正确顺序链（`正确顺序` 块 或 `41=B → …`）
+                # 我最初按"英语一一定是排序"写死，结果只有排序那几年成功，
+                # 其余年份明明有 `【答案】` 却拿不到 —— 所以**两种都试、取多的**。
+                a = parse_partb_answers(t, lo, hi)
+                b = parse_en1_partb_ordering(t)
+                got = a if len(a) >= len(b) else b
             elif sec == "section2-part-c":
                 ref = parse_reference(t)
                 if ref:
