@@ -407,8 +407,11 @@ def home(user: str = "demo"):
             with ui.row().classes("w-full gap-4 items-stretch"):
                 if weakest:
                     with ui.card().classes("softcard flex-1 p-4 gap-1"):
-                        ui.label(f'今天建议先补：{weakest["章节名"]}') \
-                            .classes("t-lead font-bold")
+                        _subj = data.CODE2NAME.get(weakest.get("学科码", ""), "")
+                        _title = ("今天建议先补：408 · " +
+                                  (f"{_subj} · " if _subj else "") +
+                                  weakest["章节名"])
+                        ui.label(_title).classes("t-lead font-bold")
                         # 【措辞修正】原来写"这一章 18 年考了 141 次" —— 会被读成
                         # "考了 141 场"。核实：141 是**该章 21 个叶子考点的考查次数之和**
                         # （单考点最高才 24 次）。必须说清口径，否则是夸大。
@@ -429,7 +432,7 @@ def home(user: str = "demo"):
                 if _msug:
                     _mt, _mr = _msug
                     with ui.card().classes("softcard flex-1 p-4 gap-1"):
-                        ui.label(f'今天建议先补：数学{_mt} · {_mr["考点"]}') \
+                        ui.label(f'今天建议先补：数学（数{_mt}） · {_mr["考点"]}') \
                             .classes("t-lead font-bold")
                         ui.label(f'这个考点你做过 {_mr["作答"]} 题、答对 '
                                  f'{_mr["答对"]} 题（{_mr["正确率"]:.0%}）；'
