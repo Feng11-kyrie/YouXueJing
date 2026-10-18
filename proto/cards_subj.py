@@ -70,7 +70,14 @@ def _free_score(q, subject, text, prompt_text, material, full, need_words,
                                    terms=_terms_of(q, subject))
             r["依据"] = "按评分标准分档"
             return r
-    r = rc.score_generic(text, prompt_text, material or "", full,
+    if subject == "ZZ" and (reference or "").strip():
+        # 有参考要点（AI 生成、界面标注非官方）→ 结构 + 要点覆盖
+        r = rc.score_politics(text, prompt_text, reference, full, need_words)
+        r["依据"] = "结构体检 + 参考要点"
+        return r
+    # 注意：第三个参数是 reference（不是 material）。score_generic 目前
+    # 不靠它给分，但传错会让以后加"参考比对"时拿到材料而不是答案。
+    r = rc.score_generic(text, prompt_text, reference or "", full,
                          need_words, terms=_terms_of(q, subject))
     r["依据"] = "结构体检"
     return r
@@ -150,8 +157,9 @@ def subj_panel(q, subject, prompt_text, material, full, user,
            "（篇幅 / 分点 / 考点词）—— 都评不了算法与代码是否真的正确；"
            "要更准的评阅需在顶部接入自己的 API Key。"
            if subject == "408" else
-           "免费评分：按「篇幅 / 分点 / 呼应题干 / 考点词」做结构体检 —— "
-           "评不了观点是否正确；要更准的评阅需在顶部接入自己的 API Key。")
+           "免费评分：有参考要点时按「结构体检 + 参考要点覆盖」给分，"
+           "没有参考要点就只做结构体检（篇幅 / 分点 / 呼应题干 / 考点词）—— "
+           "都评不了观点是否正确；要更准的评阅需在顶部接入自己的 API Key。")
     ui.label(tip).classes("t-xs").style("color:#9CA3AF")
 
 

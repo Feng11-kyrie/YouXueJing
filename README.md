@@ -401,6 +401,11 @@ PIL 认不出，要按 `/ColorSpace` 与 `/Width /Height /BitsPerComponent` 自�
   - 公开资料本身仍有 1–2 处分歧（如 2021 第 24 题 ABCD/BCD/ABD 三派并存），已在
     `scripts/zz_manual_answers.py` 注释里记录。
   - 因此政治解析不再标注「AI 生成（未经官方核验）」；题源抽取的解析仍标「题源」。
+  - **分析题（34–38）参考要点**：2026-10 起由服务端 LLM 补写
+    （`scripts/gen_zz_analysis_refs.py`），界面标注「AI 参考要点（非官方）」；
+    免费评分因此从纯结构体检升级为「结构体检 + 参考要点覆盖」，仍**不是阅卷分数**。
+  - **四科内容体检**：`scripts/audit_subjects.py` 统计题数/客观答案/解析/主观参考，
+    输出 `docs/audit_content.md`；`tests/test_free_score.py` 保证四科免费评分都能给出分数。
 - **考点掌握度数据不在此仓库**（属于运行时用户数据）。
 - 大纲各考点的「掌握 / 理解 / 了解」要求等级未包含——公开转载版大纲不含该信息。
 

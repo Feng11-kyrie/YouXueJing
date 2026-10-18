@@ -482,6 +482,55 @@ _STOP = set("的 了 和 与 及 或 是 在 对 从 到 为 以 使 让 则 若
             "问题 题目 考生 答案 分值 得分 给分 评分 应该 可以 需要 本题 如下 下列".split())
 
 
+def _split_points(ref):
+    """把参考要点按（1）（2）/1./换行切成条目，太短的丢弃。"""
+    parts = re.split(r"(?m)^\s*(?:[（(]\s*\d{1,2}\s*[)）]|\d{1,2}[.、])\s*",
+                     ref or "")
+    out = [p.strip() for p in parts if len(p.strip()) >= 15]
+    if len(out) < 2:
+        out = [p.strip() for p in re.split(r"[。；\n]", ref or "")
+               if len(p.strip()) >= 15]
+    return out[:8]
+
+
+def score_politics(answer, prompt="", reference="", full=10.0, need_words=150):
+    """
+    政治分析题的免费评分：**结构体检 + 参考要点覆盖**。
+
+    为什么不能只看结构：分析题按采分点给分，学生写满 300 字但没答到点上，
+    结构体检会给高分。有参考要点时（scripts/gen_zz_analysis_refs.py 生成，
+    界面标注「AI 参考要点（非官方）」），按要点逐条算 bigram 覆盖率，
+    折算 30% 的分数；没有参考要点就退回纯结构体检。
+
+    它仍然判断不了观点对不对 —— 界面必须写清楚。
+    """
+    base = score_generic(answer, prompt, reference, full, need_words)
+    if not reference or len((answer or "").strip()) < 10:
+        return base
+    pts = _split_points(reference)
+    if len(pts) < 2:
+        return base
+    covered = [p for p in pts if _recall(p, answer) >= 0.22]
+    cov = len(covered) / len(pts)
+    ratio = 0.70 * (base["分数"] / float(full)) + 0.30 * cov
+    score = round(full * ratio * 2) / 2
+    miss = [p for p in pts if p not in covered][:2]
+    problems = list(base.get("问题") or [])
+    if miss:
+        problems.append("参考要点里还有没答到的：" +
+                        "；".join(m[:28] + ("…" if len(m) > 28 else "") for m in miss))
+    problems.append("「参考要点覆盖」只比对关键词，判断不了观点是否正确")
+    return {
+        "分数": score, "满分": float(full),
+        "分项": (base.get("分项") or []) + [{
+            "项": "参考要点覆盖", "得分": round(full * 0.30 * cov, 1),
+            "满分": round(full * 0.30, 1),
+            "说明": f"命中 {len(covered)}/{len(pts)} 条要点"}],
+        "问题": problems,
+        "来源": "结构体检 + 参考要点覆盖（非官方）",
+    }
+
+
 def _cjk_bigrams(text):
     """中文 2-gram 集合（算"与参考答案的字面重合"，比整句比对宽容，能容忍改写）。"""
     grams = set()

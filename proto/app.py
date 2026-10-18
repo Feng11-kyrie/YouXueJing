@@ -1083,9 +1083,9 @@ def exam_zhengzhi(year: str = None, page: int = 1, user: str = "demo",
             ui.label("分析题（主观题，50 分）").classes("t-lead font-semibold")
             # 这里原来写的是"因此不做自动判分"，但下面明明就有免费评分面板 ——
             # 一句话自相矛盾，用户会以为政治分析题没有免费评分。改成如实说明。
-            ui.label("分析题也有免费评分：先自己写，再点「免费评分」拿到结构体检"
-                     "（篇幅 / 分点 / 呼应题干 / 考点词）；接入自己的 API Key 还能 AI 精评。"
-                     "两者都是参考，不等于阅卷分数。") \
+            ui.label("分析题也有免费评分：先自己写，再点「免费评分」拿到"
+                     "「结构体检 + 参考要点覆盖」；接入自己的 API Key 还能 AI 精评。"
+                     "参考要点由 AI 生成、非官方，两者都是参考，不等于阅卷分数。") \
                 .classes("t-sm").style("color:#6B7280")
             for it in ana:
                 with ui.card().classes("softcard w-full p-3 gap-1") \
@@ -1100,9 +1100,17 @@ def exam_zhengzhi(year: str = None, page: int = 1, user: str = "demo",
                     ui.label(it["题干"]).classes("text-[15px] leading-6 whitespace-pre-wrap")
                     # 用户要求：主观题也提供「默认免费评分 + 接 API Key 的 AI 精评」
                     from proto.cards_subj import subj_panel
+                    _ref = (zz.explanation(year, it["题号"]) or {}).get("文本") or ""
                     subj_panel(it, "ZZ", it.get("题干") or "",
                                it.get("材料") or "", float(it.get("分值") or 10),
-                               user, need_words=150, storage_key=it["id"])
+                               user, need_words=150, storage_key=it["id"],
+                               reference=_ref)
+                    if _ref:
+                        # 参考要点是 LLM 写的，必须标明非官方 —— 只作为自评参照
+                        with ui.expansion("参考要点（AI 生成，非官方）", value=False) \
+                                .classes("w-full"):
+                            ui.label(_ref).classes(
+                                "t-sm whitespace-pre-wrap leading-6")
 
 
 # ================================================================ 考研英语真题
