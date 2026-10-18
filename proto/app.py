@@ -1284,7 +1284,7 @@ def exam_math(tier: str = "一", year: str = None, view: str = "全部",
             ui.select(_po, value=point or "", label="按考点筛题", with_input=True,
                       on_change=lambda e: goto(point=e.value or None)) \
                 .props("dense outlined").classes("w-64")
-            ui.toggle(["全部", "未做"], value=view,
+            ui.toggle(["全部", "未做", "只错题"], value=view,
                       on_change=lambda e: goto(view=e.value)) \
                 .props("dense unelevated")
             ui.button("数学诊断", on_click=lambda: ui.navigate.to(
@@ -1298,6 +1298,10 @@ def exam_math(tier: str = "一", year: str = None, view: str = "全部",
 
         if view == "未做":
             shown = [q for q in qs if qid(q) not in done]
+        elif view == "只错题":
+            shown = [q for q in qs
+                     if (done.get(qid(q)) or {}).get("source") != "selfscore"
+                     and (done.get(qid(q)) or {}).get("is_correct") is False]
         else:
             shown = qs
 
@@ -1323,7 +1327,9 @@ def exam_math(tier: str = "一", year: str = None, view: str = "全部",
                     .classes("t-xs muted shrink-0")
 
         if not shown:
-            ui.label("筛选「未做」下没有题目 —— 这份卷子已经做完了。") \
+            ui.label("筛选「未做」下没有题目 —— 这份卷子已经做完了。"
+                     if view == "未做" else
+                     "这个筛选下没有题目 —— 这份卷子目前没有做错的题。") \
                 .classes("t-sm muted")
             return
 
@@ -1336,7 +1342,7 @@ def exam_math(tier: str = "一", year: str = None, view: str = "全部",
                     cur = head
                     ui.label(head).classes("t-body font-semibold mt-2") \
                         .style("color:var(--accent)")
-                math_card(q, tier, year, done, user)
+                math_card(q, tier, year, done, user, retry=(view == "只错题"))
 
 
 @ui.page("/exam/english")

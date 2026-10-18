@@ -85,9 +85,10 @@ def _same_answer(user, ref):
 
 
 # ---------------------------------------------------------------- 卡片
-def math_card(q, tier, year, done, user, source="practice"):
+def math_card(q, tier, year, done, user, source="practice", retry=False):
     qid = q_id(tier, year, q)
-    rec = done.get(qid)
+    # retry=True：错题重练时忽略历史作答，允许重新选/填/自评（新结果覆盖旧记录）
+    rec = None if retry else done.get(qid)
     full = math_data.q_score(q, year)
     kind = q.get("题型")
 
