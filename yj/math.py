@@ -109,3 +109,74 @@ def stats(tier, year):
     c = Counter(q.get("题型") for q in qs)
     return {"题数": len(qs), "选择题": c.get("单项选择题", 0),
             "填空题": c.get("填空题", 0), "解答题": c.get("解答题", 0)}
+
+
+# ---------------------------------------------------------------- 考点与诊断
+def points(tier):
+    """{考点: [题目...]}，只统计有考点标签的题。"""
+    out = {}
+    for y in years(tier):
+        for q in questions(tier, y):
+            kp = (q.get("考点") or "").strip()
+            if not kp:
+                continue
+            q = dict(q)
+            q["_year"] = y
+            out.setdefault(kp, []).append(q)
+    return out
+
+
+def point_list(tier):
+    """考点列表（按题量降序），供诊断覆盖与筛题用。"""
+    ps = points(tier)
+    return [{"考点": k, "题数": len(v)}
+            for k, v in sorted(ps.items(), key=lambda kv: (-len(kv[1]), kv[0]))]
+
+
+def diagnostic(tier, n=12):
+    """
+    组一套诊断卷：**每个考点抽一道选择题**，优先近年、优先没做过的。
+
+    为什么按考点而不是随机：诊断要能回答"哪块弱"，随机抽 12 道很可能
+    全落在同一章；按考点各抽一道，12 道题就是 12 个考点的探针。
+    """
+    ps = points(tier)
+    if not ps:
+        return []
+    items = []
+    for kp in sorted(ps):
+        choices = [q for q in ps[kp] if q.get("题型") == "单项选择题"]
+        if not choices:
+            continue
+        choices.sort(key=lambda q: (-int(q["_year"]), int(q["题号"])))
+        items.append((kp, choices[0]))
+    # 用题量做一点分层：题多的考点优先（更常考），但保证不同考点
+    items.sort(key=lambda kv: (-len(ps[kv[0]]), kv[0]))
+    return [{"考点": kp, "题目": q} for kp, q in items[:n]]
+
+
+def point_mastery(tier, answers):
+    """
+    按数学作答记录算考点掌握度。
+
+    answers: store.get_answers() 的 {id: {chosen,is_correct,source}}
+    只统计**客观题**（选择/填空）；解答题自评不计入正确率。
+    返回 [{考点, 作答, 答对, 正确率, 题数}]，按正确率升序。
+    """
+    ps = points(tier)
+    out = []
+    for kp, qs in ps.items():
+        done = ok = 0
+        for q in qs:
+            if q.get("题型") == "解答题":
+                continue
+            rec = answers.get(f"MATH-{tier}-{q['_year']}-{q['题号']}")
+            if not rec or rec.get("source") == "selfscore":
+                continue
+            done += 1
+            ok += 1 if rec.get("is_correct") else 0
+        out.append({"考点": kp, "作答": done, "答对": ok,
+                    "正确率": (ok / done) if done else None,
+                    "题数": len(qs)})
+    out.sort(key=lambda r: (r["正确率"] is None, r["正确率"] or 0, -r["作答"]))
+    return out

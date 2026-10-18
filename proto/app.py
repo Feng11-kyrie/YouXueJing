@@ -26,6 +26,7 @@ import argparse
 import contextlib
 import datetime
 import os
+import urllib.parse
 import sys
 from collections import Counter, defaultdict
 
@@ -361,9 +362,26 @@ def home(user: str = "demo"):
                                  f"数三 {len(math_data.years('三'))} 年"
                                  f"（数一/二 2010–2025，数三另含 2009）") \
                             .classes("t-xs muted")
-                        ui.button("进入数学",
-                                  on_click=lambda: ui.navigate.to(
-                                      f"/exam/math?user={user}")).props("unelevated")
+                        with ui.row().classes("items-center gap-2"):
+                            ui.button("进入数学",
+                                      on_click=lambda: ui.navigate.to(
+                                          f"/exam/math?user={user}")).props("unelevated")
+                            ui.button("数学诊断", on_click=lambda: ui.navigate.to(
+                                f"/diagnose?exam=MATH&tier=一&user={user}")) \
+                                .props("outline dense")
+                        _mw = []
+                        for _t in ("一", "二", "三"):
+                            if not math_data.years(_t):
+                                continue
+                            for _r in math_data.point_mastery(_t, a):
+                                if _r["作答"] and (_r["正确率"] or 0) < 0.6:
+                                    _mw.append((_t, _r))
+                        if _mw:
+                            _mw.sort(key=lambda x: x[1]["正确率"])
+                            _t, _r = _mw[0]
+                            ui.label(f'最该先补：数学{_t} · {_r["考点"]}'
+                                     f'（{_r["正确率"]:.0%}，{_r["答对"]}/{_r["作答"]}）') \
+                                .classes("t-xs").style("color:#B45309")
                     else:
                         from yj import zhengzhi as _zz
                         _ys = _zz.years()
@@ -1217,7 +1235,7 @@ def _math_tier_tabs(active_tier, user):
 
 @ui.page("/exam/math")
 def exam_math(tier: str = "一", year: str = None, view: str = "全部",
-              user: str = "demo"):
+              point: str = None, user: str = "demo"):
     """数学真题：按卷种 + 年份，逐题练习（选择/填空可判分，解答题看解析自评）。"""
     store.ensure_user(user)
     have = math_data.tiers_available()
@@ -1229,11 +1247,14 @@ def exam_math(tier: str = "一", year: str = None, view: str = "全部",
             ui.label("数学真题还没有入库。").classes("t-body sub")
         return
     year = str(year) if str(year) in ys else ys[-1]
-    qs = math_data.questions(tier, year)
+    all_qs = math_data.questions(tier, year)
+    pts = math_data.point_list(tier)
+    point = point if point in {p["考点"] for p in pts} else None
+    qs = [q for q in all_qs if not point or (q.get("考点") or "") == point]
     done = store.get_answers(user)
 
     def goto(**kw):
-        s = {"tier": tier, "year": year, "view": view, "user": user}
+        s = {"tier": tier, "year": year, "view": view, "point": point, "user": user}
         s.update(kw)
         s = {k: v for k, v in s.items() if v not in (None, "", 0)}
         ui.navigate.to("/exam/math?" + "&".join(f"{k}={v}" for k, v in s.items()))
@@ -1246,17 +1267,34 @@ def exam_math(tier: str = "一", year: str = None, view: str = "全部",
         _title(f"{year} 年{math_data.TIERS[tier]}真题")
 
         st = math_data.stats(tier, year)
-        ui.label(f'{st["题数"]} 题 · 150 分 · 选择 {st["选择题"]} / '
-                 f'填空 {st["填空题"]} / 解答 {st["解答题"]}') \
-            .classes("t-sm sub")
+        if point:
+            ui.label(f'只看考点「{point}」：{len(qs)} 题'
+                     f'（本卷共 {st["题数"]} 题）').classes("t-sm sub")
+        else:
+            ui.label(f'{st["题数"]} 题 · 150 分 · 选择 {st["选择题"]} / '
+                     f'填空 {st["填空题"]} / 解答 {st["解答题"]}') \
+                .classes("t-sm sub")
 
         with ui.row().classes("items-center gap-3 flex-wrap"):
             ui.select({y: f"{y} 年" for y in reversed(ys)}, value=year,
                       label="年份", on_change=lambda e: goto(year=str(e.value))) \
                 .props("dense outlined").classes("w-28")
+            _po = {"": "全部考点"}
+            _po.update({p["考点"]: p["考点"] for p in pts})
+            ui.select(_po, value=point or "", label="按考点筛题", with_input=True,
+                      on_change=lambda e: goto(point=e.value or None)) \
+                .props("dense outlined").classes("w-64")
             ui.toggle(["全部", "未做"], value=view,
                       on_change=lambda e: goto(view=e.value)) \
                 .props("dense unelevated")
+            ui.button("数学诊断", on_click=lambda: ui.navigate.to(
+                f"/diagnose?exam=MATH&tier={tier}&user={user}")) \
+                .props("outline dense")
+
+        if not qs:
+            ui.label("这一年没有该考点的题 —— 换个年份，或把「按考点筛题」清成全部。") \
+                .classes("t-body sub")
+            return
 
         if view == "未做":
             shown = [q for q in qs if qid(q) not in done]
@@ -1638,9 +1676,121 @@ def practice(exam: str = None, subject: str = None, chapter: str = None,
 
 
 # ================================================================ 快速诊断
+def _diag_subject_tabs(exam, user, tier="一"):
+    """诊断页的科目切换：408 / 数学（后续再加英语/政治）。"""
+    with ui.row().classes("items-center gap-2 flex-wrap"):
+        ui.button("408", on_click=lambda: ui.navigate.to(
+            f"/diagnose?exam=408&user={user}")) \
+            .props("unelevated" if exam == "408" else "flat dense")
+        ui.button("数学", on_click=lambda: ui.navigate.to(
+            f"/diagnose?exam=MATH&tier={tier}&user={user}")) \
+            .props("unelevated" if exam == "MATH" else "flat dense")
+
+
+def _math_diag_tier_tabs(tier, user):
+    with ui.row().classes("items-center gap-1 flex-wrap"):
+        for t in ("一", "二", "三"):
+            if t not in math_data.tiers_available():
+                continue
+            ui.button(f"数学{t}", on_click=lambda _=None, x=t: ui.navigate.to(
+                f"/diagnose?exam=MATH&tier={x}&user={user}")) \
+                .props("unelevated" if t == tier else "flat dense")
+
+
+def _diagnose_math(user, tier, view):
+    """数学诊断：按考点各抽一道选择题 → 交卷后给考点掌握度与薄弱 Top。"""
+    if tier not in math_data.tiers_available():
+        tier = (math_data.tiers_available() or ["一"])[0]
+    items = math_data.diagnostic(tier, 12)
+    got = store.get_answers(user)
+
+    def qid(it):
+        q = it["题目"]
+        return f"MATH-{tier}-{q['_year']}-{q['题号']}"
+
+    done_n = sum(1 for it in items if qid(it) in got)
+    with shell("/diagnose", user):
+        _title("快速诊断")
+        _diag_subject_tabs("MATH", user, tier)
+        _math_diag_tier_tabs(tier, user)
+
+        if not items:
+            ui.label(f"数学{tier}还没有带考点的题目，暂时不能诊断。").classes("t-body sub")
+            return
+
+        ui.label(f"数学{tier}　·　{len(items)} 题　·　覆盖 {len(items)} 个考点　"
+                 f"·　约 10 分钟") \
+            .classes("t-body font-semibold")
+        ui.label("每个考点抽一道题，做的是「哪块弱」的探针；不做的题不计入掌握度。") \
+            .classes("t-sm sub")
+
+        if view == "result":
+            _math_diag_result(user, tier)
+            ui.separator().style("border-color:var(--line)")
+            ui.label("诊断卷（可继续作答，作答后点上面的「查看诊断结果」刷新）") \
+                .classes("t-sm muted")
+        else:
+            ui.linear_progress(value=done_n / len(items), show_value=False).classes("w-full")
+            ui.label(f"进度 {done_n}/{len(items)}") .classes("t-sm muted")
+            ui.button("查看诊断结果", on_click=lambda: ui.navigate.to(
+                f"/diagnose?exam=MATH&tier={tier}&view=result&user={user}")) \
+                .props("unelevated")
+
+        for it in items:
+            q = dict(it["题目"])
+            ui.label(f'考点：{it["考点"]}').classes("t-xs muted")
+            math_card(q, tier, q["_year"], got, user, source="diagnostic")
+
+        if view != "result":
+            ui.button("查看诊断结果", on_click=lambda: ui.navigate.to(
+                f"/diagnose?exam=MATH&tier={tier}&view=result&user={user}")) \
+                .props("unelevated")
+
+
+def _math_diag_result(user, tier):
+    got = store.get_answers(user)
+    ms = math_data.point_mastery(tier, got)
+    tried = [r for r in ms if r["作答"]]
+    weak = [r for r in tried if (r["正确率"] or 0) < 0.6]
+    ui.label("诊断结果").classes("text-xl font-bold mt-2")
+    if not tried:
+        ui.label("还没有作答记录 —— 先在下面的诊断卷里做几题。").classes("t-body sub")
+        return
+    ui.label(f"已测 {len(tried)} 个考点 · 薄弱 {len(weak)} 个").classes("t-sm sub")
+    for r in tried[:16]:
+        rate = r["正确率"] or 0
+        with ui.row().classes("items-center gap-2 w-full no-wrap"):
+            ui.label(r["考点"]).classes("t-sm").style("width:13rem")
+            ui.label(f'{r["答对"]}/{r["作答"]}').classes("t-xs muted") \
+                .style("width:3rem")
+            ui.linear_progress(value=rate, show_value=False).classes("flex-1")
+            ui.label(f"{rate:.0%}").classes("t-xs muted").style("width:2.5rem")
+    if weak:
+        ui.label("薄弱考点 Top 5").classes("t-body font-semibold mt-2") \
+            .style("color:#B45309")
+        for r in weak[:5]:
+            rate = r["正确率"] or 0
+            with ui.row().classes("items-center gap-2 flex-wrap"):
+                ui.label(f'{r["考点"]}（{rate:.0%}，{r["答对"]}/{r["作答"]}）') \
+                    .classes("t-sm")
+                ui.button("练这个考点", on_click=lambda _=None, p=r["考点"]:
+                          ui.navigate.to(
+                              "/exam/math?tier=" + urllib.parse.quote(tier) +
+                              "&point=" + urllib.parse.quote(p))) \
+                    .props("outline dense")
+    else:
+        ui.label("暂时没有低于 60% 的考点 —— 继续做真题保持手感。") \
+            .classes("t-sm").style("color:#1B5E36")
+
+
 @ui.page("/diagnose")
-def diagnose_page(user: str = "demo"):
+def diagnose_page(user: str = "demo", exam: str = "408", tier: str = "一",
+                  view: str = "quiz"):
     store.ensure_user(user)
+    if exam == "MATH":
+        _diagnose_math(user, tier, view)
+        return
+
     got = store.get_answers(user)
     paper = data.diagnostic()["题目"]
     qs = data.questions()
@@ -1648,6 +1798,7 @@ def diagnose_page(user: str = "demo"):
 
     with shell("/diagnose", user):
         _title("快速诊断（可选）")
+        _diag_subject_tabs("408", user)
         ui.label("32 道题　·　约 20-25 分钟　·　覆盖 408 全部 24 章") \
             .classes("t-body font-semibold")
         # 文案要跟界面一致：这里已经不展示"掌握度百分比"了，
@@ -1749,6 +1900,42 @@ def profile_page(user: str = "demo"):
                         ui.label("未测").classes("t-sm muted") \
                             .style("white-space:nowrap")
 
+        # ---------------- 数学：考点作答记录（408 之外的第二科）
+        math_ans = {k: v for k, v in a.items() if k.startswith("MATH-")}
+        ui.separator()
+        ui.label("数学 · 考点作答记录").classes("t-lead font-semibold")
+        if not math_ans:
+            ui.label("还没做数学诊断 —— 做 12 道按考点抽的题，就能看到哪几个考点弱。") \
+                .classes("t-sm muted")
+            ui.button("去数学诊断", on_click=lambda: ui.navigate.to(
+                f"/diagnose?exam=MATH&tier=一&user={user}")).props("outline dense")
+        else:
+            for t in ("一", "二", "三"):
+                if not math_data.years(t):
+                    continue
+                ms = [r for r in math_data.point_mastery(t, a) if r["作答"]]
+                if not ms:
+                    continue
+                ui.label(f"数学{t} · 已测 {len(ms)} 个考点").classes("t-sm font-semibold")
+                for r in ms[:5]:
+                    with ui.row().classes("items-center gap-3 w-full no-wrap"):
+                        ui.label(r["考点"]).classes("t-sm flex-1 truncate")
+                        ui.label(f'答对 {r["答对"]} / {r["作答"]} 题') \
+                            .classes("t-sm").style("white-space:nowrap")
+                weak = [r for r in ms if (r["正确率"] or 0) < 0.6][:3]
+                if weak:
+                    with ui.row().classes("items-center gap-2 flex-wrap"):
+                        ui.label("最该先补：").classes("t-xs muted")
+                        for r in weak:
+                            ui.button(f'{r["考点"]}（{r["正确率"]:.0%}）',
+                                      on_click=lambda _=None, p=r["考点"], t=t:
+                                      ui.navigate.to(
+                                          "/exam/math?tier=" + urllib.parse.quote(t) +
+                                          "&point=" + urllib.parse.quote(p))) \
+                                .props("flat dense")
+            ui.button("去数学诊断", on_click=lambda: ui.navigate.to(
+                f"/diagnose?exam=MATH&tier=一&user={user}")).props("outline dense")
+
         if prof["薄弱章节"]:
             ui.separator()
             ui.label("最该先补的章节").classes("t-lead font-semibold")
@@ -1799,9 +1986,44 @@ def notes_page(user: str = "demo"):
             ui.label("⚠ 未配置 LLM —— 生成的内容会是「用真实数据填的模板」，"
                      "不是 AI 写的。") \
                 .classes("t-sm").style("color:#8A6D3B")
-        if not a and not mk:
+        _math_ans = {k: v for k, v in a.items() if k.startswith("MATH-")}
+        if not a and not mk and not _math_ans:
             ui.label("还没有数据。先到「挑考点练习」勾选薄弱知识点。") \
                 .classes("t-sm").style("color:#8A6D3B")
+            return
+
+        # ---------------- 数学：薄弱考点（不生成讲义，直接给筛好的真题）
+        if _math_ans:
+            ui.separator().style("border-color:var(--line)")
+            ui.label("数学 · 薄弱考点").classes("t-lead font-semibold")
+            ui.label("按你数学作答的正确率排；点「练这个考点」直接筛出该考点的真题。") \
+                .classes("t-sm muted")
+            _rows = []
+            for _t in ("一", "二", "三"):
+                if not math_data.years(_t):
+                    continue
+                for _r in math_data.point_mastery(_t, a):
+                    if _r["作答"] and (_r["正确率"] or 0) < 0.6:
+                        _rows.append((_t, _r))
+            _rows.sort(key=lambda x: x[1]["正确率"])
+            if not _rows:
+                ui.label("数学暂时没有低于 60% 的考点 —— 保持手感。") \
+                    .classes("t-sm").style("color:#1B5E36")
+            for _t, _r in _rows[:5]:
+                with ui.row().classes("items-center gap-2 flex-wrap"):
+                    ui.label(f'数学{_t} · {_r["考点"]}（{_r["正确率"]:.0%}，'
+                             f'{_r["答对"]}/{_r["作答"]}）').classes("t-sm")
+                    ui.button("练这个考点", on_click=lambda _=None, t=_t, p=_r["考点"]:
+                              ui.navigate.to(
+                                  "/exam/math?tier=" + urllib.parse.quote(t) +
+                                  "&point=" + urllib.parse.quote(p))) \
+                        .props("outline dense")
+
+        # 没有 408 作答/自报时，只展示上面的数学薄弱点，不跑 408 的讲义生成；
+        # 否则会拿空数据跑一条 LLM 链路，页面上却没有可讲的内容。
+        _a408 = {k: v for k, v in a.items()
+                 if not k.startswith(("MATH-", "EN1-", "EN2-", "ZZ-"))}
+        if not _a408 and not mk:
             return
 
         # 不再让用户选路径（三条路径高度重合、还得用户自己判断，用户已否掉这个

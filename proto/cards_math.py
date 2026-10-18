@@ -85,7 +85,7 @@ def _same_answer(user, ref):
 
 
 # ---------------------------------------------------------------- 卡片
-def math_card(q, tier, year, done, user):
+def math_card(q, tier, year, done, user, source="practice"):
     qid = q_id(tier, year, q)
     rec = done.get(qid)
     full = math_data.q_score(q, year)
@@ -98,6 +98,7 @@ def math_card(q, tier, year, done, user):
         with ui.row().classes("items-center gap-2 no-wrap"):
             ui.label(f'第 {q["题号"]} 题').classes("t-lead font-semibold")
             ui.label(f'{kind} · {full:g} 分').classes("t-xs muted")
+            ui.label(f'{year} 年').classes("t-xs muted")
             if rec:
                 if rec.get("source") == "selfscore":
                     ui.label("已自评").classes("t-xs").style("color:#17418F")
@@ -147,7 +148,7 @@ def math_card(q, tier, year, done, user):
                 if not chosen["v"]:
                     return
                 ok = chosen["v"] == (q.get("答案") or "")
-                store.record_answer(user, qid, chosen["v"], ok, source="practice")
+                store.record_answer(user, qid, chosen["v"], ok, source=source)
                 for L, box in boxes.items():
                     if L == q.get("答案"):
                         box.classes(add="opt right")
@@ -181,12 +182,12 @@ def math_card(q, tier, year, done, user):
                     ui.notify("先填写答案", color="warning")
                     return
                 ok = _same_answer(val, ref)
-                store.record_answer(user, qid, val, ok, source="practice")
+                store.record_answer(user, qid, val, ok, source=source)
                 show_fill(val, ok)
 
             def self_judge(ok):
                 store.record_answer(user, qid, (inp.value or "").strip() or "（手判）",
-                                    ok, source="practice")
+                                    ok, source=source)
                 show_fill(inp.value or "", ok, decided=True)
 
             def show_fill(val, ok, decided=False):
