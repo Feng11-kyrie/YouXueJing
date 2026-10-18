@@ -36,7 +36,7 @@ SUBJECT_COLORS = {
 }
 
 
-def question_card(q, year, done, user, exam="408"):
+def question_card(q, year, done, user, exam="408", reveal=True):
     """
     渲染一道题：整行可点的选项 + 即时判分。
 
@@ -102,7 +102,7 @@ def question_card(q, year, done, user, exam="408"):
             ans = str(q.get("答案") or "")
             for k, row in rows.items():
                 row.classes(remove="sel right wrong")
-                if locked["v"]:
+                if locked["v"] and reveal:
                     # 已提交：正确项标绿；选错的部分标红
                     if multi:
                         if k in ans:
@@ -221,6 +221,9 @@ def question_card(q, year, done, user, exam="408"):
                 locked["v"] = True
                 paint()
                 submit.set_enabled(False)
+                if not reveal:
+                    result.set_text("已记录，诊断结束后统一看结果")
+                    return
                 if ok:
                     result.set_text(f'答对了 ✓　正确答案 {q["答案"]}')
                     result.style("color:#1B5E36")
@@ -239,10 +242,13 @@ def question_card(q, year, done, user, exam="408"):
 
         paint()
         if prev:
-            result.set_text(f'已作答：你选 {prev["chosen"]}，'
-                            f'正确答案 {q["答案"]}')
-            result.style(f'color:{"#1B5E36" if prev["is_correct"] else "#8C2C2C"}')
-            show_explanation()
+            if reveal:
+                result.set_text(f'已作答：你选 {prev["chosen"]}，'
+                                f'正确答案 {q["答案"]}')
+                result.style(f'color:{"#1B5E36" if prev["is_correct"] else "#8C2C2C"}')
+                show_explanation()
+            else:
+                result.set_text("已作答（诊断结束后统一看结果）")
 
 
 def _comprehensive_block(q, year, user):

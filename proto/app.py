@@ -1863,7 +1863,8 @@ def _diagnose_math(user, tier, view):
         for it in items:
             q = dict(it["题目"])
             ui.label(f'考点：{it["考点"]}').classes("t-xs muted")
-            math_card(q, tier, q["_year"], got, user, source="diagnostic")
+            math_card(q, tier, q["_year"], got, user, source="diagnostic",
+                      reveal=(view == "result"))
 
         if view != "result":
             ui.button("查看诊断结果", on_click=lambda: ui.navigate.to(
@@ -1944,11 +1945,11 @@ def _diagnose_eng(user, tier, view):
         for ps in diag["篇目"]:
             code = ps.get("部分")
             if code == "CLOZE":
-                cloze_card(ps, y, tier, got, user)
+                cloze_card(ps, y, tier, got, user, reveal=(view == "result"))
             elif code == "READ":
-                passage_card(ps, y, tier, got, user)
+                passage_card(ps, y, tier, got, user, reveal=(view == "result"))
             elif code == "NEW":
-                partb_block(ps, y, tier, got, user)
+                partb_block(ps, y, tier, got, user, reveal=(view == "result"))
         if view != "result":
             ui.button("查看诊断结果", on_click=lambda: ui.navigate.to(
                 f"/diagnose?exam=ENG&tier={tier}&view=result&user={user}")) \
@@ -2016,7 +2017,8 @@ def _diagnose_zz(user, view):
             q["id"] = f"ZZ-{it['year']}-{q['题号']}"
             ui.label(f'{zz.PART_SHORT.get(q.get("部分"), "")} · {it["year"]} 年') \
                 .classes("t-xs muted")
-            question_card(q, it["year"], got, user, exam="ZZ")
+            question_card(q, it["year"], got, user, exam="ZZ",
+                          reveal=(view == "result"))
         if view != "result":
             ui.button("查看诊断结果", on_click=lambda: ui.navigate.to(
                 f"/diagnose?exam=ZZ&view=result&user={user}")).props("unelevated")

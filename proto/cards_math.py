@@ -85,7 +85,8 @@ def _same_answer(user, ref):
 
 
 # ---------------------------------------------------------------- 卡片
-def math_card(q, tier, year, done, user, source="practice", retry=False):
+def math_card(q, tier, year, done, user, source="practice", retry=False,
+              reveal=True):
     qid = q_id(tier, year, q)
     # retry=True：错题重练时忽略历史作答，允许重新选/填/自评（新结果覆盖旧记录）
     rec = None if retry else done.get(qid)
@@ -150,6 +151,11 @@ def math_card(q, tier, year, done, user, source="practice", retry=False):
                     return
                 ok = chosen["v"] == (q.get("答案") or "")
                 store.record_answer(user, qid, chosen["v"], ok, source=source)
+                if not reveal:
+                    out.clear()
+                    with out:
+                        ui.label("已记录，诊断结束后统一看结果").classes("t-xs muted")
+                    return
                 for L, box in boxes.items():
                     if L == q.get("答案"):
                         box.classes(add="opt right")
@@ -276,8 +282,13 @@ def math_card(q, tier, year, done, user, source="practice", retry=False):
                           on_click=lambda: run_ai(ans.value, score_holder, q, full, user, qid)) \
                     .props("outline dense")
 
+        # 诊断模式：只显示"已作答"，不展示答案与解析
+        if rec and not reveal:
+            out.clear()
+            with out:
+                ui.label("已作答（诊断结束后统一看结果）").classes("t-xs muted")
         # 已有记录：直接把解析亮出来
-        if rec:
+        elif rec:
             out.clear()
             with out:
                 if kind == "解答题" and str(rec.get("chosen", "")).startswith("score:"):

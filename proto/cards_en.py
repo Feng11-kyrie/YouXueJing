@@ -45,14 +45,14 @@ _CLOZE_JUMP = {}
 WRONG = "#8C2C2C"
 
 
-def _opt_row(q, letter, text, chosen, multi, locked, on_pick):
+def _opt_row(q, letter, text, chosen, multi, locked, on_pick, reveal=True):
     """一行选项。整行可点（与 question_card 的行为一致）。"""
     sel = letter in chosen["v"] if multi else chosen["v"] == letter
     cls = "opt w-full items-center gap-2 rounded-lg px-3 py-1 cursor-pointer"
     row = ui.row().classes(cls)
     if sel:
         row.style("background:#EAF2FB")
-    if locked:
+    if locked and reveal:
         ans = (q.get("_ans") or "")
         if letter in ans:
             row.style("background:#E8F5E9")
@@ -80,7 +80,7 @@ def answer_of(q, tier, year):
     return str((e or {}).get("答案") or "")
 
 
-def _sub_question(q, year, tier, done, user):
+def _sub_question(q, year, tier, done, user, reveal=True):
     """
     一道小题（阅读 21–40 / 新题型 41–45 用）。
     与政治/408 的题卡行为一致：可点选项、即时判分、提交后显示答案与解析。
@@ -129,7 +129,8 @@ def _sub_question(q, year, tier, done, user):
             opts_box.clear()
             with opts_box:
                 for L, T in sorted((q.get("选项") or {}).items()):
-                    _opt_row(q, L, T, chosen, False, locked["v"], pick)
+                    _opt_row(q, L, T, chosen, False, locked["v"], pick,
+                             reveal=reveal)
 
         def pick(letter):
             if locked["v"]:
@@ -150,6 +151,9 @@ def _sub_question(q, year, tier, done, user):
             locked["v"] = True
             paint()
             submit_btn.set_enabled(False)
+            if not reveal:
+                result.set_text("已记录，诊断结束后统一看结果")
+                return
             if ok:
                 result.set_text(f'答对了 ✓　正确答案 {ans}')
                 result.style(f"color:{CORRECT}")
@@ -165,15 +169,18 @@ def _sub_question(q, year, tier, done, user):
         if prev:
             chosen["v"] = prev.get("chosen") or ""
             paint()
-            if ans:
-                result.set_text(f'已作答：你选 {prev["chosen"]}，'
-                                f'正确答案 {ans}')
-                result.style(f'color:{CORRECT if prev["is_correct"] else WRONG}')
-            show_explanation()
+            if not reveal:
+                result.set_text("已作答（诊断结束后统一看结果）")
+            else:
+                if ans:
+                    result.set_text(f'已作答：你选 {prev["chosen"]}，'
+                                    f'正确答案 {ans}')
+                    result.style(f'color:{CORRECT if prev["is_correct"] else WRONG}')
+                show_explanation()
 
 
 def passage_card(passage, year, tier, done, user, compact_material=True,
-                 material_only=False):
+                 material_only=False, reveal=True):
     """
     渲染一个**篇目**：材料区 + 小题区。
 
@@ -205,7 +212,7 @@ def passage_card(passage, year, tier, done, user, compact_material=True,
     if material_only:
         return
     for q in subs:
-        _sub_question(q, year, tier, done, user)
+        _sub_question(q, year, tier, done, user, reveal=reveal)
 
 
 # ---------------------------------------------------------------------------
@@ -274,7 +281,7 @@ def _split_cloze(text, lo=1, hi=20):
     return parts, nums
 
 
-def cloze_card(passage, year, tier, done, user):
+def cloze_card(passage, year, tier, done, user, reveal=True):
     """
     完形填空：**左文章（空可点）/ 右题目（每 5 空一组翻页）**。
 
@@ -375,8 +382,11 @@ def cloze_card(passage, year, tier, done, user):
             picked[n] = L
             paint_slots()
             render_page()
-            ui.notify("答对了 ✓" if ok else f'答错了 ✗ 正确答案 {ans}',
-                      color=("positive" if ok else "negative"))
+            if reveal:
+                ui.notify("答对了 ✓" if ok else f'答错了 ✗ 正确答案 {ans}',
+                          color=("positive" if ok else "negative"))
+            else:
+                ui.notify("已记录", color="info")
 
         def jump(n):
             """点左侧的空 → 右侧切到它那一组，并高亮该空。"""
@@ -430,7 +440,7 @@ def cloze_card(passage, year, tier, done, user):
                     with _qc:
                         with ui.row().classes("items-center gap-2"):
                             ui.label(f'第 {n} 空').classes("font-semibold")
-                            if ans and cur:
+                            if ans and cur and reveal:
                                 ok = (cur == ans)
                                 ui.label(("答对了 ✓" if ok
                                           else f'答错了 ✗ 你选 {cur}')
@@ -446,7 +456,7 @@ def cloze_card(passage, year, tier, done, user):
                                 "px-2 py-0 cursor-pointer")
                             if cur == L:
                                 row.style("background:#EAF2FB")
-                            if ans and cur:
+                            if ans and cur and reveal:
                                 if L == ans:
                                     row.style("background:#E8F5E9")
                                 elif cur == L:
@@ -458,7 +468,7 @@ def cloze_card(passage, year, tier, done, user):
                             if not (ans and cur):
                                 row.on("click", lambda _=None, L=L, n=n:
                                        commit(n, L))
-                        if ans and cur:
+                        if ans and cur and reveal:
                             e = en.explanation(tier, year, q["题号"])
                             if e and e.get("解析"):
                                 ui.label(e["解析"][:300]).classes(
@@ -770,7 +780,7 @@ def two_col(passage, year, tier, done, user, left=None):
         # 右栏：小题
         with ui.column().classes("w-full gap-2 min-w-0"):
             for q in subs:
-                _sub_question(q, year, tier, done, user)
+                _sub_question(q, year, tier, done, user, reveal=reveal)
 
 
 # ---------------------------------------------------------------------------
@@ -978,7 +988,7 @@ def score_report(tier, year, user):
 # ---------------------------------------------------------------------------
 # 新题型 Part B：句子库只显示一次
 # ---------------------------------------------------------------------------
-def partb_block(passage, year, tier, done, user):
+def partb_block(passage, year, tier, done, user, reveal=True):
     """
     新题型：**左材料+句子库（只显示一次）/ 右 41–45 作答位**。
 
@@ -1025,10 +1035,10 @@ def partb_block(passage, year, tier, done, user):
         right = ui.column().classes("w-full gap-2 min-w-0")
         with right:
             for q in subs:
-                _partb_row(q, year, tier, done, user)
+                _partb_row(q, year, tier, done, user, reveal=reveal)
 
 
-def _partb_row(q, year, tier, done, user):
+def _partb_row(q, year, tier, done, user, reveal=True):
     """
     一道 Part B 题：**只给 A–G 字母按钮**，不再重复句子文本。
 
@@ -1071,7 +1081,7 @@ def _partb_row(q, year, tier, done, user):
                     b = ui.button(L, on_click=lambda _=None, L=L: pick(L))
                     b.props("unelevated" if on else "flat dense")
                     b.style("min-width:2.1rem")
-                    if locked["v"] and ans:
+                    if locked["v"] and ans and reveal:
                         if L == ans:
                             b.style("background:#E8F5E9")
                         elif on and L != ans:
@@ -1095,6 +1105,9 @@ def _partb_row(q, year, tier, done, user):
             locked["v"] = True
             paint()
             submit_btn.set_enabled(False)
+            if not reveal:
+                result.set_text("已记录，诊断结束后统一看结果")
+                return
             result.set_text(("答对了 ✓" if ok else f'答错了 ✗ 你选 {chosen["v"]}')
                             + f'　正确答案 {ans}')
             result.style(f'color:{"#1B5E36" if ok else "#8C2C2C"}')
@@ -1115,10 +1128,13 @@ def _partb_row(q, year, tier, done, user):
 
         paint()
         if prev:
-            if ans:
-                result.set_text(f'已作答：{prev["chosen"]}　正确答案 {ans}')
-                result.style(f'color:{"#1B5E36" if prev.get("is_correct") else "#8C2C2C"}')
-            show_exp()
+            if not reveal:
+                result.set_text("已作答（诊断结束后统一看结果）")
+            else:
+                if ans:
+                    result.set_text(f'已作答：{prev["chosen"]}　正确答案 {ans}')
+                    result.style(f'color:{"#1B5E36" if prev.get("is_correct") else "#8C2C2C"}')
+                show_exp()
 
 
 def subjective_two_col(passage, year, tier, done, user):
