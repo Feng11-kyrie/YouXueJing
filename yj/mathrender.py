@@ -1,39 +1,28 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-数学题干/解析的渲染：把 Markdown 里的 LaTeX 公式转成 **MathML**。
+数学题干/解析的渲染：**保留 LaTeX，交给前端 KaTeX**。
 
-为什么用 MathML 而不是 KaTeX
----------------------------
-NiceGUI 的 markdown 不渲染 LaTeX；引 KaTeX 要额外加载 JS/CSS 并在每次内容
-更新后手动 re-render。MathML 是浏览器原生支持的（Chrome 109+ / Safari），
-服务端用 latex2mathml 转好直接塞进 HTML 即可 —— 无 JS、无 CDN、离线可用。
+为什么换掉 MathML
+-----------------
+之前用 latex2mathml 在服务端转 MathML。它对 aligned / 矩阵 / 行列式的排版很差：
+`\\begin{array}` 的行列对不齐、`&` 会当普通字符、缺 `\\end{array}` 直接报错退回
+原始 LaTeX（2025 数一第 5 题实测）。数学题里 these 恰恰是最常见的结构。
+现在改成：服务端只做**坏 LaTeX 修补 + HTML 转义**，保留 $...$ / $$...$$，
+浏览器加载本地 KaTeX（static/katex，离线可用）统一渲染。
 
-代价：排版不如 KaTeX 精致；latex2mathml 对极少数宏不支持，遇到就退回原样文本
-（不能让一个公式把整道题渲染挂掉）。
+KaTeX 不支持的少数写法在这里修：
+  · OCR 丢掉的 \\end{array} / \\right  —— 自动补齐
+  · \\xlongequal{...}                  —— 改成 \\overset{...}{=}
 """
 import html
 import re
-
-import latex2mathml.converter as _l2m
-
-# 行内 $...$ 与行间 $$...$$
-_MATH = re.compile(r"\$\$(.+?)\$\$|\$(.+?)\$", re.S)
-
 
 _CIRCLED = {str(i): chr(0x2460 + i - 1) for i in range(1, 10)}
 
 
 def _repair_arrays(tex):
-    """
-    修 OCR 丢掉的 \\end{array}：源数据里出现过
-    `\\left| \\begin{array}{ccc} ... \\right|`（没有 end），
-    latex2mathml 会直接报错、整块退回原始 LaTeX。
-
-    做法：每个 \\begin{array} 找它后面最近的 \\end{array} 与 \\right；
-    如果 \\right 先到，就在 \\right 前补一个 \\end{array}。
-    只补"确实缺 end"的数组，不动合法的嵌套。
-    """
+    """补 OCR 丢掉的 \\end{array}（\\right 先到就补在它前面）。"""
     for _ in range(20):
         i = tex.find("\\begin{array}")
         fixed = False
@@ -50,9 +39,8 @@ def _repair_arrays(tex):
     return tex
 
 
-
 def _repair_delims(tex):
-    """补齐 OCR 丢掉的 \\right)：只处理"\\left 多于 \\right"的情况。"""
+    """补齐 OCR 丢掉的 \\right（仅处理 left 多于 right 的情况）。"""
     stack, i = [], 0
     pairs = {"(": ")", "[": "]", "\\{": "\\}", "|": "|", ".": "."}
     while i < len(tex):
@@ -72,10 +60,7 @@ def _repair_delims(tex):
             j = i + 6
             while j < len(tex) and tex[j] == " ":
                 j += 1
-            if tex.startswith("\\}", j):
-                j += 2
-            else:
-                j += 1
+            j += 2 if tex.startswith("\\}", j) else 1
             if stack:
                 stack.pop()
             i = j
@@ -86,100 +71,72 @@ def _repair_delims(tex):
     return tex
 
 
-def _split_top(s):
-    """按顶层 \\\\ 切分 aligned 行；array/matrix 内部的 \\\\ 不算。"""
-    out, buf, depth, i = [], [], 0, 0
-    while i < len(s):
-        if s.startswith("\\begin{", i):
-            depth += 1
-        elif s.startswith("\\end{", i):
-            depth = max(0, depth - 1)
-        if depth == 0 and s.startswith("\\\\", i):
-            out.append("".join(buf))
-            buf = []
-            i += 2
+def _strip_xlongequal(tex):
+    """把 \\xlongequal{...}（参数里带嵌套花括号）整体换成 =。"""
+    out, i = [], 0
+    while i < len(tex):
+        if tex.startswith("\\xlongequal", i):
+            j = i + len("\\xlongequal")
+            while j < len(tex) and tex[j].isspace():
+                j += 1
+            if j < len(tex) and tex[j] == "{":
+                depth = 0
+                while j < len(tex):
+                    if tex[j] == "{":
+                        depth += 1
+                    elif tex[j] == "}":
+                        depth -= 1
+                        if depth == 0:
+                            j += 1
+                            break
+                    j += 1
+            out.append("=")
+            i = j
             continue
-        buf.append(s[i])
+        out.append(tex[i])
         i += 1
-    out.append("".join(buf))
-    return out
+    return "".join(out)
 
 
-def _aligned_lines(tex):
-    """把 aligned 拆成逐行公式 —— latex2mathml 对 & 对齐支持不好。"""
-    tex = _repair_arrays(tex)
-    m = re.search(r"\\begin\{aligned\}(.*?)\\end\{aligned\}", tex, re.S)
-    if not m:
-        return None
-    body = re.sub(r"\\xlongequal\s*\{[^{}]*\}", "=", m.group(1))
-    lines = []
-    for line in _split_top(body):
-        line = _repair_delims(line.replace("&", "").strip())
-        if line:
-            lines.append(line)
-    return lines or None
-
-
-def _mathml(tex, display=False):
-    # latex2mathml 不认 \textcircled{1}，先换成 ①（数学一 2024 第 7 题会用到）
+def _clean(tex):
     tex = re.sub(r"\\textcircled\s*\{\s*(\d)\s*\}",
                  lambda m: _CIRCLED.get(m.group(1), m.group(0)), tex)
-    lines = _aligned_lines(tex)
-    if lines:
-        return "<br>".join(_mathml_single(l, display=True) for l in lines)
-    return _mathml_single(tex, display)
+    tex = _strip_xlongequal(tex)
+    tex = _repair_arrays(tex)
+    tex = _repair_delims(tex)
+    return tex
 
 
-def _mathml_single(tex, display=False):
-    # \xlongequal{...} 是"恒等变形"标注，MathML 不认识；降级成 =
-    tex = re.sub(r"\\xlongequal\s*\{[^{}]*\}", "=", tex)
-    try:
-        out = _l2m.convert(tex.strip())
-    except Exception:                                       # noqa: BLE001
-        return "<code>" + html.escape("$" + tex.strip() + "$") + "</code>"
-    if display and "<math" in out:
-        out = out.replace('<math xmlns="http://www.w3.org/1998/Math/MathML"',
-                          '<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"')
-    return out
+def _balance_dollars(text):
+    """奇数个 $ 时把最后一个转义掉，避免它把后面的正文吞进公式。"""
+    if text.count("$") % 2:
+        i = text.rfind("$")
+        text = text[:i] + "\\$" + text[i + 1:]
+    return text
 
 
-def to_html(text, display=False):
-    """
-    把一段含 LaTeX 的文本转成可放进 ui.html 的 HTML。
-
-    安全：先做 html.escape，再把公式占位替换成 MathML —— 公式以外的内容
-    不会被当成标签执行。
-    """
-    text = str(text or "")
-    if not text:
-        return ""
-    parts = []
-    pos = 0
-    for m in _MATH.finditer(text):
-        parts.append(html.escape(text[pos:m.start()]))
-        if m.group(1) is not None:
-            parts.append(_mathml(m.group(1), display=True))
-        else:
-            parts.append(_mathml(m.group(2), display=display))
-        pos = m.end()
-    parts.append(html.escape(text[pos:]))
-    out = "".join(parts)
-
-    # 公式外的 Markdown 转义（\_ 表示下划线）与换行
-    out = out.replace("\\_", "_").replace("\\\\", "\\")
-    out = out.replace("\r\n", "\n")
-    out = re.sub(r"\n{2,}", "</p><p>", out)
-    out = out.replace("\n", "<br>")
+def _wrap(text):
+    out = html.escape(_balance_dollars(_clean(str(text or ""))))
+    out = out.replace("\\_", "_")
+    # 数学块内的换行压成空格，避免 KaTeX 把换行当公式内容
+    out = re.sub(r"\$\$.+?\$\$|\$.+?\$",
+                 lambda m: m.group(0).replace("\n", " "), out, flags=re.S)
+    out = re.sub(r"\n{2,}", "</p><p>", out).replace("\n", "<br>")
     return f'<div class="mathbody"><p>{out}</p></div>'
 
 
+def to_html(text, display=False):
+    """保留 $...$ / $$...$$ 的 HTML；公式由前端 KaTeX 渲染。"""
+    return _wrap(text)
+
+
 def _inline(line):
-    h = to_html(line)
+    h = _wrap(line)
     return re.sub(r'^<div class="mathbody"><p>|</p></div>$', "", h)
 
 
 def note_html(text):
-    """速记的轻量 Markdown：只认 ## 标题、- 列表，其余按段落 + 公式渲染。"""
+    """速记的轻量 Markdown：只认 ## 标题、- 列表，其余按段落。"""
     out = []
     for raw in str(text or "").splitlines():
         s = raw.strip()

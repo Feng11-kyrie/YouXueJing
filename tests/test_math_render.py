@@ -35,8 +35,9 @@ def check_2025_q5():
     q = m.question("一", 2025, 5)
     h = mr.to_html(q["解析"])
     assert "<code>" not in h
-    assert "aligned" not in h
-    assert "<mi>&</mi>" not in h
+    assert "$" in h and "\\begin{aligned}" in h
+    # xlongequal 必须被处理掉（KaTeX 不认这个宏）
+    assert "\\xlongequal" not in h
 
 
 def check_images():

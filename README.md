@@ -419,8 +419,8 @@ PIL 认不出，要按 `/ColorSpace` 与 `/Width /Height /BitsPerComponent` 自�
     数三另按题目图片逐题转录/校对，处理记录写进每题 `备注`。
 - **答案校验**：422 道选择题与同仓库 `answers.json`（真题墙）逐题比对，**0 处不一致**；
   数一 2010–2020 另与 TsekaLuk 解析交叉校验，选择题答案同样全一致。
-- **公式渲染**：用 `latex2mathml` 在服务端把 LaTeX 转成 **MathML**，不依赖 KaTeX/CDN，
-  离线可用（见 `yj/mathrender.py`）。
+- **公式渲染**：本地 **KaTeX**（`static/katex/`，前端渲染，离线可用）；
+  服务端只做坏 LaTeX 修补与 HTML 转义（见 `yj/mathrender.py`）。
 - **判分**：
   - 选择题：点选项即判对错（答案来自题库）。
   - 填空题：先把 `\frac{1}{2}`、`\sqrt{2}`、`\pi` 等压成可比的写法再比；对不上时给出

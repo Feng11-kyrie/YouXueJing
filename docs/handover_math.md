@@ -40,7 +40,7 @@
 | `scripts/import_math.py` | 数一 TsekaLuk 源导入（切题型/题号/选项/答案/解析 + 校验） |
 | `scripts/import_math_lx.py` | 三个卷种的真题墙文档导入；同一题跨考点重复时去重取最全；缺题干/选项时下载**原题图**兜底 |
 | `yj/math.py` | 数据层：`tiers_available()` / `years()` / `paper()` / `questions()` / `q_score()` |
-| `yj/mathrender.py` | LaTeX → **MathML**（latex2mathml，服务端；不依赖 KaTeX/CDN） |
+| `yj/mathrender.py` | 坏 LaTeX 修补 + 保留 `$...$`；前端 **KaTeX** 渲染（`static/katex/`） |
 | `yj/math_checker.py` | 解答题免费评分（关键步骤覆盖 50% + 分步 25% + 篇幅 25%） |
 | `proto/cards_math.py` | 题目卡片：选择判分 / 填空比对+手判 / 解答看解析+自评+免费评分+AI 精评 |
 | `proto/app.py` | `/exam/math` 页面、卷种切换条、答题卡、主页入口 |

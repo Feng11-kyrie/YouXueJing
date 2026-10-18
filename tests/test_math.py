@@ -60,11 +60,11 @@ def check_subject_order():
 
 def check_render():
     html = mr.to_html(r"设 $x^2+\frac{1}{2}$，则（ ）")
-    assert "<math" in html and "<mfrac>" in html and "x" in html
+    assert r"$x^2+\frac{1}{2}$" in html and "设" in html
     # 公式之外的 HTML 必须转义，不能被执行
     evil = mr.to_html("<script>alert(1)</script> $x$")
     assert "<script>" not in evil and "&lt;script&gt;" in evil
-    # latex2mathml 不认的宏要降级成文本，而不是让整题渲染失败
+    # 不支持的宏在服务端就被换成可渲染的写法
     weird = mr.to_html(r"$\textcircled{1} x$")
     assert "①" in weird
 

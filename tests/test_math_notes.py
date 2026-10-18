@@ -31,7 +31,7 @@ def check_related():
 
 def check_render():
     h = mr.note_html("## 核心公式\n- 二次型 $x^TAx$\n正文 $\\frac{1}{2}$")
-    assert "<h4" in h and "核心公式" in h and "<math" in h and "•" in h
+    assert "<h4" in h and "核心公式" in h and "$x^TAx$" in h and "•" in h
 
 
 def check_generate_and_cache():

@@ -11,7 +11,7 @@ pandas>=2.0                  # 表格展示
 # 原型只用到 yj/ 数据层，不影响现有应用；装不装都不影响 streamlit 版运行。
 # 启动:  .venv/bin/python proto/app_nicegui.py --port 8899
 nicegui>=2.0
-latex2mathml>=3.7           # 数学真题：LaTeX → MathML（服务端渲染，离线可用）
+# KaTeX 以静态资源放在 static/katex/，不依赖 Python 包
 
 # ---- 免费版评分：本地语义相似度（翻译评分用）----
 # 不需要 torch —— fastembed 基于 ONNX，首次使用会下载约 50MB 的

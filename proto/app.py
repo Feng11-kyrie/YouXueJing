@@ -60,6 +60,36 @@ _MATH_IMG = os.path.join(os.path.dirname(os.path.dirname(
     os.path.abspath(__file__))), "data", "math", "figures")
 if os.path.isdir(_MATH_IMG):
     app.add_static_files("/math_img", _MATH_IMG)
+
+# KaTeX（本地静态资源，离线可用）：数学公式统一由前端渲染。
+_KATEX = os.path.join(BASE, "static", "katex")
+if os.path.isdir(_KATEX):
+    app.add_static_files("/katex", _KATEX)
+ui.add_head_html("""
+<link rel="stylesheet" href="/katex/katex.min.css">
+<script defer src="/katex/katex.min.js"></script>
+<script defer src="/katex/contrib/auto-render.min.js"></script>
+<script>
+(function () {
+  let timer = null;
+  function renderAll() {
+    if (!window.renderMathInElement) return;
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "$$", right: "$$", display: true},
+        {left: "$", right: "$", display: false}
+      ],
+      throwOnError: false,
+      ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"]
+    });
+  }
+  function schedule() { clearTimeout(timer); timer = setTimeout(renderAll, 120); }
+  document.addEventListener("DOMContentLoaded", schedule);
+  new MutationObserver(schedule).observe(document.documentElement,
+                                         {childList: true, subtree: true});
+})();
+</script>
+""", shared=True)
 from proto import store_lite as store              # noqa: E402
 from proto.cards_math import math_card                # noqa: E402
 from proto.cards import (question_card, SUBJECT_COLORS,   # noqa: E402
