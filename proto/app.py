@@ -1917,7 +1917,7 @@ def _math_diag_result(user, tier, items):
             .classes("t-sm").style("color:#1B5E36")
 
 
-def _diagnose_eng(user, tier, view):
+def _diagnose_eng(user, tier, view, part="CLOZE"):
     """英语诊断：完形 20 空 + 阅读 5 题 + 新题型 5 题（客观题三块）。"""
     tier = tier if tier in en.TIERS else "EN1"
     diag = en.diagnostic(tier)
@@ -1951,13 +1951,20 @@ def _diagnose_eng(user, tier, view):
             ui.button("查看诊断结果", on_click=lambda: ui.navigate.to(
                 f"/diagnose?exam=ENG&tier={tier}&view=result&user={user}")) \
                 .props("unelevated")
-        for ps in diag["篇目"]:
-            code = ps.get("部分")
-            if code == "CLOZE":
+        by_part = {ps.get("部分"): ps for ps in diag["篇目"]}
+        part = part if part in ("CLOZE", "READ", "NEW") else "CLOZE"
+        with ui.row().classes("items-center gap-1 flex-wrap"):
+            for code, label in (("CLOZE", "完形"), ("READ", "阅读"), ("NEW", "新题型")):
+                ui.button(label, on_click=lambda _=None, c=code: ui.navigate.to(
+                    f"/diagnose?exam=ENG&tier={tier}&part={c}&user={user}")) \
+                    .props("unelevated" if code == part else "flat dense")
+        ps = by_part.get(part)
+        if ps:
+            if part == "CLOZE":
                 cloze_card(ps, y, tier, got, user, reveal=(view == "result"))
-            elif code == "READ":
+            elif part == "READ":
                 passage_card(ps, y, tier, got, user, reveal=(view == "result"))
-            elif code == "NEW":
+            else:
                 partb_block(ps, y, tier, got, user, reveal=(view == "result"))
         if view != "result":
             ui.button("查看诊断结果", on_click=lambda: ui.navigate.to(
@@ -2089,71 +2096,215 @@ def _zz_diag_result(user, items):
             .classes("t-sm").style("color:#1B5E36")
 
 
+def _diag_ids(exam, tier="一"):
+    """某科当前诊断卷的题目 id（用于进度/重新开始）。"""
+    if exam == "408":
+        return [x["id"] for x in data.diagnostic()["题目"]]
+    if exam == "MATH":
+        return [f"MATH-{tier}-{it['题目']['_year']}-{it['题目']['题号']}"
+                for it in math_data.diagnostic(tier, 12)]
+    if exam == "ENG":
+        t = tier if tier in en.TIERS else "EN1"
+        d = en.diagnostic(t)
+        return [q["id"] for ps in (d or {}).get("篇目", [])
+                for q in ps.get("小题") or []]
+    if exam == "ZZ":
+        return [it["题目"]["id"] for it in zz.diagnostic()]
+    return []
+
+
+def _diag_progress(exam, tier, answers):
+    ids = _diag_ids(exam, tier)
+    return sum(1 for x in ids if x in answers), len(ids)
+
+
+def _diagnose_chooser(user):
+    got = store.get_answers(user)
+    cards = [
+        ("408", "408 真题诊断", "32 题 · 约 20–25 分钟 · 覆盖 24 章",
+         "/diagnose?exam=408&user=" + user),
+        ("ENG", "英语诊断", "30 题 · 约 25 分钟 · 完形 / 阅读 / 新题型",
+         "/diagnose?exam=ENG&tier=EN1&user=" + user),
+        ("MATH", "数学诊断", "12 题 · 约 10 分钟 · 每个考点 1 题",
+         "/diagnose?exam=MATH&tier=一&user=" + user),
+        ("ZZ", "政治诊断", "15 题 · 约 10 分钟 · 五个部分各 3 题",
+         "/diagnose?exam=ZZ&user=" + user),
+    ]
+    with shell("/diagnose", user):
+        _title("快速诊断")
+        ui.label("先用一套短卷找出薄弱点，再针对性练。选一科开始。") \
+            .classes("t-body sub")
+        with ui.element("div").classes("w-full").style(
+                "display:grid;grid-template-columns:repeat(auto-fit,"
+                "minmax(320px,1fr));gap:16px;margin-top:8px"):
+            for exam, title, desc, route in cards:
+                tier = "EN1" if exam == "ENG" else ("一" if exam == "MATH" else "一")
+                done, total = _diag_progress(exam, tier, got)
+                with ui.card().classes("softcard w-full p-4 gap-1"):
+                    ui.label(title).classes("t-lead font-bold")
+                    ui.label(desc).classes("t-sm sub")
+                    if done:
+                        ui.label(f"已做 {done}/{total} 题").classes("t-xs") \
+                            .style("color:#17418F")
+                        with ui.row().classes("items-center gap-2 mt-1"):
+                            ui.button("继续诊断", on_click=lambda _=None, r=route:
+                                      ui.navigate.to(r)).props("unelevated")
+                            def _restart(exam=exam, tier=tier, route=route):
+                                store.delete_answers(user, _diag_ids(exam, tier))
+                                ui.navigate.to(route)
+                            ui.button("重新开始", on_click=_restart) \
+                                .props("outline dense")
+                    else:
+                        ui.label("还没做过").classes("t-xs muted")
+                        ui.button("开始诊断", on_click=lambda _=None, r=route:
+                                  ui.navigate.to(r)).props("unelevated")
+
+
 @ui.page("/diagnose")
-def diagnose_page(user: str = "demo", exam: str = "408", tier: str = "一",
-                  view: str = "quiz"):
+def diagnose_page(user: str = "demo", exam: str = "", tier: str = "一",
+                  view: str = "quiz", page: int = 1, part: str = ""):
     store.ensure_user(user)
+    if not exam:
+        _diagnose_chooser(user)
+        return
     if exam == "MATH":
         _diagnose_math(user, tier, view)
         return
     if exam == "ENG":
-        _diagnose_eng(user, tier, view)
+        _diagnose_eng(user, tier, view, part or "CLOZE")
         return
     if exam == "ZZ":
         _diagnose_zz(user, view)
         return
 
-    got = store.get_answers(user)
+    _diagnose_408(user, view, page)
+
+
+# ================================================================ 我的画像
+def _diagnose_408(user, view, page=1):
+    """408 诊断：8 题一页，选一题记一题；结果页给章节薄弱 Top。"""
     paper = data.diagnostic()["题目"]
     qs = data.questions()
-    picks = {}
+    got = store.get_answers(user)
+    ids = [x["id"] for x in paper]
+
+    if view == "result":
+        _diag_408_result(user)
+        return
 
     with shell("/diagnose", user):
-        _title("快速诊断（可选）")
+        _title("快速诊断")
         _diag_subject_tabs("408", user)
-        ui.label("32 道题　·　约 20-25 分钟　·　覆盖 408 全部 24 章") \
+        ui.label("32 道题 · 每页 8 题 · 覆盖 408 全部 24 章") \
             .classes("t-body font-semibold")
-        # 文案要跟界面一致：这里已经不展示"掌握度百分比"了，
-        # 所以不能再承诺"做完会得到章节级掌握度"（承诺了却看不到，更糟）
-        ui.label("做完 24 章的作答记录就有了，之后的推荐会更准。这是可选的 —— "
-                 "不做也能用：你可以在「挑考点练习」里直接勾选自认薄弱的知识点。") \
+        ui.label("选一题就记录一题；中途退出不会丢，回来可以继续。") \
             .classes("t-sm sub")
-        done_n = sum(1 for x in paper if x["id"] in got)
-        ui.linear_progress(value=done_n / len(paper), show_value=False).classes("w-full")
-        ui.label(f"进度 {done_n}/{len(paper)}　（未作答不计入掌握度）") \
-            .classes("t-sm muted")
 
-        for item in paper:
+        done_n = sum(1 for x in ids if x in got)
+        bar = ui.linear_progress(value=done_n / len(ids), show_value=False) \
+            .classes("w-full")
+        plabel = ui.label(f"进度 {done_n}/{len(ids)}").classes("t-sm muted")
+
+        def refresh():
+            cur = store.get_answers(user)
+            n = sum(1 for x in ids if x in cur)
+            bar.value = n / len(ids)
+            plabel.set_text(f"进度 {n}/{len(ids)}")
+
+        per = 8
+        pages = max(1, (len(paper) + per - 1) // per)
+        pg = max(1, min(int(page or 1), pages))
+        shown = paper[(pg - 1) * per: pg * per]
+
+        for item in shown:
             q = qs[item["id"]]
-            prev = got.get(item["id"], {}).get("chosen")
+            prev = (store.get_answers(user).get(item["id"]) or {}).get("chosen")
+
+            def on_pick(e, q=q):
+                if e.value:
+                    store.record_answer(user, q["id"], e.value,
+                                        e.value == q.get("答案"),
+                                        source="diagnostic")
+                    refresh()
+
             with ui.card().classes("w-full p-3 gap-1 shadow-none"):
                 ui.label(f'{item["order"]}. [{item["学科"]} · '
                          f'{item["诊断章节名"]} · 难度 {item["难度"]}]') \
                     .classes("t-xs muted")
                 ui.label(q["题干"]).classes("t-body leading-6 whitespace-pre-wrap")
-                opts = q.get("选项") or {}
-                # 用 radio，且 value 默认 None → 不预选任何一项
-                r = ui.radio({k: f'{k}. {opts[k]}' for k in sorted(opts)},
-                             value=prev).props("dense")
-                picks[item["id"]] = r
+                ui.radio({k: f'{k}. {v}' for k, v in sorted((q.get("选项") or {}).items())},
+                         value=prev, on_change=on_pick).props("dense")
 
-        def submit():
-            n = 0
-            for item in paper:
-                v = picks[item["id"]].value
-                if not v:
-                    continue
-                q = qs[item["id"]]
-                store.record_answer(user, item["id"], v, v == q.get("答案"),
-                                    source="diagnostic")
-                n += 1
-            ui.notify(f"已记录 {n} 题（未作答不计入）", type="positive")
-            ui.navigate.to(f"/profile?user={user}")
+        with ui.row().classes("items-center gap-2 flex-wrap mt-2"):
+            if pg > 1:
+                ui.button("← 上一页", on_click=lambda: ui.navigate.to(
+                    f"/diagnose?exam=408&page={pg - 1}&user={user}")) \
+                    .props("outline dense")
+            ui.label(f"第 {pg}/{pages} 页").classes("t-sm muted")
+            if pg < pages:
+                ui.button("下一页 →", on_click=lambda: ui.navigate.to(
+                    f"/diagnose?exam=408&page={pg + 1}&user={user}")) \
+                    .props("outline dense")
+            ui.button("先看当前结果", on_click=lambda: ui.navigate.to(
+                f"/diagnose?exam=408&view=result&user={user}")) \
+                .props("flat dense")
+            ui.button("提交并查看结果", on_click=lambda: ui.navigate.to(
+                f"/diagnose?exam=408&view=result&user={user}")) \
+                .props("unelevated")
 
-        ui.button("提交并生成掌握度", on_click=submit).props("unelevated")
+
+def _diag_408_result(user):
+    got = store.get_answers(user)
+    paper = data.diagnostic()["题目"]
+    ids = [x["id"] for x in paper]
+    done_n = sum(1 for x in ids if x in got)
+    with shell("/diagnose", user):
+        _title("诊断结果")
+        _diag_subject_tabs("408", user)
+        ui.label(f"已作答 {done_n}/{len(ids)} 题").classes("t-body font-semibold")
+
+        def redo():
+            store.delete_answers(user, ids)
+            ui.notify("已清空本次诊断，重新开始", color="positive")
+            ui.navigate.to(f"/diagnose?exam=408&user={user}")
+
+        with ui.row().classes("items-center gap-2"):
+            ui.button("重新诊断", on_click=redo).props("outline dense")
+            ui.button("查看完整画像", on_click=lambda: ui.navigate.to(
+                f"/profile?user={user}")).props("flat dense")
+
+        m = diagnose.summarize(got)["章节"]
+        rows = sorted(m.values(),
+                      key=lambda c: (c["答对"] / c["题数"] if c["题数"] else 1,
+                                     -c["题数"]))
+        if not rows:
+            ui.label("还没有作答记录 —— 先做几题诊断。").classes("t-sm muted")
+            return
+        ui.label("各章作答").classes("t-lead font-semibold mt-2")
+        for c in rows[:16]:
+            rate = c["答对"] / c["题数"] if c["题数"] else 0
+            with ui.row().classes("items-center gap-2 w-full no-wrap"):
+                ui.label(c["章节名"]).classes("t-sm").style("width:12rem")
+                ui.label(f'{c["答对"]}/{c["题数"]}').classes("t-xs muted") \
+                    .style("width:3rem")
+                ui.linear_progress(value=rate, show_value=False).classes("flex-1")
+                ui.label(f"{rate:.0%}").classes("t-xs muted").style("width:2.5rem")
+        weak = [c for c in rows if c["题数"] and c["答对"] / c["题数"] < 0.6][:5]
+        if weak:
+            ui.label("薄弱章节 Top 5").classes("t-body font-semibold mt-2") \
+                .style("color:#B45309")
+            for c in weak:
+                rate = c["答对"] / c["题数"]
+                with ui.row().classes("items-center gap-2 flex-wrap"):
+                    ui.label(f'{c["章节名"]}（{rate:.0%}，'
+                             f'{c["答对"]}/{c["题数"]}）').classes("t-sm")
+                    ui.button("练这一章", on_click=lambda _=None, c=c:
+                              ui.navigate.to(
+                                  f'/practice?subject={c["学科码"]}'
+                                  f'&chapter={c["chapter"]}&go=1&user={user}')) \
+                        .props("outline dense")
 
 
-# ================================================================ 我的画像
 @ui.page("/profile")
 def profile_page(user: str = "demo"):
     a, mk = store.get_answers(user), store.get_marks(user)
