@@ -24,10 +24,115 @@ _MATH = re.compile(r"\$\$(.+?)\$\$|\$(.+?)\$", re.S)
 _CIRCLED = {str(i): chr(0x2460 + i - 1) for i in range(1, 10)}
 
 
+def _repair_arrays(tex):
+    """
+    修 OCR 丢掉的 \\end{array}：源数据里出现过
+    `\\left| \\begin{array}{ccc} ... \\right|`（没有 end），
+    latex2mathml 会直接报错、整块退回原始 LaTeX。
+
+    做法：每个 \\begin{array} 找它后面最近的 \\end{array} 与 \\right；
+    如果 \\right 先到，就在 \\right 前补一个 \\end{array}。
+    只补"确实缺 end"的数组，不动合法的嵌套。
+    """
+    for _ in range(20):
+        i = tex.find("\\begin{array}")
+        fixed = False
+        while i >= 0:
+            end = tex.find("\\end{array}", i)
+            right = tex.find("\\right", i)
+            if right >= 0 and (end < 0 or right < end):
+                tex = tex[:right] + "\\end{array}" + tex[right:]
+                fixed = True
+                break
+            i = tex.find("\\begin{array}", i + 1)
+        if not fixed:
+            break
+    return tex
+
+
+
+def _repair_delims(tex):
+    """补齐 OCR 丢掉的 \\right)：只处理"\\left 多于 \\right"的情况。"""
+    stack, i = [], 0
+    pairs = {"(": ")", "[": "]", "\\{": "\\}", "|": "|", ".": "."}
+    while i < len(tex):
+        if tex.startswith("\\left", i):
+            j = i + 5
+            while j < len(tex) and tex[j] == " ":
+                j += 1
+            if tex.startswith("\\{", j):
+                d, j = "\\{", j + 2
+            else:
+                d, j = (tex[j] if j < len(tex) else ""), j + 1
+            if d in pairs:
+                stack.append(d)
+            i = j
+            continue
+        if tex.startswith("\\right", i):
+            j = i + 6
+            while j < len(tex) and tex[j] == " ":
+                j += 1
+            if tex.startswith("\\}", j):
+                j += 2
+            else:
+                j += 1
+            if stack:
+                stack.pop()
+            i = j
+            continue
+        i += 1
+    for d in reversed(stack):
+        tex += "\\right" + pairs.get(d, ")")
+    return tex
+
+
+def _split_top(s):
+    """按顶层 \\\\ 切分 aligned 行；array/matrix 内部的 \\\\ 不算。"""
+    out, buf, depth, i = [], [], 0, 0
+    while i < len(s):
+        if s.startswith("\\begin{", i):
+            depth += 1
+        elif s.startswith("\\end{", i):
+            depth = max(0, depth - 1)
+        if depth == 0 and s.startswith("\\\\", i):
+            out.append("".join(buf))
+            buf = []
+            i += 2
+            continue
+        buf.append(s[i])
+        i += 1
+    out.append("".join(buf))
+    return out
+
+
+def _aligned_lines(tex):
+    """把 aligned 拆成逐行公式 —— latex2mathml 对 & 对齐支持不好。"""
+    tex = _repair_arrays(tex)
+    m = re.search(r"\\begin\{aligned\}(.*?)\\end\{aligned\}", tex, re.S)
+    if not m:
+        return None
+    body = re.sub(r"\\xlongequal\s*\{[^{}]*\}", "=", m.group(1))
+    lines = []
+    for line in _split_top(body):
+        line = _repair_delims(line.replace("&", "").strip())
+        if line:
+            lines.append(line)
+    return lines or None
+
+
 def _mathml(tex, display=False):
     # latex2mathml 不认 \textcircled{1}，先换成 ①（数学一 2024 第 7 题会用到）
     tex = re.sub(r"\\textcircled\s*\{\s*(\d)\s*\}",
                  lambda m: _CIRCLED.get(m.group(1), m.group(0)), tex)
+    lines = _aligned_lines(tex)
+    if lines:
+        return "<br>".join(_mathml_single(l, display=True) for l in lines)
+    return _mathml_single(tex, display)
+
+
+def _mathml_single(tex, display=False):
+    # \xlongequal{...} 是"恒等变形"标注，MathML 不认识；降级成 =
+    tex = re.sub(r"\\xlongequal\s*\{[^{}]*\}", "=", tex)
     try:
         out = _l2m.convert(tex.strip())
     except Exception:                                       # noqa: BLE001

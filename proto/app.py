@@ -350,17 +350,25 @@ def home(user: str = "demo"):
                     if e["id"] == "408":
                         ui.label("18 年真题 846 道 · 266 个考点 · 依赖关系图") \
                             .classes("t-xs muted")
-                        ui.button("进入408真题",
-                                  on_click=lambda: ui.navigate.to(
-                                      f"/exam/408?user={user}")).props("unelevated")
+                        with ui.row().classes("items-center gap-2"):
+                            ui.button("进入408真题",
+                                      on_click=lambda: ui.navigate.to(
+                                          f"/exam/408?user={user}")).props("unelevated")
+                            ui.button("快速诊断", on_click=lambda: ui.navigate.to(
+                                f"/diagnose?exam=408&user={user}")) \
+                                .props("outline dense")
                     elif e["id"] == "ENG":
                         ui.label(f"英语一 {len(en.years('EN1'))} 年 · "
                                  f"英语二 {len(en.years('EN2'))} 年"
                                  f"（2010–2026）") \
                             .classes("t-xs muted")
-                        ui.button("进入英语真题",
-                                  on_click=lambda: ui.navigate.to(
-                                      f"/exam/english?user={user}")).props("unelevated")
+                        with ui.row().classes("items-center gap-2"):
+                            ui.button("进入英语真题",
+                                      on_click=lambda: ui.navigate.to(
+                                          f"/exam/english?user={user}")).props("unelevated")
+                            ui.button("快速诊断", on_click=lambda: ui.navigate.to(
+                                f"/diagnose?exam=ENG&tier=EN1&user={user}")) \
+                                .props("outline dense")
                     elif e["id"] == "MATH":
                         ui.label(f"数一 {len(math_data.years('一'))} 年 · "
                                  f"数二 {len(math_data.years('二'))} 年 · "
@@ -371,7 +379,7 @@ def home(user: str = "demo"):
                             ui.button("进入数学真题",
                                       on_click=lambda: ui.navigate.to(
                                           f"/exam/math?user={user}")).props("unelevated")
-                            ui.button("数学诊断", on_click=lambda: ui.navigate.to(
+                            ui.button("快速诊断", on_click=lambda: ui.navigate.to(
                                 f"/diagnose?exam=MATH&tier=一&user={user}")) \
                                 .props("outline dense")
                     else:
@@ -380,9 +388,13 @@ def home(user: str = "demo"):
                         ui.label(f"已入库 {len(_ys)} 年真题"
                                  f"（{('、'.join(_ys)) if _ys else '整理中'}）") \
                             .classes("t-xs muted")
-                        ui.button("进入政治真题",
-                                  on_click=lambda: ui.navigate.to(
-                                      f"/exam/zhengzhi?user={user}")).props("unelevated")
+                        with ui.row().classes("items-center gap-2"):
+                            ui.button("进入政治真题",
+                                      on_click=lambda: ui.navigate.to(
+                                          f"/exam/zhengzhi?user={user}")).props("unelevated")
+                            ui.button("快速诊断", on_click=lambda: ui.navigate.to(
+                                f"/diagnose?exam=ZZ&user={user}")) \
+                                .props("outline dense")
                     ui.label(f"考生规模 {e['考生规模']}").classes("t-xs muted")
 
         ui.separator().style("border-color:var(--line)")
