@@ -350,7 +350,7 @@ def home(user: str = "demo"):
                     if e["id"] == "408":
                         ui.label("18 年真题 846 道 · 266 个考点 · 依赖关系图") \
                             .classes("t-xs muted")
-                        ui.button("进入 408",
+                        ui.button("进入408真题",
                                   on_click=lambda: ui.navigate.to(
                                       f"/exam/408?user={user}")).props("unelevated")
                     elif e["id"] == "ENG":
@@ -358,7 +358,7 @@ def home(user: str = "demo"):
                                  f"英语二 {len(en.years('EN2'))} 年"
                                  f"（2010–2026）") \
                             .classes("t-xs muted")
-                        ui.button("进入英语",
+                        ui.button("进入英语真题",
                                   on_click=lambda: ui.navigate.to(
                                       f"/exam/english?user={user}")).props("unelevated")
                     elif e["id"] == "MATH":
@@ -368,7 +368,7 @@ def home(user: str = "demo"):
                                  f"（数一/二 2010–2025，数三另含 2009）") \
                             .classes("t-xs muted")
                         with ui.row().classes("items-center gap-2"):
-                            ui.button("进入数学",
+                            ui.button("进入数学真题",
                                       on_click=lambda: ui.navigate.to(
                                           f"/exam/math?user={user}")).props("unelevated")
                             ui.button("数学诊断", on_click=lambda: ui.navigate.to(
@@ -380,7 +380,7 @@ def home(user: str = "demo"):
                         ui.label(f"已入库 {len(_ys)} 年真题"
                                  f"（{('、'.join(_ys)) if _ys else '整理中'}）") \
                             .classes("t-xs muted")
-                        ui.button("进入政治",
+                        ui.button("进入政治真题",
                                   on_click=lambda: ui.navigate.to(
                                       f"/exam/zhengzhi?user={user}")).props("unelevated")
                     ui.label(f"考生规模 {e['考生规模']}").classes("t-xs muted")
