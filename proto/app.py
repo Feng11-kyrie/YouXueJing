@@ -39,6 +39,8 @@ from yj import data, diagnose, profile as profile_mod, path as path_mod  # noqa:
 from yj import llm, graph, zhengzhi as zz           # noqa: E402
 from yj import english as en                          # noqa: E402
 from yj import math as math_data                      # noqa: E402
+from yj import math_notes                             # noqa: E402
+from yj import mathrender as mr                       # noqa: E402
 from proto import llm_key                              # noqa: E402
 from proto.cards_en import (passage_card, cloze_card,   # noqa: E402
                             subjective_block, two_col, partb_block,
@@ -324,6 +326,7 @@ def home(user: str = "demo"):
         wrong_ids = [qid for qid, r in a.items() if not r["is_correct"]]
         prof = profile_mod.build(a, mk)
         weakest = prof["薄弱章节"][0] if prof["薄弱章节"] else None
+        _msug = _math_weakest(a)
 
         # ---------- 选科目（用户要求："用户进去可以选择科目"）
         # 设计取舍：**不做问卷**。考研学生一进来若被问"你考哪几科"，
@@ -369,19 +372,6 @@ def home(user: str = "demo"):
                             ui.button("数学诊断", on_click=lambda: ui.navigate.to(
                                 f"/diagnose?exam=MATH&tier=一&user={user}")) \
                                 .props("outline dense")
-                        _mw = []
-                        for _t in ("一", "二", "三"):
-                            if not math_data.years(_t):
-                                continue
-                            for _r in math_data.point_mastery(_t, a):
-                                if _r["作答"] and (_r["正确率"] or 0) < 0.6:
-                                    _mw.append((_t, _r))
-                        if _mw:
-                            _mw.sort(key=lambda x: x[1]["正确率"])
-                            _t, _r = _mw[0]
-                            ui.label(f'最该先补：数学{_t} · {_r["考点"]}'
-                                     f'（{_r["正确率"]:.0%}，{_r["答对"]}/{_r["作答"]}）') \
-                                .classes("t-xs").style("color:#B45309")
                     else:
                         from yj import zhengzhi as _zz
                         _ys = _zz.years()
@@ -410,28 +400,47 @@ def home(user: str = "demo"):
                      f"近 7 天做了 {sum(wk)} 题") \
                 .classes("t-body sub")
 
-        # ---------- 主行动点：仍然只给一个按钮（保留"今天该干嘛"的入口）
-        if weakest:
-            with ui.card().classes("softcard w-full p-4 gap-1").style("max-width:52rem"):
-                ui.label(f'今天建议先补：{weakest["章节名"]}') \
-                    .classes("t-lead font-bold")
-                # 【措辞修正】原来写"这一章 18 年考了 141 次" —— 会被读成
-                # "考了 141 场"。核实：141 是**该章 21 个叶子考点的考查次数之和**
-                # （单考点最高才 24 次）。必须说清口径，否则是夸大。
-                _ch = weakest.get("chapter")
-                _lv = data.chapter_leaves().get(_ch, [])
-                _fq = data.freq()
-                _q = sum(data.leaf_question_count().get(l, 0) for l in _lv)
-                ui.label(f'这一章有 {len(_lv)} 个考点，18 年真题里共出现 '
-                         f'{weakest["考频"]} 次（各考点累计）；'
-                         f'题库里有 {_q} 道该章的真题可练。') \
-                    .classes("t-sm sub")
-                ui.label("它是你目前最薄弱、同时考得又多的一章 —— 先补它性价比最高。") \
-                    .classes("t-sm sub")
-                ui.button("从这一章开始练",
-                          on_click=lambda: ui.navigate.to(
-                              f'/practice?subject={weakest.get("学科码", "DS")}'
-                              f'&user={user}')).props("unelevated")
+        # ---------- 主行动点：**按科目各给一张建议卡**
+        # 之前只有 408 一章，学数学的人看到的永远是"进程管理"；现在有哪科数据
+        # 就给哪科建议，各带一个按钮（"今天该干嘛"仍然一眼能看到）。
+        if weakest or _msug:
+            with ui.row().classes("w-full gap-4 items-stretch"):
+                if weakest:
+                    with ui.card().classes("softcard flex-1 p-4 gap-1"):
+                        ui.label(f'今天建议先补：{weakest["章节名"]}') \
+                            .classes("t-lead font-bold")
+                        # 【措辞修正】原来写"这一章 18 年考了 141 次" —— 会被读成
+                        # "考了 141 场"。核实：141 是**该章 21 个叶子考点的考查次数之和**
+                        # （单考点最高才 24 次）。必须说清口径，否则是夸大。
+                        _ch = weakest.get("chapter")
+                        _lv = data.chapter_leaves().get(_ch, [])
+                        _fq = data.freq()
+                        _q = sum(data.leaf_question_count().get(l, 0) for l in _lv)
+                        ui.label(f'这一章有 {len(_lv)} 个考点，18 年真题里共出现 '
+                                 f'{weakest["考频"]} 次（各考点累计）；'
+                                 f'题库里有 {_q} 道该章的真题可练。') \
+                            .classes("t-sm sub")
+                        ui.label("它是你目前最薄弱、同时考得又多的一章 —— 先补它性价比最高。") \
+                            .classes("t-sm sub")
+                        ui.button("从这一章开始练",
+                                  on_click=lambda: ui.navigate.to(
+                                      f'/practice?subject={weakest.get("学科码", "DS")}'
+                                      f'&user={user}')).props("unelevated")
+                if _msug:
+                    _mt, _mr = _msug
+                    with ui.card().classes("softcard flex-1 p-4 gap-1"):
+                        ui.label(f'今天建议先补：数学{_mt} · {_mr["考点"]}') \
+                            .classes("t-lead font-bold")
+                        ui.label(f'这个考点你做过 {_mr["作答"]} 题、答对 '
+                                 f'{_mr["答对"]} 题（{_mr["正确率"]:.0%}）；'
+                                 f'题库里共 {_mr["题数"]} 题，先把这个点补起来。') \
+                            .classes("t-sm sub")
+                        ui.button("练这个考点",
+                                  on_click=lambda _=None, t=_mt, p=_mr["考点"]:
+                                  ui.navigate.to(
+                                      "/exam/math?tier=" + urllib.parse.quote(t) +
+                                      "&point=" + urllib.parse.quote(p))) \
+                            .props("unelevated")
 
         if not a:
             return
@@ -1693,6 +1702,24 @@ def _diag_subject_tabs(exam, user, tier="一"):
             .props("unelevated" if exam == "MATH" else "flat dense")
 
 
+def _math_weakest(answers):
+    """首页建议用：跨卷种挑一个"正确率最低、且做过题"的数学考点。"""
+    best = None
+    for t in ("一", "二", "三"):
+        if not math_data.years(t):
+            continue
+        for r in math_data.point_mastery(t, answers):
+            if not r["作答"]:
+                continue
+            rate = r["正确率"] or 0
+            if rate >= 0.6:
+                continue
+            key = (rate, -r["作答"])
+            if best is None or key < best[0]:
+                best = (key, t, r)
+    return (best[1], best[2]) if best else None
+
+
 def _math_diag_tier_tabs(tier, user):
     with ui.row().classes("items-center gap-1 flex-wrap"):
         for t in ("一", "二", "三"):
@@ -2024,6 +2051,64 @@ def notes_page(user: str = "demo"):
                                   "/exam/math?tier=" + urllib.parse.quote(t) +
                                   "&point=" + urllib.parse.quote(p))) \
                         .props("outline dense")
+
+            # ---------------- 数学考点速记（单考点一页，AI 生成 + 配套真题）
+            if _rows:
+                ui.label("数学考点速记").classes("t-body font-semibold mt-2")
+                ui.label("选一个薄弱考点，按该考点的真题生成速记；生成结果会缓存，"
+                         "同一考点不重复花钱。") .classes("t-sm muted")
+                _opts = {f'数学{t} · {r["考点"]}': (t, r["考点"])
+                         for t, r in _rows[:8]}
+                _sel = ui.select(_opts, value=next(iter(_opts)),
+                                 label="选择薄弱考点",
+                                 on_change=lambda e: _load_note()) \
+                    .props("dense outlined").classes("w-96")
+                _box = ui.column().classes("w-full gap-2")
+
+                def _render_note(rec, t, p):
+                    _box.clear()
+                    with _box:
+                        if rec.get("error"):
+                            ui.label(rec["error"]).classes("t-sm") \
+                                .style("color:#8C2C2C")
+                            return
+                        ui.label("考点速记（AI 生成，供复习参考）").classes("t-xs muted")
+                        ui.html(mr.note_html(rec.get("文本") or "")).classes("w-full")
+                        ui.label("配套真题").classes("t-sm font-semibold mt-2")
+                        for q in math_notes.related(t, p, 4):
+                            with ui.row().classes("items-center gap-2"):
+                                ui.label(f'{q["_year"]} 年第 {q["题号"]} 题 · '
+                                         f'{q["题型"]}').classes("t-sm")
+                                ui.button("练这道", on_click=lambda _=None, q=q, t=t, p=p:
+                                          ui.navigate.to(
+                                              "/exam/math?tier=" +
+                                              urllib.parse.quote(t) +
+                                              "&year=" + str(q["_year"]) +
+                                              "&point=" + urllib.parse.quote(p))) \
+                                    .props("flat dense")
+
+                def _load_note():
+                    t, p = _opts[_sel.value]
+                    rec = math_notes.cached(t, p)
+                    if rec:
+                        _render_note(rec, t, p)
+                    else:
+                        _box.clear()
+                        with _box:
+                            ui.label("这个考点还没有速记 —— 点「生成速记」"
+                                     "（AI 按该考点的真题提炼，约 10 秒）。") \
+                                .classes("t-sm muted")
+
+                def _gen_note():
+                    t, p = _opts[_sel.value]
+                    _box.clear()
+                    with _box:
+                        ui.label("生成中…（AI 按该考点的真题提炼）").classes("t-sm muted")
+                    ui.timer(0.05, lambda: _render_note(
+                        math_notes.generate(t, p), t, p), once=True)
+
+                ui.button("生成速记（AI）", on_click=_gen_note).props("outline dense")
+                _load_note()
 
         # 没有 408 作答/自报时，只展示上面的数学薄弱点，不跑 408 的讲义生成；
         # 否则会拿空数据跑一条 LLM 链路，页面上却没有可讲的内容。

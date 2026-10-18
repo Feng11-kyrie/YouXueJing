@@ -66,3 +66,25 @@ def to_html(text, display=False):
     out = re.sub(r"\n{2,}", "</p><p>", out)
     out = out.replace("\n", "<br>")
     return f'<div class="mathbody"><p>{out}</p></div>'
+
+
+def _inline(line):
+    h = to_html(line)
+    return re.sub(r'^<div class="mathbody"><p>|</p></div>$', "", h)
+
+
+def note_html(text):
+    """速记的轻量 Markdown：只认 ## 标题、- 列表，其余按段落 + 公式渲染。"""
+    out = []
+    for raw in str(text or "").splitlines():
+        s = raw.strip()
+        if not s:
+            continue
+        if s.startswith("## "):
+            out.append(f"<h4 class='t-body font-semibold' style='margin:6px 0 2px'>"
+                       f"{html.escape(s[3:])}</h4>")
+        elif s.startswith(("- ", "* ")):
+            out.append(f"<div>• {_inline(s[2:])}</div>")
+        else:
+            out.append(f"<p>{_inline(s)}</p>")
+    return '<div class="mathbody">' + "".join(out) + "</div>"
