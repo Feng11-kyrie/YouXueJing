@@ -24,6 +24,8 @@
 """
 import argparse
 import contextlib
+import functools
+import inspect
 import datetime
 import os
 import urllib.parse
@@ -301,6 +303,115 @@ def _key_entry():
         _key_panel()
 
 
+def _auth_user():
+    try:
+        return app.storage.user.get("user")
+    except Exception:                                       # noqa: BLE001
+        return None
+
+
+def authed(fn):
+    """页面登录守卫：未登录跳 /login；登录后 user 以会话为准（忽略 URL）。"""
+    sig = inspect.signature(fn)
+
+    @functools.wraps(fn)
+    def wrapper(*args, **kwargs):
+        u = _auth_user()
+        if not u:
+            ui.navigate.to("/login")
+            return None
+        if "user" in sig.parameters:
+            kwargs["user"] = u
+        return fn(*args, **kwargs)
+
+    return wrapper
+
+
+def _logout():
+    try:
+        app.storage.user.pop("user", None)
+    except Exception:                                       # noqa: BLE001
+        pass
+    ui.navigate.to("/login")
+
+
+@ui.page("/login")
+def login_page():
+    if _auth_user():
+        ui.navigate.to(f"/?user={_auth_user()}")
+        return
+    with ui.column().classes("w-full min-h-screen items-center justify-center") \
+            .style("background:var(--bg-soft)"):
+        with ui.card().classes("softcard p-6 gap-2").style("width:360px"):
+            ui.label("优学鲸").classes("text-2xl font-bold")
+            ui.label("登录后，做题记录按账号分开保存。").classes("t-sm sub")
+            name = ui.input("用户名").props("outlined dense").classes("w-full")
+            pw = ui.input("密码", password=True,
+                          password_toggle_button=True).props("outlined dense") \
+                .classes("w-full")
+            err = ui.label("").classes("t-xs").style("color:#8C2C2C")
+            ui.button("登录", on_click=lambda: _do_login(name.value, pw.value,
+                                                         err)).props("unelevated") \
+                .classes("w-full")
+
+            def _guest():
+                app.storage.user["user"] = "demo"
+                ui.navigate.to("/?user=demo")
+
+            with ui.row().classes("w-full items-center justify-between"):
+                ui.button("注册新账号", on_click=lambda: ui.navigate.to("/register")) \
+                    .props("flat dense")
+                ui.button("游客体验", on_click=_guest).props("flat dense")
+
+
+def _do_login(name, pw, err):
+    name = (name or "").strip()
+    if not store.has_account(name):
+        err.set_text("用户名或密码不对")
+        return
+    if not store.verify_account(name, pw or ""):
+        err.set_text("用户名或密码不对")
+        return
+    app.storage.user["user"] = name
+    ui.navigate.to(f"/?user={name}")
+
+
+@ui.page("/register")
+def register_page():
+    with ui.column().classes("w-full min-h-screen items-center justify-center") \
+            .style("background:var(--bg-soft)"):
+        with ui.card().classes("softcard p-6 gap-2").style("width:360px"):
+            ui.label("注册账号").classes("text-2xl font-bold")
+            ui.label("用户名 3–20 位字母/数字/下划线，密码至少 8 位。") \
+                .classes("t-sm sub")
+            name = ui.input("用户名").props("outlined dense").classes("w-full")
+            pw = ui.input("密码", password=True,
+                          password_toggle_button=True).props("outlined dense") \
+                .classes("w-full")
+            pw2 = ui.input("确认密码", password=True,
+                           password_toggle_button=True).props("outlined dense") \
+                .classes("w-full")
+            err = ui.label("").classes("t-xs").style("color:#8C2C2C")
+
+            def submit():
+                if (pw.value or "") != (pw2.value or ""):
+                    err.set_text("两次输入的密码不一致")
+                    return
+                try:
+                    u = store.register_account(name.value, pw.value or "")
+                except ValueError as e:
+                    err.set_text(str(e))
+                    return
+                app.storage.user["user"] = u
+                ui.navigate.to(f"/?user={u}")
+
+            ui.button("注册并登录", on_click=submit).props("unelevated") \
+                .classes("w-full")
+            ui.button("已有账号，去登录",
+                      on_click=lambda: ui.navigate.to("/login")) \
+                .props("flat dense")
+
+
 @contextlib.contextmanager
 def shell(active: str, user: str):
     """
@@ -404,6 +515,13 @@ def shell(active: str, user: str):
                               "t-xs no-underline flex-1 text-center py-1 rounded") \
                               .style("color:var(--accent);background:var(--accent-weak)"):
                           ui.label("看我的画像")
+              with ui.row().classes("gap-1 mt-1"):
+                  if _auth_user():
+                      ui.button("退出登录", on_click=_logout) \
+                          .props("flat dense").classes("t-xs w-full")
+                  else:
+                      ui.button("登录 / 注册", on_click=lambda: ui.navigate.to("/login")) \
+                          .props("flat dense").classes("t-xs w-full")
         # 内容区
         with ui.column().classes("flex-1 p-6 gap-3 min-w-0"):
             _key_entry()
@@ -412,6 +530,7 @@ def shell(active: str, user: str):
 
 # ================================================================ 首页
 @ui.page("/")
+@authed
 def home(user: str = "demo"):
     """
     首页 = **我的做题记录**（用户要求："首页去总结用户的做题记录什么的"）。
@@ -961,6 +1080,7 @@ def _subject_tabs(active_id, user):
 
 
 @ui.page("/exam")
+@authed
 def exam_hub(user: str = "demo"):
     """
     真题总入口：**先选科目**。
@@ -1010,6 +1130,7 @@ def exam_hub(user: str = "demo"):
 
 
 @ui.page("/exam/408")
+@authed
 def exam_408(year: str = None, page: int = 1, view: str = "全部", user: str = "demo"):
     papers = data.paper_index()
     years = [p["年份"] for p in papers]
@@ -1075,12 +1196,14 @@ def exam_408(year: str = None, page: int = 1, view: str = "全部", user: str = 
 
 # ================================================================ 考研政治真题
 @ui.page("/zz")
+@authed
 def zz_legacy(user: str = "demo"):
     """旧路由 /zz → 跳到新的 /exam/zhengzhi（避免已存的链接失效）"""
     ui.navigate.to(f"/exam/zhengzhi?user={user}")
 
 
 @ui.page("/exam/zhengzhi/index")
+@authed
 def zz_index(user: str = "demo"):
     """
     政治真题入口：按年份进入。
@@ -1130,6 +1253,7 @@ def zz_index(user: str = "demo"):
 
 
 @ui.page("/exam/zhengzhi")
+@authed
 def exam_zhengzhi(year: str = None, page: int = 1, user: str = "demo",
                   view: str = "全部"):
     """
@@ -1374,6 +1498,7 @@ def _math_tier_tabs(active_tier, user):
 
 
 @ui.page("/exam/math")
+@authed
 def exam_math(tier: str = "一", year: str = None, view: str = "全部",
               point: str = None, user: str = "demo"):
     """数学真题：按卷种 + 年份，逐题练习（选择/填空可判分，解答题看解析自评）。"""
@@ -1488,6 +1613,7 @@ def exam_math(tier: str = "一", year: str = None, view: str = "全部",
 
 
 @ui.page("/exam/english")
+@authed
 def exam_english(tier: str = "EN1", year: str = None, view: str = "全部",
                  page: int = 1, user: str = "demo"):
     """
@@ -1629,6 +1755,7 @@ def exam_english(tier: str = "EN1", year: str = None, view: str = "全部",
 
 # ================================================================ 挑考点练习
 @ui.page("/practice")
+@authed
 def practice(exam: str = None, subject: str = None, chapter: str = None,
              part: str = None, go: int = 0, user: str = "demo"):
     """
@@ -2245,6 +2372,7 @@ def _diagnose_chooser(user):
 
 
 @ui.page("/diagnose")
+@authed
 def diagnose_page(user: str = "demo", exam: str = "", tier: str = "一",
                   view: str = "quiz", page: int = 1, part: str = ""):
     store.ensure_user(user)
@@ -2390,6 +2518,7 @@ def _diag_408_result(user):
 
 
 @ui.page("/wrong")
+@authed
 def wrong_page(exam: str = "408", user: str = "demo"):
     """错题本：四科分开看/重练。"""
     store.ensure_user(user)
@@ -2480,6 +2609,7 @@ def wrong_page(exam: str = "408", user: str = "demo"):
 
 
 @ui.page("/profile")
+@authed
 def profile_page(user: str = "demo"):
     a, mk = store.get_answers(user), store.get_marks(user)
     with shell("/profile", user):
@@ -2662,6 +2792,7 @@ def profile_page(user: str = "demo"):
 
 
 @ui.page("/notes")
+@authed
 def notes_page(user: str = "demo"):
     snap_name = {"v": None}
     a, mk = store.get_answers(user), store.get_marks(user)
@@ -3076,7 +3207,8 @@ def main():
     ap.add_argument("--port", type=int, default=8890)
     args = ap.parse_args()
     ui.run(port=args.port, title="优学鲸 · 考研智能备考",
-           reload=False, favicon="🐳", show=False)
+           reload=False, favicon="🐳", show=False,
+           storage_secret=os.environ.get("YJ_SECRET", "youxuejing-dev-secret"))
 
 
 if __name__ in {"__main__", "__mp_main__"}:

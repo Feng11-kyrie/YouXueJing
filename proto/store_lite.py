@@ -13,6 +13,9 @@ sqlite 文件。两个框架进程同时写同一个库，需要打开 WAL 模�
 """
 import datetime
 import os
+import hashlib
+import re
+import secrets
 import sqlite3
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,6 +28,58 @@ def conn():
     # WAL：让 streamlit 与 nicegui 两个进程能安全地同时读写同一个库
     c.execute("PRAGMA journal_mode=WAL")
     return c
+
+
+def _accounts_table(c):
+    c.execute("""CREATE TABLE IF NOT EXISTS accounts (
+                   user_id      TEXT PRIMARY KEY,
+                   pw_hash      TEXT NOT NULL,
+                   salt         TEXT NOT NULL,
+                   created_at   TEXT NOT NULL)""")
+
+
+def _hash_pw(password, salt):
+    return hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"),
+                               bytes.fromhex(salt), 200_000).hex()
+
+
+def register_account(user_id, password):
+    """注册账号：用户名 3–20 位字母/数字/下划线，密码至少 8 位。"""
+    user_id = (user_id or "").strip()
+    if not re.fullmatch(r"[A-Za-z0-9_]{3,20}", user_id):
+        raise ValueError("用户名需为 3–20 位字母、数字或下划线")
+    if len(password or "") < 8:
+        raise ValueError("密码至少 8 位")
+    salt = secrets.token_hex(16)
+    with conn() as c:
+        _accounts_table(c)
+        if c.execute("SELECT 1 FROM accounts WHERE user_id=?",
+                     (user_id,)).fetchone():
+            raise ValueError("用户名已被占用")
+        c.execute("INSERT INTO accounts(user_id, pw_hash, salt, created_at) "
+                  "VALUES(?,?,?,?)",
+                  (user_id, _hash_pw(password, salt), salt,
+                   datetime.datetime.now().isoformat(timespec="seconds")))
+    ensure_user(user_id)
+    return user_id
+
+
+def verify_account(user_id, password):
+    with conn() as c:
+        _accounts_table(c)
+        row = c.execute("SELECT pw_hash, salt FROM accounts WHERE user_id=?",
+                        ((user_id or "").strip(),)).fetchone()
+    if not row:
+        return False
+    return secrets.compare_digest(row["pw_hash"],
+                                  _hash_pw(password or "", row["salt"]))
+
+
+def has_account(user_id):
+    with conn() as c:
+        _accounts_table(c)
+        return bool(c.execute("SELECT 1 FROM accounts WHERE user_id=?",
+                              ((user_id or "").strip(),)).fetchone())
 
 
 def ensure_user(user_id):
