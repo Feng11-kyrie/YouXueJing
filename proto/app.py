@@ -1849,7 +1849,7 @@ def _diagnose_math(user, tier, view):
             .classes("t-sm sub")
 
         if view == "result":
-            _math_diag_result(user, tier)
+            _math_diag_result(user, tier, items)
             ui.separator().style("border-color:var(--line)")
             ui.label("诊断卷（可继续作答，作答后点上面的「查看诊断结果」刷新）") \
                 .classes("t-sm muted")
@@ -1872,12 +1872,21 @@ def _diagnose_math(user, tier, view):
                 .props("unelevated")
 
 
-def _math_diag_result(user, tier):
+def _math_diag_result(user, tier, items):
     got = store.get_answers(user)
     ms = math_data.point_mastery(tier, got)
     tried = [r for r in ms if r["作答"]]
     weak = [r for r in tried if (r["正确率"] or 0) < 0.6]
     ui.label("诊断结果").classes("text-xl font-bold mt-2")
+
+    def _redo_math():
+        ids = [f"MATH-{tier}-{it['题目']['_year']}-{it['题目']['题号']}"
+               for it in items]
+        store.delete_answers(user, ids)
+        ui.notify("已清空本次诊断的作答，重新开始", color="positive")
+        ui.navigate.to(f"/diagnose?exam=MATH&tier={tier}&user={user}")
+
+    ui.button("重新诊断", on_click=_redo_math).props("outline dense")
     if not tried:
         ui.label("还没有作答记录 —— 先在下面的诊断卷里做几题。").classes("t-body sub")
         return
@@ -1932,7 +1941,7 @@ def _diagnose_eng(user, tier, view):
         ui.label("翻译/写作是主观题，不参与自动诊断；去真题页可用免费评分 / AI 精评。") \
             .classes("t-sm sub")
         if view == "result":
-            _eng_diag_result(user, tier)
+            _eng_diag_result(user, tier, diag)
         else:
             qids = [q["id"] for ps in diag["篇目"] for q in ps.get("小题") or []]
             done_n = sum(1 for x in qids if x in got)
@@ -1956,12 +1965,21 @@ def _diagnose_eng(user, tier, view):
                 .props("unelevated")
 
 
-def _eng_diag_result(user, tier):
+def _eng_diag_result(user, tier, diag):
     got = store.get_answers(user)
     ms = en.part_mastery(tier, got)
     tried = [r for r in ms if r["作答"]]
     weak = [r for r in tried if (r["正确率"] or 0) < 0.6]
     ui.label("诊断结果").classes("text-xl font-bold mt-2")
+
+    def _redo_math():
+        ids = [f"MATH-{tier}-{it['题目']['_year']}-{it['题目']['题号']}"
+               for it in items]
+        store.delete_answers(user, ids)
+        ui.notify("已清空本次诊断的作答，重新开始", color="positive")
+        ui.navigate.to(f"/diagnose?exam=MATH&tier={tier}&user={user}")
+
+    ui.button("重新诊断", on_click=_redo_math).props("outline dense")
     if not tried:
         ui.label("还没有作答记录 —— 先在下面的诊断卷里做几题。").classes("t-body sub")
         return
@@ -2004,7 +2022,7 @@ def _diagnose_zz(user, view):
         ui.label("按部分各抽几道，结果才能回答「哪一部分弱」；分析题不参与自动诊断。") \
             .classes("t-sm sub")
         if view == "result":
-            _zz_diag_result(user)
+            _zz_diag_result(user, items)
         else:
             done_n = sum(1 for it in items if it["题目"]["id"] in got)
             ui.linear_progress(value=done_n / max(1, len(items)),
@@ -2024,12 +2042,21 @@ def _diagnose_zz(user, view):
                 f"/diagnose?exam=ZZ&view=result&user={user}")).props("unelevated")
 
 
-def _zz_diag_result(user):
+def _zz_diag_result(user, items):
     got = store.get_answers(user)
     ms = zz.part_mastery(got)
     tried = [r for r in ms if r["作答"]]
     weak = [r for r in tried if (r["正确率"] or 0) < 0.6]
     ui.label("诊断结果").classes("text-xl font-bold mt-2")
+
+    def _redo_math():
+        ids = [f"MATH-{tier}-{it['题目']['_year']}-{it['题目']['题号']}"
+               for it in items]
+        store.delete_answers(user, ids)
+        ui.notify("已清空本次诊断的作答，重新开始", color="positive")
+        ui.navigate.to(f"/diagnose?exam=MATH&tier={tier}&user={user}")
+
+    ui.button("重新诊断", on_click=_redo_math).props("outline dense")
     if not tried:
         ui.label("还没有作答记录 —— 先在下面的诊断卷里做几题。").classes("t-body sub")
         return
