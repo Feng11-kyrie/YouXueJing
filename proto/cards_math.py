@@ -109,26 +109,20 @@ def math_card(q, tier, year, done, user):
         if stem and "题干见下方原题图" not in stem:
             ui.html(mr.to_html(stem)).classes("w-full math")
         if q.get("图片"):
-            # 题源文档缺题干/选项、或题干引用图形时，展示**原题图**。
-            # 用原生 <img> 包在 <a> 里：点图直接在新标签打开原图（可放大查看），
-            # 比 q-img 更可控 —— q-img 需要显式高度才会稳定加载。
+            # 只有**确实无法用文字还原**的题才保留图：
+            #   · 题干引用函数图像/曲线图（"图形如右图所示"）；
+            #   · 文字源里题干缺失的极个别题。
+            # 其余图片题已逐题文本化，不再展示原图（也就没有"查看原图"入口）。
             fname = os.path.basename(q["图片"])
             url = f"/math_img/{urllib.parse.quote(fname)}"
-            # 注意：ui.html 里的 <a target="_blank"> 会被 DOMPurify 剥掉 target，
-            # 点了会在当前标签打开原图、把应用顶掉。所以用 ui.element("a")
-            # 直接把 href/target 作为组件属性下发（不过前端 sanitize）。
-            link = ui.element("a").props(
-                f'href="{url}" target="_blank" rel="noopener" '
-                f'title="点击查看原图"').classes("block w-full")
-            with link:
-                ui.html(
-                    f'<img src="{url}" alt="原题图" '
-                    f'style="display:block;max-width:100%;height:auto;'
-                    f'border-radius:8px;border:1px solid var(--line)">') \
-                    .classes("w-full")
-            with ui.row().classes("items-center gap-2"):
-                ui.link("查看原图（新标签）", url, new_tab=True).classes("t-xs")
-                ui.label("图片题：题干/图形以原图为准").classes("t-xs muted")
+            is_placeholder = "题干见下方原题图" in stem
+            ui.label("原题" if is_placeholder else "题图（原题配图）") \
+                .classes("t-xs muted")
+            ui.html(
+                f'<img src="{url}" alt="原题配图" '
+                f'style="display:block;max-width:100%;height:auto;'
+                f'border-radius:8px;border:1px solid var(--line)">') \
+                .classes("w-full")
 
         out = ui.column().classes("w-full gap-1")
 

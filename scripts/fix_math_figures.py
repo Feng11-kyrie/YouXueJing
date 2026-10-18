@@ -27,7 +27,7 @@ sys.path.insert(0, os.path.join(BASE, "scripts"))
 import import_math_lx as lx                                    # noqa: E402
 from yj import math as m                                       # noqa: E402
 
-FIG_HINT = re.compile(r"如图|图形|图所示|右图|下图|曲线如图")
+FIG_HINT = re.compile(r"如图|图形|图所示|图中|右图|下图|曲线如图")
 
 
 def fix(tier):
