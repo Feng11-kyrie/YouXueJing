@@ -365,67 +365,27 @@ def home(user: str = "demo"):
         # 选了英语/数学却发现没有内容，第一印象就坏了；问卷还多一步操作。
         # 改成直接把**已有的科目**摆出来，点哪个进哪个 —— 卡片本身就是说明。
         ui.label("选择科目").classes("text-2xl font-bold")
-        ui.label("每科都是独立的考纲图谱与真题库；进度、作答记录按科目分开。") \
+        ui.label("每科独立题库，进度分开记。") \
             .classes("t-body sub")
-        with ui.row().classes("w-full gap-4 items-stretch"):
+        with ui.element("div").classes("w-full").style(
+                "display:grid;grid-template-columns:repeat(auto-fit,"
+                "minmax(320px,1fr));gap:16px;align-items:start"):
             for e in data.exam_list():
-                with ui.card().classes("softcard flex-1 p-4 gap-1"):
+                with ui.card().classes("softcard w-full p-4 gap-1"):
                     with ui.row().classes("items-center gap-2"):
                         ui.label(e["简称"]).classes("t-lead font-bold")
                         ui.label(e["科目类型"]).classes("t-xs muted")
                     ui.label(e["名称"]).classes("t-body font-semibold")
-                    ui.label(e["说明"]).classes("t-sm sub")
-                    # 如实说明覆盖情况 —— 不写"敬请期待"这种空话，
-                    # 也不假装内容已经齐全
-                    if e["id"] == "408":
-                        ui.label("18 年真题 846 道 · 266 个考点 · 依赖关系图") \
-                            .classes("t-xs muted")
-                        with ui.row().classes("items-center gap-2"):
-                            ui.button("进入408真题",
-                                      on_click=lambda: ui.navigate.to(
-                                          f"/exam/408?user={user}")).props("unelevated")
-                            ui.button("快速诊断", on_click=lambda: ui.navigate.to(
-                                f"/diagnose?exam=408&user={user}")) \
-                                .props("outline dense")
-                    elif e["id"] == "ENG":
-                        ui.label(f"英语一 {len(en.years('EN1'))} 年 · "
-                                 f"英语二 {len(en.years('EN2'))} 年"
-                                 f"（2010–2026）") \
-                            .classes("t-xs muted")
-                        with ui.row().classes("items-center gap-2"):
-                            ui.button("进入英语真题",
-                                      on_click=lambda: ui.navigate.to(
-                                          f"/exam/english?user={user}")).props("unelevated")
-                            ui.button("快速诊断", on_click=lambda: ui.navigate.to(
-                                f"/diagnose?exam=ENG&tier=EN1&user={user}")) \
-                                .props("outline dense")
-                    elif e["id"] == "MATH":
-                        ui.label(f"数一 {len(math_data.years('一'))} 年 · "
-                                 f"数二 {len(math_data.years('二'))} 年 · "
-                                 f"数三 {len(math_data.years('三'))} 年"
-                                 f"（数一/二 2010–2025，数三另含 2009）") \
-                            .classes("t-xs muted")
-                        with ui.row().classes("items-center gap-2"):
-                            ui.button("进入数学真题",
-                                      on_click=lambda: ui.navigate.to(
-                                          f"/exam/math?user={user}")).props("unelevated")
-                            ui.button("快速诊断", on_click=lambda: ui.navigate.to(
-                                f"/diagnose?exam=MATH&tier=一&user={user}")) \
-                                .props("outline dense")
-                    else:
-                        from yj import zhengzhi as _zz
-                        _ys = _zz.years()
-                        ui.label(f"已入库 {len(_ys)} 年真题"
-                                 f"（{('、'.join(_ys)) if _ys else '整理中'}）") \
-                            .classes("t-xs muted")
-                        with ui.row().classes("items-center gap-2"):
-                            ui.button("进入政治真题",
-                                      on_click=lambda: ui.navigate.to(
-                                          f"/exam/zhengzhi?user={user}")).props("unelevated")
-                            ui.button("快速诊断", on_click=lambda: ui.navigate.to(
-                                f"/diagnose?exam=ZZ&user={user}")) \
-                                .props("outline dense")
-                    ui.label(f"考生规模 {e['考生规模']}").classes("t-xs muted")
+                    ui.label(_exam_short(e)).classes("t-xs muted")
+                    with ui.row().classes("items-center gap-2 mt-1"):
+                        ui.button(f'进入{e["简称"]}真题',
+                                  on_click=lambda _=None, r=e["真题路由"]:
+                                  ui.navigate.to(f"{r}?user={user}")) \
+                            .props("unelevated")
+                        ui.button("快速诊断",
+                                  on_click=lambda _=None, x=e["id"]:
+                                  ui.navigate.to(_diag_url(x, user))) \
+                            .props("outline dense")
 
         ui.separator().style("border-color:var(--line)")
 
@@ -880,6 +840,26 @@ def _practice_zhengzhi(part, go, user, goto):
         question_card(q, q["year"], done, user, exam="ZZ")
 
 
+def _exam_short(e):
+    """首页/真题入口卡片的一句话覆盖信息（只留关键数字）。"""
+    return {
+        "408": "18 年真题 846 道 · 266 个考点",
+        "ENG": "英语一 / 英语二 · 17 年真题",
+        "MATH": "数一 / 数二 / 数三 · 16 年真题",
+        "ZZ": "17 年真题 646 道",
+    }.get(e.get("id"), e.get("题量说明", ""))
+
+
+def _diag_url(exam_id, user="demo"):
+    route = {
+        "408": "/diagnose?exam=408",
+        "ENG": "/diagnose?exam=ENG&tier=EN1",
+        "MATH": "/diagnose?exam=MATH&tier=一",
+        "ZZ": "/diagnose?exam=ZZ",
+    }.get(exam_id, "/diagnose")
+    return f"{route}&user={user}"
+
+
 def _subject_tabs(active_id, user):
     """
     真题页顶部的**科目切换条**。
@@ -919,22 +899,22 @@ def exam_hub(user: str = "demo"):
     store.ensure_user(user)
     with shell("/exam", user):
         ui.label("考研历年真题").classes("text-2xl font-bold")
-        ui.label("按科目进入。每科都是独立的考纲与真题库，作答记录也按科目分开。") \
+        ui.label("按科目进入；进度、作答记录按科目分开。") \
             .classes("t-body sub")
 
         ready = [e for e in data.exam_list() if e.get("可用")]
         planned = [e for e in data.exam_list() if not e.get("可用")]
 
-        with ui.row().classes("w-full gap-4 items-stretch mt-2"):
+        with ui.element("div").classes("w-full mt-2").style(
+                "display:grid;grid-template-columns:repeat(auto-fit,"
+                "minmax(320px,1fr));gap:16px;align-items:start"):
             for e in ready:
-                with ui.card().classes("softcard flex-1 p-4 gap-1"):
+                with ui.card().classes("softcard w-full p-4 gap-1"):
                     with ui.row().classes("items-center gap-2"):
                         ui.label(e["简称"]).classes("t-lead font-bold")
                         ui.label(e["科目类型"]).classes("t-xs muted")
                     ui.label(e["名称"]).classes("t-body font-semibold")
-                    ui.label(e["说明"]).classes("t-sm sub")
-                    ui.label(e.get("题量说明", "")).classes("t-xs muted")
-                    ui.label(f'考生规模 {e["考生规模"]}').classes("t-xs muted")
+                    ui.label(_exam_short(e)).classes("t-xs muted")
                     ui.button(f'进入{e["简称"]}真题',
                               on_click=lambda _=None, r=e["真题路由"]:
                               ui.navigate.to(f"{r}?user={user}")) \
