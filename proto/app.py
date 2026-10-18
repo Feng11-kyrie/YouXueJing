@@ -770,6 +770,57 @@ def _en_single(q, tier, done, user):
     _sub_question(q, q["year"], tier, done, user)
 
 
+def _practice_math(tier, point, go, user, goto):
+    """数学：按**考点**练（数一/二/三 各自一套）。"""
+    tier = tier if tier in math_data.tiers_available() else "一"
+    done = store.get_answers(user)
+
+    with ui.row().classes("items-center gap-1 flex-wrap"):
+        for t in ("一", "二", "三"):
+            if t not in math_data.tiers_available():
+                continue
+            ui.button(f"数学{t}", on_click=lambda _=None, x=t:
+                      goto(subject=x, part=None, go=0)) \
+                .props("unelevated" if t == tier else "flat dense")
+
+    pts = math_data.point_list(tier)
+    if not point:
+        ui.label(f"数学{tier} · 按考点练 —— 选一个考点，直接筛出该考点的真题。") \
+            .classes("t-body")
+        with ui.element("div").classes("w-full").style(
+                "display:grid;grid-template-columns:repeat(auto-fit,"
+                "minmax(300px,1fr));gap:10px"):
+            for p in pts:
+                n_done = sum(
+                    1 for q in math_data.points(tier)[p["考点"]]
+                    if f"MATH-{tier}-{q['_year']}-{q['题号']}" in done)
+                with ui.card().classes("bookcard p-3 gap-1 shadow-none"):
+                    with ui.row().classes("items-center gap-2"):
+                        ui.label(p["考点"]).classes("t-sm font-semibold")
+                        ui.label(f'{p["题数"]} 题').classes("t-xs muted")
+                    ui.label(f"已做 {n_done} 题").classes("t-xs muted")
+                    ui.button("练这个考点", on_click=lambda _=None, x=p["考点"]:
+                              goto(part=x, go=0)).props("outline dense")
+        return
+
+    pool = [q for q in math_data.points(tier).get(point, [])]
+    if not pool:
+        ui.label("这个考点下没有题目。").classes("t-sm muted")
+        return
+    pool.sort(key=lambda q: (f"MATH-{tier}-{q['_year']}-{q['题号']}" in done,
+                             q["题型"] != "单项选择题",
+                             -int(q["_year"])))
+    ui.label(f"{point} · 题库 {len(pool)} 道（数{tier}）").classes("t-lead font-bold")
+    if not go:
+        ui.button(f"▶ 开始练习（共 {len(pool)} 道）",
+                  on_click=lambda: goto(go=1)).props("unelevated")
+        ui.label("排序：未做过的优先 → 选择题优先 → 年份新优先。") \
+            .classes("t-sm muted")
+        return
+    for q in pool:
+        math_card(q, tier, q["_year"], done, user)
+
+
 def _practice_zhengzhi(part, go, user, goto):
     """
     政治练习：**按官方五个部分**出题。
@@ -1579,8 +1630,7 @@ def practice(exam: str = None, subject: str = None, chapter: str = None,
 
         # ---------------- 第 0 层：先选科目 ----------------
         if not exam:
-            ui.label("先选一科，再挑要练的部分或考点。两科的「块」不一样："
-                     "408 有 266 个考点可勾选，政治按官方五个部分划分。") \
+            ui.label("先选一科：408 按章/考点，数学按考点，英语按题型，政治按部分。") \
                 .classes("t-body")
             with ui.row().classes("w-full gap-4 items-stretch"):
                 for e in data.exam_list():
@@ -1590,12 +1640,14 @@ def practice(exam: str = None, subject: str = None, chapter: str = None,
                         ui.label(e["简称"]).classes("t-lead font-bold")
                         ui.label(e["名称"]).classes("t-sm sub")
                         ui.label(e.get("题量说明", "")).classes("t-sm sub")
-                        if e["id"] == "408":
-                            ui.label("4 门课 → 章 → 节 → 266 个考点可勾选") \
-                                .classes("t-xs muted")
-                        else:
-                            ui.label("5 个部分（马原/毛中特/史纲/思修法基/时政）") \
-                                .classes("t-xs muted")
+                        _desc = {
+                            "408": "4 门课 → 章 → 节 → 266 个考点可勾选",
+                            "ENG": "按题型练：完形 / 阅读 / 新题型",
+                            "MATH": "按考点练：数一 68 / 数二 45 / 数三 57",
+                            "ZZ": "5 个部分（马原/毛中特/史纲/思修法基/时政）",
+                        }.get(e["id"], "")
+                        if _desc:
+                            ui.label(_desc).classes("t-xs muted")
                         ui.button(f'进入{e["简称"]}练习',
                                   on_click=lambda _=None, x=e["id"]:
                                   goto(exam=x)).props("unelevated") \
@@ -1608,6 +1660,9 @@ def practice(exam: str = None, subject: str = None, chapter: str = None,
             return
         if exam == "ENG":
             _practice_english(subject, part, go, user, goto)
+            return
+        if exam == "MATH":
+            _practice_math(subject, part, go, user, goto)
             return
 
         _steps(1 if not subject else 2)
