@@ -255,3 +255,88 @@ def part_summary():
             "年份数": len(ys),
         }
     return out
+
+
+# ---------------------------------------------------------------- 部分诊断
+def part_list():
+    """五个部分：客观题数 + 分析题数（全部年份累计）。"""
+    from collections import Counter
+    obj, ana = Counter(), Counter()
+    for y in years():
+        for q in paper(y)["题目"]:
+            part, _ = part_of(q["题号"], q["题型"])
+            if not part:
+                continue
+            if "分析题" in str(q["题型"]):
+                ana[part] += 1
+            else:
+                obj[part] += 1
+    return [{"部分": p, "简称": PART_SHORT[p], "客观题": obj.get(p, 0),
+             "分析题": ana.get(p, 0)} for p in PARTS]
+
+
+def diagnostic(n_per_part=3):
+    """
+    政治诊断：**每个部分抽 2 道单选 + 1 道多选**（尽量），约 15 题、10 分钟。
+
+    为什么按部分而不是随机：政治的选择题 1–16 单选、17–33 多选，题号本身就
+    映射到五个部分；随机抽很可能整卷偏马原。按部分各抽几道，结果才能回答
+    "哪一部分弱"。
+    """
+    out = []
+    ys = list(reversed(years()))
+    for p in PARTS:
+        picked = []
+        for y in ys:
+            for q in paper(y)["题目"]:
+                part, _ = part_of(q["题号"], q["题型"])
+                if part != p or "分析题" in str(q["题型"]):
+                    continue
+                kind = q["题型"]
+                if sum(1 for x in picked
+                       if x["题目"]["题型"] == kind) >= (
+                        2 if kind == "单项选择题" else 1):
+                    continue
+                if any(x["题目"]["题号"] == q["题号"] and x["year"] == y
+                       for x in picked):
+                    continue
+                q = dict(q)
+                q["id"] = f"ZZ-{y}-{q['题号']}"
+                picked.append({"year": y, "题目": q})
+                if len(picked) >= n_per_part:
+                    break
+            if len(picked) >= n_per_part:
+                break
+        out.extend(picked)
+    return out
+
+
+def part_mastery(answers):
+    """
+    按部分统计**客观题**正确率；分析题单独计"已练"数（不算正确率）。
+
+    分析题没有客观对错，硬算正确率是假的 —— 页面上分开显示。
+    """
+    out = []
+    for p in PARTS:
+        done = ok = ana = 0
+        for y in years():
+            for q in paper(y)["题目"]:
+                part, _ = part_of(q["题号"], q["题型"])
+                if part != p:
+                    continue
+                qid = f"ZZ-{y}-{q['题号']}"
+                r = answers.get(qid)
+                if "分析题" in str(q["题型"]):
+                    if r:
+                        ana += 1
+                    continue
+                if not r or r.get("source") == "selfscore":
+                    continue
+                done += 1
+                ok += 1 if r.get("is_correct") else 0
+        out.append({"部分": p, "简称": PART_SHORT[p], "作答": done,
+                    "答对": ok, "正确率": (ok / done) if done else None,
+                    "分析题已练": ana})
+    out.sort(key=lambda r: (r["正确率"] is None, r["正确率"] or 0, -r["作答"]))
+    return out

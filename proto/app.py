@@ -327,6 +327,8 @@ def home(user: str = "demo"):
         prof = profile_mod.build(a, mk)
         weakest = prof["薄弱章节"][0] if prof["薄弱章节"] else None
         _msug = _math_weakest(a)
+        _esug = _eng_weakest(a)
+        _zsug = _zz_weakest(a)
 
         # ---------- 选科目（用户要求："用户进去可以选择科目"）
         # 设计取舍：**不做问卷**。考研学生一进来若被问"你考哪几科"，
@@ -403,10 +405,13 @@ def home(user: str = "demo"):
         # ---------- 主行动点：**按科目各给一张建议卡**
         # 之前只有 408 一章，学数学的人看到的永远是"进程管理"；现在有哪科数据
         # 就给哪科建议，各带一个按钮（"今天该干嘛"仍然一眼能看到）。
-        if weakest or _msug:
-            with ui.row().classes("w-full gap-4 items-stretch"):
+        if weakest or _msug or _esug or _zsug:
+            # 四科建议卡：两列自适应（窄屏自动变一列），比一行四张好读
+            with ui.element("div").classes("w-full").style(
+                    "display:grid;grid-template-columns:repeat(auto-fit,"
+                    "minmax(320px,1fr));gap:16px;align-items:start"):
                 if weakest:
-                    with ui.card().classes("softcard flex-1 p-4 gap-1"):
+                    with ui.card().classes("softcard w-full p-4 gap-1"):
                         _subj = data.CODE2NAME.get(weakest.get("学科码", ""), "")
                         _title = ("今天建议先补：408 · " +
                                   (f"{_subj} · " if _subj else "") +
@@ -431,7 +436,7 @@ def home(user: str = "demo"):
                                       f'&user={user}')).props("unelevated")
                 if _msug:
                     _mt, _mr = _msug
-                    with ui.card().classes("softcard flex-1 p-4 gap-1"):
+                    with ui.card().classes("softcard w-full p-4 gap-1"):
                         ui.label(f'今天建议先补：数学（数{_mt}） · {_mr["考点"]}') \
                             .classes("t-lead font-bold")
                         ui.label(f'这个考点你做过 {_mr["作答"]} 题、答对 '
@@ -443,6 +448,31 @@ def home(user: str = "demo"):
                                   ui.navigate.to(
                                       "/exam/math?tier=" + urllib.parse.quote(t) +
                                       "&point=" + urllib.parse.quote(p))) \
+                            .props("unelevated")
+                if _esug:
+                    _et, _er = _esug
+                    with ui.card().classes("softcard w-full p-4 gap-1"):
+                        ui.label(f'今天建议先补：{en.TIERS[_et]["简称"]} · {_er["简称"]}') \
+                            .classes("t-lead font-bold")
+                        ui.label(f'这个题型你做过 {_er["作答"]} 题、答对 '
+                                 f'{_er["答对"]} 题（{_er["正确率"]:.0%}）；'
+                                 f'按题型练先把这个题型补起来。') \
+                            .classes("t-sm sub")
+                        ui.button("按题型练", on_click=lambda _=None, t=_et, p=_er["部分"]:
+                                  ui.navigate.to(
+                                      f"/practice?exam=ENG&subject={t}&part={p}"
+                                      f"&user={user}")).props("unelevated")
+                if _zsug:
+                    with ui.card().classes("softcard w-full p-4 gap-1"):
+                        ui.label(f'今天建议先补：政治 · {_zsug["简称"]}') \
+                            .classes("t-lead font-bold")
+                        ui.label(f'这个部分你做过 {_zsug["作答"]} 题、答对 '
+                                 f'{_zsug["答对"]} 题（{_zsug["正确率"]:.0%}）；'
+                                 f'按部分练先把这部分补起来。') \
+                            .classes("t-sm sub")
+                        ui.button("按部分练", on_click=lambda _=None, p=_zsug["部分"]:
+                                  ui.navigate.to(
+                                      f"/practice?exam=ZZ&part={p}&user={user}")) \
                             .props("unelevated")
 
         if not a:
@@ -1703,6 +1733,12 @@ def _diag_subject_tabs(exam, user, tier="一"):
         ui.button("数学", on_click=lambda: ui.navigate.to(
             f"/diagnose?exam=MATH&tier={tier}&user={user}")) \
             .props("unelevated" if exam == "MATH" else "flat dense")
+        ui.button("英语", on_click=lambda: ui.navigate.to(
+            f"/diagnose?exam=ENG&tier=EN1&user={user}")) \
+            .props("unelevated" if exam == "ENG" else "flat dense")
+        ui.button("政治", on_click=lambda: ui.navigate.to(
+            f"/diagnose?exam=ZZ&user={user}")) \
+            .props("unelevated" if exam == "ZZ" else "flat dense")
 
 
 def _math_weakest(answers):
@@ -1721,6 +1757,36 @@ def _math_weakest(answers):
             if best is None or key < best[0]:
                 best = (key, t, r)
     return (best[1], best[2]) if best else None
+
+
+def _eng_weakest(answers):
+    """首页建议：英语两卷种里正确率最低的客观题型。"""
+    best = None
+    for t in ("EN1", "EN2"):
+        for r in en.part_mastery(t, answers):
+            if not r["作答"]:
+                continue
+            rate = r["正确率"] or 0
+            if rate >= 0.6:
+                continue
+            key = (rate, -r["作答"])
+            if best is None or key < best[0]:
+                best = (key, t, r)
+    return (best[1], best[2]) if best else None
+
+
+def _zz_weakest(answers):
+    best = None
+    for r in zz.part_mastery(answers):
+        if not r["作答"]:
+            continue
+        rate = r["正确率"] or 0
+        if rate >= 0.6:
+            continue
+        key = (rate, -r["作答"])
+        if best is None or key < best[0]:
+            best = (key, r)
+    return best[1] if best else None
 
 
 def _math_diag_tier_tabs(tier, user):
@@ -1819,12 +1885,171 @@ def _math_diag_result(user, tier):
             .classes("t-sm").style("color:#1B5E36")
 
 
+def _diagnose_eng(user, tier, view):
+    """英语诊断：完形 20 空 + 阅读 5 题 + 新题型 5 题（客观题三块）。"""
+    tier = tier if tier in en.TIERS else "EN1"
+    diag = en.diagnostic(tier)
+    got = store.get_answers(user)
+    with shell("/diagnose", user):
+        _title("快速诊断")
+        _diag_subject_tabs("ENG", user, tier)
+        with ui.row().classes("items-center gap-1 flex-wrap"):
+            for t in en.TIERS:
+                on = t == tier
+                ui.button(en.TIERS[t]["简称"], on_click=lambda _=None, x=t:
+                          ui.navigate.to(f"/diagnose?exam=ENG&tier={x}&user={user}")) \
+                    .props("unelevated" if on else "flat dense")
+        if not diag:
+            ui.label("英语真题还没有入库。").classes("t-body sub")
+            return
+        y = diag["year"]
+        ui.label(f'{y} 年{en.TIERS[tier]["简称"]} · {diag["题数"]} 题 · '
+                 f'完形 20 / 阅读 5 / 新题型 5 · 约 25 分钟') \
+            .classes("t-body font-semibold")
+        ui.label("翻译/写作是主观题，不参与自动诊断；去真题页可用免费评分 / AI 精评。") \
+            .classes("t-sm sub")
+        if view == "result":
+            _eng_diag_result(user, tier)
+        else:
+            qids = [q["id"] for ps in diag["篇目"] for q in ps.get("小题") or []]
+            done_n = sum(1 for x in qids if x in got)
+            ui.linear_progress(value=done_n / max(1, len(qids)),
+                               show_value=False).classes("w-full")
+            ui.label(f"进度 {done_n}/{len(qids)}").classes("t-sm muted")
+            ui.button("查看诊断结果", on_click=lambda: ui.navigate.to(
+                f"/diagnose?exam=ENG&tier={tier}&view=result&user={user}")) \
+                .props("unelevated")
+        for ps in diag["篇目"]:
+            code = ps.get("部分")
+            if code == "CLOZE":
+                cloze_card(ps, y, tier, got, user)
+            elif code == "READ":
+                passage_card(ps, y, tier, got, user)
+            elif code == "NEW":
+                partb_block(ps, y, tier, got, user)
+        if view != "result":
+            ui.button("查看诊断结果", on_click=lambda: ui.navigate.to(
+                f"/diagnose?exam=ENG&tier={tier}&view=result&user={user}")) \
+                .props("unelevated")
+
+
+def _eng_diag_result(user, tier):
+    got = store.get_answers(user)
+    ms = en.part_mastery(tier, got)
+    tried = [r for r in ms if r["作答"]]
+    weak = [r for r in tried if (r["正确率"] or 0) < 0.6]
+    ui.label("诊断结果").classes("text-xl font-bold mt-2")
+    if not tried:
+        ui.label("还没有作答记录 —— 先在下面的诊断卷里做几题。").classes("t-body sub")
+        return
+    ui.label(f"已测 {len(tried)} 个题型 · 薄弱 {len(weak)} 个").classes("t-sm sub")
+    for r in tried:
+        rate = r["正确率"] or 0
+        with ui.row().classes("items-center gap-2 w-full no-wrap"):
+            ui.label(r["简称"]).classes("t-sm").style("width:5rem")
+            ui.label(f'{r["答对"]}/{r["作答"]}').classes("t-xs muted") \
+                .style("width:3rem")
+            ui.linear_progress(value=rate, show_value=False).classes("flex-1")
+            ui.label(f"{rate:.0%}").classes("t-xs muted").style("width:2.5rem")
+    if weak:
+        ui.label("薄弱题型 Top 5").classes("t-body font-semibold mt-2") \
+            .style("color:#B45309")
+        for r in weak[:5]:
+            with ui.row().classes("items-center gap-2 flex-wrap"):
+                ui.label(f'{r["简称"]}（{r["正确率"]:.0%}，{r["答对"]}/{r["作答"]}）') \
+                    .classes("t-sm")
+                ui.button("按题型练", on_click=lambda _=None, p=r["部分"]:
+                          ui.navigate.to(
+                              f"/practice?exam=ENG&subject={tier}&part={p}&user={user}")) \
+                    .props("outline dense")
+    else:
+        ui.label("暂时没有低于 60% 的题型 —— 继续按套卷练保持手感。") \
+            .classes("t-sm").style("color:#1B5E36")
+    ui.label("翻译/写作：到真题页做，主观题有免费评分 + 自己的 Key 的 AI 精评。") \
+        .classes("t-sm muted")
+
+
+def _diagnose_zz(user, view):
+    """政治诊断：五个部分各 2 单选 + 1 多选，共 15 题。"""
+    items = zz.diagnostic()
+    got = store.get_answers(user)
+    with shell("/diagnose", user):
+        _title("快速诊断")
+        _diag_subject_tabs("ZZ", user)
+        ui.label("5 个部分 × 3 题（2 单选 + 1 多选） · 约 10 分钟") \
+            .classes("t-body font-semibold")
+        ui.label("按部分各抽几道，结果才能回答「哪一部分弱」；分析题不参与自动诊断。") \
+            .classes("t-sm sub")
+        if view == "result":
+            _zz_diag_result(user)
+        else:
+            done_n = sum(1 for it in items if it["题目"]["id"] in got)
+            ui.linear_progress(value=done_n / max(1, len(items)),
+                               show_value=False).classes("w-full")
+            ui.label(f"进度 {done_n}/{len(items)}").classes("t-sm muted")
+            ui.button("查看诊断结果", on_click=lambda: ui.navigate.to(
+                f"/diagnose?exam=ZZ&view=result&user={user}")).props("unelevated")
+        for it in items:
+            q = it["题目"]
+            q["id"] = f"ZZ-{it['year']}-{q['题号']}"
+            ui.label(f'{zz.PART_SHORT.get(q.get("部分"), "")} · {it["year"]} 年') \
+                .classes("t-xs muted")
+            question_card(q, it["year"], got, user, exam="ZZ")
+        if view != "result":
+            ui.button("查看诊断结果", on_click=lambda: ui.navigate.to(
+                f"/diagnose?exam=ZZ&view=result&user={user}")).props("unelevated")
+
+
+def _zz_diag_result(user):
+    got = store.get_answers(user)
+    ms = zz.part_mastery(got)
+    tried = [r for r in ms if r["作答"]]
+    weak = [r for r in tried if (r["正确率"] or 0) < 0.6]
+    ui.label("诊断结果").classes("text-xl font-bold mt-2")
+    if not tried:
+        ui.label("还没有作答记录 —— 先在下面的诊断卷里做几题。").classes("t-body sub")
+        return
+    ui.label(f"已测 {len(tried)} 个部分 · 薄弱 {len(weak)} 个").classes("t-sm sub")
+    for r in ms:
+        if not r["作答"]:
+            continue
+        rate = r["正确率"] or 0
+        with ui.row().classes("items-center gap-2 w-full no-wrap"):
+            ui.label(r["简称"]).classes("t-sm").style("width:6rem")
+            ui.label(f'{r["答对"]}/{r["作答"]}').classes("t-xs muted") \
+                .style("width:3rem")
+            ui.linear_progress(value=rate, show_value=False).classes("flex-1")
+            ui.label(f"{rate:.0%}").classes("t-xs muted").style("width:2.5rem")
+            if r["分析题已练"]:
+                ui.label(f'分析题已练 {r["分析题已练"]}').classes("t-xs muted")
+    if weak:
+        ui.label("薄弱部分 Top 5").classes("t-body font-semibold mt-2") \
+            .style("color:#B45309")
+        for r in weak[:5]:
+            with ui.row().classes("items-center gap-2 flex-wrap"):
+                ui.label(f'{r["简称"]}（{r["正确率"]:.0%}，{r["答对"]}/{r["作答"]}）') \
+                    .classes("t-sm")
+                ui.button("按部分练", on_click=lambda _=None, p=r["部分"]:
+                          ui.navigate.to(
+                              f"/practice?exam=ZZ&part={p}&user={user}")) \
+                    .props("outline dense")
+    else:
+        ui.label("暂时没有低于 60% 的部分 —— 继续做真题保持手感。") \
+            .classes("t-sm").style("color:#1B5E36")
+
+
 @ui.page("/diagnose")
 def diagnose_page(user: str = "demo", exam: str = "408", tier: str = "一",
                   view: str = "quiz"):
     store.ensure_user(user)
     if exam == "MATH":
         _diagnose_math(user, tier, view)
+        return
+    if exam == "ENG":
+        _diagnose_eng(user, tier, view)
+        return
+    if exam == "ZZ":
+        _diagnose_zz(user, view)
         return
 
     got = store.get_answers(user)
@@ -1971,6 +2196,72 @@ def profile_page(user: str = "demo"):
                                 .props("flat dense")
             ui.button("去数学诊断", on_click=lambda: ui.navigate.to(
                 f"/diagnose?exam=MATH&tier=一&user={user}")).props("outline dense")
+
+        # ---------------- 英语：题型作答记录
+        _eng_ans = {k: v for k, v in a.items() if k.startswith(("EN1-", "EN2-"))}
+        ui.separator()
+        ui.label("英语 · 题型作答记录").classes("t-lead font-semibold")
+        if not _eng_ans:
+            ui.label("还没做英语诊断 —— 按题型抽一套完形+阅读+新题型，看哪块弱。") \
+                .classes("t-sm muted")
+            ui.button("去英语诊断", on_click=lambda: ui.navigate.to(
+                f"/diagnose?exam=ENG&tier=EN1&user={user}")).props("outline dense")
+        else:
+            for t in ("EN1", "EN2"):
+                ms = [r for r in en.part_mastery(t, a) if r["作答"]]
+                if not ms:
+                    continue
+                ui.label(f'{en.TIERS[t]["简称"]} · 已测 {len(ms)} 个题型') \
+                    .classes("t-sm font-semibold")
+                for r in ms:
+                    with ui.row().classes("items-center gap-3 w-full no-wrap"):
+                        ui.label(r["简称"]).classes("t-sm flex-1")
+                        ui.label(f'答对 {r["答对"]} / {r["作答"]} 题') \
+                            .classes("t-sm").style("white-space:nowrap")
+                weak = [r for r in ms if (r["正确率"] or 0) < 0.6][:3]
+                if weak:
+                    with ui.row().classes("items-center gap-2 flex-wrap"):
+                        ui.label("最该先补：").classes("t-xs muted")
+                        for r in weak:
+                            ui.button(f'{r["简称"]}（{r["正确率"]:.0%}）',
+                                      on_click=lambda _=None, x=t, p=r["部分"]:
+                                      ui.navigate.to(
+                                          f"/practice?exam=ENG&subject={x}&part={p}"
+                                          f"&user={user}")).props("flat dense")
+            ui.button("去英语诊断", on_click=lambda: ui.navigate.to(
+                f"/diagnose?exam=ENG&tier=EN1&user={user}")).props("outline dense")
+
+        # ---------------- 政治：部分作答记录
+        _zz_ans = {k: v for k, v in a.items() if k.startswith("ZZ-")}
+        ui.separator()
+        ui.label("政治 · 部分作答记录").classes("t-lead font-semibold")
+        if not _zz_ans:
+            ui.label("还没做政治诊断 —— 按五个部分各抽几道，看哪部分弱。") \
+                .classes("t-sm muted")
+            ui.button("去政治诊断", on_click=lambda: ui.navigate.to(
+                f"/diagnose?exam=ZZ&user={user}")).props("outline dense")
+        else:
+            ms = [r for r in zz.part_mastery(a) if r["作答"]]
+            ui.label(f"已测 {len(ms)} 个部分").classes("t-sm font-semibold")
+            for r in ms:
+                with ui.row().classes("items-center gap-3 w-full no-wrap"):
+                    ui.label(r["简称"]).classes("t-sm flex-1")
+                    ui.label(f'答对 {r["答对"]} / {r["作答"]} 题') \
+                        .classes("t-sm").style("white-space:nowrap")
+                    if r["分析题已练"]:
+                        ui.label(f'分析题 {r["分析题已练"]}').classes("t-xs muted")
+            weak = [r for r in ms if (r["正确率"] or 0) < 0.6][:3]
+            if weak:
+                with ui.row().classes("items-center gap-2 flex-wrap"):
+                    ui.label("最该先补：").classes("t-xs muted")
+                    for r in weak:
+                        ui.button(f'{r["简称"]}（{r["正确率"]:.0%}）',
+                                  on_click=lambda _=None, p=r["部分"]:
+                                  ui.navigate.to(
+                                      f"/practice?exam=ZZ&part={p}&user={user}")) \
+                            .props("flat dense")
+            ui.button("去政治诊断", on_click=lambda: ui.navigate.to(
+                f"/diagnose?exam=ZZ&user={user}")).props("outline dense")
 
         if prof["薄弱章节"]:
             ui.separator()

@@ -399,3 +399,70 @@ def report(tier, year, answers, ai_grades=None):
         "total_score": round(obj_score + sub_total, 2),
         "total_max": round(obj_max + sub_max, 2),
     }
+
+
+# ---------------------------------------------------------------- 题型诊断
+def part_list():
+    """各题型：代码/简称/题数（客观题按全部年份统计）。"""
+    from collections import Counter
+    c = Counter()
+    for t in TIERS:
+        for y in years(t):
+            rec = paper(t, y) or {}
+            for ps in rec.get("篇目", []):
+                c[ps.get("部分")] += len(ps.get("小题") or [])
+    out = []
+    for code in PARTS:
+        out.append({"部分": code, "简称": part_name(code),
+                    "全称": part_full(code), "题数": c.get(code, 0),
+                    "客观": code not in SUBJECTIVE})
+    return out
+
+
+def diagnostic(tier="EN1", year=None):
+    """
+    一套英语诊断：**完形 + 阅读 Part A 第一篇 + 新题型**（客观题三块）。
+
+    为什么不抽样单选题：英语是复合题，完形 20 空共享一篇文章、阅读 5 题共享
+    一篇。抽单题就得重复贴文章，反而更乱。所以用"篇目"作诊断单位，
+    30 道客观题，约 25 分钟；翻译/写作不参与自动诊断，另给入口。
+    """
+    for y in ([str(year)] if year else list(reversed(years(tier)))):
+        rec = paper(tier, y)
+        if not rec:
+            continue
+        by = {}
+        for ps in rec.get("篇目", []):
+            by.setdefault(ps.get("部分"), []).append(ps)
+        if not all(k in by for k in ("CLOZE", "READ", "NEW")):
+            continue
+        picked = [by["CLOZE"][0], by["READ"][0], by["NEW"][0]]
+        return {"tier": tier, "year": y, "篇目": picked,
+                "题数": sum(len(p.get("小题") or []) for p in picked)}
+    return None
+
+
+def part_mastery(tier, answers):
+    """
+    按题型统计客观题正确率。
+
+    只统计 CLOZE/READ/NEW（能机判的）；翻译/写作在页面上单独看免费/AI 评分。
+    """
+    out = []
+    for code in ("CLOZE", "READ", "NEW"):
+        done = ok = 0
+        for y in years(tier):
+            rec = paper(tier, y) or {}
+            for ps in rec.get("篇目", []):
+                if ps.get("部分") != code:
+                    continue
+                for q in ps.get("小题") or []:
+                    r = answers.get(q.get("id"))
+                    if not r or r.get("source") == "selfscore":
+                        continue
+                    done += 1
+                    ok += 1 if r.get("is_correct") else 0
+        out.append({"部分": code, "简称": part_name(code), "作答": done,
+                    "答对": ok, "正确率": (ok / done) if done else None})
+    out.sort(key=lambda r: (r["正确率"] is None, r["正确率"] or 0, -r["作答"]))
+    return out
