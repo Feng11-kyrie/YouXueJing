@@ -33,6 +33,31 @@ def ensure_user(user_id):
                   (user_id, datetime.datetime.now().isoformat(timespec="seconds")))
 
 
+def set_last_visit(user_id, label, url):
+    """记录"继续上次"（存库，比浏览器 cookie 可靠）。"""
+    ensure_user(user_id)
+    with conn() as c:
+        c.execute("""CREATE TABLE IF NOT EXISTS last_visit(
+                       user_id TEXT PRIMARY KEY, label TEXT, url TEXT,
+                       at TEXT)""")
+        c.execute("""INSERT INTO last_visit(user_id, label, url, at)
+                     VALUES(?,?,?,?)
+                     ON CONFLICT(user_id) DO UPDATE SET
+                       label=excluded.label, url=excluded.url, at=excluded.at""",
+                  (user_id, label, url,
+                   datetime.datetime.now().isoformat(timespec="seconds")))
+
+
+def get_last_visit(user_id):
+    with conn() as c:
+        c.execute("""CREATE TABLE IF NOT EXISTS last_visit(
+                       user_id TEXT PRIMARY KEY, label TEXT, url TEXT,
+                       at TEXT)""")
+        r = c.execute("SELECT label, url, at FROM last_visit WHERE user_id=?",
+                      (user_id,)).fetchone()
+    return dict(r) if r else None
+
+
 def get_answers(user_id, source=None):
     sql = "SELECT * FROM answers WHERE user_id=?"
     args = [user_id]

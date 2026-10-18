@@ -197,6 +197,93 @@ ui.add_head_html("""
 
 
 # ================================================================ 公共外壳
+def _remember_visit(label, url, user="demo"):
+    """记录"继续上次"（存库；浏览器 cookie 在未配置 storage_secret 时不可靠）。"""
+    try:
+        store.set_last_visit(user, label, url)
+    except Exception:                                       # noqa: BLE001
+        pass
+
+
+def _last_visit(user="demo"):
+    try:
+        return store.get_last_visit(user)
+    except Exception:                                       # noqa: BLE001
+        return None
+
+
+def _streak_days(answers):
+    """连续学习天数（从今天/昨天往前数，断了就停）。"""
+    days = {str(r.get("answered_at", ""))[:10]
+            for r in answers.values() if r.get("answered_at")}
+    d = datetime.date.today()
+    if d.isoformat() not in days:
+        d -= datetime.timedelta(days=1)
+    n = 0
+    while d.isoformat() in days:
+        n += 1
+        d -= datetime.timedelta(days=1)
+    return n
+
+
+def _wrong_targets(answers):
+    """四科错题：总数 + 错得最多的年份/卷种（错题本跳转用）。"""
+    from collections import Counter
+    c408, c_eng, c_math, c_zz = Counter(), Counter(), Counter(), Counter()
+    q408 = data.questions()
+    for qid, r in answers.items():
+        if r.get("is_correct") or r.get("source") == "selfscore":
+            continue
+        if qid.startswith("MATH-"):
+            parts = qid.split("-")
+            if len(parts) >= 4:
+                c_math[(parts[1], parts[2])] += 1
+        elif qid.startswith(("EN1-", "EN2-")):
+            parts = qid.split("-")
+            if len(parts) >= 3:
+                c_eng[(parts[0], parts[1])] += 1
+        elif qid.startswith("ZZ-"):
+            parts = qid.split("-")
+            if len(parts) >= 3:
+                c_zz[parts[1]] += 1
+        elif str(qid).isdigit():
+            y = (q408.get(qid) or {}).get("year")
+            if y:
+                c408[str(y)] += 1
+    out = {"408": {"n": sum(c408.values())},
+           "ENG": {"n": sum(c_eng.values())},
+           "MATH": {"n": sum(c_math.values())},
+           "ZZ": {"n": sum(c_zz.values())}}
+    if c408:
+        out["408"]["year"] = c408.most_common(1)[0][0]
+    if c_eng:
+        (t, y), _ = c_eng.most_common(1)[0]
+        out["ENG"].update(tier=t, year=y)
+    if c_math:
+        (t, y), _ = c_math.most_common(1)[0]
+        out["MATH"].update(tier=t, year=y)
+    if c_zz:
+        out["ZZ"]["year"] = c_zz.most_common(1)[0][0]
+    return out
+
+
+def _wrong_counts(answers):
+    """四科错题数（只算客观题；数学自评不算错题）。"""
+    out = {"408": 0, "ENG": 0, "MATH": 0, "ZZ": 0}
+    for qid, r in answers.items():
+        if r.get("is_correct") or r.get("source") == "selfscore":
+            continue
+        if qid.startswith("MATH-"):
+            out["MATH"] += 1
+        elif qid.startswith(("EN1-", "EN2-")):
+            out["ENG"] += 1
+        elif qid.startswith("ZZ-"):
+            out["ZZ"] += 1
+        elif str(qid).isdigit():
+            out["408"] += 1
+    return out
+
+
 def _key_entry():
     """
     页面顶部的 **API Key 入口**（每一页都有）。
@@ -388,6 +475,50 @@ def home(user: str = "demo"):
                             .props("outline dense")
 
         ui.separator().style("border-color:var(--line)")
+
+        # ---------- 继续上次 / 连续学习 / 错题本
+        _lv = _last_visit(user)
+        _streak = _streak_days(a)
+        _today_n = sum(1 for r in a.values()
+                       if str(r.get("answered_at", ""))[:10]
+                       == today.isoformat())
+        with ui.row().classes("w-full gap-4 items-stretch flex-wrap"):
+            with ui.card().classes("softcard p-4 gap-1").style("flex:1 1 420px"):
+                ui.label("继续上次").classes("t-xs muted")
+                if _lv:
+                    ui.label(_lv["label"]).classes("t-lead font-bold")
+                    ui.button("继续", on_click=lambda: ui.navigate.to(_lv["url"])) \
+                        .props("unelevated")
+                else:
+                    ui.label("还没有打开过真题").classes("t-sm sub")
+                    ui.button("先做一次诊断", on_click=lambda: ui.navigate.to(
+                        f"/diagnose?user={user}")).props("outline dense")
+            with ui.card().classes("softcard p-4 gap-1").style("flex:0 0 220px"):
+                ui.label("连续学习").classes("t-xs muted")
+                with ui.row().classes("items-baseline gap-1"):
+                    ui.label(str(_streak)).classes("text-3xl font-bold") \
+                        .style("color:#17418F")
+                    ui.label("天").classes("t-sm muted")
+                ui.label(f"今天做了 {_today_n} 题").classes("t-sm sub")
+
+        _wc = _wrong_counts(a)
+        _wt = _wrong_targets(a)
+        with ui.card().classes("softcard w-full p-4 gap-2"):
+            ui.label("错题本").classes("t-lead font-bold")
+            ui.label("做错过的客观题，按科目进去重练（解答题自评不算错题）。") \
+                .classes("t-xs muted")
+            with ui.row().classes("items-center gap-2 flex-wrap"):
+                _wrong = [
+                    ("408", "408", f"/wrong?exam=408&user={user}"),
+                    ("ENG", "英语", f"/wrong?exam=ENG&user={user}"),
+                    ("MATH", "数学", f"/wrong?exam=MATH&user={user}"),
+                    ("ZZ", "政治", f"/wrong?exam=ZZ&user={user}"),
+                ]
+                for _id, _name, _url in _wrong:
+                    _n = _wc.get(_id, 0)
+                    ui.button(f"{_name} {_n} 题" if _n else f"{_name} · 暂无",
+                              on_click=lambda _=None, u=_url: ui.navigate.to(u)) \
+                        .props("outline dense" if _n else "flat dense disable")
 
         # ---------- 首屏：一句话说清"你最近练了多少"
         ui.label("我的做题记录").classes("text-2xl font-bold")
@@ -992,6 +1123,7 @@ def exam_408(year: str = None, page: int = 1, view: str = "全部", user: str = 
     papers = data.paper_index()
     years = [p["年份"] for p in papers]
     year = str(year) if str(year) in years else years[0]
+    _remember_visit(f"{year} 年 408 真题", f"/exam/408?year={year}&user={user}", user)
     p = data.paper(year)
     store.ensure_user(user)
     done = store.get_answers(user)
@@ -1123,6 +1255,8 @@ def exam_zhengzhi(year: str = None, page: int = 1, user: str = "demo",
             ui.label("政治真题还没有入库。").classes("t-body sub")
         return
     year = year if year in ys else ys[-1]
+    _remember_visit(f"{year} 年政治真题",
+                    f"/exam/zhengzhi?year={year}&user={user}", user)
     rec = zz.paper(year)
     done = store.get_answers(user)
 
@@ -1362,6 +1496,8 @@ def exam_math(tier: str = "一", year: str = None, view: str = "全部",
             ui.label("数学真题还没有入库。").classes("t-body sub")
         return
     year = str(year) if str(year) in ys else ys[-1]
+    _remember_visit(f"{year} 年数学{tier}真题",
+                    f"/exam/math?tier={tier}&year={year}&user={user}", user)
     all_qs = math_data.questions(tier, year)
     pts = math_data.point_list(tier)
     point = point if point in {p["考点"] for p in pts} else None
@@ -1479,6 +1615,8 @@ def exam_english(tier: str = "EN1", year: str = None, view: str = "全部",
             ui.label("英语真题还没有入库。").classes("t-body sub")
         return
     year = str(year) if str(year) in ys else ys[-1]
+    _remember_visit(f"{year} 年{en.TIERS[tier]['简称']}真题",
+                    f"/exam/english?tier={tier}&year={year}&user={user}", user)
     rec = en.paper(tier, year)
     done = store.get_answers(user)
     tn = en.TIERS[tier]["简称"]
@@ -2358,6 +2496,96 @@ def _diag_408_result(user):
                                   f'/practice?subject={c["学科码"]}'
                                   f'&chapter={c["chapter"]}&go=1&user={user}')) \
                         .props("outline dense")
+
+
+@ui.page("/wrong")
+def wrong_page(exam: str = "408", user: str = "demo"):
+    """错题本：四科分开看/重练。"""
+    store.ensure_user(user)
+    a = store.get_answers(user)
+    wc = _wrong_counts(a)
+    with shell("/wrong", user):
+        _title("错题本")
+        ui.label("做错的客观题（解答题自评不算），按科目查看与重练。") \
+            .classes("t-body sub")
+        with ui.row().classes("items-center gap-2 flex-wrap"):
+            for _id, _name in (("408", "408"), ("ENG", "英语"),
+                               ("MATH", "数学"), ("ZZ", "政治")):
+                ui.button(f'{_name} {wc.get(_id, 0)}',
+                          on_click=lambda _=None, x=_id:
+                          ui.navigate.to(f"/wrong?exam={x}&user={user}")) \
+                    .props("unelevated" if exam == _id else "flat dense")
+
+        if exam == "408":
+            qs = data.questions()
+            ids = [qid for qid, r in a.items()
+                   if str(qid).isdigit() and not r["is_correct"]
+                   and r.get("source") != "selfscore"]
+            if not ids:
+                ui.label("408 暂无错题。").classes("t-sm muted")
+            for qid in sorted(ids, key=lambda x: (qs[x]["year"],
+                                                  int(qs[x]["题号"]))):
+                q = qs[qid]
+                ui.label(f'{q["year"]} 年 · 第 {q["题号"]} 题') \
+                    .classes("t-xs muted")
+                question_card(q, q["year"], a, user, exam="408")
+        elif exam == "ZZ":
+            ids = [qid for qid, r in a.items()
+                   if qid.startswith("ZZ-") and not r["is_correct"]
+                   and r.get("source") != "selfscore"]
+            if not ids:
+                ui.label("政治暂无错题。").classes("t-sm muted")
+            for qid in sorted(ids, key=lambda x: (x.split("-")[1],
+                                                  int(x.split("-")[2]))):
+                _, y, n = qid.split("-")
+                q = next((q for q in zz.paper(y)["题目"]
+                          if str(q["题号"]) == n), None)
+                if not q:
+                    continue
+                q = dict(q)
+                q["id"] = qid
+                ui.label(f'{y} 年 · 第 {n} 题').classes("t-xs muted")
+                question_card(q, y, a, user, exam="ZZ")
+        elif exam == "MATH":
+            ids = [qid for qid, r in a.items()
+                   if qid.startswith("MATH-") and not r["is_correct"]
+                   and r.get("source") != "selfscore"]
+            if not ids:
+                ui.label("数学暂无错题。").classes("t-sm muted")
+            for qid in ids:
+                parts = qid.split("-")
+                if len(parts) < 4:
+                    continue
+                _, tier, y, n = parts
+                q = math_data.question(tier, y, n)
+                if not q:
+                    continue
+                ui.label(f'数学{tier} · {y} 年 · 第 {n} 题').classes("t-xs muted")
+                math_card(q, tier, y, a, user)
+        else:  # ENG
+            wrong = {qid for qid, r in a.items()
+                     if qid.startswith(("EN1-", "EN2-"))
+                     and not r["is_correct"] and r.get("source") != "selfscore"}
+            if not wrong:
+                ui.label("英语暂无错题。").classes("t-sm muted")
+            for tier in ("EN1", "EN2"):
+                for y in en.years(tier):
+                    rec = en.paper(tier, y)
+                    for ps in rec.get("篇目", []):
+                        subs = [q for q in ps.get("小题", [])
+                                if q.get("id") in wrong]
+                        if not subs:
+                            continue
+                        ui.label(f'{y} 年{en.TIERS[tier]["简称"]} · '
+                                 f'{en.part_name(ps.get("部分"))}') \
+                            .classes("t-xs muted")
+                        code = ps.get("部分")
+                        if code == "CLOZE":
+                            cloze_card({**ps, "小题": subs}, y, tier, a, user)
+                        elif code == "NEW":
+                            partb_block({**ps, "小题": subs}, y, tier, a, user)
+                        elif code == "READ":
+                            passage_card({**ps, "小题": subs}, y, tier, a, user)
 
 
 @ui.page("/profile")
