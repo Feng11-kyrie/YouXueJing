@@ -51,6 +51,12 @@ _EN_IMG = os.path.join(os.path.dirname(os.path.dirname(
     os.path.abspath(__file__))), "data", "english", "img")
 if os.path.isdir(_EN_IMG):
     app.add_static_files("/en_img", _EN_IMG)
+
+# 数学题的原题图（缺题干/引用图形的题）：/math_img/<文件名>
+_MATH_IMG = os.path.join(os.path.dirname(os.path.dirname(
+    os.path.abspath(__file__))), "data", "math", "figures")
+if os.path.isdir(_MATH_IMG):
+    app.add_static_files("/math_img", _MATH_IMG)
 from proto import store_lite as store              # noqa: E402
 from proto.cards_math import math_card                # noqa: E402
 from proto.cards import (question_card, SUBJECT_COLORS,   # noqa: E402
