@@ -18,6 +18,7 @@ from collections import Counter
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, BASE)
 
+from yj import data                                             # noqa: E402
 from yj import math as m                                        # noqa: E402
 from yj import math_checker as mc                               # noqa: E402
 from yj import mathrender as mr                                 # noqa: E402
@@ -48,6 +49,13 @@ def check_data():
                 else:
                     assert q.get("解析") or q.get("图片"), \
                         f"数学{tier} {y} 第{q['题号']}题没有解析"
+
+
+def check_subject_order():
+    """真题部分：公共课在前，专业课（408）在后。"""
+    ids = [e["id"] for e in data.exam_list() if e.get("可用")]
+    assert ids[-1] == "408", f"408 应排最后：{ids}"
+    assert set(ids[:-1]) == {"ENG", "MATH", "ZZ"}, ids
 
 
 def check_render():
@@ -83,6 +91,7 @@ def check_free_score():
 
 if __name__ == "__main__":
     check_data()
+    check_subject_order()
     check_render()
     check_answer_norm()
     check_free_score()

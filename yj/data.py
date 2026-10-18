@@ -105,9 +105,14 @@ def exam_list():
     """
     全部科目，**可用的排前面**（供首页与真题页的科目选择用）。
 
-    排序规则：可用 → 规划中。这样界面不用自己排，也保证了"能点的先出现"。
+    排序规则（用户要求："真题部分把公共课放前面，专业课放后面"）：
+        可用 → 公共课 → 专业课 → id
+    即：英语 / 数学 / 政治 → 408。规划中的科目永远排最后。
     """
-    return sorted(EXAMS.values(), key=lambda e: (not e.get("可用"), e["id"]))
+    def _rank(e):
+        public = 0 if e.get("科目类型") == "统考公共课" else 1
+        return (not e.get("可用"), public, e["id"])
+    return sorted(EXAMS.values(), key=_rank)
 
 
 def exam(exam_id):
