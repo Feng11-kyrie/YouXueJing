@@ -74,3 +74,6 @@ data/*.db-shm
 
 # ---- 考研政治真题数据（题目与答案，与题源同属版权内容）----
 data/zhengzhi
+
+# NiceGUI 会话/缓存
+.nicegui/

@@ -739,7 +739,7 @@ def questions_only(passage, year, tier, done, user):
         _sub_question(q, year, tier, done, user)
 
 
-def two_col(passage, year, tier, done, user, left=None):
+def two_col(passage, year, tier, done, user, left=None, reveal=True):
     """
     **两栏布局**：左文章 / 右题目。
 
