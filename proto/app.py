@@ -329,6 +329,7 @@ def authed(fn):
 
 def _logout():
     try:
+        llm_key.clear()          # 退出时一并清掉本会话的 API Key
         app.storage.user.pop("user", None)
     except Exception:                                       # noqa: BLE001
         pass
@@ -1449,8 +1450,8 @@ def _key_panel():
             ui.button("保存", on_click=save).props("unelevated dense")
             if cur["key"]:
                 ui.button("清除", on_click=drop).props("flat dense")
-        ui.label("密钥只保存在你自己的浏览器 cookie 里，不会写进服务器数据库；"
-                 "清除浏览器数据即失效。免费版评分不需要任何密钥。") \
+        ui.label("密钥只保存在当前登录会话里，不写数据库、不下发浏览器；"
+                 "退出登录即清除。免费版评分不需要任何密钥。") \
             .classes("t-xs muted")
 
 

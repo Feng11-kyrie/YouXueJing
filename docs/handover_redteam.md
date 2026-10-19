@@ -99,7 +99,7 @@ done
 proto/app.py            所有页面/路由（约 3000 行，单文件）
 proto/store_lite.py     SQLite：answers / marks / ai_grades / accounts / last_visit
 proto/cards*.py         408/政治/数学/英语题卡
-proto/llm_key.py        API Key（浏览器 cookie，见风险）
+proto/llm_key.py        API Key（服务端会话，见风险）
 yj/                     数据加载、诊断、评分、渲染、画像
   data.py               408 题库/图谱
   math.py               数学题库 + 考点诊断
@@ -279,8 +279,9 @@ docs/                   既有交接文档
 24. 性能：英语 30 题长页、数学 68 个考点卡、KaTeX MutationObserver 全页重扫。
 
 ### 隐私 / 静态资源
-25. API Key 存在浏览器 cookie（`proto/llm_key.py`），不是数据库；
-    检查 cookie 是否 HttpOnly、是否随每个请求发送、是否会被 XSS 读取；
+25. API Key 存在 `app.storage.user`（服务端会话文件，不是数据库、不下发浏览器）；
+    检查 `.nicegui/` 会话文件权限、退出登录是否清除、同一浏览器换账号是否串 Key；
+    （2026-10 修复：`app.storage.browser` 在按钮回调里不可写，原实现保存后刷新即丢）
 26. `/math_img`、`/en_img`、`/katex` 静态目录是否可列目录/路径穿越；
 27. `data/*.json`、`data/yj.db` 不应通过 HTTP 直接访问；确认没有静态挂载整个 `data/`；
 28. 日志是否打印题干/答案/Key。
