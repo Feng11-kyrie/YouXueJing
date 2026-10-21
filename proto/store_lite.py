@@ -88,6 +88,48 @@ def ensure_user(user_id):
                   (user_id, datetime.datetime.now().isoformat(timespec="seconds")))
 
 
+def set_diag_plan(user_id, exam, payload_json):
+    """保存某科下一套诊断卷（JSON 字符串），刷新后不变题。"""
+    with conn() as c:
+        c.execute("""CREATE TABLE IF NOT EXISTS diag_plans (
+                       user_id TEXT NOT NULL, exam TEXT NOT NULL,
+                       payload TEXT NOT NULL, at TEXT NOT NULL,
+                       PRIMARY KEY(user_id, exam))""")
+        c.execute("""INSERT INTO diag_plans(user_id, exam, payload, at)
+                     VALUES(?,?,?,?)
+                     ON CONFLICT(user_id, exam) DO UPDATE SET
+                       payload=excluded.payload, at=excluded.at""",
+                  (user_id, exam, payload_json,
+                   datetime.datetime.now().isoformat(timespec="seconds")))
+
+
+def get_diag_plan(user_id, exam):
+    import json
+    with conn() as c:
+        c.execute("""CREATE TABLE IF NOT EXISTS diag_plans (
+                       user_id TEXT NOT NULL, exam TEXT NOT NULL,
+                       payload TEXT NOT NULL, at TEXT NOT NULL,
+                       PRIMARY KEY(user_id, exam))""")
+        r = c.execute("SELECT payload FROM diag_plans "
+                      "WHERE user_id=? AND exam=?", (user_id, exam)).fetchone()
+    if not r:
+        return None
+    try:
+        return json.loads(r["payload"])
+    except Exception:                                       # noqa: BLE001
+        return None
+
+
+def clear_diag_plan(user_id, exam):
+    with conn() as c:
+        c.execute("""CREATE TABLE IF NOT EXISTS diag_plans (
+                       user_id TEXT NOT NULL, exam TEXT NOT NULL,
+                       payload TEXT NOT NULL, at TEXT NOT NULL,
+                       PRIMARY KEY(user_id, exam))""")
+        c.execute("DELETE FROM diag_plans WHERE user_id=? AND exam=?",
+                  (user_id, exam))
+
+
 def set_last_visit(user_id, label, url):
     """记录"继续上次"（存库，比浏览器 cookie 可靠）。"""
     ensure_user(user_id)

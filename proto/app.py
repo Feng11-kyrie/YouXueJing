@@ -27,6 +27,7 @@ import contextlib
 import functools
 import inspect
 import datetime
+import json
 import os
 import urllib.parse
 import sys
@@ -37,7 +38,7 @@ sys.path.insert(0, BASE)
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from nicegui import ui, app                            # noqa: E402
-from yj import data, diagnose, profile as profile_mod, path as path_mod  # noqa: E402
+from yj import data, diagnose, adaptive, profile as profile_mod, path as path_mod  # noqa: E402
 from yj import llm, graph, zhengzhi as zz           # noqa: E402
 from yj import english as en                          # noqa: E402
 from yj import math as math_data                      # noqa: E402
@@ -2037,7 +2038,9 @@ def _diagnose_math(user, tier, view):
     """数学诊断：按考点各抽一道选择题 → 交卷后给考点掌握度与薄弱 Top。"""
     if tier not in math_data.tiers_available():
         tier = (math_data.tiers_available() or ["一"])[0]
-    items = math_data.diagnostic(tier, 12)
+    _plan = store.get_diag_plan(user, "MATH")
+    items = (_plan["items"] if _plan and _plan.get("tier") == tier
+             else math_data.diagnostic(tier, 12))
     got = store.get_answers(user)
 
     def qid(it):
@@ -2092,10 +2095,12 @@ def _math_diag_result(user, tier, items):
     ui.label("诊断结果").classes("text-xl font-bold mt-2")
 
     def _redo_math():
-        ids = [f"MATH-{tier}-{it['题目']['_year']}-{it['题目']['题号']}"
-               for it in items]
+        ids = _plan_ids("MATH", tier, user) or [
+            f"MATH-{tier}-{it['题目']['_year']}-{it['题目']['题号']}"
+            for it in items]
+        _make_diag_plan("MATH", tier, user)      # 先按本次错题生成下一套
         store.delete_answers(user, ids)
-        ui.notify("已清空本次诊断的作答，重新开始", color="positive")
+        ui.notify("已按你的错题生成新一套诊断", color="positive")
         ui.navigate.to(f"/diagnose?exam=MATH&tier={tier}&user={user}")
 
     ui.button("重新诊断", on_click=_redo_math).props("outline dense")
@@ -2132,7 +2137,9 @@ def _math_diag_result(user, tier, items):
 def _diagnose_eng(user, tier, view, part="CLOZE"):
     """英语诊断：完形 20 空 + 阅读 5 题 + 新题型 5 题（客观题三块）。"""
     tier = tier if tier in en.TIERS else "EN1"
-    diag = en.diagnostic(tier)
+    _plan = store.get_diag_plan(user, "ENG")
+    diag = (_plan["diag"] if _plan and _plan.get("tier") == tier
+            and _plan.get("diag") else en.diagnostic(tier))
     got = store.get_answers(user)
     with shell("/diagnose", user):
         _title("快速诊断")
@@ -2147,7 +2154,9 @@ def _diagnose_eng(user, tier, view, part="CLOZE"):
             ui.label("英语真题还没有入库。").classes("t-body sub")
             return
         y = diag["year"]
-        ui.label(f'{y} 年{en.TIERS[tier]["简称"]} · {diag["题数"]} 题 · '
+        _ys = sorted({str(ps.get("year") or y) for ps in diag["篇目"]})
+        _ys_label = (_ys[0] if len(_ys) == 1 else " / ".join(_ys))
+        ui.label(f'{_ys_label} 年{en.TIERS[tier]["简称"]} · {diag["题数"]} 题 · '
                  f'完形 20 / 阅读 5 / 新题型 5 · 约 25 分钟') \
             .classes("t-body font-semibold")
         ui.label("翻译/写作是主观题，不参与自动诊断；去真题页可用免费评分 / AI 精评。") \
@@ -2172,12 +2181,13 @@ def _diagnose_eng(user, tier, view, part="CLOZE"):
                     .props("unelevated" if code == part else "flat dense")
         ps = by_part.get(part)
         if ps:
+            _py = ps.get("year") or y
             if part == "CLOZE":
-                cloze_card(ps, y, tier, got, user, reveal=(view == "result"))
+                cloze_card(ps, _py, tier, got, user, reveal=(view == "result"))
             elif part == "READ":
-                passage_card(ps, y, tier, got, user, reveal=(view == "result"))
+                passage_card(ps, _py, tier, got, user, reveal=(view == "result"))
             else:
-                partb_block(ps, y, tier, got, user, reveal=(view == "result"))
+                partb_block(ps, _py, tier, got, user, reveal=(view == "result"))
         if view != "result":
             ui.button("查看诊断结果", on_click=lambda: ui.navigate.to(
                 f"/diagnose?exam=ENG&tier={tier}&view=result&user={user}")) \
@@ -2191,14 +2201,16 @@ def _eng_diag_result(user, tier, diag):
     weak = [r for r in tried if (r["正确率"] or 0) < 0.6]
     ui.label("诊断结果").classes("text-xl font-bold mt-2")
 
-    def _redo_math():
-        ids = [f"MATH-{tier}-{it['题目']['_year']}-{it['题目']['题号']}"
-               for it in items]
+    def _redo_eng():
+        ids = _plan_ids("ENG", tier, user) or [
+            q["id"] for ps in diag.get("篇目", [])
+            for q in ps.get("小题") or []]
+        _make_diag_plan("ENG", tier, user)
         store.delete_answers(user, ids)
-        ui.notify("已清空本次诊断的作答，重新开始", color="positive")
-        ui.navigate.to(f"/diagnose?exam=MATH&tier={tier}&user={user}")
+        ui.notify("已按你的错题生成新一套诊断", color="positive")
+        ui.navigate.to(f"/diagnose?exam=ENG&tier={tier}&user={user}")
 
-    ui.button("重新诊断", on_click=_redo_math).props("outline dense")
+    ui.button("重新诊断", on_click=_redo_eng).props("outline dense")
     if not tried:
         ui.label("还没有作答记录 —— 先在下面的诊断卷里做几题。").classes("t-body sub")
         return
@@ -2231,7 +2243,8 @@ def _eng_diag_result(user, tier, diag):
 
 def _diagnose_zz(user, view):
     """政治诊断：五个部分各 2 单选 + 1 多选，共 15 题。"""
-    items = zz.diagnostic()
+    _plan = store.get_diag_plan(user, "ZZ")
+    items = _plan["items"] if _plan and _plan.get("items") else zz.diagnostic()
     got = store.get_answers(user)
     with shell("/diagnose", user):
         _title("快速诊断")
@@ -2268,14 +2281,14 @@ def _zz_diag_result(user, items):
     weak = [r for r in tried if (r["正确率"] or 0) < 0.6]
     ui.label("诊断结果").classes("text-xl font-bold mt-2")
 
-    def _redo_math():
-        ids = [f"MATH-{tier}-{it['题目']['_year']}-{it['题目']['题号']}"
-               for it in items]
+    def _redo_zz():
+        ids = _plan_ids("ZZ", "一", user) or [it["题目"]["id"] for it in items]
+        _make_diag_plan("ZZ", "一", user)
         store.delete_answers(user, ids)
-        ui.notify("已清空本次诊断的作答，重新开始", color="positive")
-        ui.navigate.to(f"/diagnose?exam=MATH&tier={tier}&user={user}")
+        ui.notify("已按你的错题生成新一套诊断", color="positive")
+        ui.navigate.to(f"/diagnose?exam=ZZ&user={user}")
 
-    ui.button("重新诊断", on_click=_redo_math).props("outline dense")
+    ui.button("重新诊断", on_click=_redo_zz).props("outline dense")
     if not tried:
         ui.label("还没有作答记录 —— 先在下面的诊断卷里做几题。").classes("t-body sub")
         return
@@ -2308,6 +2321,38 @@ def _zz_diag_result(user, items):
             .classes("t-sm").style("color:#1B5E36")
 
 
+def _make_diag_plan(exam, tier, user):
+    """用当前作答生成下一套诊断卷，存库（刷新不变题）。"""
+    got = store.get_answers(user)
+    if exam == "MATH":
+        items = adaptive.math_plan(tier, got)
+        payload = {"tier": tier, "items": items,
+                   "ids": [f"MATH-{tier}-{it['题目']['_year']}-{it['题目']['题号']}"
+                           for it in items]}
+    elif exam == "ZZ":
+        items = adaptive.zz_plan(got)
+        payload = {"items": items, "ids": [it["题目"]["id"] for it in items]}
+    elif exam == "ENG":
+        diag = adaptive.eng_plan(tier, got)
+        payload = {"tier": tier, "diag": diag,
+                   "ids": [q["id"] for ps in (diag or {}).get("篇目", [])
+                           for q in ps.get("小题") or []]}
+    else:  # 408
+        items = adaptive.data_plan(got)
+        payload = {"items": items, "ids": [it["id"] for it in items]}
+    store.set_diag_plan(user, exam, json.dumps(payload, ensure_ascii=False))
+    return payload
+
+
+def _plan_ids(exam, tier, user):
+    plan = store.get_diag_plan(user, exam)
+    if not plan:
+        return None
+    if exam in ("MATH", "ENG") and plan.get("tier") not in (None, tier):
+        return None
+    return plan.get("ids") or None
+
+
 def _diag_ids(exam, tier="一"):
     """某科当前诊断卷的题目 id（用于进度/重新开始）。"""
     if exam == "408":
@@ -2325,8 +2370,8 @@ def _diag_ids(exam, tier="一"):
     return []
 
 
-def _diag_progress(exam, tier, answers):
-    ids = _diag_ids(exam, tier)
+def _diag_progress(exam, tier, answers, user="demo"):
+    ids = _plan_ids(exam, tier, user) or _diag_ids(exam, tier)
     return sum(1 for x in ids if x in answers), len(ids)
 
 
@@ -2351,7 +2396,7 @@ def _diagnose_chooser(user):
                 "minmax(320px,1fr));gap:16px;margin-top:8px"):
             for exam, title, desc, route in cards:
                 tier = "EN1" if exam == "ENG" else ("一" if exam == "MATH" else "一")
-                done, total = _diag_progress(exam, tier, got)
+                done, total = _diag_progress(exam, tier, got, user)
                 with ui.card().classes("softcard w-full p-4 gap-1"):
                     ui.label(title).classes("t-lead font-bold")
                     ui.label(desc).classes("t-sm sub")
@@ -2362,7 +2407,10 @@ def _diagnose_chooser(user):
                             ui.button("继续诊断", on_click=lambda _=None, r=route:
                                       ui.navigate.to(r)).props("unelevated")
                             def _restart(exam=exam, tier=tier, route=route):
-                                store.delete_answers(user, _diag_ids(exam, tier))
+                                ids = _plan_ids(exam, tier, user) or \
+                                    _diag_ids(exam, tier)
+                                _make_diag_plan(exam, tier, user)
+                                store.delete_answers(user, ids)
                                 ui.navigate.to(route)
                             ui.button("重新开始", on_click=_restart) \
                                 .props("outline dense")
@@ -2396,7 +2444,8 @@ def diagnose_page(user: str = "demo", exam: str = "", tier: str = "一",
 # ================================================================ 我的画像
 def _diagnose_408(user, view, page=1):
     """408 诊断：8 题一页，选一题记一题；结果页给章节薄弱 Top。"""
-    paper = data.diagnostic()["题目"]
+    _plan = store.get_diag_plan(user, "408")
+    paper = _plan["items"] if _plan and _plan.get("items") else data.diagnostic()["题目"]
     qs = data.questions()
     got = store.get_answers(user)
     ids = [x["id"] for x in paper]
@@ -2477,8 +2526,10 @@ def _diag_408_result(user):
         ui.label(f"已作答 {done_n}/{len(ids)} 题").classes("t-body font-semibold")
 
         def redo():
-            store.delete_answers(user, ids)
-            ui.notify("已清空本次诊断，重新开始", color="positive")
+            old = _plan_ids("408", "一", user) or ids
+            _make_diag_plan("408", "一", user)
+            store.delete_answers(user, old)
+            ui.notify("已按你的错题生成新一套诊断", color="positive")
             ui.navigate.to(f"/diagnose?exam=408&user={user}")
 
         with ui.row().classes("items-center gap-2"):
