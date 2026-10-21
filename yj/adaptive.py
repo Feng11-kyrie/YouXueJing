@@ -9,7 +9,8 @@
   1. 以"诊断单元"为抽样单位（数学=考点，政治=部分，英语=篇目，408=章）；
   2. 单元权重 = 1 + 4×错题数 + 2×没做过 + 2×正确率<60%；
   3. 先强制放入有错题的单元，再按权重抽满；
-  4. 单元内优先选**上次做错的题**，其次没做过的，再随机；
+  4. 单元内优先选**同类型的其他题**（尽量不重复上次原题），其次没做过的，再随机；
+     只有整个单元没有替代题时才回退到原题；
   5. 生成完整 payload 存库（diag_plans），刷新不会变题。
 
 注意：这是"诊断"不是"考试"，不追求固定卷面；每次重新诊断都会换题。
@@ -74,10 +75,13 @@ def math_plan(tier, answers, n=12, seed=None):
     out = []
     for kp in chosen:
         qs = ps[kp]
-        wrong = [q for q in qs
-                 if (_rec(answers, _qid_math(tier, q)) or {}).get("is_correct") is False]
-        unseen = [q for q in qs if _rec(answers, _qid_math(tier, q)) is None]
-        pool = wrong or unseen or qs
+        wrong_ids = {_qid_math(tier, q) for q in qs
+                     if (_rec(answers, _qid_math(tier, q)) or {}).get("is_correct")
+                     is False}
+        # 同考点、但**不重复上次原题**；优先没做过的同类型题
+        others = [q for q in qs if _qid_math(tier, q) not in wrong_ids]
+        unseen = [q for q in others if _rec(answers, _qid_math(tier, q)) is None]
+        pool = unseen or others or qs
         out.append({"考点": kp, "题目": rng.choice(pool)})
     return out
 
@@ -105,7 +109,7 @@ def zz_plan(answers, n_per_part=3, seed=None):
 
         def w_of(row):
             _, _, _, r = row
-            w = 1 + (5 if r and r["is_correct"] is False else 0)
+            w = 1
             if r is None:
                 w += 2
             if weak.get(part):
@@ -118,7 +122,9 @@ def zz_plan(answers, n_per_part=3, seed=None):
             pool = [r for r in cand if r[1]["题型"] == kind and r not in picked]
             if not pool:
                 continue
-            picked += _weighted(pool, [w_of(r) for r in pool],
+            clean = [r for r in pool if not (r[3] and r[3]["is_correct"] is False)]
+            use = clean if len(clean) >= need else pool
+            picked += _weighted(use, [w_of(r) for r in use],
                                 min(need, n_per_part - len(picked)), rng)
         picked = picked[:n_per_part]
         for y, q, qid, _ in picked:
@@ -148,10 +154,13 @@ def eng_plan(tier, answers, seed=None):
                 st = mastery.get(code) or {}
                 if st.get("正确率") is not None and st["正确率"] < 0.6:
                     w += 2
-                units.append((y, ps, w))
+                units.append((y, ps, w, wrong))
         if not units:
             continue
-        y, ps, _ = _weighted(units, [u[2] for u in units], 1, rng)[0]
+        clean = [u for u in units if u[3] == 0]   # 优先同题型、没有错题的篇目
+        use = clean or units
+        uw = [u[2] for u in use]
+        y, ps, _, _ = _weighted(use, uw, 1, rng)[0]
         picked.append({**ps, "year": y})
     if not picked:
         return None
@@ -188,10 +197,11 @@ def data_plan(answers, n=32, seed=None):
 
     def q_for(ch):
         pool = by_ch[ch]
-        wrong = [q for q in pool
-                 if (_rec(answers, q["id"]) or {}).get("is_correct") is False]
-        unseen = [q for q in pool if _rec(answers, q["id"]) is None]
-        return rng.choice(wrong or unseen or pool)
+        wrong_ids = {q["id"] for q in pool
+                     if (_rec(answers, q["id"]) or {}).get("is_correct") is False}
+        others = [q for q in pool if q["id"] not in wrong_ids]
+        unseen = [q for q in others if _rec(answers, q["id"]) is None]
+        return rng.choice(unseen or others or pool)
 
     used = set()
     for ch in chosen_ch:
@@ -210,10 +220,12 @@ def data_plan(answers, n=32, seed=None):
             pool = [q for q in by_ch[ch] if q["id"] not in used]
             if not pool:
                 continue
-            wrong = [q for q in pool
-                     if (_rec(answers, q["id"]) or {}).get("is_correct") is False]
-            unseen = [q for q in pool if _rec(answers, q["id"]) is None]
-            q = rng.choice(wrong or unseen or pool)
+            wrong_ids = {q["id"] for q in pool
+                         if (_rec(answers, q["id"]) or {}).get("is_correct")
+                         is False}
+            others = [q for q in pool if q["id"] not in wrong_ids]
+            unseen = [q for q in others if _rec(answers, q["id"]) is None]
+            q = rng.choice(unseen or others or pool)
             used.add(q["id"])
             items.append({"order": len(items) + 1, "id": q["id"],
                           "学科": q.get("学科", ""),
