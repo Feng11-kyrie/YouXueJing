@@ -195,6 +195,25 @@ ui.add_head_html("""
   }
 
   .sub { color:var(--sub); }
+
+  /* ===== 移动端：侧栏改顶部横条，卡片单列，避免横向溢出 ===== */
+  @media (max-width: 900px) {
+    .app-shell { flex-direction: column; }
+    .app-side { width:100% !important; min-height:0 !important;
+                border-right:0 !important; border-bottom:1px solid var(--line); }
+    .side-inner { position:static !important; padding:10px 12px !important; }
+    .side-brand-sub { display:none; }
+    .nav-list { display:flex !important; flex-direction:row !important;
+                flex-wrap:wrap; gap:6px; }
+    .nav-list .navlink { width:auto !important; flex:0 0 auto;
+                         padding:6px 8px !important; }
+    .side-progress { display:none !important; }
+    .side-user { margin-top:2px; }
+    .app-main { padding:12px !important; }
+    .softcard, .bookcard, .q-card { min-width:0 !important; }
+    .q-btn { white-space:normal !important; }
+    .katex-display { overflow-x:auto; }
+  }
 </style>
 """, shared=True)
 
@@ -430,7 +449,7 @@ def shell(active: str, user: str):
     """
     answers = store.get_answers(user)
     marks = store.get_marks(user)
-    with ui.row().classes("w-full no-wrap items-start"):
+    with ui.row().classes("w-full no-wrap items-start app-shell"):
         # 侧栏
         # 侧栏：232 → 264px。17px 的中文在 250px 里仍然挤，而侧栏文字少，
         # 可以给得比正文更宽松。
@@ -443,10 +462,10 @@ def shell(active: str, user: str):
         # 外层负责"背景铺满整个高度"，内层 sticky 负责"滚动时导航还在"。
         # self-stretch 是必须的：父级 flex 行设了 items-start，
         # 子元素默认不拉伸 → 背景块只有 644px 高（实测），下面露出白色。
-        with ui.column().classes("shrink-0 border-r self-stretch") \
+        with ui.column().classes("shrink-0 border-r self-stretch app-side") \
                 .style("background:var(--bg-side);border-color:var(--line);"
                        "width:min(17vw,300px);min-height:100vh"):
-          with ui.column().classes("p-3 pt-4 gap-1 sticky top-0 w-full"):
+          with ui.column().classes("p-3 pt-4 gap-1 sticky top-0 w-full side-inner"):
               # 品牌区：加大 logo 与标题，原来 18px 的标题配 17px 导航没有主次
               with ui.row().classes("items-center gap-3 mb-4 px-1"):
                   ui.label("鲸").classes("w-10 h-10 rounded-xl text-white font-bold "
@@ -457,15 +476,16 @@ def shell(active: str, user: str):
                       ui.label("优学鲸").classes("t-brand font-bold leading-tight")
                       # 品牌副标题：从"408 考研"改为"考研智能备考"
                       # （用户决定做考研平台：408 + 政治，而不是只做 408）
-                      ui.label("考研智能备考").classes("t-xs sub")
+                      ui.label("考研智能备考").classes("t-xs sub side-brand-sub")
 
               ui.label("学习功能").classes(
                   "t-xs muted font-semibold tracking-wide mx-1 mb-0.5")
-              for href, label, icon in NAV:
-                  with ui.link(target=f"{href}?user={user}").classes(
-                          "navlink" + (" on" if href == active else "")):
-                      ui.icon(icon).classes("ic")
-                      ui.label(label).classes("t-nav")
+              with ui.column().classes("nav-list gap-1 w-full"):
+                  for href, label, icon in NAV:
+                      with ui.link(target=f"{href}?user={user}").classes(
+                              "navlink" + (" on" if href == active else "")):
+                          ui.icon(icon).classes("ic")
+                          ui.label(label).classes("t-nav")
 
               # 下面这块原来是"846 题·266 考点·339 依赖边 + 演示模式 + 用户 demo"，
               # 全是**给开发看的字段**：
@@ -475,30 +495,31 @@ def shell(active: str, user: str):
               # 改成：没有数据时给**行动指引**，不展示空值。
               # 侧栏不再靠"拉满屏幕"占位，但内容本身也该给够：
               # 「我的进度」用进度条式的直观数字（可追溯的原始计数，不用百分比）
-              ui.label("我的进度").classes(
-                  "t-xs muted font-semibold tracking-wide mx-1 mt-3 mb-0.5")
-              if answers:
-                  _ok = sum(1 for r in answers.values() if r["is_correct"])
-                  with ui.column().classes("gap-1 px-1"):
-                      for label, val, total, color in [
-                              ("已作答", len(answers), len(data.questions()), "#2563EB"),
-                              ("答对", _ok, len(answers), "#1B5E36"),
-                              ("待复习", len(answers) - _ok, len(answers), "#B45309")]:
-                          with ui.row().classes("items-center gap-2 w-full no-wrap"):
-                              ui.label(label).classes("t-xs muted w-12 shrink-0")
-                              ui.label(f"{val}").classes("t-sm font-semibold w-8")
-                              ui.element("div").classes("h-1.5 rounded flex-1") \
-                                  .style(f"background:{color};opacity:.85;"
-                                         f"max-width:{int(val / max(total, 1) * 100)}%")
-                  if marks:
-                      ui.label(f"自报薄弱考点 {len(marks)} 个").classes("t-xs muted mx-1")
-              else:
-                  ui.label("还没有练习记录").classes("t-xs muted mx-1")
+              with ui.column().classes("side-progress gap-1 w-full"):
+                  ui.label("我的进度").classes(
+                      "t-xs muted font-semibold tracking-wide mx-1 mt-3 mb-0.5")
+                  if answers:
+                      _ok = sum(1 for r in answers.values() if r["is_correct"])
+                      with ui.column().classes("gap-1 px-1"):
+                          for label, val, total, color in [
+                                  ("已作答", len(answers), len(data.questions()), "#2563EB"),
+                                  ("答对", _ok, len(answers), "#1B5E36"),
+                                  ("待复习", len(answers) - _ok, len(answers), "#B45309")]:
+                              with ui.row().classes("items-center gap-2 w-full no-wrap"):
+                                  ui.label(label).classes("t-xs muted w-12 shrink-0")
+                                  ui.label(f"{val}").classes("t-sm font-semibold w-8")
+                                  ui.element("div").classes("h-1.5 rounded flex-1") \
+                                      .style(f"background:{color};opacity:.85;"
+                                             f"max-width:{int(val / max(total, 1) * 100)}%")
+                          if marks:
+                              ui.label(f"自报薄弱考点 {len(marks)} 个").classes("t-xs muted mx-1")
+                  else:
+                      ui.label("还没有练习记录").classes("t-xs muted mx-1")
 
               # 底部：原来只有一行"已作答 32 题"孤零零挂着。
               ui.element("div").classes("flex-1 min-h-4")
               ui.separator().style("border-color:var(--line)")
-              with ui.row().classes("items-center gap-2 px-1 pt-2"):
+              with ui.row().classes("items-center gap-2 px-1 pt-2 side-user"):
                   ui.label(user[:1].upper()).classes(
                       "w-9 h-9 rounded-full text-white font-bold flex items-center "
                       "justify-center shrink-0").style("background:#5A6B80;font-size:15px")
@@ -525,7 +546,7 @@ def shell(active: str, user: str):
                       ui.button("登录 / 注册", on_click=lambda: ui.navigate.to("/login")) \
                           .props("flat dense").classes("t-xs w-full")
         # 内容区
-        with ui.column().classes("flex-1 p-6 gap-3 min-w-0"):
+        with ui.column().classes("flex-1 p-6 gap-3 min-w-0 app-main"):
             _key_entry()
             yield
 
@@ -1784,6 +1805,11 @@ def practice(exam: str = None, subject: str = None, chapter: str = None,
 
     with shell("/practice", user):
         _title("挑考点练习")
+        _ename = {"MATH": "数学", "ENG": "英语", "ZZ": "政治",
+                  "408": "408"}.get(exam, "")
+        _remember_visit(
+            "挑考点练习" + (f" · {_ename}" if _ename else ""),
+            f"/practice?exam={exam}" if exam else "/practice", user)
         _exam_tabs(exam, "practice", user)
 
         # ---------------- 第 0 层：先选科目 ----------------
@@ -2042,14 +2068,17 @@ def _diagnose_math(user, tier, view):
     items = (_plan["items"] if _plan and _plan.get("tier") == tier
              else math_data.diagnostic(tier, 12))
     got = store.get_answers(user)
+    got_diag = {k: v for k, v in got.items() if v.get("source") == "diagnostic"}
 
     def qid(it):
         q = it["题目"]
         return f"MATH-{tier}-{q['_year']}-{q['题号']}"
 
-    done_n = sum(1 for it in items if qid(it) in got)
+    done_n = sum(1 for it in items if qid(it) in got_diag)
     with shell("/diagnose", user):
         _title("快速诊断")
+        _remember_visit(f"数学{tier}诊断",
+                        f"/diagnose?exam=MATH&tier={tier}", user)
         _diag_subject_tabs("MATH", user, tier)
         _math_diag_tier_tabs(tier, user)
 
@@ -2078,8 +2107,8 @@ def _diagnose_math(user, tier, view):
         for it in items:
             q = dict(it["题目"])
             ui.label(f'考点：{it["考点"]}').classes("t-xs muted")
-            math_card(q, tier, q["_year"], got, user, source="diagnostic",
-                      reveal=(view == "result"))
+            math_card(q, tier, q["_year"], got_diag, user,
+                      source="diagnostic", reveal=(view == "result"))
 
         if view != "result":
             ui.button("查看诊断结果", on_click=lambda: ui.navigate.to(
@@ -2099,7 +2128,7 @@ def _math_diag_result(user, tier, items):
             f"MATH-{tier}-{it['题目']['_year']}-{it['题目']['题号']}"
             for it in items]
         _make_diag_plan("MATH", tier, user)      # 先按本次错题生成下一套
-        store.delete_answers(user, ids)
+        store.delete_answers(user, ids, "diagnostic")
         ui.notify("已按你的错题生成新一套诊断", color="positive")
         ui.navigate.to(f"/diagnose?exam=MATH&tier={tier}&user={user}")
 
@@ -2141,8 +2170,11 @@ def _diagnose_eng(user, tier, view, part="CLOZE"):
     diag = (_plan["diag"] if _plan and _plan.get("tier") == tier
             and _plan.get("diag") else en.diagnostic(tier))
     got = store.get_answers(user)
+    got_diag = {k: v for k, v in got.items() if v.get("source") == "diagnostic"}
     with shell("/diagnose", user):
         _title("快速诊断")
+        _remember_visit(f"英语{tier}诊断",
+                        f"/diagnose?exam=ENG&tier={tier}", user)
         _diag_subject_tabs("ENG", user, tier)
         with ui.row().classes("items-center gap-1 flex-wrap"):
             for t in en.TIERS:
@@ -2165,7 +2197,7 @@ def _diagnose_eng(user, tier, view, part="CLOZE"):
             _eng_diag_result(user, tier, diag)
         else:
             qids = [q["id"] for ps in diag["篇目"] for q in ps.get("小题") or []]
-            done_n = sum(1 for x in qids if x in got)
+            done_n = sum(1 for x in qids if x in got_diag)
             ui.linear_progress(value=done_n / max(1, len(qids)),
                                show_value=False).classes("w-full")
             ui.label(f"进度 {done_n}/{len(qids)}").classes("t-sm muted")
@@ -2183,11 +2215,14 @@ def _diagnose_eng(user, tier, view, part="CLOZE"):
         if ps:
             _py = ps.get("year") or y
             if part == "CLOZE":
-                cloze_card(ps, _py, tier, got, user, reveal=(view == "result"))
+                cloze_card(ps, _py, tier, got_diag, user,
+                           reveal=(view == "result"), source="diagnostic")
             elif part == "READ":
-                passage_card(ps, _py, tier, got, user, reveal=(view == "result"))
+                passage_card(ps, _py, tier, got_diag, user,
+                             reveal=(view == "result"), source="diagnostic")
             else:
-                partb_block(ps, _py, tier, got, user, reveal=(view == "result"))
+                partb_block(ps, _py, tier, got_diag, user,
+                            reveal=(view == "result"), source="diagnostic")
         if view != "result":
             ui.button("查看诊断结果", on_click=lambda: ui.navigate.to(
                 f"/diagnose?exam=ENG&tier={tier}&view=result&user={user}")) \
@@ -2206,7 +2241,7 @@ def _eng_diag_result(user, tier, diag):
             q["id"] for ps in diag.get("篇目", [])
             for q in ps.get("小题") or []]
         _make_diag_plan("ENG", tier, user)
-        store.delete_answers(user, ids)
+        store.delete_answers(user, ids, "diagnostic")
         ui.notify("已按你的错题生成新一套诊断", color="positive")
         ui.navigate.to(f"/diagnose?exam=ENG&tier={tier}&user={user}")
 
@@ -2246,8 +2281,10 @@ def _diagnose_zz(user, view):
     _plan = store.get_diag_plan(user, "ZZ")
     items = _plan["items"] if _plan and _plan.get("items") else zz.diagnostic()
     got = store.get_answers(user)
+    got_diag = {k: v for k, v in got.items() if v.get("source") == "diagnostic"}
     with shell("/diagnose", user):
         _title("快速诊断")
+        _remember_visit("政治诊断", "/diagnose?exam=ZZ", user)
         _diag_subject_tabs("ZZ", user)
         ui.label("5 个部分 × 3 题（2 单选 + 1 多选） · 约 10 分钟") \
             .classes("t-body font-semibold")
@@ -2256,7 +2293,7 @@ def _diagnose_zz(user, view):
         if view == "result":
             _zz_diag_result(user, items)
         else:
-            done_n = sum(1 for it in items if it["题目"]["id"] in got)
+            done_n = sum(1 for it in items if it["题目"]["id"] in got_diag)
             ui.linear_progress(value=done_n / max(1, len(items)),
                                show_value=False).classes("w-full")
             ui.label(f"进度 {done_n}/{len(items)}").classes("t-sm muted")
@@ -2267,8 +2304,8 @@ def _diagnose_zz(user, view):
             q["id"] = f"ZZ-{it['year']}-{q['题号']}"
             ui.label(f'{zz.PART_SHORT.get(q.get("部分"), "")} · {it["year"]} 年') \
                 .classes("t-xs muted")
-            question_card(q, it["year"], got, user, exam="ZZ",
-                          reveal=(view == "result"))
+            question_card(q, it["year"], got_diag, user, exam="ZZ",
+                          reveal=(view == "result"), source="diagnostic")
         if view != "result":
             ui.button("查看诊断结果", on_click=lambda: ui.navigate.to(
                 f"/diagnose?exam=ZZ&view=result&user={user}")).props("unelevated")
@@ -2284,7 +2321,7 @@ def _zz_diag_result(user, items):
     def _redo_zz():
         ids = _plan_ids("ZZ", "一", user) or [it["题目"]["id"] for it in items]
         _make_diag_plan("ZZ", "一", user)
-        store.delete_answers(user, ids)
+        store.delete_answers(user, ids, "diagnostic")
         ui.notify("已按你的错题生成新一套诊断", color="positive")
         ui.navigate.to(f"/diagnose?exam=ZZ&user={user}")
 
@@ -2372,7 +2409,9 @@ def _diag_ids(exam, tier="一"):
 
 def _diag_progress(exam, tier, answers, user="demo"):
     ids = _plan_ids(exam, tier, user) or _diag_ids(exam, tier)
-    return sum(1 for x in ids if x in answers), len(ids)
+    # 只统计本次诊断来源；练习页做过的题不应该让诊断进度“凭空已完成”
+    return sum(1 for x in ids
+               if (answers.get(x) or {}).get("source") == "diagnostic"), len(ids)
 
 
 def _diagnose_chooser(user):
@@ -2387,6 +2426,7 @@ def _diagnose_chooser(user):
         ("ZZ", "政治诊断", "15 题 · 约 10 分钟 · 五个部分各 3 题",
          "/diagnose?exam=ZZ&user=" + user),
     ]
+    _remember_visit("快速诊断", "/diagnose", user)
     with shell("/diagnose", user):
         _title("快速诊断")
         ui.label("先用一套短卷找出薄弱点，再针对性练。选一科开始。") \
@@ -2410,7 +2450,7 @@ def _diagnose_chooser(user):
                                 ids = _plan_ids(exam, tier, user) or \
                                     _diag_ids(exam, tier)
                                 _make_diag_plan(exam, tier, user)
-                                store.delete_answers(user, ids)
+                                store.delete_answers(user, ids, "diagnostic")
                                 ui.navigate.to(route)
                             ui.button("重新开始", on_click=_restart) \
                                 .props("outline dense")
@@ -2448,6 +2488,7 @@ def _diagnose_408(user, view, page=1):
     paper = _plan["items"] if _plan and _plan.get("items") else data.diagnostic()["题目"]
     qs = data.questions()
     got = store.get_answers(user)
+    got_diag = {k: v for k, v in got.items() if v.get("source") == "diagnostic"}
     ids = [x["id"] for x in paper]
 
     if view == "result":
@@ -2456,19 +2497,22 @@ def _diagnose_408(user, view, page=1):
 
     with shell("/diagnose", user):
         _title("快速诊断")
+        _remember_visit("408 诊断", "/diagnose?exam=408", user)
+        _remember_visit("408 诊断", "/diagnose?exam=408", user)
         _diag_subject_tabs("408", user)
         ui.label("32 道题 · 每页 8 题 · 覆盖 408 全部 24 章") \
             .classes("t-body font-semibold")
         ui.label("选一题就记录一题；中途退出不会丢，回来可以继续。") \
             .classes("t-sm sub")
 
-        done_n = sum(1 for x in ids if x in got)
+        done_n = sum(1 for x in ids if x in got_diag)
         bar = ui.linear_progress(value=done_n / len(ids), show_value=False) \
             .classes("w-full")
         plabel = ui.label(f"进度 {done_n}/{len(ids)}").classes("t-sm muted")
 
         def refresh():
-            cur = store.get_answers(user)
+            cur = {k: v for k, v in store.get_answers(user).items()
+                   if v.get("source") == "diagnostic"}
             n = sum(1 for x in ids if x in cur)
             bar.value = n / len(ids)
             plabel.set_text(f"进度 {n}/{len(ids)}")
@@ -2480,7 +2524,7 @@ def _diagnose_408(user, view, page=1):
 
         for item in shown:
             q = qs[item["id"]]
-            prev = (store.get_answers(user).get(item["id"]) or {}).get("chosen")
+            prev = (got_diag.get(item["id"]) or {}).get("chosen")
 
             def on_pick(e, q=q):
                 if e.value:
@@ -2528,7 +2572,7 @@ def _diag_408_result(user):
         def redo():
             old = _plan_ids("408", "一", user) or ids
             _make_diag_plan("408", "一", user)
-            store.delete_answers(user, old)
+            store.delete_answers(user, old, "diagnostic")
             ui.notify("已按你的错题生成新一套诊断", color="positive")
             ui.navigate.to(f"/diagnose?exam=408&user={user}")
 
@@ -2821,6 +2865,41 @@ def profile_page(user: str = "demo"):
             ui.button("去政治诊断", on_click=lambda: ui.navigate.to(
                 f"/diagnose?exam=ZZ&user={user}")).props("outline dense")
 
+        # ---------------- 408：章节作答记录
+        _a408 = {k: v for k, v in a.items() if str(k).isdigit()}
+        ui.separator()
+        ui.label("408 · 章节作答记录").classes("t-lead font-semibold")
+        if not _a408:
+            ui.label("还没做 408 诊断 —— 32 题覆盖 24 章，做完能看到章节掌握度。") \
+                .classes("t-sm muted")
+            ui.button("去 408 诊断", on_click=lambda: ui.navigate.to(
+                f"/diagnose?exam=408&user={user}")).props("outline dense")
+        else:
+            _rows408 = [r for r in diagnose.mastery_by_chapter(a).values()
+                        if r["学科码"] in ("DS", "CO", "OS", "CN")]
+            _rows408.sort(key=lambda r: (r["答对"] / r["题数"] if r["题数"] else 1,
+                                         -r["题数"]))
+            ui.label(f"已测 {len(_rows408)} 个章节").classes("t-sm font-semibold")
+            for r in _rows408[:10]:
+                with ui.row().classes("items-center gap-3 w-full no-wrap"):
+                    ui.label(r["章节名"]).classes("t-sm flex-1")
+                    ui.label(f'答对 {r["答对"]} / {r["题数"]} 题') \
+                        .classes("t-sm").style("white-space:nowrap")
+            _weak408 = [r for r in _rows408
+                        if r["题数"] and r["答对"] / r["题数"] < 0.6][:3]
+            if _weak408:
+                with ui.row().classes("items-center gap-2 flex-wrap"):
+                    ui.label("最该先补：").classes("t-xs muted")
+                    for r in _weak408:
+                        ui.button(f'{r["章节名"]}（{r["答对"]}/{r["题数"]}）',
+                                  on_click=lambda _=None, r=r:
+                                  ui.navigate.to(
+                                      f'/practice?subject={r["学科码"]}'
+                                      f'&chapter={r["chapter"]}&go=1&user={user}')) \
+                            .props("flat dense")
+            ui.button("去 408 诊断", on_click=lambda: ui.navigate.to(
+                f"/diagnose?exam=408&user={user}")).props("outline dense")
+
         if prof["薄弱章节"]:
             ui.separator()
             ui.label("最该先补的章节").classes("t-lead font-semibold")
@@ -2965,6 +3044,16 @@ def notes_page(user: str = "demo"):
 
         # 没有 408 作答/自报时，只展示上面的数学薄弱点，不跑 408 的讲义生成；
         # 否则会拿空数据跑一条 LLM 链路，页面上却没有可讲的内容。
+        # 其他科目的薄弱点入口（数学以外的速记在对应科目页生成）
+        with ui.row().classes("items-center gap-2 flex-wrap"):
+            ui.label("其他科目：").classes("t-sm muted")
+            ui.button("408 诊断", on_click=lambda: ui.navigate.to(
+                f"/diagnose?exam=408&user={user}")).props("flat dense")
+            ui.button("英语诊断", on_click=lambda: ui.navigate.to(
+                f"/diagnose?exam=ENG&tier=EN1&user={user}")).props("flat dense")
+            ui.button("政治诊断", on_click=lambda: ui.navigate.to(
+                f"/diagnose?exam=ZZ&user={user}")).props("flat dense")
+
         _a408 = {k: v for k, v in a.items()
                  if not k.startswith(("MATH-", "EN1-", "EN2-", "ZZ-"))}
         if not _a408 and not mk:

@@ -80,7 +80,7 @@ def answer_of(q, tier, year):
     return str((e or {}).get("答案") or "")
 
 
-def _sub_question(q, year, tier, done, user, reveal=True):
+def _sub_question(q, year, tier, done, user, reveal=True, source="exam"):
     """
     一道小题（阅读 21–40 / 新题型 41–45 用）。
     与政治/408 的题卡行为一致：可点选项、即时判分、提交后显示答案与解析。
@@ -147,7 +147,7 @@ def _sub_question(q, year, tier, done, user, reveal=True):
                 hint.set_text("这道题暂无答案，无法判分（来源站点缺该节）。")
                 return
             ok = (val == ans)
-            store.record_answer(user, qid, val, ok, source="exam")
+            store.record_answer(user, qid, val, ok, source=source)
             locked["v"] = True
             paint()
             submit_btn.set_enabled(False)
@@ -180,7 +180,7 @@ def _sub_question(q, year, tier, done, user, reveal=True):
 
 
 def passage_card(passage, year, tier, done, user, compact_material=True,
-                 material_only=False, reveal=True):
+                 material_only=False, reveal=True, source="exam"):
     """
     渲染一个**篇目**：材料区 + 小题区。
 
@@ -212,7 +212,8 @@ def passage_card(passage, year, tier, done, user, compact_material=True,
     if material_only:
         return
     for q in subs:
-        _sub_question(q, year, tier, done, user, reveal=reveal)
+        _sub_question(q, year, tier, done, user, reveal=reveal,
+                      source=source)
 
 
 # ---------------------------------------------------------------------------
@@ -281,7 +282,7 @@ def _split_cloze(text, lo=1, hi=20):
     return parts, nums
 
 
-def cloze_card(passage, year, tier, done, user, reveal=True):
+def cloze_card(passage, year, tier, done, user, reveal=True, source="exam"):
     """
     完形填空：**左文章（空可点）/ 右题目（每 5 空一组翻页）**。
 
@@ -378,7 +379,7 @@ def cloze_card(passage, year, tier, done, user, reveal=True):
                 ui.notify("这道题暂无答案，无法判分。", color="warning")
                 return
             ok = (L == ans)
-            store.record_answer(user, q["id"], L, ok, source="exam")
+            store.record_answer(user, q["id"], L, ok, source=source)
             picked[n] = L
             paint_slots()
             render_page()
@@ -988,7 +989,7 @@ def score_report(tier, year, user):
 # ---------------------------------------------------------------------------
 # 新题型 Part B：句子库只显示一次
 # ---------------------------------------------------------------------------
-def partb_block(passage, year, tier, done, user, reveal=True):
+def partb_block(passage, year, tier, done, user, reveal=True, source="exam"):
     """
     新题型：**左材料+句子库（只显示一次）/ 右 41–45 作答位**。
 
@@ -1035,10 +1036,11 @@ def partb_block(passage, year, tier, done, user, reveal=True):
         right = ui.column().classes("w-full gap-2 min-w-0")
         with right:
             for q in subs:
-                _partb_row(q, year, tier, done, user, reveal=reveal)
+                _partb_row(q, year, tier, done, user, reveal=reveal,
+                           source=source)
 
 
-def _partb_row(q, year, tier, done, user, reveal=True):
+def _partb_row(q, year, tier, done, user, reveal=True, source="exam"):
     """
     一道 Part B 题：**只给 A–G 字母按钮**，不再重复句子文本。
 
@@ -1101,7 +1103,7 @@ def _partb_row(q, year, tier, done, user, reveal=True):
                 ui.notify("这道题暂无答案，无法判分。", color="warning")
                 return
             ok = (chosen["v"] == ans)
-            store.record_answer(user, qid, chosen["v"], ok, source="exam")
+            store.record_answer(user, qid, chosen["v"], ok, source=source)
             locked["v"] = True
             paint()
             submit_btn.set_enabled(False)

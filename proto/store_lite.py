@@ -170,15 +170,20 @@ def get_answers(user_id, source=None):
                                "answered_at": r["answered_at"]} for r in rows}
 
 
-def delete_answers(user_id, question_ids):
-    """删除指定题目的作答记录（诊断页「重新诊断」用）。返回删除条数。"""
+def delete_answers(user_id, question_ids, source=None):
+    """删除指定题目的作答记录。source 不为空时只删该来源（如 diagnostic）。"""
     ids = [str(x) for x in (question_ids or []) if str(x).strip()]
     if not ids:
         return 0
     with conn() as c:
-        cur = c.executemany(
-            "DELETE FROM answers WHERE user_id=? AND question_id=?",
-            [(user_id, qid) for qid in ids])
+        if source:
+            cur = c.executemany(
+                "DELETE FROM answers WHERE user_id=? AND question_id=? "
+                "AND source=?", [(user_id, qid, source) for qid in ids])
+        else:
+            cur = c.executemany(
+                "DELETE FROM answers WHERE user_id=? AND question_id=?",
+                [(user_id, qid) for qid in ids])
         return cur.rowcount if cur.rowcount is not None else len(ids)
 
 

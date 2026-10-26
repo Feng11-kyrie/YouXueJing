@@ -36,7 +36,8 @@ SUBJECT_COLORS = {
 }
 
 
-def question_card(q, year, done, user, exam="408", reveal=True):
+def question_card(q, year, done, user, exam="408", reveal=True,
+                  source="practice"):
     """
     渲染一道题：整行可点的选项 + 即时判分。
 
@@ -217,7 +218,7 @@ def question_card(q, year, done, user, exam="408", reveal=True):
                 ok = val == str(q.get("答案") or "")
                 # 数据层也会拦空值；这里再判一次是为了给用户提示
                 store.record_answer(user, q["id"], val, ok,
-                                    source="practice")
+                                    source=source)
                 locked["v"] = True
                 paint()
                 submit.set_enabled(False)
