@@ -351,7 +351,7 @@ def login_page():
             pw = ui.input("密码", password=True,
                           password_toggle_button=True).props("outlined dense") \
                 .classes("w-full")
-            err = ui.label("").classes("t-xs").style("color:#8C2C2C")
+            err = ui.label(" ").classes("t-xs").style("color:#8C2C2C")
             ui.button("登录", on_click=lambda: _do_login(name.value, pw.value,
                                                          err)).props("unelevated") \
                 .classes("w-full")
@@ -393,7 +393,7 @@ def register_page():
             pw2 = ui.input("确认密码", password=True,
                            password_toggle_button=True).props("outlined dense") \
                 .classes("w-full")
-            err = ui.label("").classes("t-xs").style("color:#8C2C2C")
+            err = ui.label(" ").classes("t-xs").style("color:#8C2C2C")
 
             def submit():
                 if (pw.value or "") != (pw2.value or ""):
