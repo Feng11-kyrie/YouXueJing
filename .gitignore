@@ -77,3 +77,7 @@ data/zhengzhi
 
 # NiceGUI 会话/缓存
 .nicegui/
+
+# 部署
+.env
+backups/

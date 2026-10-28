@@ -1,0 +1,5 @@
+# 生产镜像只装 NiceGUI 运行所需；不含 Streamlit/LangGraph 开发依赖
+nicegui==3.18.0
+numpy==2.3.5
+openai==3.29.0
+fastembed==0.9.0

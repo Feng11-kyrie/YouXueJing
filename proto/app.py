@@ -3347,7 +3347,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--port", type=int, default=8890)
     args = ap.parse_args()
-    ui.run(port=args.port, title="优学鲸 · 考研智能备考",
+    ui.run(host=os.environ.get("YJ_HOST", "0.0.0.0"), port=args.port,
+           title="优学鲸 · 考研智能备考",
            reload=False, favicon="🐳", show=False,
            storage_secret=os.environ.get("YJ_SECRET", "youxuejing-dev-secret"))
 

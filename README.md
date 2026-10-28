@@ -326,6 +326,12 @@ python scripts/prewarm.py --name roadshow --profile "DS:0.8,CO:0.65,OS:0.5,CN:0.
 预跑一条完整链路，落成**状态快照**（LLM 输出同时进缓存）。现场即使 API 完全不可用，
 在「⑤ 资源生成」里选「回放预跑快照」即可一键回放**与预跑时完全一致**的结果。
 
+## 上线部署
+
+生产部署用 Docker + Caddy（自动 HTTPS/WebSocket），单实例 + 挂载 `data/`。
+完整步骤见 [`docs/deploy.md`](docs/deploy.md)，文件包括 `Dockerfile`、
+`docker-compose.yml`、`Caddyfile`、`.env.example`、`scripts/backup.sh`。
+
 ## 账号与登录
 
 - `/register` 注册：用户名 3–20 位字母/数字/下划线，密码至少 8 位；
