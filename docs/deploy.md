@@ -105,6 +105,23 @@ docker compose logs -f caddy
 
 ---
 
+## 4.5 没有域名：只用 IP 访问（大陆服务器常用）
+
+大陆节点未备案时，先不要用域名，直接开端口：
+
+```bash
+# 阿里云控制台 → 轻量应用服务器 → 防火墙 → 添加 TCP 8080
+docker compose -f docker-compose.ip.yml up -d --build
+```
+
+访问：
+
+```text
+http://<服务器公网IP>:8080
+```
+
+注意：这是 **HTTP 明文**，只适合小范围内测；有域名/备案后再换成 Caddy + HTTPS。
+
 ## 5. 首次登录
 
 - 打开 `/register` 注册第一个账号；
