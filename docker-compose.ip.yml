@@ -3,7 +3,10 @@
 # 访问：http://服务器公网IP:8080
 services:
   app:
-    build: .
+    build:
+      context: .
+      args:
+        PIP_INDEX_URL: ${PIP_INDEX_URL:-https://pypi.org/simple}
     restart: unless-stopped
     environment:
       YJ_SECRET: ${YJ_SECRET:?请在 .env 设置 YJ_SECRET}
@@ -14,7 +17,7 @@ services:
       - ./data:/app/data
       - ./.nicegui:/app/.nicegui
     healthcheck:
-      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8080/login"]
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/login', timeout=3)\""]
       interval: 30s
       timeout: 5s
       retries: 3
